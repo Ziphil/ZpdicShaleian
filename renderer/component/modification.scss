@@ -1,0 +1,28 @@
+@charset "utf-8";
+
+
+body {
+  background-color: $pt-app-background-color;
+  user-select: auto;
+}
+
+*::-webkit-scrollbar {
+  width: $pt-grid-size * 0.5;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: $pt-app-background-color;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: $tag-default-color;
+  border-radius: $pt-grid-size * 0.5;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba($tag-default-color, 1 - 0.15);
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: rgba($tag-default-color, 1 - 0.3);
+}

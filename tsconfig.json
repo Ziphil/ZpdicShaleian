@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "module": "commonjs",
+    "target": "es5",
+    "lib": ["es2015", "dom"],
+    "jsx": "react",
+    "jsxFactory": "react.createElement",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "downlevelIteration": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "removeComments": true
+  },
+  "include": [
+    "main/**/*",
+    "renderer/**/*"
+  ]
+}

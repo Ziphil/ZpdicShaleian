@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+@import "./variable.scss";
+@import "~normalize.css";
+@import "~@blueprintjs/core/src/blueprint.scss";
+@import "./modification.scss";
+
+
+.zp-root {
+  padding: $pt-grid-size * 1.5;
+  padding-top: $pt-grid-size * 2;
+  padding-bottom: $pt-grid-size * 2;
+}
+
+.zp-navbar-root {
+  padding-top: $pt-navbar-height + $pt-grid-size * 2;
+}
