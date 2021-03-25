@@ -39,9 +39,10 @@ export class Root extends Component<Props, State> {
 
   public render(): ReactNode {
     let props = this.state.props;
+    let mode = this.state.mode;
     let id = this.state.id;
-    if (this.state.props !== null) {
-      if (this.state.mode === "main") {
+    if (props !== null) {
+      if (mode === "main") {
         return <MainPage id={id} {...props}/>;
       } else {
         return <div/>;
