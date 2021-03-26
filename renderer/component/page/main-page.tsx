@@ -29,6 +29,10 @@ export class MainPage extends Component<Props, State> {
   }
 
   public componentDidMount(): void {
+    this.loadDictionary();
+  }
+
+  private loadDictionary(): void {
     window.api.send("ready-get-dictionary", "C:/Users/Ziphil/Desktop/dic");
     window.api.on("get-dictionary-progress", (event, progress) => {
       this.setState({progress});

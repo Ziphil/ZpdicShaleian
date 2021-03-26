@@ -19,7 +19,7 @@ export class Root extends Component<Props, State> {
     props: null
   };
 
-  public async componentDidMount(): Promise<void> {
+  public componentDidMount(): void {
     let query = queryParser.parse(window.location.search);
     let mode = query.mode;
     let id = query.id;
