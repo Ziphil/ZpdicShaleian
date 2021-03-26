@@ -11,9 +11,11 @@ import {
   ReactNode
 } from "react";
 import {
-  Dictionary,
-  Loader
+  Dictionary
 } from "../../module";
+import {
+  SplitLoader
+} from "../../module/loader/split-loader";
 import {
   Component
 } from "../component";
@@ -30,7 +32,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   public componentDidMount(): void {
-    let loader = new Loader("C:/Users/Ziphil/Desktop/dic");
+    let loader = new SplitLoader("C:/Users/Ziphil/Desktop/dic");
     loader.on("progress", (progress) => {
       this.setState({progress});
     })
@@ -40,7 +42,7 @@ export class MainPage extends Component<Props, State> {
     loader.on("error", (error) => {
       console.error(error);
     });
-    loader.load();
+    loader.start();
   }
 
   private renderNavbar(): ReactNode {

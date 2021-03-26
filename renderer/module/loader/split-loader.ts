@@ -3,17 +3,17 @@
 import * as fs from "fs";
 import * as path from "path";
 import {
-  EventEmitter
-} from "events";
+  Loader
+} from "./loader";
 import {
   Dictionary
-} from "./dictionary";
+} from "../dictionary";
 import {
   Word
-} from "./word";
+} from "../word";
 
 
-export class Loader extends EventEmitter {
+export class SplitLoader extends Loader {
 
   public path: string;
   private words: Array<Word> = [];
@@ -21,23 +21,11 @@ export class Loader extends EventEmitter {
   private count: number = 0;
 
   public constructor(path: string) {
-    super();
+    super(path);
     this.path = path;
   }
 
-  public on<E extends keyof LoaderEvent>(event: E, listener: (...args: LoaderEvent[E]) => void): this;
-  public on(event: string | symbol, listener: (...args: any) => void): this {
-    let result = super.on(event, listener);
-    return result;
-  }
-
-  public emit<E extends keyof LoaderEvent>(event: E, ...args: LoaderEvent[E]): boolean;
-  public emit(event: string | symbol, ...args: any): boolean {
-    let result = super.emit(event, ...args);
-    return result;
-  }
-
-  public load(): void {
+  public start(): void {
     fs.readdir(this.path, (error, paths) => {
       if (error) {
         this.emit("error", error);
