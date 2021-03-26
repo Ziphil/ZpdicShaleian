@@ -60,5 +60,5 @@ type Props = {
 type State = {
   mode: string,
   id: string,
-  props: any | null
+  props: object | null
 };
