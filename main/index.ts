@@ -24,10 +24,10 @@ const COMMON_WINDOW_OPTIONS = {
   autoHideMenuBar: true,
   acceptFirstMouse: true,
   useContentSize: true,
-  webPreferences: {preload: joinPath(__dirname, "preload.js"), nodeIntegration: false, contextIsolation: true, devTools: true}
+  webPreferences: {preload: joinPath(__dirname, "preload.js"), devTools: true}
 };
 const PRODUCTION_WINDOW_OPTIONS = {
-  webPreferences: {preload: joinPath(__dirname, "preload.js"), nodeIntegration: false, contextIsolation: true, devTools: false}
+  webPreferences: {preload: joinPath(__dirname, "preload.js"), devTools: false}
 };
 
 
