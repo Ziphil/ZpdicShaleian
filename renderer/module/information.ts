@@ -12,7 +12,7 @@ export class NormalInformation<S> {
   public readonly date: number | null;
   public readonly hidden: boolean;
 
-  public constructor(kind: InformationKind, text: S, date?: number, hidden?: boolean) {
+  public constructor(kind: InformationKind, text: S, date?: number | null, hidden?: boolean) {
     this.kind = kind;
     this.text = text;
     this.date = date ?? null;
@@ -27,15 +27,15 @@ export class PhraseInformation<S> {
   public readonly kind: "phrase";
   public readonly expression: S;
   public readonly equivalents: ReadonlyArray<S>;
-  public readonly text: S;
+  public readonly text: S | null;
   public readonly date: number | null;
   public readonly hidden: boolean;
 
-  public constructor(expression: S, equivalents: Array<S>, text: S, date?: number, hidden?: boolean) {
+  public constructor(expression: S, equivalents: Array<S>, text?: S | null, date?: number | null, hidden?: boolean) {
     this.kind = "phrase";
     this.expression = expression;
     this.equivalents = equivalents;
-    this.text = text;
+    this.text = text ?? null;
     this.date = date ?? null;
     this.hidden = hidden ?? false;
   }
@@ -51,7 +51,7 @@ export class ExampleInformation<S> {
   public readonly date: number | null;
   public readonly hidden: boolean;
 
-  public constructor(sentence: S, translation: S, date?: number, hidden?: boolean) {
+  public constructor(sentence: S, translation: S, date?: number | null, hidden?: boolean) {
     this.kind = "example";
     this.sentence = sentence;
     this.translation = translation;
