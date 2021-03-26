@@ -66,7 +66,7 @@ class Main {
         event.reply("get-props", this.props.get(id));
         this.props.delete(id);
       } else {
-        console.error("props undefined");
+        event.reply("get-props", {});
       }
     });
     ipcMain.on("ready-show", (event, id) => {
