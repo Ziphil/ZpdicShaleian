@@ -2,14 +2,20 @@
 
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import * as path from "path";
+import {
+  DefinePlugin
+} from "webpack";
 
 
 let main = {
   target: "electron-main",
-  entry: ["./main/index.ts"],
+  entry: {
+    index: "./main/index.ts",
+    preload: "./main/preload.ts"
+  },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "index.js"
+    filename: "[name].js"
   },
   node: {
     __dirname: false,
@@ -95,6 +101,9 @@ let renderer = {
     extensions: [".ts", ".tsx", ".js", ".jsx", ".scss"]
   },
   plugins: [
+    new DefinePlugin({
+      "process.env": {}
+    }),
     new HtmlWebpackPlugin({
       template: "./renderer/public/index.html",
       title: "Soxsot"

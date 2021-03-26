@@ -1,8 +1,5 @@
 //
 
-import {
-  ipcRenderer
-} from "electron";
 import * as queryParser from "query-string";
 import * as react from "react";
 import {
@@ -27,10 +24,10 @@ export class Root extends Component<Props, State> {
     let mode = query.mode;
     let id = query.id;
     if (typeof mode === "string" && typeof id === "string") {
-      ipcRenderer.send("ready-get-props", id);
-      ipcRenderer.on("get-props", (event, props) => {
+      window.api.send("ready-get-props", id);
+      window.api.on("get-props", (event, props) => {
         this.setState({props}, () => {
-          ipcRenderer.send("ready-show", id);
+          window.api.send("ready-show", id);
         });
       });
       this.setState({mode, id});

@@ -14,9 +14,6 @@ import {
   Dictionary
 } from "../../module";
 import {
-  SplitLoader
-} from "../../module/loader/split-loader";
-import {
   Component
 } from "../component";
 import {
@@ -32,17 +29,13 @@ export class MainPage extends Component<Props, State> {
   }
 
   public componentDidMount(): void {
-    let loader = new SplitLoader("C:/Users/Ziphil/Desktop/dic");
-    loader.on("progress", (progress) => {
+    window.api.send("ready-get-dictionary", "C:/Users/Ziphil/Desktop/dic");
+    window.api.on("get-dictionary-progress", (event, progress) => {
       this.setState({progress});
-    })
-    loader.on("end", (dictionary) => {
-      this.setState({dictionary});
-    })
-    loader.on("error", (error) => {
-      console.error(error);
     });
-    loader.start();
+    window.api.on("get-dictionary", (event, dictionary) => {
+      this.setState({dictionary});
+    });
   }
 
   private renderNavbar(): ReactNode {

@@ -2,7 +2,6 @@
 
 import {
   BrowserWindowConstructorOptions,
-  ipcRenderer
 } from "electron";
 import {
   Component as ReactComponent
@@ -15,7 +14,7 @@ export class Component<P, S, H = any> extends ReactComponent<{id?: string} & P, 
 
   protected createWindow(mode: string, props: object, options: BrowserWindowConstructorOptions): void {
     let id = this.props.id!;
-    ipcRenderer.send("create-window", mode, id, props, options);
+    window.api.send("create-window", mode, id, props, options);
   }
 
 }

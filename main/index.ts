@@ -13,6 +13,9 @@ import {
 import {
   join as joinPath
 } from "path";
+import {
+  SplitLoader
+} from "../renderer/module/loader/split-loader";
 
 
 const COMMON_WINDOW_OPTIONS = {
@@ -21,10 +24,10 @@ const COMMON_WINDOW_OPTIONS = {
   autoHideMenuBar: true,
   acceptFirstMouse: true,
   useContentSize: true,
-  webPreferences: {nodeIntegration: true, contextIsolation: false, devTools: true}
+  webPreferences: {preload: joinPath(__dirname, "preload.js"), nodeIntegration: false, contextIsolation: true, devTools: true}
 };
 const PRODUCTION_WINDOW_OPTIONS = {
-  webPreferences: {nodeIntegration: true, contextIsolation: false, devTools: false}
+  webPreferences: {preload: joinPath(__dirname, "preload.js"), nodeIntegration: false, contextIsolation: true, devTools: false}
 };
 
 
@@ -42,6 +45,7 @@ class Main {
 
   public main(): void {
     this.setupEventHandlers();
+    this.setupBasicIpc();
     this.setupIpc();
   }
 
@@ -59,7 +63,7 @@ class Main {
     });
   }
 
-  private setupIpc(): void {
+  private setupBasicIpc(): void {
     ipcMain.on("ready-get-props", (event, id) => {
       let props = this.props.get(id);
       if (props !== undefined) {
@@ -78,6 +82,22 @@ class Main {
     ipcMain.on("create-window", (event, mode, parentId, props, options) => {
       this.createWindow(mode, parentId, props, options);
     });
+  }
+
+  private setupIpc(): void {
+    ipcMain.on("ready-get-dictionary", (event, path) => {
+      let loader = new SplitLoader(path);
+      loader.on("progress", (progress) => {
+        event.reply("get-dictionary-progress", progress);
+      })
+      loader.on("end", (dictionary) => {
+        event.reply("get-dictionary", dictionary);
+      })
+      loader.on("error", (error) => {
+        console.error(error);
+      });
+      loader.start();
+    })
   }
 
   private createWindow(mode: string, parentId: string | null, props: object, options: BrowserWindowConstructorOptions): BrowserWindow {
