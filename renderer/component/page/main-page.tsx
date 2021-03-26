@@ -17,8 +17,9 @@ import {
   Component
 } from "../component";
 import {
-  Loading
-} from "../compound/loading";
+  Loading,
+  WordList
+} from "../compound";
 
 
 export class MainPage extends Component<Props, State> {
@@ -66,7 +67,7 @@ export class MainPage extends Component<Props, State> {
       <div className="zp-root zp-navbar-root">
         {navbarNode}
         <Loading loading={this.state.dictionary === null} progress={this.state.progress}>
-          Dictionary loaded: {this.state.dictionary?.words?.length} words
+          <WordList words={this.state.dictionary?.words!}/>
         </Loading>
       </div>
     );
