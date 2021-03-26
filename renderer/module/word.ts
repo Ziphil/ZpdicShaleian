@@ -1,5 +1,13 @@
 //
 
+import {
+  ParsedWord
+} from "./parsed-word";
+import {
+  MarkupReducers,
+  Parser
+} from "./parser";
+
 
 export class Word {
 
@@ -13,9 +21,17 @@ export class Word {
     this.contents = contents;
   }
 
+  public static fromPlain(plain: Word): Word {
+    let name = plain.name;
+    let date = plain.date;
+    let contents = plain.contents;
+    let word = new Word(name, date, contents);
+    return word;
+  }
+
   public static fromString(string: string): Word {
     let lines = string.trim().split(/\r\n|\r|\n/);
-    let match = lines[0]?.match(/^\*\s*(.+)\s*@(\d+)/)
+    let match = lines[0]?.match(/^\*\s*(.+?)\s*@(\d+)/)
     if (match) {
       let name = match[1];
       let date = parseInt(match[2], 10);
@@ -43,6 +59,12 @@ export class Word {
     } else {
       throw new Error("parse failed");
     }
+  }
+
+  public toParsed<S, E>(reducers: MarkupReducers<S, E>): ParsedWord<S> {
+    let parser = new Parser(reducers);
+    let parsedWord = parser.parse(this);
+    return parsedWord;
   }
 
 }

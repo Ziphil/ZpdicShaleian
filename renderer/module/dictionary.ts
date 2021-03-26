@@ -13,4 +13,10 @@ export class Dictionary {
     this.words = words;
   }
 
+  public static fromPlain(plain: Dictionary): Dictionary {
+    let words = plain.words.map((word) => Word.fromPlain(word));
+    let dictionary = new Dictionary(words);
+    return dictionary;
+  }
+
 }
