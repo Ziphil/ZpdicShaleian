@@ -353,6 +353,23 @@ export class MarkupReducers<S, E> {
     this.join = join;
   }
 
+  public static simple(): MarkupReducers<string, string> {
+    let reduceLink = function (name: string, children: Array<string>): string {
+      return children.join("");
+    }
+    let reduceBracket = function (children: Array<string>): string {
+      return children.join("");
+    }
+    let reduceSlash = function (string: string): string {
+      return string;
+    }
+    let join = function (nodes: Array<string>): string {
+      return nodes.join("");
+    }
+    let reducers = new MarkupReducers(reduceLink, reduceBracket, reduceSlash, join);
+    return reducers;
+  }
+
 }
 
 
