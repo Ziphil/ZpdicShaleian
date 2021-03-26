@@ -11,13 +11,36 @@ import {
   ReactNode
 } from "react";
 import {
+  Dictionary,
+  Loader
+} from "../../module";
+import {
   Component
 } from "../component";
+import {
+  Loading
+} from "../compound/loading";
 
 
 export class MainPage extends Component<Props, State> {
 
-  public async componentDidMount(): Promise<void> {
+  public state: State = {
+    dictionary: null,
+    progress: 0
+  }
+
+  public componentDidMount(): void {
+    let loader = new Loader("C:/Users/Ziphil/Desktop/dic");
+    loader.on("progress", (progress) => {
+      this.setState({progress});
+    })
+    loader.on("end", (dictionary) => {
+      this.setState({dictionary});
+    })
+    loader.on("error", (error) => {
+      console.error(error);
+    });
+    loader.load();
   }
 
   private renderNavbar(): ReactNode {
@@ -43,8 +66,9 @@ export class MainPage extends Component<Props, State> {
     let node = (
       <div className="zp-root zp-navbar-root">
         {navbarNode}
-        Hello, React!
-        This is a main page.
+        <Loading loading={this.state.dictionary === null} progress={this.state.progress}>
+          Dictionary loaded: {this.state.dictionary?.words?.length} words
+        </Loading>
       </div>
     );
     return node;
@@ -56,4 +80,6 @@ export class MainPage extends Component<Props, State> {
 type Props = {
 };
 type State = {
+  dictionary: Dictionary | null,
+  progress: number
 };
