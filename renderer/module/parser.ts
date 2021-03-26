@@ -51,19 +51,20 @@ export class Parser<S, E> {
 
   private parsePart(content: string): Part<S> {
     let lines = content.split(/\r\n|\r|\n/);
-    let match = lines[0]?.match(/^\+\s*<(.+?)>/);
-    let lexicalCategory = (match !== null) ? match[1] : "";
-    let firstIndex = (match !== null) ? 1 : 0;
-    let sections = []
+    let sections = [];
+    let currentLexicalCategory = "";
     let currentEquivalents = [];
     let currentInformations = [];
     let currentRelations = [];
-    for (let i = firstIndex ; i < lines.length ; i ++) {
+    for (let i = 0 ; i < lines.length ; i ++) {
       let line = lines[i];
-      let equivalenceMatch = line.match(/^=/)
-      if (equivalenceMatch) {
-        let section = new Section(currentEquivalents, currentInformations, currentRelations);
-        sections.push(section);
+      let lexicalCategoryMatch = line.match(/^\+\s*<(.+?)>/);
+      if (lexicalCategoryMatch) {
+        if (currentLexicalCategory !== "") {
+          let section = new Section(currentLexicalCategory, currentEquivalents, currentInformations, currentRelations);
+          sections.push(section);
+        }
+        currentLexicalCategory = lexicalCategoryMatch[1];
         currentEquivalents = [];
         currentInformations = [];
         currentRelations = [];
@@ -77,9 +78,11 @@ export class Parser<S, E> {
         currentInformations.push(lineData);
       }
     }
-    let section = new Section(currentEquivalents, currentInformations, currentRelations);
-    sections.push(section);
-    let part = new Part(lexicalCategory, sections);
+    if (currentLexicalCategory !== "") {
+      let section = new Section(currentLexicalCategory, currentEquivalents, currentInformations, currentRelations);
+      sections.push(section);
+    }
+    let part = new Part(sections);
     return part;
   }
 
@@ -96,10 +99,10 @@ export class Parser<S, E> {
   }
 
   private parseEquivalent(line: string): Equivalent<S> | null {
-    let match = line.match(/^=(\?)?\s*<(.+?)>\s*(?:\((.+?)\)\s*)?(.+)$/)
+    let match = line.match(/^=(\?)?\s*(?:<(.+?)>\s*)?(?:\((.+?)\)\s*)?(.+)$/)
     if (match) {
       let hidden = match[1] !== undefined;
-      let category = match[2];
+      let category = match[2] ?? "";
       let frame = this.markupParser.parse(match[3] ?? "");
       let names = match[4].split(/\s*,\s*/).map((rawName) => this.markupParser.parse(rawName));
       let equivalent = new Equivalent(category, frame, names, hidden);

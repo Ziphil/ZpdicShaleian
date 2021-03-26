@@ -24,7 +24,7 @@ export const INFORMATION_KIND_DATA = [
   {code: "O", kind: "task"},
   {code: "H", kind: "history"},
   {code: "P", kind: "phrase"},
-  {code: "E", kind: "example"}
+  {code: "S", kind: "example"}
 ] as const;
 
 export type InformationKind = (typeof INFORMATION_KIND_DATA)[number]["kind"];

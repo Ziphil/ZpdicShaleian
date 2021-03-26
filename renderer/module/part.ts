@@ -7,11 +7,9 @@ import {
 
 export class Part<S> {
 
-  public readonly lexicalCategory: string;
   public readonly sections: ReadonlyArray<Section<S>>;
 
-  public constructor(lexicalCategory: string, sections: Array<Section<S>>) {
-    this.lexicalCategory = lexicalCategory;
+  public constructor(sections: Array<Section<S>>) {
     this.sections = sections;
   }
 
