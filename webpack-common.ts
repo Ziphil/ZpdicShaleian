@@ -42,7 +42,7 @@ let renderer = {
   entry: ["./renderer/index.tsx"],
   output: {
     path: path.join(__dirname, "dist"),
-    filename: "./script/index.bundle.js"
+    filename: "./script/bundle.js"
   },
   module: {
     rules: [
