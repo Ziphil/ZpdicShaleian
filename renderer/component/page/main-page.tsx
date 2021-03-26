@@ -38,7 +38,8 @@ export class MainPage extends Component<Props, State> {
     window.api.on("get-dictionary-progress", (event, progress) => {
       this.setState({progress});
     });
-    window.api.on("get-dictionary", (event, dictionary) => {
+    window.api.on("get-dictionary", (event, plainDictionary) => {
+      let dictionary = Dictionary.fromPlain(plainDictionary);
       this.setState({dictionary});
     });
   }
