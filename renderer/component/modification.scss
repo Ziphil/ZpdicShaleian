@@ -3,7 +3,8 @@
 
 body {
   background-color: $pt-app-background-color;
-  user-select: auto;
+  font-feature-settings: "palt" 1, "pkna" 1 !important;
+  user-select: none;
 }
 
 *::-webkit-scrollbar {

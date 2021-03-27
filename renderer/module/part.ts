@@ -13,4 +13,13 @@ export class Part<S> {
     this.sections = sections;
   }
 
+  public get lexicalCategory(): string | null {
+    let section = this.sections[0];
+    if (section !== undefined) {
+      return section.lexicalCategory;
+    } else {
+      return null;
+    }
+  }
+
 }

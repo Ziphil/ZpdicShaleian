@@ -4,6 +4,7 @@ import {
 } from "@blueprintjs/core";
 import * as react from "react";
 import {
+  Fragment,
   ReactNode
 } from "react";
 import {
@@ -12,6 +13,7 @@ import {
 import {
   Equivalent,
   Information,
+  InformationKindUtil,
   MarkupReducers,
   ParsedWord,
   Relation,
@@ -43,52 +45,66 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderHead(word: ParsedWord<ReactNode>): ReactNode {
+    let lexicalCategory = word.parts.get(this.props.language)!.lexicalCategory;
+    let categoryNode = (lexicalCategory !== null) && (
+      <span className="swp-head-category swp-tag swp-right-margin">{lexicalCategory}</span>
+    );
+    let nameNode = (
+      <span className="swp-head-name">
+        <span className="swp-sans">{word.name}</span>
+      </span>
+    );
     let node = (
       <div className="swp-head">
-        <span className="swp-sans">{word.name}</span>
+        {categoryNode}
+        {nameNode}
       </div>
     );
     return node;
   }
 
   private renderSection(section: Section<ReactNode>): ReactNode {
-    let equivalentNodes = section.equivalents.map((equivalent) => this.renderEquivalent(equivalent));
+    let equivalentNodes = section.equivalents.filter((equivalent) => !equivalent.hidden).map((equivalent) => this.renderEquivalent(equivalent));
     let informationNodes = section.informations.map((information) => this.renderInformation(information));
     let relationNodes = section.relations.map((relation) => this.renderRelation(relation));
     let equivalentNode = (section.equivalents.length > 0) && (
-      <div className="swp-section-items swp-equivalents">
+      <ul className="swp-equivalents swp-section-item swp-list">
         {equivalentNodes}
-      </div>
+      </ul>
     );
     let informationNode = (section.informations.length > 0) && (
-      <div className="swp-section-items swp-informations">
+      <Fragment>
         {informationNodes}
-      </div>
+      </Fragment>
     );
     let relationNode = (section.relations.length > 0) && (
-      <div className="swp-section-items swp-informations">
+      <ul className="swp-relations swp-section-item swp-list">
         {relationNodes}
-      </div>
+      </ul>
     );
     let node = (
       <div className="swp-section">
-        <div className="swp-equivalents">
-          {equivalentNode}
-          {informationNode}
-          {relationNode}
-        </div>
+        {equivalentNode}
+        {informationNode}
+        {relationNode}
       </div>
     );
     return node;
   }
 
   private renderEquivalent(equivalent: Equivalent<ReactNode>): ReactNode {
+    let categoryNode = (equivalent.category !== "") && (
+      <span className="swp-equivalent-category swp-tag swp-right-margin">{equivalent.category}</span>
+    );
+    let frameNode = (equivalent.frame !== "") && (
+      <span className="swp-equivalent-frame swp-small swp-right-margin">({equivalent.frame})</span>
+    );
     let node = (
-      <div className="swp-section-item swp-equivalent">
-        <span className="swp-equivalent-category swp-tag">{equivalent.category}</span>
-        <span className="swp-equivalent-frame swp-small">{equivalent.frame}</span>
+      <li className="swp-equivalent swp-text swp-list-item">
+        {categoryNode}
+        {frameNode}
         {WordPane.intersperse(equivalent.names, ", ")}
-      </div>
+      </li>
     );
     return node;
   }
@@ -107,9 +123,11 @@ export class WordPane extends Component<Props, State> {
       }
     })();
     let node = (
-      <div className="swp-section-item swp-information">
-        <div className="swp-information-kind swp-small-head">{information.kind}</div>
-        <div className="swp-information-text">
+      <div className="swp-information swp-section-item">
+        <div className="swp-information-kind swp-small-head">
+          <span className="swp-information-kind-inner swp-small-head-inner">{InformationKindUtil.getName(information.kind, this.props.language)}</span>
+        </div>
+        <div className="swp-information-text swp-text">
           {textNode}
         </div>
       </div>
@@ -119,10 +137,10 @@ export class WordPane extends Component<Props, State> {
 
   private renderRelation(relation: Relation<ReactNode>): ReactNode {
     let node = (
-      <div className="swp-section-item swp-relation">
-        <span className="swp-relation-title swp-tag">{relation.title}</span>
+      <li className="swp-relation swp-text swp-list-item">
+        <span className="swp-relation-title swp-tag swp-right-margin">{relation.title}</span>
         {WordPane.intersperse(relation.names, ", ")}
-      </div>
+      </li>
     );
     return node;
   }

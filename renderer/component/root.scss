@@ -5,6 +5,8 @@
 @import "~@blueprintjs/core/src/blueprint.scss";
 @import "./modification.scss";
 
+@import "./compound/word-pane.scss";
+
 
 .zp-root {
   padding: $pt-grid-size * 1.5;

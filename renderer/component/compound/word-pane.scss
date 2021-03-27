@@ -1,0 +1,87 @@
+@charset "utf-8";
+
+
+.swp-word {
+  @extend .bp3-card;
+  margin-bottom: $pt-grid-size;
+  padding: $pt-grid-size;
+  user-select: text;
+  &:last-child {
+    margin-bottom: 0px;
+  }
+}
+
+.swp-head {
+  @extend %h4;
+  margin-bottom: $pt-grid-size / 2;
+}
+
+.swp-head-name {
+  font-weight: bold;
+}
+
+.swp-head .swp-tag {
+  position: relative;
+  bottom: 1px;
+}
+
+.swp-section-item {
+  margin: 0px;
+  margin-bottom: $pt-grid-size / 2;
+  &:last-child {
+    margin-bottom: 0px;
+  }
+}
+
+.swp-list {
+  padding: 0px;
+  list-style: none;
+}
+
+.swp-list-item {
+  margin: 0px;
+  padding: 0px;
+}
+
+.swp-small-head {
+  font-size: $pt-font-size-small;
+  color: $pt-text-color-muted;
+}
+
+.swp-small-head-inner {
+  padding-right: $pt-grid-size;
+  border-bottom: 1px $pt-divider-black solid;
+}
+
+.swp-text {
+  @extend .bp3-running-text;
+}
+
+.swp-tag {
+  @extend .bp3-tag;
+  padding: 0px $pt-grid-size * 0.3;
+  min-width: 0px;
+  min-height: $pt-grid-size * 0.8;
+}
+
+.swp-section-item .swp-tag {
+  @extend .bp3-minimal;
+}
+
+.swp-small {
+  font-size: $pt-font-size-small;
+}
+
+.swp-right-margin {
+  margin-right: $pt-grid-size * 0.5;
+}
+
+.swp-sans {
+  font-family: $pt-font-family-sans;
+  font-size: 96%;
+  line-height: 96%;
+}
+
+.swp-italic {
+  font-style: italic;
+}
