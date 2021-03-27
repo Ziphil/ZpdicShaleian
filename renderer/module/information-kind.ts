@@ -38,3 +38,4 @@ export const INFORMATION_KIND_DATA = {
 } as const;
 
 export type InformationKind = keyof typeof INFORMATION_KIND_DATA;
+export type NormalInformationKind = Exclude<InformationKind, "phrase" | "example">;

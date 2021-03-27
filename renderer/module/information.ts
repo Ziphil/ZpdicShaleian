@@ -1,18 +1,18 @@
 //
 
 import {
-  InformationKind
+  NormalInformationKind
 } from "./information-kind";
 
 
 export class NormalInformation<S> {
 
-  public readonly kind: Exclude<InformationKind, "phrase" | "example">;
+  public readonly kind: NormalInformationKind;
   public readonly text: S;
   public readonly date: number | null;
   public readonly hidden: boolean;
 
-  public constructor(kind: Exclude<InformationKind, "phrase" | "example">, text: S, date: number | null, hidden: boolean) {
+  public constructor(kind: NormalInformationKind, text: S, date: number | null, hidden: boolean) {
     this.kind = kind;
     this.text = text;
     this.date = date;
