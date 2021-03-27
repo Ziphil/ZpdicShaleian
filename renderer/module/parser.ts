@@ -4,7 +4,8 @@ import {
   Word
 } from "./word";
 import {
-  ParsedWord
+  ParsedWord,
+  Parts
 } from "./parsed-word";
 import {
   Part
@@ -40,10 +41,12 @@ export class Parser<S, E> {
   public parse(word: Word): ParsedWord<S> {
     let name = word.name;
     let date = word.date;
-    let parts = new Map<string, Part<S>>();
-    for (let [language, content] of word.contents) {
-      let part = this.parsePart(content);
-      parts.set(language, part);
+    let parts = {} as Parts<S>;
+    for (let [language, content] of Object.entries(word.contents)) {
+      if (content !== undefined) {
+        let part = this.parsePart(content);
+        parts[language] = part;
+      }
     }
     let parsedWord = new ParsedWord(name, date, parts);
     return parsedWord;

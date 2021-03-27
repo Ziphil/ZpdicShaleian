@@ -45,7 +45,7 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderHead(word: ParsedWord<ReactNode>): ReactNode {
-    let lexicalCategory = word.parts.get(this.props.language)!.lexicalCategory;
+    let lexicalCategory = word.parts[this.props.language]?.lexicalCategory ?? null;
     let categoryNode = (lexicalCategory !== null) && (
       <span className="swp-head-category swp-tag swp-right-margin">{lexicalCategory}</span>
     );
@@ -147,13 +147,16 @@ export class WordPane extends Component<Props, State> {
 
   private renderWord(word: ParsedWord<ReactNode>): ReactNode {
     let headNode = this.renderHead(word);
-    let sectionNodes = word.parts.get(this.props.language)!.sections.map((section) => this.renderSection(section));
+    let sectionNodes = word.parts[this.props.language]?.sections.map((section) => this.renderSection(section));
+    let sectionNode = (sectionNodes !== undefined && sectionNodes.length > 0) && (
+      <div className="swp-sections">
+        {sectionNodes}
+      </div>
+    );
     let node = (
       <div className="swp-word">
         {headNode}
-        <div className="swp-sections">
-          {sectionNodes}
-        </div>
+        {sectionNode}
       </div>
     );
     return node;

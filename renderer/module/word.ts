@@ -13,9 +13,9 @@ export class Word {
 
   public name: string;
   public date: number;
-  public contents: Map<string, string>;
+  public contents: Contents;
 
-  public constructor(name: string, date: number, contents: Map<string, string>) {
+  public constructor(name: string, date: number, contents: Contents) {
     this.name = name;
     this.date = date;
     this.contents = contents;
@@ -35,15 +35,15 @@ export class Word {
     if (match) {
       let name = match[1];
       let date = parseInt(match[2], 10);
-      let contents = new Map<string, string>();
+      let contents = {} as Contents;
       let currentLanguage = "";
       let currentContent = "";
       for (let i = 1 ; i < lines.length ; i ++) {
         let line = lines[i];
         let languageMatch = line.match(/^!(\w{2})/);
         if (languageMatch) {
-          if (currentLanguage !== "" && currentContent !== "") {
-            contents.set(currentLanguage, currentContent.trim());
+          if (currentLanguage !== "" && currentContent.trim() !== "") {
+            contents[currentLanguage] = currentContent.trim();
           }
           currentLanguage = languageMatch[1].toLowerCase();
           currentContent = "";
@@ -51,8 +51,8 @@ export class Word {
           currentContent += line + "\n";
         }
       }
-      if (currentContent !== "") {
-        contents.set(currentLanguage, currentContent.trim());
+      if (currentContent.trim() !== "") {
+        contents[currentLanguage] = currentContent.trim();
       }
       let word = new Word(name, date, contents);
       return word;
@@ -68,3 +68,6 @@ export class Word {
   }
 
 }
+
+
+export type Contents = {[language: string]: string | undefined};
