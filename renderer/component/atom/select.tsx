@@ -19,12 +19,13 @@ import {
 } from "../component";
 
 
-export class Select<T extends string> extends Component<Props<T>, State> {
+export class Select<T> extends Component<Props<T>, State> {
 
-  private renderKeyItem(key: string, itemProps: IItemRendererProps): ReactElement | null {
+  private renderItem(item: T, itemProps: IItemRendererProps): ReactElement | null {
     let modifiers = itemProps.modifiers;
+    let text = (this.props.getMenuText ?? this.props.getText)(item);
     let node = (modifiers.matchesPredicate) && (
-      <MenuItem key={key} text={key} active={modifiers.active} onClick={itemProps.handleClick}/>
+      <MenuItem key={text} text={text} active={modifiers.active} onClick={itemProps.handleClick}/>
     );
     return node || null;
   }
@@ -33,7 +34,6 @@ export class Select<T extends string> extends Component<Props<T>, State> {
     let popoverProps = {
       position: "bottom-left",
       hoverOpenDelay: 0,
-      usePortal: false,
       minimal: true,
       modifiers: {preventOverflow: {enabled: true, boundariesElement: "window"}, flip: {enabled: true, boundariesElement: "window"}}
     } as const;
@@ -41,13 +41,13 @@ export class Select<T extends string> extends Component<Props<T>, State> {
       <AnySelect
         items={this.props.items}
         activeItem={this.props.activeItem}
-        itemRenderer={this.renderKeyItem}
+        itemRenderer={this.renderItem.bind(this)}
         filterable={false}
         popoverProps={popoverProps}
         onItemSelect={this.props.onItemSelect as any}
         className={this.props.className}
       >
-        <Button className={this.props.buttonClassName} text={this.props.activeItem} alignText="left" rightIcon="double-caret-vertical"/>
+        <Button className={this.props.buttonClassName} text={this.props.getText(this.props.activeItem)} alignText="left" rightIcon="double-caret-vertical"/>
       </AnySelect>
     );
     return node;
@@ -59,6 +59,8 @@ export class Select<T extends string> extends Component<Props<T>, State> {
 type Props<T> = {
   items: Array<T>,
   activeItem: T,
+  getText: (item: T) => string,
+  getMenuText?: (item: T) => string,
   onItemSelect: (item: T, event?: SyntheticEvent<HTMLElement>) => void,
   className?: string,
   buttonClassName?: string
@@ -66,4 +68,4 @@ type Props<T> = {
 type State = {
 };
 
-let AnySelect = BlueprintSelect.ofType<string>();
+let AnySelect = BlueprintSelect.ofType<any>();

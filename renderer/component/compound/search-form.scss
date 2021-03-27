@@ -1,6 +1,10 @@
 @charset "utf-8";
 
 
-.zp-search-form-select {
-  width: $pt-grid-size * 10;
+.zp-search-form-button {
+  width: $pt-grid-size * 8;
+}
+
+.zp-search-form-select >.bp3-popover-target >div {
+  border-radius: inherit;
 }

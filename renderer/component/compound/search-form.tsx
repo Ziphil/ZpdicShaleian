@@ -50,12 +50,28 @@ export class SearchForm extends Component<Props, State> {
 
   public render(): ReactNode {
     let parameter = this.getNormalWordParameter();
+    let modeTexts = {name: "単語", equivalent: "訳語", both: "両方", content: "内容"};
+    let typeTexts = {exact: "完全", prefix: "前方", suffix: "後方", part: "部分", regular: "正規"};
     let node = (
       <div className="zp-search-form">
         <ControlGroup fill={true}>
           <InputGroup value={parameter.search} fill={true} onChange={(event) => this.handleParameterSet({search: event.target.value})}/>
-          <Select buttonClassName="zp-search-form-select" items={[...WORD_MODES]} activeItem={parameter.mode} onItemSelect={(mode) => this.handleParameterSet({mode})}/>
-          <Select buttonClassName="zp-search-form-select" items={[...WORD_TYPES]} activeItem={parameter.type} onItemSelect={(type) => this.handleParameterSet({type})}/>
+          <Select
+            className="zp-search-form-select"
+            buttonClassName="zp-search-form-button"
+            items={[...WORD_MODES]}
+            activeItem={parameter.mode}
+            getText={(mode) => modeTexts[mode]}
+            onItemSelect={(mode) => this.handleParameterSet({mode})}
+          />
+          <Select
+            className="zp-search-form-select"
+            buttonClassName="zp-search-form-button"
+            items={[...WORD_TYPES]}
+            activeItem={parameter.type}
+            getText={(type) => typeTexts[type]}
+            onItemSelect={(type) => this.handleParameterSet({type})}
+          />
         </ControlGroup>
       </div>
     );
