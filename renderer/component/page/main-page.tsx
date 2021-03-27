@@ -56,13 +56,11 @@ export class MainPage extends Component<Props, State> {
   }
 
   private updateWordsImmediately(): void {
-    let parameter = this.state.parameter;
-    let hitWords = this.state.dictionary!.words.filter((word) => parameter.match(word));
-    let hitResult = {words: hitWords, suggestions: []};
+    let hitResult = this.state.dictionary!.search(this.state.parameter);
     this.setState({hitResult});
   }
 
-  @debounce(300)
+  @debounce(200)
   private updateWords(): void {
     this.updateWordsImmediately();
   }
