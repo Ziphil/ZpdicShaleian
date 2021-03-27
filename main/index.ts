@@ -110,9 +110,7 @@ class Main {
     window.once("closed", () => {
       this.windows.delete(id);
     });
-    if (!this.isDevelopment()) {
-      window.setMenu(null);
-    }
+    window.setMenu(null);
     this.windows.set(id, window);
     this.props.set(id, props);
     return window;

@@ -18,6 +18,9 @@ import {
   ReactNode
 } from "react";
 import {
+  GlobalHotKeys
+} from "react-hotkeys";
+import {
   WordMode,
   WordType
 } from "../../module";
@@ -66,13 +69,39 @@ export class MainNavbar extends Component<Props, State> {
         <MenuItem text="検索結果のシャッフル" icon="random" label="Ctrl+R"/>
         <MenuDivider/>
         <MenuItem text="高度な検索" icon="blank" label="Ctrl+F"/>
-        <MenuItem text="スクリプト検索" icon="blank" label="Ctrl+Shift+F"/>  
+        <MenuItem text="スクリプト検索" icon="blank" label="Ctrl+Shift+F"/>
       </Menu>
     );
     return node;
   }
 
+  private renderHelpMenu(): ReactElement {
+    let node = (
+      <Menu>
+        <MenuItem text="デベロッパーツールを開く" icon="blank" label="F12"/>
+        <MenuDivider/>
+        <MenuItem text="ヘルプ" icon="help" label="F1"/>
+        <MenuItem text="このアプリについて" icon="blank"/>
+      </Menu>
+    );
+    return node;
+  }
+
+  private renderHotkeys(): ReactNode {
+    let keyMap = {
+      changeWordModeToName: "ctrl+w",
+      changeWordModeToEquivalent: "ctrl+e"
+    };
+    let handlers = {
+      changeWordModeToName: () => this.props.changeWordMode("name"),
+      changeWordModeToEquivalent: () => this.props.changeWordMode("equivalent")
+    };
+    let node = <GlobalHotKeys keyMap={keyMap} handlers={handlers}/>;
+    return node;
+  }
+
   public render(): ReactNode {
+    let hotkeyNode = this.renderHotkeys();
     let node = (
       <Navbar fixedToTop={true}>
         <NavbarGroup align="left">
@@ -90,10 +119,13 @@ export class MainNavbar extends Component<Props, State> {
           <Button text="編集" minimal={true}/>
           <Button text="Git" minimal={true}/>
           <Button text="設定" minimal={true}/>
+          <Popover2 content={this.renderHelpMenu()} position="bottom-left">
+            <Button text="ヘルプ" minimal={true}/>
+          </Popover2>
         </NavbarGroup>
       </Navbar>
     );
-    return node;
+    return [node, hotkeyNode];
   }
 
 }
