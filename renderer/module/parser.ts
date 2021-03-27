@@ -34,8 +34,8 @@ export class Parser<S, E> {
 
   private readonly markupParser: MarkupParser<S, E>;
 
-  public constructor(reducers: MarkupReducers<S, E>) {
-    this.markupParser = new MarkupParser(reducers);
+  public constructor(resolvers: MarkupResolvers<S, E>) {
+    this.markupParser = new MarkupParser(resolvers);
   }
 
   public parse(word: Word): ParsedWord<S> {
@@ -174,12 +174,12 @@ export class Parser<S, E> {
 
 export class MarkupParser<S, E> {
 
-  private readonly reducers: MarkupReducers<S, E>;
+  private readonly resolvers: MarkupResolvers<S, E>;
   private source: string = "";
   private pointer: number = 0;
 
-  public constructor(reducers: MarkupReducers<S, E>) {
-    this.reducers = reducers;
+  public constructor(resolvers: MarkupResolvers<S, E>) {
+    this.resolvers = resolvers;
   }
 
   public parse(source: string): S {
@@ -209,14 +209,14 @@ export class MarkupParser<S, E> {
         children.push(string);
       }
     }
-    let node = this.reducers.join(children);
+    let node = this.resolvers.join(children);
     return node;
   }
 
   private consumeBrace(): E {
     this.pointer ++;
     let children = this.consumeBraceChildren();
-    let element = this.reducers.reduceBracket(children);
+    let element = this.resolvers.resolveBracket(children);
     this.pointer ++;
     return element;
   }
@@ -224,7 +224,7 @@ export class MarkupParser<S, E> {
   private consumeBracket(): E {
     this.pointer ++;
     let children = this.consumeBracketChildren()
-    let element = this.reducers.reduceBracket(children);
+    let element = this.resolvers.resolveBracket(children);
     this.pointer ++;
     return element;
   }
@@ -232,7 +232,7 @@ export class MarkupParser<S, E> {
   private consumeSlash(): [string, E] {
     this.pointer ++;
     let string = this.consumeSlashString();
-    let element = this.reducers.reduceSlash(string);
+    let element = this.resolvers.resolveSlash(string);
     this.pointer ++;
     return [string, element];
   }
@@ -245,7 +245,7 @@ export class MarkupParser<S, E> {
       let char = this.source.charAt(this.pointer);
       if (char === " " || char === "," || char === "." || char === "!" || char === "?") {
         if (currentChildren.length > 0) {
-          children.push(this.reducers.reduceLink(currentName, currentChildren));
+          children.push(this.resolvers.resolveLink(currentName, currentChildren));
           currentChildren = [];
           currentName = "";
         }
@@ -253,7 +253,7 @@ export class MarkupParser<S, E> {
         children.push(char);
       } else if (char === "}") {
         if (currentChildren.length > 0) {
-          children.push(this.reducers.reduceLink(currentName, currentChildren));
+          children.push(this.resolvers.resolveLink(currentName, currentChildren));
           currentChildren = [];
           currentName = "";
         }
@@ -347,21 +347,21 @@ export class MarkupParser<S, E> {
 }
 
 
-export class MarkupReducers<S, E> {
+export class MarkupResolvers<S, E> {
 
-  public readonly reduceLink: LinkReducer<E>;
-  public readonly reduceBracket: BracketReducer<E>;
-  public readonly reduceSlash: SlashReducer<E>;
+  public readonly resolveLink: LinkResolver<E>;
+  public readonly resolveBracket: BracketResolver<E>;
+  public readonly resolveSlash: SlashResolver<E>;
   public readonly join: Joiner<S, E>;
 
-  public constructor(reduceLink: LinkReducer<E>, reduceBracket: BracketReducer<E>, reduceSlash: SlashReducer<E>, join: Joiner<S, E>) {
-    this.reduceLink = reduceLink;
-    this.reduceBracket = reduceBracket;
-    this.reduceSlash = reduceSlash;
+  public constructor(reduceLink: LinkResolver<E>, reduceBracket: BracketResolver<E>, reduceSlash: SlashResolver<E>, join: Joiner<S, E>) {
+    this.resolveLink = reduceLink;
+    this.resolveBracket = reduceBracket;
+    this.resolveSlash = reduceSlash;
     this.join = join;
   }
 
-  public static simple(): MarkupReducers<string, string> {
+  public static createSimple(): MarkupResolvers<string, string> {
     let reduceLink = function (name: string, children: Array<string>): string {
       return children.join("");
     }
@@ -374,14 +374,14 @@ export class MarkupReducers<S, E> {
     let join = function (nodes: Array<string>): string {
       return nodes.join("");
     }
-    let reducers = new MarkupReducers(reduceLink, reduceBracket, reduceSlash, join);
-    return reducers;
+    let resolvers = new MarkupResolvers(reduceLink, reduceBracket, reduceSlash, join);
+    return resolvers;
   }
 
 }
 
 
-type LinkReducer<E> = (name: string, children: Array<E | string>) => E;
-type BracketReducer<E> = (children: Array<E | string>) => E;
-type SlashReducer<E> = (string: string) => E;
+type LinkResolver<E> = (name: string, children: Array<E | string>) => E;
+type BracketResolver<E> = (children: Array<E | string>) => E;
+type SlashResolver<E> = (string: string) => E;
 type Joiner<S, E> = (nodes: Array<E | string>) => S;

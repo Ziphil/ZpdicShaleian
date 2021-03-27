@@ -4,7 +4,7 @@ import {
   ParsedWord
 } from "./parsed-word";
 import {
-  MarkupReducers,
+  MarkupResolvers,
   Parser
 } from "./parser";
 
@@ -84,8 +84,8 @@ export class Word {
     this.equivalentNames = equivalentNames;
   }
 
-  public toParsed<S, E>(reducers: MarkupReducers<S, E>): ParsedWord<S> {
-    let parser = new Parser(reducers);
+  public parse<S, E>(resolvers: MarkupResolvers<S, E>): ParsedWord<S> {
+    let parser = new Parser(resolvers);
     let parsedWord = parser.parse(this);
     return parsedWord;
   }

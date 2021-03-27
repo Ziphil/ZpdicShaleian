@@ -12,7 +12,7 @@ import {
   Equivalent,
   Information,
   InformationKindUtil,
-  MarkupReducers,
+  MarkupResolvers,
   ParsedWord,
   Relation,
   Section,
@@ -22,24 +22,24 @@ import {
 
 export class WordPane extends Component<Props, State> {
 
-  private createMarkupReducers(): MarkupReducers<ReactNode, ReactNode> {
-    let reduceLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
+  private createMarkupResolvers(): MarkupResolvers<ReactNode, ReactNode> {
+    let resolveLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
       let node = <span>{children}</span>;
       return node;
     }
-    let reduceBracket = function (children: Array<ReactNode | string>): ReactNode {
+    let resolveBracket = function (children: Array<ReactNode | string>): ReactNode {
       let node = <span className="swp-sans">{children}</span>;
       return node;
     }
-    let reduceSlash = function (string: string): ReactNode {
+    let resolveSlash = function (string: string): ReactNode {
       let node = <span className="swp-italic">{string}</span>;
       return node;
     }
     let join = function (nodes: Array<ReactNode | string>): ReactNode {
       return nodes;
     }
-    let reducers = new MarkupReducers(reduceLink, reduceBracket, reduceSlash, join);
-    return reducers;
+    let resolvers = new MarkupResolvers(resolveLink, resolveBracket, resolveSlash, join);
+    return resolvers;
   }
 
   private renderHead(word: ParsedWord<ReactNode>): ReactNode {
@@ -164,8 +164,8 @@ export class WordPane extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let markupReducers = this.createMarkupReducers();
-    let word = this.props.word.toParsed(markupReducers);
+    let markupResolvers = this.createMarkupResolvers();
+    let word = this.props.word.parse(markupResolvers);
     let node = this.renderWord(word);
     return node;
   }
