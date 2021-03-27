@@ -7,12 +7,12 @@ import {
 
 export class NormalInformation<S> {
 
-  public readonly kind: InformationKind;
+  public readonly kind: Exclude<InformationKind, "phrase" | "example">;
   public readonly text: S;
   public readonly date: number | null;
   public readonly hidden: boolean;
 
-  public constructor(kind: InformationKind, text: S, date?: number | null, hidden?: boolean) {
+  public constructor(kind: Exclude<InformationKind, "phrase" | "example">, text: S, date?: number | null, hidden?: boolean) {
     this.kind = kind;
     this.text = text;
     this.date = date ?? null;

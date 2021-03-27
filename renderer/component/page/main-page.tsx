@@ -68,7 +68,12 @@ export class MainPage extends Component<Props, State> {
       <div className="zp-root zp-navbar-root">
         {navbarNode}
         <Loading loading={this.state.dictionary === null} progress={this.state.progress}>
-          <WordList words={this.state.dictionary?.words!}/>
+          <div className="zp-searcher-container">
+            Search form here
+          </div>
+          <div className="zp-word-list-container">
+            <WordList words={this.state.dictionary?.words!} language="ja"/>
+          </div>
         </Loading>
       </div>
     );
