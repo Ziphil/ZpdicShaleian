@@ -49,16 +49,22 @@ export class MainPage extends Component<Props, State> {
     });
     window.api.on("get-dictionary", (event, plainDictionary) => {
       let dictionary = Dictionary.fromPlain(plainDictionary);
-      this.setState({dictionary});
+      this.setState({dictionary}, () => {
+        this.updateWordsImmediately();
+      });
     });
   }
 
-  @debounce(300)
-  private updateWords(): void {
+  private updateWordsImmediately(): void {
     let parameter = this.state.parameter;
     let hitWords = this.state.dictionary!.words.filter((word) => parameter.match(word));
     let hitResult = {words: hitWords, suggestions: []};
     this.setState({hitResult});
+  }
+
+  @debounce(300)
+  private updateWords(): void {
+    this.updateWordsImmediately();
   }
 
   private handleParameterSet(parameter: WordParameter): void {
