@@ -35,7 +35,7 @@ export class MainPage extends Component<Props, State> {
     dictionary: null,
     parameter: NormalWordParameter.createEmpty("ja"),
     hitResult: {words: [], suggestions: []},
-    progress: 0
+    progress: {offset: 0, size: 0}
   }
 
   public componentDidMount(): void {
@@ -94,7 +94,7 @@ export class MainPage extends Component<Props, State> {
     let node = (
       <div className="zp-main-page zp-root zp-navbar-root">
         {navbarNode}
-        <Loading loading={this.state.dictionary === null} progress={this.state.progress}>
+        <Loading loading={this.state.dictionary === null} {...this.state.progress}>
           <div className="zp-search-form-container">
             <SearchForm parameter={this.state.parameter} onParameterSet={this.handleParameterSet.bind(this)}/>
           </div>
@@ -116,5 +116,5 @@ type State = {
   dictionary: Dictionary | null,
   parameter: WordParameter,
   hitResult: {words: Array<Word>, suggestions: Array<null>},
-  progress: number
+  progress: {offset: number, size: number}
 };

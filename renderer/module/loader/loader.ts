@@ -35,7 +35,7 @@ export abstract class Loader extends EventEmitter {
 
 
 export type LoaderEvent = {
-  progress: [progress: number],
+  progress: [offset: number, size: number],
   end: [dictionary: Dictionary],
   error: [error: Error]
 };

@@ -87,8 +87,8 @@ class Main {
   private setupIpc(): void {
     ipcMain.on("ready-get-dictionary", (event, path) => {
       let loader = new SplitLoader(path);
-      loader.on("progress", (progress) => {
-        event.reply("get-dictionary-progress", progress);
+      loader.on("progress", (offset, size) => {
+        event.reply("get-dictionary-progress", {offset, size});
       })
       loader.on("end", (dictionary) => {
         event.reply("get-dictionary", dictionary);

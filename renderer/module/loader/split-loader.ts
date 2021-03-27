@@ -59,8 +59,7 @@ export class SplitLoader extends Loader {
   }
 
   private emitProgress(): void {
-    let progress = (this.size > 0) ? this.count / this.size : 0;
-    this.emit("progress", progress);
+    this.emit("progress", this.count, this.size);
   }
 
 }

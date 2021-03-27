@@ -15,22 +15,23 @@ import {
 
 export class Loading extends Component<Props, State> {
 
-  public render(): ReactNode {
-    if (this.props.loading) {
-      let node = (
-        <div className="zp-loading">
-          <ProgressBar value={this.props.progress} intent="primary"/>
+  private renderProgressBar(): ReactNode {
+    let progress = (this.props.size > 0) ? this.props.offset / this.props.size : 0;
+    let node = (
+      <div className="zp-loading">
+        <ProgressBar value={progress} intent="primary"/>
+        <div className="zp-loading-detail">
+          <div className="zp-loading-percent">{(progress * 100).toFixed(2)} %</div>
+          <div className="zp-loading-offset">{this.props.offset} / {this.props.size}</div>
         </div>
-      );
-      return node;
-    } else {
-      let node = (
-        <Fragment>
-          {this.props.children}
-        </Fragment>
-      );
-      return node;
-    }
+      </div>
+    );
+    return node;
+  }
+
+  public render(): ReactNode {
+    let node = (this.props.loading) ? this.renderProgressBar() : <Fragment>{this.props.children}</Fragment>;
+    return node;
   }
 
 }
@@ -38,7 +39,8 @@ export class Loading extends Component<Props, State> {
 
 type Props = {
   loading: boolean,
-  progress: number
+  offset: number,
+  size: number
 };
 type State = {
 };
