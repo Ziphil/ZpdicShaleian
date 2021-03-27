@@ -8,7 +8,9 @@ import {
   Dictionary,
   NormalWordParameter,
   Word,
-  WordParameter
+  WordMode,
+  WordParameter,
+  WordType
 } from "../../module";
 import {
   debounce
@@ -60,19 +62,34 @@ export class MainPage extends Component<Props, State> {
     this.updateWordsImmediately();
   }
 
-  private handleParameterSet(parameter: WordParameter): void {
+  private changeParameter(parameter: WordParameter): void {
     this.setState({parameter}, () => {
       this.updateWords();
     });
   }
 
+  private changeWordMode(mode: WordMode) {
+    let oldParameter = WordParameter.getNormal(this.state.parameter);
+    let parameter = new NormalWordParameter(oldParameter.search, mode, oldParameter.type, oldParameter.language);
+    this.changeParameter(parameter);
+  }
+
+  private changeWordType(type: WordType) {
+    let oldParameter = WordParameter.getNormal(this.state.parameter);
+    let parameter = new NormalWordParameter(oldParameter.search, oldParameter.mode, type, oldParameter.language);
+    this.changeParameter(parameter);
+  }
+
   public render(): ReactNode {
     let node = (
       <div className="zp-main-page zp-root zp-navbar-root">
-        <MainNavbar/>
+        <MainNavbar
+          changeWordMode={this.changeWordMode.bind(this)}
+          changeWordType={this.changeWordType.bind(this)}
+        />
         <Loading loading={this.state.dictionary === null} {...this.state.progress}>
           <div className="zp-search-form-container">
-            <SearchForm parameter={this.state.parameter} onParameterSet={this.handleParameterSet.bind(this)}/>
+            <SearchForm parameter={this.state.parameter} onParameterSet={this.changeParameter.bind(this)}/>
           </div>
           <div className="zp-word-list-container" id="word-list-container">
             <WordList words={this.state.hitResult.words} language="ja"/>

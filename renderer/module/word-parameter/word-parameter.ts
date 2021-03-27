@@ -58,6 +58,29 @@ export abstract class WordParameter {
         return candidate.includes(search);
       }
       return matcher;
+    } else if (type === "pair") {
+      let matcher = function (search: string, candidate: string): boolean {
+        try {
+          if (search.length <= 10) {
+            let predicate = false;
+            for (let i = 0 ; i < search.length ; i ++) {
+              let beforeSearch = search.substring(0, i);
+              let afterSearch = search.substring(i + 1);
+              let regexp = new RegExp("^" + beforeSearch + "." + afterSearch + "$");
+              if (candidate.match(regexp) !== null) {
+                predicate = true;
+                break;
+              }
+            }
+            return predicate;
+          } else {
+            return false;
+          }
+        } catch (error) {
+          return false;
+        }
+      }
+      return matcher;
     } else if (type === "regular") {
       let matcher = function (search: string, candidate: string): boolean {
         try {
@@ -79,5 +102,5 @@ export abstract class WordParameter {
 export const WORD_MODES = ["name", "equivalent", "both", "content"] as const;
 export type WordMode = (typeof WORD_MODES)[number];
 
-export const WORD_TYPES = ["exact", "prefix", "suffix", "part", "regular"] as const;
+export const WORD_TYPES = ["exact", "prefix", "suffix", "part", "pair", "regular"] as const;
 export type WordType = (typeof WORD_TYPES)[number];

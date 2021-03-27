@@ -18,6 +18,10 @@ import {
   ReactNode
 } from "react";
 import {
+  WordMode,
+  WordType
+} from "../../module";
+import {
   Component
 } from "../component";
 
@@ -46,23 +50,23 @@ export class MainNavbar extends Component<Props, State> {
     let node = (
       <Menu>
         <MenuItem text="検索範囲の変更" icon="blank">
-          <MenuItem text="単語" label="Ctrl+W"/>
-          <MenuItem text="訳語" label="Ctrl+E"/>
-          <MenuItem text="両方" label="Ctrl+Shift+W"/>
-          <MenuItem text="内容" label="Ctrl+Q"/>
+          <MenuItem text="単語" label="Ctrl+W" onClick={() => this.props.changeWordMode("name")}/>
+          <MenuItem text="訳語" label="Ctrl+E" onClick={() => this.props.changeWordMode("equivalent")}/>
+          <MenuItem text="両方" label="Ctrl+Shift+W" onClick={() => this.props.changeWordMode("both")}/>
+          <MenuItem text="内容" label="Ctrl+Q" onClick={() => this.props.changeWordMode("content")}/>
         </MenuItem>
         <MenuItem text="検索方式の変更" icon="blank">
-          <MenuItem text="完全一致"/>
-          <MenuItem text="前方一致" label="Ctrl+T"/>
-          <MenuItem text="後方一致"/>
-          <MenuItem text="部分一致"/>
-          <MenuItem text="最小対語" label="Ctrl+G"/>
-          <MenuItem text="正規表現" label="Ctrl+Shift+G"/>
+          <MenuItem text="完全一致" label="Ctrl+Shift+T" onClick={() => this.props.changeWordType("exact")}/>
+          <MenuItem text="前方一致" label="Ctrl+T" onClick={() => this.props.changeWordType("prefix")}/>
+          <MenuItem text="後方一致" onClick={() => this.props.changeWordType("suffix")}/>
+          <MenuItem text="部分一致" onClick={() => this.props.changeWordType("part")}/>
+          <MenuItem text="最小対語" label="Ctrl+Shift+G" onClick={() => this.props.changeWordType("pair")}/>
+          <MenuItem text="正規表現" label="Ctrl+G" onClick={() => this.props.changeWordType("regular")}/>
         </MenuItem>
         <MenuItem text="検索結果のシャッフル" icon="random" label="Ctrl+R"/>
         <MenuDivider/>
         <MenuItem text="高度な検索" icon="blank" label="Ctrl+F"/>
-        <MenuItem text="スクリプト検索" icon="blank" label="Ctrl+Shift+F"/>
+        <MenuItem text="スクリプト検索" icon="blank" label="Ctrl+Shift+F"/>  
       </Menu>
     );
     return node;
@@ -96,6 +100,8 @@ export class MainNavbar extends Component<Props, State> {
 
 
 type Props = {
+  changeWordMode: (mode: WordMode) => void;
+  changeWordType: (type: WordType) => void;
 };
 type State = {
 };

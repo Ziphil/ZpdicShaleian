@@ -41,7 +41,7 @@ export class SearchForm extends Component<Props, State> {
   public render(): ReactNode {
     let parameter = WordParameter.getNormal(this.props.parameter);
     let modeTexts = {name: "単語", equivalent: "訳語", both: "両方", content: "内容"};
-    let typeTexts = {exact: "完全", prefix: "前方", suffix: "後方", part: "部分", regular: "正規"};
+    let typeTexts = {exact: "完全", prefix: "前方", suffix: "後方", part: "部分", pair: "対語", regular: "正規"};
     let node = (
       <div className="zp-search-form">
         <ControlGroup fill={true}>
