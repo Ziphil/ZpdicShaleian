@@ -9,7 +9,7 @@ import {
   ReactNode
 } from "react";
 import {
-  StringSelect
+  Select
 } from "../atom";
 import {
   Component
@@ -53,9 +53,9 @@ export class SearchForm extends Component<Props, State> {
     let node = (
       <div className="zp-search-form">
         <ControlGroup fill={true}>
-          <InputGroup value={parameter.search} onChange={(event) => this.handleParameterSet({search: event.target.value})}/>
-          <StringSelect items={[...WORD_MODES]} activeItem={parameter.mode} onItemSelect={(mode) => this.handleParameterSet({mode})}/>
-          <StringSelect items={[...WORD_TYPES]} activeItem={parameter.type} onItemSelect={(type) => this.handleParameterSet({type})}/>
+          <InputGroup value={parameter.search} fill={true} onChange={(event) => this.handleParameterSet({search: event.target.value})}/>
+          <Select buttonClassName="zp-search-form-select" items={[...WORD_MODES]} activeItem={parameter.mode} onItemSelect={(mode) => this.handleParameterSet({mode})}/>
+          <Select buttonClassName="zp-search-form-select" items={[...WORD_TYPES]} activeItem={parameter.type} onItemSelect={(type) => this.handleParameterSet({type})}/>
         </ControlGroup>
       </div>
     );

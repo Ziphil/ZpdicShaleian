@@ -1,3 +1,3 @@
 //
 
-export * from "./string-select";
+export * from "./select";
