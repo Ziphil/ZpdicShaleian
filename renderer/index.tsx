@@ -1,5 +1,8 @@
 //
 
+import {
+  FocusStyleManager
+} from "@blueprintjs/core";
 import * as react from "react";
 import {
   render
@@ -15,7 +18,8 @@ class Main {
     this.render();
   }
 
-  private render(): void {
+  private render(): void { 
+    FocusStyleManager.onlyShowFocusOnTabs();
     require("./component/root.scss");
     render(<Root/>, document.getElementById("root"));
   }
