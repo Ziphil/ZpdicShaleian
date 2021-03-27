@@ -1,7 +1,5 @@
 //
 
-import {
-} from "@blueprintjs/core";
 import * as react from "react";
 import {
   Fragment,
@@ -93,10 +91,10 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderEquivalent(equivalent: Equivalent<ReactNode>): ReactNode {
-    let categoryNode = (equivalent.category !== "") && (
+    let categoryNode = (equivalent.category !== null) && (
       <span className="swp-equivalent-category swp-tag swp-right-margin">{equivalent.category}</span>
     );
-    let frameNode = (equivalent.frame !== "") && (
+    let frameNode = (equivalent.frame !== null) && (
       <span className="swp-equivalent-frame swp-small swp-right-margin">({equivalent.frame})</span>
     );
     let node = (
@@ -136,9 +134,12 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderRelation(relation: Relation<ReactNode>): ReactNode {
+    let titleNode = (relation.title !== null) && (
+      <span className="swp-relation-title swp-tag swp-right-margin">{relation.title}</span>
+    );
     let node = (
       <li className="swp-relation swp-text swp-list-item">
-        <span className="swp-relation-title swp-tag swp-right-margin">{relation.title}</span>
+        {titleNode}
         {WordPane.intersperse(relation.names, ", ")}
       </li>
     );

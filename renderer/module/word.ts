@@ -36,22 +36,24 @@ export class Word {
       let name = match[1];
       let date = parseInt(match[2], 10);
       let contents = {} as Contents;
+      let before = true;
       let currentLanguage = "";
       let currentContent = "";
       for (let i = 1 ; i < lines.length ; i ++) {
         let line = lines[i];
         let languageMatch = line.match(/^!(\w{2})/);
         if (languageMatch) {
-          if (currentLanguage !== "" && currentContent.trim() !== "") {
+          if (!before) {
             contents[currentLanguage] = currentContent.trim();
           }
+          before = false;
           currentLanguage = languageMatch[1].toLowerCase();
           currentContent = "";
         } else {
           currentContent += line + "\n";
         }
       }
-      if (currentContent.trim() !== "") {
+      if (!before) {
         contents[currentLanguage] = currentContent.trim();
       }
       let word = new Word(name, date, contents);

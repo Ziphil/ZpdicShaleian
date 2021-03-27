@@ -12,11 +12,11 @@ export class NormalInformation<S> {
   public readonly date: number | null;
   public readonly hidden: boolean;
 
-  public constructor(kind: Exclude<InformationKind, "phrase" | "example">, text: S, date?: number | null, hidden?: boolean) {
+  public constructor(kind: Exclude<InformationKind, "phrase" | "example">, text: S, date: number | null, hidden: boolean) {
     this.kind = kind;
     this.text = text;
-    this.date = date ?? null;
-    this.hidden = hidden ?? false;
+    this.date = date;
+    this.hidden = hidden;
   }
 
 }
@@ -31,13 +31,13 @@ export class PhraseInformation<S> {
   public readonly date: number | null;
   public readonly hidden: boolean;
 
-  public constructor(expression: S, equivalents: Array<S>, text?: S | null, date?: number | null, hidden?: boolean) {
+  public constructor(expression: S, equivalents: Array<S>, text: S | null, date: number | null, hidden: boolean) {
     this.kind = "phrase";
     this.expression = expression;
     this.equivalents = equivalents;
-    this.text = text ?? null;
-    this.date = date ?? null;
-    this.hidden = hidden ?? false;
+    this.text = text;
+    this.date = date;
+    this.hidden = hidden;
   }
 
 }
@@ -51,12 +51,12 @@ export class ExampleInformation<S> {
   public readonly date: number | null;
   public readonly hidden: boolean;
 
-  public constructor(sentence: S, translation: S, date?: number | null, hidden?: boolean) {
+  public constructor(sentence: S, translation: S, date: number | null, hidden: boolean) {
     this.kind = "example";
     this.sentence = sentence;
     this.translation = translation;
-    this.date = date ?? null;
-    this.hidden = hidden ?? false;
+    this.date = date;
+    this.hidden = hidden;
   }
 
 }

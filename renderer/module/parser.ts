@@ -55,19 +55,21 @@ export class Parser<S, E> {
   private parsePart(content: string): Part<S> {
     let lines = content.split(/\r\n|\r|\n/);
     let sections = [];
-    let currentLexicalCategory = "";
+    let before = true;
+    let currentLexicalCategory = null as string | null;
     let currentEquivalents = [];
     let currentInformations = [];
     let currentRelations = [];
     for (let i = 0 ; i < lines.length ; i ++) {
       let line = lines[i];
-      let lexicalCategoryMatch = line.match(/^\+\s*<(.+?)>/);
+      let lexicalCategoryMatch = line.match(/^\+\s*(?:<(.*?)>)/);
       if (lexicalCategoryMatch) {
-        if (currentLexicalCategory !== "") {
+        if (!before) {
           let section = new Section(currentLexicalCategory, currentEquivalents, currentInformations, currentRelations);
           sections.push(section);
         }
-        currentLexicalCategory = lexicalCategoryMatch[1];
+        before = false;
+        currentLexicalCategory = lexicalCategoryMatch[1] || null;
         currentEquivalents = [];
         currentInformations = [];
         currentRelations = [];
@@ -81,7 +83,7 @@ export class Parser<S, E> {
         currentInformations.push(lineData);
       }
     }
-    if (currentLexicalCategory !== "") {
+    if (!before) {
       let section = new Section(currentLexicalCategory, currentEquivalents, currentInformations, currentRelations);
       sections.push(section);
     }
@@ -102,11 +104,11 @@ export class Parser<S, E> {
   }
 
   private parseEquivalent(line: string): Equivalent<S> | null {
-    let match = line.match(/^=(\?)?\s*(?:<(.+?)>\s*)?(?:\((.+?)\)\s*)?(.+)$/)
+    let match = line.match(/^=(\?)?\s*(?:<(.*?)>\s*)?(?:\((.*?)\)\s*)?(.*)$/)
     if (match) {
       let hidden = match[1] !== undefined;
-      let category = match[2] ?? "";
-      let frame = this.markupParser.parse(match[3] ?? "");
+      let category = (match[2] !== undefined && match[2] !== "") ? match[2] : null;
+      let frame = (match[3] !== undefined && match[3] !== "") ? this.markupParser.parse(match[3]) : null;
       let names = match[4].split(/\s*,\s*/).map((rawName) => this.markupParser.parse(rawName));
       let equivalent = new Equivalent(category, frame, names, hidden);
       return equivalent;
@@ -116,25 +118,25 @@ export class Parser<S, E> {
   }
 
   private parseInformation(line: string): Information<S> | null {
-    let match = line.match(/^(\w)(\?)?:\s*(?:@(\d+)\s*)?(.+)$/);
+    let match = line.match(/^(\w)(\?)?:\s*(?:@(\d+)\s*)?(.*)$/);
     if (match) {
       let kind = InformationKindUtil.fromCode(match[1]);
       let hidden = match[2] !== undefined;
       let date = (match[3] !== undefined) ? parseInt(match[3], 10) : null;
       let rawText = match[4];
       if (kind === "phrase") {
-        let textMatch = rawText.match(/^(.+?)\s*→\s*(.+?)(?:\s*\|\s*(.+))?$/)
+        let textMatch = rawText.match(/^(.*?)\s*→\s*(.*?)(?:\s*\|\s*(.*))?$/)
         if (textMatch) {
           let expression = this.markupParser.parse(textMatch[1]);
           let equivalents = textMatch[2].split(/\s*,\s*/).map((rawName) => this.markupParser.parse(rawName));
-          let phraseText = (textMatch[3] !== undefined) ? this.markupParser.parse(textMatch[3]) : null;
-          let information = new PhraseInformation(expression, equivalents, phraseText, date, hidden);
+          let text = (textMatch[3] !== undefined || textMatch[3] !== "") ? this.markupParser.parse(textMatch[3]) : null;
+          let information = new PhraseInformation(expression, equivalents, text, date, hidden);
           return information;
         } else {
           return null;
         }
       } else if (kind === "example") {
-        let textMatch = rawText.match(/^(.+?)\s*→\s*(.+?)$/);
+        let textMatch = rawText.match(/^(.*?)\s*→\s*(.*?)$/);
         if (textMatch) {
           let sentence = this.markupParser.parse(textMatch[1]);
           let translation = this.markupParser.parse(textMatch[2]);
@@ -156,9 +158,9 @@ export class Parser<S, E> {
   }
 
   private parseRelation(line: string): Relation<S> | null {
-    let match = line.match(/^\-\s*<(.+?)>\s*(.+)$/)
+    let match = line.match(/^\-\s*(?:<(.*?)>\s*)?(.*)$/)
     if (match) {
-      let title = match[1];
+      let title = (match[1] !== undefined && match[1] !== "") ? match[1] : null;
       let names = match[2].split(/\s*,\s*/).map((rawName) => this.markupParser.parse(rawName));
       let relation = new Relation(title, names);
       return relation;
