@@ -13,12 +13,15 @@ export class Word {
 
   public name: string;
   public date: number;
+  public equivalentNames: EquivalentNames;
   public contents: Contents;
 
   public constructor(name: string, date: number, contents: Contents) {
     this.name = name;
+    this.equivalentNames = {};
     this.date = date;
     this.contents = contents;
+    this.update();
   }
 
   public static fromPlain(plain: Word): Word {
@@ -63,6 +66,24 @@ export class Word {
     }
   }
 
+  private update(): void {
+    let equivalentNames = {} as EquivalentNames;
+    for (let [language, content] of Object.entries(this.contents)) {
+      let eachEquivalentNames = [];
+      if (content !== undefined) {
+        let match;
+        if (match = content.match(/^=(\?)?\s*(?:<(.*?)>\s*)?(?:\((.*?)\)\s*)?(.*)$/m)) {
+          eachEquivalentNames.push(...match[4].split(/\s*,\s*/));
+        }
+        if (match = content.match(/^(P)(\?)?:\s*(?:@(\d+)\s*)?(.*?)\s*→\s*(.*?)(?:\s*\|\s*(.*))?$/m)) {
+          eachEquivalentNames.push(...match[5].split(/\s*,\s*/));
+        }
+        equivalentNames[language] = eachEquivalentNames;
+      }
+    }
+    this.equivalentNames = equivalentNames;
+  }
+
   public toParsed<S, E>(reducers: MarkupReducers<S, E>): ParsedWord<S> {
     let parser = new Parser(reducers);
     let parsedWord = parser.parse(this);
@@ -72,4 +93,5 @@ export class Word {
 }
 
 
+export type EquivalentNames = {[language: string]: Array<string> | undefined};
 export type Contents = {[language: string]: string | undefined};

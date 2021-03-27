@@ -11,15 +11,21 @@ import {
   ReactNode
 } from "react";
 import {
-  Dictionary
+  Dictionary,
+  NormalWordParameter,
+  Word,
+  WordParameter
 } from "../../module";
+import {
+  debounce
+} from "../../util/decorator";
 import {
   Component
 } from "../component";
 import {
   Loading,
   WordList,
-  WordSearcher
+  SearchForm
 } from "../compound";
 
 
@@ -27,6 +33,8 @@ export class MainPage extends Component<Props, State> {
 
   public state: State = {
     dictionary: null,
+    parameter: NormalWordParameter.createEmpty("ja"),
+    hitResult: {words: [], suggestions: []},
     progress: 0
   }
 
@@ -42,6 +50,20 @@ export class MainPage extends Component<Props, State> {
     window.api.on("get-dictionary", (event, plainDictionary) => {
       let dictionary = Dictionary.fromPlain(plainDictionary);
       this.setState({dictionary});
+    });
+  }
+
+  @debounce(300)
+  private updateWords(): void {
+    let parameter = this.state.parameter;
+    let hitWords = this.state.dictionary!.words.filter((word) => parameter.match(word));
+    let hitResult = {words: hitWords, suggestions: []};
+    this.setState({hitResult});
+  }
+
+  private handleParameterSet(parameter: WordParameter): void {
+    this.setState({parameter}, () => {
+      this.updateWords();
     });
   }
 
@@ -69,11 +91,11 @@ export class MainPage extends Component<Props, State> {
       <div className="zp-main-page zp-root zp-navbar-root">
         {navbarNode}
         <Loading loading={this.state.dictionary === null} progress={this.state.progress}>
-          <div className="zp-word-searcher-container">
-            <WordSearcher/>
+          <div className="zp-search-form-container">
+            <SearchForm parameter={this.state.parameter} onParameterSet={this.handleParameterSet.bind(this)}/>
           </div>
           <div className="zp-word-list-container">
-            <WordList words={this.state.dictionary?.words!} language="ja"/>
+            <WordList words={this.state.hitResult.words} language="ja"/>
           </div>
         </Loading>
       </div>
@@ -88,5 +110,7 @@ type Props = {
 };
 type State = {
   dictionary: Dictionary | null,
+  parameter: WordParameter,
+  hitResult: {words: Array<Word>, suggestions: Array<null>},
   progress: number
 };

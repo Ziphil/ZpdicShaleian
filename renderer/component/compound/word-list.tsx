@@ -1,7 +1,5 @@
 //
 
-import {
-} from "@blueprintjs/core";
 import * as react from "react";
 import {
   ReactNode
@@ -20,9 +18,9 @@ import {
 export class WordList extends Component<Props, State> {
 
   public render(): ReactNode {
-    let wordPanes = this.props.words.map((word) => {
+    let wordPanes = this.props.words.slice(0, 20).map((word) => {
       let wordPane = (
-        <WordPane key={word.name} word={word}/>
+        <WordPane key={word.name} word={word} language={this.props.language}/>
       );
       return wordPane;
     }); 
@@ -38,7 +36,8 @@ export class WordList extends Component<Props, State> {
 
 
 type Props = {
-  words: Array<Word>
+  words: Array<Word>,
+  language: string
 };
 type State = {
 };

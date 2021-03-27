@@ -31,11 +31,13 @@
     "@blueprintjs/core": "^3.41.0",
     "@blueprintjs/select": "^3.15.8",
     "electron-connect": "^0.6.3",
+    "lodash-es": "^4.17.21",
     "query-string": "^7.0.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0"
   },
   "devDependencies": {
+    "@types/lodash-es": "^4.17.4",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
     "@types/webpack-merge": "^5.0.0",

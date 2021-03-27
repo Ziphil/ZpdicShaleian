@@ -10,3 +10,5 @@ export * from "./part";
 export * from "./relation";
 export * from "./section";
 export * from "./word";
+export * from "./word-parameter/normal-word-parameter";
+export * from "./word-parameter/word-parameter";

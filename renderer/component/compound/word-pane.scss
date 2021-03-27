@@ -3,7 +3,8 @@
 
 .swp-word {
   @extend .bp3-card;
-  margin-bottom: $pt-grid-size;
+  margin: 1px;
+  margin-bottom: $pt-grid-size + 2px;
   padding: $pt-grid-size;
   user-select: text;
   &:last-child {
