@@ -3,6 +3,9 @@
 import {
   Word
 } from "../word";
+import {
+  NormalWordParameter
+} from "./normal-word-parameter";
 
 
 export abstract class WordParameter {
@@ -10,6 +13,15 @@ export abstract class WordParameter {
   public abstract language: string;
 
   public abstract match(word: Word): boolean;
+
+  public static getNormal(parameter: WordParameter): NormalWordParameter {
+    let language = parameter.language;
+    if (parameter instanceof NormalWordParameter) {
+      return parameter;
+    } else {
+      return NormalWordParameter.createEmpty(language);
+    }
+  }
 
   protected static createCandidates(word: Word, mode: WordMode, language: string): Array<string> {
     if (mode === "name") {

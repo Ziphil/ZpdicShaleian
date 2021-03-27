@@ -26,19 +26,9 @@ import {
 
 export class SearchForm extends Component<Props, State> {
 
-  private getNormalWordParameter(): NormalWordParameter {
-    let parameter = this.props.parameter;
-    let language = parameter.language;
-    if (parameter instanceof NormalWordParameter) {
-      return parameter;
-    } else {
-      return NormalWordParameter.createEmpty(language);
-    }
-  }
-
   private handleParameterSet(nextParameter: {search?: string, mode?: WordMode, type?: WordType}): void {
     if (this.props.onParameterSet) {
-      let oldParameter = this.getNormalWordParameter();
+      let oldParameter = WordParameter.getNormal(this.props.parameter);
       let search = nextParameter.search ?? oldParameter.search;
       let mode = nextParameter.mode ?? oldParameter.mode;
       let type = nextParameter.type ?? oldParameter.type;
@@ -49,7 +39,7 @@ export class SearchForm extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let parameter = this.getNormalWordParameter();
+    let parameter = WordParameter.getNormal(this.props.parameter);
     let modeTexts = {name: "単語", equivalent: "訳語", both: "両方", content: "内容"};
     let typeTexts = {exact: "完全", prefix: "前方", suffix: "後方", part: "部分", regular: "正規"};
     let node = (
