@@ -1,11 +1,5 @@
 //
 
-import {
-  Button,
-  Navbar,
-  NavbarGroup,
-  NavbarHeading
-} from "@blueprintjs/core";
 import * as react from "react";
 import {
   ReactNode
@@ -24,8 +18,9 @@ import {
 } from "../component";
 import {
   Loading,
-  WordList,
-  SearchForm
+  MainNavbar,
+  SearchForm,
+  WordList
 } from "../compound";
 
 
@@ -71,29 +66,10 @@ export class MainPage extends Component<Props, State> {
     });
   }
 
-  private renderNavbar(): ReactNode {
-    let node = (
-      <Navbar fixedToTop={true}>
-        <NavbarGroup align="left">
-          <NavbarHeading>
-            <strong>シャレイア語辞典</strong>
-          </NavbarHeading>
-        </NavbarGroup>
-        <NavbarGroup align="left">
-          <Button text="ファイル" minimal={true}/>
-          <Button text="検索" minimal={true}/>
-          <Button text="編集" minimal={true}/>
-        </NavbarGroup>
-      </Navbar>
-    );
-    return node;
-  }
-
   public render(): ReactNode {
-    let navbarNode = this.renderNavbar();
     let node = (
       <div className="zp-main-page zp-root zp-navbar-root">
-        {navbarNode}
+        <MainNavbar/>
         <Loading loading={this.state.dictionary === null} {...this.state.progress}>
           <div className="zp-search-form-container">
             <SearchForm parameter={this.state.parameter} onParameterSet={this.handleParameterSet.bind(this)}/>

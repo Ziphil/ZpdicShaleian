@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^3.41.0",
+    "@blueprintjs/popover2": "^0.4.0",
     "@blueprintjs/select": "^3.15.8",
     "electron-connect": "^0.6.3",
     "lodash-es": "^4.17.21",
