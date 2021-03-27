@@ -5,15 +5,15 @@
 @import "~@blueprintjs/core/src/blueprint.scss";
 @import "./modification.scss";
 
+@import "./page/main-page.scss";
 @import "./compound/word-pane.scss";
 
 
 .zp-root {
+  height: 100vh;
   padding: $pt-grid-size * 1.5;
-  padding-top: $pt-grid-size * 2;
-  padding-bottom: $pt-grid-size * 2;
 }
 
 .zp-navbar-root {
-  padding-top: $pt-navbar-height + $pt-grid-size * 2;
+  padding-top: $pt-navbar-height + $pt-grid-size * 1.5 + 1px;
 }

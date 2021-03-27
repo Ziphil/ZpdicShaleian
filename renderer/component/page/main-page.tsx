@@ -18,7 +18,8 @@ import {
 } from "../component";
 import {
   Loading,
-  WordList
+  WordList,
+  WordSearcher
 } from "../compound";
 
 
@@ -65,11 +66,11 @@ export class MainPage extends Component<Props, State> {
   public render(): ReactNode {
     let navbarNode = this.renderNavbar();
     let node = (
-      <div className="zp-root zp-navbar-root">
+      <div className="zp-main-page zp-root zp-navbar-root">
         {navbarNode}
         <Loading loading={this.state.dictionary === null} progress={this.state.progress}>
-          <div className="zp-searcher-container">
-            Search form here
+          <div className="zp-word-searcher-container">
+            <WordSearcher/>
           </div>
           <div className="zp-word-list-container">
             <WordList words={this.state.dictionary?.words!} language="ja"/>
