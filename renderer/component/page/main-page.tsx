@@ -100,7 +100,7 @@ export class MainPage extends Component<Props, State> {
           <div className="zp-search-form-container">
             <SearchForm parameter={this.state.parameter} onParameterSet={this.handleParameterSet.bind(this)}/>
           </div>
-          <div className="zp-word-list-container">
+          <div className="zp-word-list-container" id="word-list-container">
             <WordList words={this.state.hitResult.words} language="ja"/>
           </div>
         </Loading>
