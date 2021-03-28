@@ -94,11 +94,13 @@ export class Word {
     for (let [language, content] of Object.entries(this.contents)) {
       let eachEquivalentNames = [];
       if (content !== undefined) {
+        let equivalentRegexp = /^=(\?)?\s*(?:<(.*?)>\s*)?(?:\((.*?)\)\s*)?(.*)$/mg;
+        let phraseRegexp = /^(P)(\?)?:\s*(?:@(\d+)\s*)?(.*?)\s*→\s*(.*?)(?:\s*\|\s*(.*))?$/mg;
         let match;
-        if (match = content.match(/^=(\?)?\s*(?:<(.*?)>\s*)?(?:\((.*?)\)\s*)?(.*)$/m)) {
+        while (match = equivalentRegexp.exec(content)) {
           eachEquivalentNames.push(...match[4].split(/\s*,\s*/));
         }
-        if (match = content.match(/^(P)(\?)?:\s*(?:@(\d+)\s*)?(.*?)\s*→\s*(.*?)(?:\s*\|\s*(.*))?$/m)) {
+        while (match = phraseRegexp.exec(content)) {
           eachEquivalentNames.push(...match[5].split(/\s*,\s*/));
         }
         equivalentNames[language] = eachEquivalentNames;
