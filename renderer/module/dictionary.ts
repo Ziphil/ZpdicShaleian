@@ -12,14 +12,20 @@ import {
 export class Dictionary {
 
   public words: Array<Word>;
+  public settings: any;
+  public markers: Map<string, Array<Marker>>;
 
-  public constructor(words: Array<Word>) {
+  public constructor(words: Array<Word>, settings: any, markers: Map<string, Array<Marker>>) {
     this.words = words;
+    this.settings = settings;
+    this.markers = markers;
   }
 
   public static fromPlain(plain: PlainDictionary): Dictionary {
     let words = plain.words.map((word) => Word.fromPlain(word));
-    let dictionary = new Dictionary(words);
+    let settings = plain.settings;
+    let markers = plain.markers;
+    let dictionary = new Dictionary(words, settings, markers);
     return dictionary;
   }
 
@@ -58,5 +64,10 @@ export class Dictionary {
 export interface PlainDictionary {
 
   words: Array<PlainWord>;
+  settings: any;
+  markers: Map<string, Array<Marker>>;
 
 }
+
+
+export type Marker = "circle" | "square" | "upTriangle" | "diamond" | "downTriangle" | "cross" | "pentagon" | "heart";

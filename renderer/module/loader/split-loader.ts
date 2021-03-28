@@ -51,7 +51,9 @@ export class SplitLoader extends Loader {
         this.emitProgress();
         if (this.count >= this.size) {
           let words = this.words;
-          let dictionary = new Dictionary(words);
+          let settings = null;
+          let markers = new Map();
+          let dictionary = new Dictionary(words, settings, markers);
           this.emit("end", dictionary);
         }
       }
