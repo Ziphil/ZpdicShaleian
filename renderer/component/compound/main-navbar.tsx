@@ -22,9 +22,6 @@ import {
   GlobalHotKeys
 } from "react-hotkeys";
 import {
-  component
-} from "../decorator";
-import {
   WordMode,
   WordType
 } from "../../module";
@@ -37,6 +34,9 @@ import {
 import {
   Component
 } from "../component";
+import {
+  component
+} from "../decorator";
 
 
 @component()

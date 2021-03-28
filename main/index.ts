@@ -86,7 +86,7 @@ class Main {
       if (window !== undefined) {
         window.webContents.openDevTools();
       }
-    })
+    });
     ipcMain.on("close-window", (event, id) => {
       let window = this.windows.get(id);
       if (window !== undefined) {
@@ -103,10 +103,10 @@ class Main {
       let loader = new SplitLoader(path);
       loader.on("progress", (offset, size) => {
         event.reply("get-dictionary-progress", {offset, size});
-      })
+      });
       loader.on("end", (dictionary) => {
         event.reply("get-dictionary", dictionary);
-      })
+      });
       loader.on("error", (error) => {
         console.error(error);
       });

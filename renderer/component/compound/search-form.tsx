@@ -9,6 +9,14 @@ import {
   ReactNode
 } from "react";
 import {
+  NormalWordParameter,
+  WORD_MODES,
+  WORD_TYPES,
+  WordMode,
+  WordParameter,
+  WordType
+} from "../../module";
+import {
   Select
 } from "../atom";
 import {
@@ -17,14 +25,6 @@ import {
 import {
   component
 } from "../decorator";
-import {
-  NormalWordParameter,
-  WORD_MODES,
-  WordMode,
-  WordParameter,
-  WORD_TYPES,
-  WordType,
-} from "../../module";
 
 
 @component()

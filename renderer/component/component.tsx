@@ -1,7 +1,7 @@
 //
 
 import {
-  BrowserWindowConstructorOptions,
+  BrowserWindowConstructorOptions
 } from "electron";
 import {
   Component as ReactComponent,

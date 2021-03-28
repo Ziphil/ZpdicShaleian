@@ -31,7 +31,7 @@ class Main {
     configureHotkeys({ignoreTags: ["select"]});
   }
 
-  private render(): void { 
+  private render(): void {
     require("./component/root.scss");
     render(<Root/>, document.getElementById("root"));
   }

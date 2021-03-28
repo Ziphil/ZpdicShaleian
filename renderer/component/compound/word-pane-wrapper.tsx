@@ -16,19 +16,20 @@ import {
 } from "react";
 import {
   HotKeys
-} from "react-hotkeys"
+} from "react-hotkeys";
+import {
+  Word
+} from "../../module";
 import {
   Component
 } from "../component";
 import {
-  WordPane
-} from "./word-pane";
-import {
   component
 } from "../decorator";
+
 import {
-  Word
-} from "../../module";
+  WordPane
+} from "./word-pane";
 
 
 @component()

@@ -1,19 +1,6 @@
 //
 
 import {
-  Word
-} from "./word";
-import {
-  ParsedWord,
-  Parts
-} from "./parsed-word";
-import {
-  Part
-} from "./part";
-import {
-  Section
-} from "./section";
-import {
   Equivalent
 } from "./equivalent";
 import {
@@ -26,8 +13,21 @@ import {
   InformationKindUtil
 } from "./information-kind";
 import {
+  ParsedWord,
+  Parts
+} from "./parsed-word";
+import {
+  Part
+} from "./part";
+import {
   Relation
 } from "./relation";
+import {
+  Section
+} from "./section";
+import {
+  Word
+} from "./word";
 
 
 export class Parser<S, E> {
@@ -60,8 +60,7 @@ export class Parser<S, E> {
     let currentEquivalents = [];
     let currentInformations = [];
     let currentRelations = [];
-    for (let i = 0 ; i < lines.length ; i ++) {
-      let line = lines[i];
+    for (let line of lines) {
       let lexicalCategoryMatch = line.match(/^\+\s*(?:<(.*?)>)/);
       if (lexicalCategoryMatch) {
         if (!before) {
@@ -104,7 +103,7 @@ export class Parser<S, E> {
   }
 
   private parseEquivalent(line: string): Equivalent<S> | null {
-    let match = line.match(/^=(\?)?\s*(?:<(.*?)>\s*)?(?:\((.*?)\)\s*)?(.*)$/)
+    let match = line.match(/^=(\?)?\s*(?:<(.*?)>\s*)?(?:\((.*?)\)\s*)?(.*)$/);
     if (match) {
       let hidden = match[1] !== undefined;
       let category = (match[2] !== undefined && match[2] !== "") ? match[2] : null;
@@ -125,7 +124,7 @@ export class Parser<S, E> {
       let date = (match[3] !== undefined) ? parseInt(match[3], 10) : null;
       let rawText = match[4];
       if (kind === "phrase") {
-        let textMatch = rawText.match(/^(.*?)\s*→\s*(.*?)(?:\s*\|\s*(.*))?$/)
+        let textMatch = rawText.match(/^(.*?)\s*→\s*(.*?)(?:\s*\|\s*(.*))?$/);
         if (textMatch) {
           let expression = this.markupParser.parse(textMatch[1]);
           let equivalents = textMatch[2].split(/\s*,\s*/).map((rawName) => this.markupParser.parse(rawName));
@@ -158,7 +157,7 @@ export class Parser<S, E> {
   }
 
   private parseRelation(line: string): Relation<S> | null {
-    let match = line.match(/^\-\s*(?:<(.*?)>\s*)?(.*)$/)
+    let match = line.match(/^\-\s*(?:<(.*?)>\s*)?(.*)$/);
     if (match) {
       let title = (match[1] !== undefined && match[1] !== "") ? match[1] : null;
       let names = match[2].split(/\s*,\s*/).map((rawName) => this.markupParser.parse(rawName));
@@ -223,7 +222,7 @@ export class MarkupParser<S, E> {
 
   private consumeBracket(): E {
     this.pointer ++;
-    let children = this.consumeBracketChildren()
+    let children = this.consumeBracketChildren();
     let element = this.resolvers.resolveBracket(children);
     this.pointer ++;
     return element;
@@ -289,7 +288,7 @@ export class MarkupParser<S, E> {
   }
 
   private consumeString(): string {
-    let string = ""
+    let string = "";
     while (true) {
       let char = this.source.charAt(this.pointer);
       if (char === "{" || char === "[" || char === "/" || char === "") {
@@ -303,7 +302,7 @@ export class MarkupParser<S, E> {
   }
 
   private consumeBraceString(): string {
-    let string = ""
+    let string = "";
     while (true) {
       let char = this.source.charAt(this.pointer);
       if (char === "}" || char === "/" || char === "" || char === " " || char === "," || char === "." || char === "!" || char === "?") {
@@ -317,7 +316,7 @@ export class MarkupParser<S, E> {
   }
 
   private consumeBracketString(): string {
-    let string = ""
+    let string = "";
     while (true) {
       let char = this.source.charAt(this.pointer);
       if (char === "]" || char === "/" || char === "") {
@@ -331,7 +330,7 @@ export class MarkupParser<S, E> {
   }
 
   private consumeSlashString(): string {
-    let string = ""
+    let string = "";
     while (true) {
       let char = this.source.charAt(this.pointer);
       if (char === "/" || char === "") {
@@ -364,16 +363,16 @@ export class MarkupResolvers<S, E> {
   public static createSimple(): MarkupResolvers<string, string> {
     let reduceLink = function (name: string, children: Array<string>): string {
       return children.join("");
-    }
+    };
     let reduceBracket = function (children: Array<string>): string {
       return children.join("");
-    }
+    };
     let reduceSlash = function (string: string): string {
       return string;
-    }
+    };
     let join = function (nodes: Array<string>): string {
       return nodes.join("");
-    }
+    };
     let resolvers = new MarkupResolvers(reduceLink, reduceBracket, reduceSlash, join);
     return resolvers;
   }

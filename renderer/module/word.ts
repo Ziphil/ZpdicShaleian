@@ -38,7 +38,7 @@ export class Word {
 
   public static fromString(string: string): Word {
     let lines = string.trim().split(/\r\n|\r|\n/);
-    let match = lines[0]?.match(/^\*\s*(.+?)\s*@(\d+)/)
+    let match = lines[0]?.match(/^\*\s*(.+?)\s*@(\d+)/);
     if (match) {
       let name = match[1];
       let date = parseInt(match[2], 10);

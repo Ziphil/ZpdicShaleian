@@ -3,14 +3,14 @@
 import * as fs from "fs";
 import * as path from "path";
 import {
-  Loader
-} from "./loader";
-import {
   Dictionary
 } from "../dictionary";
 import {
   Word
 } from "../word";
+import {
+  Loader
+} from "./loader";
 
 
 export class SplitLoader extends Loader {

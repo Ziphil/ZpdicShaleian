@@ -15,15 +15,15 @@ import {
   ReactNode
 } from "react";
 import {
+  PlainWord,
+  Word
+} from "../../module";
+import {
   Component
 } from "../component";
 import {
   component
 } from "../decorator";
-import {
-  PlainWord,
-  Word
-} from "../../module";
 
 
 @component()
@@ -87,7 +87,7 @@ export class WordEditor extends Component<Props, State> {
         <Tab id={language} title={this.trans(`wordEditor.language.${language}`)} panel={editorNode}/>
       );
       return tabNode;
-    })
+    });
     let deleteButton = (this.props.word !== null) && (
       <Button text={this.trans("wordEditor.delete")} intent="danger" icon="trash" onClick={this.handleDelete.bind(this)}/>
     );

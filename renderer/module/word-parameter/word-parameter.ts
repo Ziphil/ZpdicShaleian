@@ -41,22 +41,22 @@ export abstract class WordParameter {
     if (type === "exact") {
       let matcher = function (search: string, candidate: string): boolean {
         return candidate === search;
-      }
+      };
       return matcher;
     } else if (type === "prefix") {
       let matcher = function (search: string, candidate: string): boolean {
         return candidate.startsWith(search);
-      }
+      };
       return matcher;
     } else if (type === "suffix") {
       let matcher = function (search: string, candidate: string): boolean {
         return candidate.endsWith(search);
-      }
+      };
       return matcher;
     } else if (type === "part") {
       let matcher = function (search: string, candidate: string): boolean {
         return candidate.includes(search);
-      }
+      };
       return matcher;
     } else if (type === "pair") {
       let matcher = function (search: string, candidate: string): boolean {
@@ -79,7 +79,7 @@ export abstract class WordParameter {
         } catch (error) {
           return false;
         }
-      }
+      };
       return matcher;
     } else if (type === "regular") {
       let matcher = function (search: string, candidate: string): boolean {
@@ -89,7 +89,7 @@ export abstract class WordParameter {
         } catch (error) {
           return false;
         }
-      }
+      };
       return matcher;
     } else {
       throw new Error("cannot happen");

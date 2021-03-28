@@ -5,8 +5,8 @@ import {
   MenuItem
 } from "@blueprintjs/core";
 import {
-  IItemRendererProps,
-  Select as BlueprintSelect
+  Select as BlueprintSelect,
+  IItemRendererProps
 } from "@blueprintjs/select";
 import * as react from "react";
 import {

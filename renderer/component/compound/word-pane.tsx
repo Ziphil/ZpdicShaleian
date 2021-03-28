@@ -28,7 +28,7 @@ export class WordPane extends Component<Props, State> {
       if (outerThis.props.onLinkClick && event.ctrlKey) {
         outerThis.props.onLinkClick(name, event);
       }
-    }
+    };
     let resolveLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
       let node = <span className="swp-link" onClick={partial(onLinkClick, name)}>{children}</span>;
       return node;

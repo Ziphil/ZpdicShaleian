@@ -6,7 +6,10 @@ import {
   MouseEvent,
   ReactNode
 } from "react";
-import InfiniteScroll from "react-infinite-scroller"
+import InfiniteScroll from "react-infinite-scroller";
+import {
+  Word
+} from "../../module";
 import {
   Component
 } from "../component";
@@ -16,9 +19,6 @@ import {
 import {
   component
 } from "../decorator";
-import {
-  Word
-} from "../../module";
 
 
 @component()
@@ -26,7 +26,7 @@ export class WordList extends Component<Props, State> {
 
   public state: State = {
     displayedWords: []
-  }
+  };
 
   public constructor(props: Props) {
     super(props);
@@ -41,7 +41,7 @@ export class WordList extends Component<Props, State> {
       document.getElementById("word-list-container")!.scrollTop = 0;
     }
   }
-  
+
   public loadWords(page: number): void {
     let length = this.state.displayedWords.length;
     let displayedWords = this.props.words.slice(0, length + 10);

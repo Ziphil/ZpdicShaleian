@@ -28,8 +28,8 @@ export class InformationKindUtil {
 
 export const INFORMATION_KIND_DATA = {
   meaning: {code: "M", names: {ja: "語義", en: "Meaning"}},
-  etymology: {code: "E", names: {ja: "語源", en: "Etymology"}}, 
-  usage: {code: "U", names: {ja: "語法", en: "Usage"}}, 
+  etymology: {code: "E", names: {ja: "語源", en: "Etymology"}},
+  usage: {code: "U", names: {ja: "語法", en: "Usage"}},
   note: {code: "N", names: {ja: "備考", en: "Note"}},
   task: {code: "O", names: {ja: "タスク", en: "Task"}},
   history: {code: "H", names: {ja: "履歴", en: "History"}},

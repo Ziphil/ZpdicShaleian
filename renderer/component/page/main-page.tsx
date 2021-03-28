@@ -39,7 +39,7 @@ export class MainPage extends Component<Props, State> {
     parameter: NormalWordParameter.createEmpty("ja"),
     hitResult: {words: [], suggestions: []},
     progress: {offset: 0, size: 0}
-  }
+  };
 
   public constructor(props: Props) {
     super(props);
