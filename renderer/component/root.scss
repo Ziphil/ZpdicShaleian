@@ -15,9 +15,9 @@
 
 .zp-root {
   height: 100vh;
-  padding: $pt-grid-size * 1.5;
+  padding: $zp-page-margin;
 }
 
 .zp-navbar-root {
-  padding-top: $pt-navbar-height + $pt-grid-size * 1.5 + 1px;
+  padding-top: $pt-navbar-height + $zp-page-margin + 1px;
 }

@@ -29,6 +29,9 @@ import {
   WordType
 } from "../../module";
 import {
+  HairianUtil
+} from "../../util/hairian";
+import {
   HandlerManager
 } from "../../util/handler-manager";
 import {
@@ -232,12 +235,14 @@ export class MainNavbar extends Component<Props, State> {
 
   public render(): ReactNode {
     let hotkeyNode = this.renderHotkeys();
+    let version = "dev" + HairianUtil.getHairia(process.env["BUILD_DATE"]);
     let node = (
       <Fragment>
         <Navbar fixedToTop={true}>
           <NavbarGroup align="left">
             <NavbarHeading>
-              <strong>{this.trans("mainNavbar.title")}</strong>
+              <strong>{this.trans("mainNavbar.title")}</strong><br/>
+              <small className="bp3-text-muted">ver {version}</small>
             </NavbarHeading>
           </NavbarGroup>
           <NavbarGroup align="left">

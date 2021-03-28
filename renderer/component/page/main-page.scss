@@ -8,13 +8,13 @@
 }
 
 .zp-search-form-container {
-  margin-top: -$pt-grid-size * 1.5 - 1px;
-  margin-left: -$pt-grid-size * 1.5;
-  margin-right: -$pt-grid-size * 1.5;
-  padding-top: $pt-grid-size * 1.5 + 1px;
-  padding-left: $pt-grid-size * 1.5;
-  padding-right: $pt-grid-size * 1.5;
-  padding-bottom: $pt-grid-size * 1.5;
+  margin-top: -$zp-page-margin - 1px;
+  margin-left: -$zp-page-margin;
+  margin-right: -$zp-page-margin;
+  padding-top: $zp-page-margin + 1px;
+  padding-left: $zp-page-margin;
+  padding-right: $zp-page-margin;
+  padding-bottom: $zp-page-margin;
   background-color: $light-gray4;
   box-shadow: $pt-elevation-shadow-1;
   z-index: $pt-z-index-content - 1;
@@ -22,13 +22,13 @@
 
 .zp-word-list-container {
   margin-top: 1px;
-  margin-bottom: -$pt-grid-size * 1.5;
-  margin-left: -$pt-grid-size * 1.5;
-  margin-right: -$pt-grid-size * 1.5;
-  padding-top: $pt-grid-size * 1.5;
-  padding-bottom: $pt-grid-size * 1.5;
-  padding-left: $pt-grid-size * 1.5;
-  padding-right: $pt-grid-size * 1.5;
+  margin-bottom: -$zp-page-margin;
+  margin-left: -$zp-page-margin;
+  margin-right: -$zp-page-margin;
+  padding-top: $zp-page-margin;
+  padding-bottom: $zp-page-margin;
+  padding-left: $zp-page-margin;
+  padding-right: $zp-page-margin;
   flex-grow: 1;
   flex-basis: 0;
   overflow-y: scroll;

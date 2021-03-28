@@ -3,12 +3,23 @@
 
 .swp-word {
   @extend .bp3-card;
+  @extend .bp3-interactive;
   margin: 1px;
-  margin-bottom: $pt-grid-size + 2px;
+  margin-bottom: $pt-grid-size * 1.5 + 2px;
   padding: $pt-grid-size;
-  user-select: text;
   &:last-child {
     margin-bottom: 0px;
+  }
+}
+
+.swp-section {
+  margin-bottom: $pt-grid-size / 2;
+  padding-bottom: $pt-grid-size / 2;
+  border-bottom: 1px $pt-divider-black solid;
+  &:last-child {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    border-bottom: none;
   }
 }
 

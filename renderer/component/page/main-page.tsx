@@ -120,7 +120,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private openWordEditor(word: Word): void {
-    let options = {width: 640, height: 480, minWidth: 640, minHeight: 480, type: "toolbar"};
+    let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
     this.createWindow("editor", {word}, options);
   }
 

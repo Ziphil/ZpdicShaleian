@@ -3,6 +3,7 @@
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import * as path from "path";
 import {
+  EnvironmentPlugin,
   DefinePlugin
 } from "webpack";
 
@@ -112,6 +113,9 @@ let renderer = {
     extensions: [".tsx", ".ts", ".jsx", ".js", ".scss", ".css", ".yml"]
   },
   plugins: [
+    new EnvironmentPlugin({
+      "BUILD_DATE": new Date().toISOString()
+    }),
     new DefinePlugin({
       "process.env": {}
     }),

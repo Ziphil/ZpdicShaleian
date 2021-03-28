@@ -123,7 +123,7 @@ class Main {
   private createWindow(mode: string, parentId: string | null, props: object, options: BrowserWindowConstructorOptions): BrowserWindow {
     let show = false;
     let parent = (parentId !== null) ? this.windows.get(parentId) : undefined;
-    let additionalOptions = (this.isDevelopment()) ? {} : PRODUCTION_WINDOW_OPTIONS;
+    let additionalOptions = (!this.app.isPackaged) ? {} : PRODUCTION_WINDOW_OPTIONS;
     let window = new BrowserWindow({...COMMON_WINDOW_OPTIONS, ...additionalOptions, show, parent, ...options});
     let id = window.id.toString();
     window.loadFile(joinPath(__dirname, "index.html"), {query: {id, mode}});
@@ -136,7 +136,7 @@ class Main {
   }
 
   private createMainWindow(): BrowserWindow {
-    let options = {width: 640, height: 640, minWidth: 640, minHeight: 640};
+    let options = {width: 720, height: 720, minWidth: 480, minHeight: 320};
     let window = this.createWindow("main", null, {}, options);
     window.setMenu(null);
     window.webContents.openDevTools({mode: "detach"});
@@ -146,15 +146,11 @@ class Main {
   }
 
   private connectReloadClient(window: BrowserWindow): void {
-    if (this.isDevelopment()) {
+    if (!this.app.isPackaged) {
       client.create(window, {}, () => {
         console.log("Reload client connected");
       });
     }
-  }
-
-  private isDevelopment(): boolean {
-    return process.env["NODE_ENV"] === "development";
   }
 
 }
