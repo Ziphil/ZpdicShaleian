@@ -78,6 +78,13 @@ export class Word {
     return word;
   }
 
+  public edit(word: Word): void {
+    this.name = word.name;
+    this.date = word.date;
+    this.contents = word.contents;
+    this.updateEquivalentNames();
+  }
+
   private updateUid(): void {
     this.uid = uuid();
   }

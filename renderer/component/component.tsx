@@ -41,6 +41,11 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
     }
   }
 
+  protected closeWindow(): void {
+    let id = this.props.store!.id;
+    window.api.send("close-window", id);
+  }
+
   protected createWindow(mode: string, props: object, options: BrowserWindowConstructorOptions): void {
     let id = this.props.store!.id;
     window.api.send("create-window", mode, id, props, options);

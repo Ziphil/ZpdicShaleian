@@ -39,12 +39,17 @@ export class MainPage extends Component<Props, State> {
     progress: {offset: 0, size: 0}
   }
 
-  public componentDidMount(): void {
-    this.loadDictionary();
+  public constructor(props: Props) {
+    super(props);
+    this.setupIpc();
   }
 
-  private loadDictionary(): void {
-    window.api.send("ready-get-dictionary", "C:/Users/Ziphil/Desktop/dic");
+  public componentDidMount(): void {
+    let path = "C:/Users/Ziphil/Desktop/dic";
+    this.loadDictionary(path);
+  }
+
+  private setupIpc(): void {
     window.api.on("get-dictionary-progress", (event, progress) => {
       this.setState({progress});
     });
@@ -54,16 +59,45 @@ export class MainPage extends Component<Props, State> {
         this.updateWordsImmediately();
       });
     });
+    window.api.on("edit-word", (event, uid, word) => {
+      this.editWord(uid, word);
+    });
+    window.api.on("delete-word", (event, uid) => {
+      this.deleteWord(uid);
+    });
+  }
+
+  private loadDictionary(path: string): void {
+    window.api.send("ready-get-dictionary", path);
   }
 
   private updateWordsImmediately(): void {
-    let hitResult = this.state.dictionary!.search(this.state.parameter);
-    this.setState({hitResult});
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      let hitResult = dictionary.search(this.state.parameter);
+      this.setState({hitResult});
+    }
   }
 
   @debounce(200)
   private updateWords(): void {
     this.updateWordsImmediately();
+  }
+
+  private editWord(uid: string | null, word: Word): void {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      dictionary.editWord(uid, word);
+      this.updateWordsImmediately();
+    }
+  }
+
+  private deleteWord(uid: string): void {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      dictionary.deleteWord(uid);
+      this.updateWordsImmediately();
+    }
   }
 
   private changeParameter(parameter: WordParameter): void {

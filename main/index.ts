@@ -35,11 +35,13 @@ class Main {
 
   private app: App;
   private windows: Map<string, BrowserWindow>;
+  private mainWindow: BrowserWindow | undefined;
   private props: Map<string, object>;
 
   public constructor(app: App) {
     this.app = app;
     this.windows = new Map();
+    this.mainWindow = undefined;
     this.props = new Map();
   }
 
@@ -79,6 +81,12 @@ class Main {
         window.show();
       }
     });
+    ipcMain.on("close-window", (event, id) => {
+      let window = this.windows.get(id);
+      if (window !== undefined) {
+        window.close();
+      }
+    });
     ipcMain.on("create-window", (event, mode, parentId, props, options) => {
       this.createWindow(mode, parentId, props, options);
     });
@@ -97,6 +105,18 @@ class Main {
         console.error(error);
       });
       loader.start();
+    });
+    ipcMain.on("ready-edit-word", (event, uid, word) => {
+      let window = this.mainWindow;
+      if (window !== undefined) {
+        window.webContents.send("edit-word", uid, word);
+      }
+    });
+    ipcMain.on("ready-delete-word", (event, uid) => {
+      let window = this.mainWindow;
+      if (window !== undefined) {
+        window.webContents.send("delete-word", uid);
+      }
     });
   }
 
@@ -120,6 +140,7 @@ class Main {
     let window = this.createWindow("main", null, {}, options);
     window.setMenu(null);
     window.webContents.openDevTools({mode: "detach"});
+    this.mainWindow = window;
     this.connectReloadClient(window);
     return window;
   }

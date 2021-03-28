@@ -27,4 +27,28 @@ export class Dictionary {
     return {words, suggestions: []};
   }
 
+  public findByUid(uid: string): Word | undefined {
+    let word = this.words.find((word) => word.uid === uid);
+    return word;
+  }
+
+  public editWord(uid: string | null, word: Word): void {
+    if (uid !== null) {
+      let oldWord = this.words.find((word) => word.uid === uid);
+      if (oldWord !== undefined) {
+        oldWord.edit(word);
+      }
+    } else {
+      let newWord = Word.fromPlain(word);
+      this.words.push(newWord);
+    }
+  }
+
+  public deleteWord(uid: string): void {
+    let oldWordIndex = this.words.findIndex((word) => word.uid === uid);
+    if (oldWordIndex >= 0) {
+      this.words.splice(oldWordIndex, 1);
+    }
+  }
+
 }

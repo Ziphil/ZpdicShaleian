@@ -10,6 +10,7 @@ import {
 } from "@blueprintjs/core";
 import * as react from "react";
 import {
+  MouseEvent,
   ReactElement,
   ReactNode
 } from "react";
@@ -33,6 +34,24 @@ export class WordEditor extends Component<Props, State> {
     let word = (props.word !== null) ? props.word : Word.createEmpty();
     let language = "ja";
     this.state = {uid, word, language};
+  }
+
+  private handleCancel(event: MouseEvent<HTMLElement>): void {
+    if (this.props.onCancel) {
+      this.props.onCancel(event);
+    }
+  }
+
+  private handleConfirm(event: MouseEvent<HTMLElement>): void {
+    if (this.props.onConfirm) {
+      this.props.onConfirm(this.state.uid, this.state.word, event);
+    }
+  }
+
+  private handleDelete(event: MouseEvent<HTMLElement>): void {
+    if (this.props.onDelete) {
+      this.props.onDelete(this.state.uid!, event);
+    }
   }
 
   private setWord<T extends Array<unknown>>(setter: (...args: T) => void): (...args: T) => void {
@@ -68,15 +87,18 @@ export class WordEditor extends Component<Props, State> {
       );
       return tabNode;
     })
+    let deleteButton = (this.props.word !== null) && (
+      <Button text={this.trans("wordEditor.delete")} intent="danger" icon="trash" onClick={this.handleDelete.bind(this)}/>
+    );
     let node = (
       <div className="zp-word-editor">
         <Tabs selectedTabId={this.state.language} onChange={(language) => this.setState({language: "" + language})}>
           {tabNodes}
         </Tabs>
         <div className="zp-word-editor-button">
-          <Button text={this.trans("wordEditor.cancel")} icon="cross"/>
-          <Button text={this.trans("wordEditor.delete")} intent="danger" icon="trash"/>
-          <Button text={this.trans("wordEditor.confirm")} intent="primary" icon="confirm"/>
+          <Button text={this.trans("wordEditor.cancel")} icon="cross" onClick={this.handleCancel.bind(this)}/>
+          {deleteButton}
+          <Button text={this.trans("wordEditor.confirm")} intent="primary" icon="confirm" onClick={this.handleConfirm.bind(this)}/>
         </div>
       </div>
     );
@@ -87,7 +109,10 @@ export class WordEditor extends Component<Props, State> {
 
 
 type Props = {
-  word: Word | null
+  word: Word | null,
+  onConfirm?: (uid: string | null, word: Word, event: MouseEvent<HTMLElement>) => void,
+  onDelete?: (uid: string, event: MouseEvent<HTMLElement>) => void,
+  onCancel?: (event: MouseEvent<HTMLElement>) => void
 };
 type State = {
   uid: string | null,
