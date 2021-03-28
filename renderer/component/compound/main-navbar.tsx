@@ -208,6 +208,9 @@ export class MainNavbar extends Component<Props, State> {
 
   private createHandlerManager(): HandlerManager {
     let manager = new HandlerManager({
+      openDictionary: {key: "ctrl+o"},
+      reopenDictionary: {key: "ctrl+shift+o"},
+      saveDictionary: {key: "ctrl+s"},
       changeWordModeToName: {key: "ctrl+w", handler: () => this.props.changeWordMode("name")},
       changeWordModeToEquivalent: {key: "ctrl+e", handler: () => this.props.changeWordMode("equivalent")},
       changeWordModeToBoth: {key: "ctrl+shift+w", handler: () => this.props.changeWordMode("both")},
