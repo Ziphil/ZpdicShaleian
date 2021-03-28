@@ -53,6 +53,7 @@ export class WordList extends Component<Props, State> {
     let wordPanes = this.state.displayedWords.map((word) => {
       let wordPane = (
         <WordPaneWrapper
+          key={word.uid}
           word={word}
           language={this.props.language}
           onCreate={this.props.onCreate}
