@@ -111,6 +111,7 @@ class Main {
       this.windows.delete(id);
     });
     window.setMenu(null);
+    window.webContents.openDevTools({mode: "detach"});
     this.windows.set(id, window);
     this.props.set(id, props);
     return window;

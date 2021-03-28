@@ -27,6 +27,7 @@ import {
 export class Root extends Component<Props, State> {
 
   private store: GlobalStore = new GlobalStore();
+  private messages: Record<string, string> = require("../language/ja.yml");
 
   public state: State = {
     mode: "",
@@ -67,7 +68,7 @@ export class Root extends Component<Props, State> {
     let pageNode = this.renderPage();
     let node = (
       <Provider store={this.store}>
-        <IntlProvider defaultLocale="ja" locale="ja" messages={{}}>
+        <IntlProvider defaultLocale="ja" locale="ja" messages={this.messages}>
           {pageNode}
         </IntlProvider>
       </Provider>

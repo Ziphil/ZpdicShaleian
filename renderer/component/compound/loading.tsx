@@ -21,12 +21,15 @@ export class Loading extends Component<Props, State> {
 
   private renderProgressBar(): ReactNode {
     let progress = (this.props.size > 0) ? this.props.offset / this.props.size : 0;
+    let percent = progress * 100;
+    let offset = this.props.offset;
+    let size = this.props.size;
     let node = (
       <div className="zp-loading">
         <ProgressBar value={progress} intent="primary"/>
         <div className="zp-loading-detail">
-          <div className="zp-loading-percent">{(progress * 100).toFixed(2)} %</div>
-          <div className="zp-loading-offset">{this.props.offset} / {this.props.size}</div>
+          <div className="zp-loading-percent">{this.trans("loading.percent", {percent})}</div>
+          <div className="zp-loading-offset">{this.trans("loading.offset", {offset, size})}</div>
         </div>
       </div>
     );

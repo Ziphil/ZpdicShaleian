@@ -44,8 +44,6 @@ export class SearchForm extends Component<Props, State> {
 
   public render(): ReactNode {
     let parameter = WordParameter.getNormal(this.props.parameter);
-    let modeTexts = {name: "単語", equivalent: "訳語", both: "両方", content: "内容"};
-    let typeTexts = {exact: "完全", prefix: "前方", suffix: "後方", part: "部分", pair: "対語", regular: "正規"};
     let node = (
       <div className="zp-search-form">
         <ControlGroup fill={true}>
@@ -55,7 +53,8 @@ export class SearchForm extends Component<Props, State> {
             buttonClassName="zp-search-form-button"
             items={[...WORD_MODES]}
             activeItem={parameter.mode}
-            getText={(mode) => modeTexts[mode]}
+            getText={(mode) => this.trans(`searchForm.modeShort.${mode}`)}
+            getMenuText={(mode) => this.trans(`searchForm.mode.${mode}`)}
             onItemSelect={(mode) => this.handleParameterSet({mode})}
           />
           <Select
@@ -63,7 +62,8 @@ export class SearchForm extends Component<Props, State> {
             buttonClassName="zp-search-form-button"
             items={[...WORD_TYPES]}
             activeItem={parameter.type}
-            getText={(type) => typeTexts[type]}
+            getText={(type) => this.trans(`searchForm.typeShort.${type}`)}
+            getMenuText={(type) => this.trans(`searchForm.type.${type}`)}
             onItemSelect={(type) => this.handleParameterSet({type})}
           />
         </ControlGroup>

@@ -47,6 +47,13 @@ let renderer = {
   module: {
     rules: [
       {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "ts-loader"
+        }
+      },
+      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
@@ -54,10 +61,10 @@ let renderer = {
         }
       },
       {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
+        test: /\.js$/,
+        enforce: "pre",
         use: {
-          loader: "ts-loader"
+          loader: "source-map-loader"
         }
       },
       {
@@ -89,24 +96,27 @@ let renderer = {
         ]
       },
       {
-        test: /\.js$/,
-        enforce: "pre",
-        use: {
-          loader: "source-map-loader"
-        }
+        test: /\.yml$/,
+        use: [
+          {
+            loader: "json-loader"
+          },
+          {
+            loader: "yaml-flat-loader"
+          }
+        ]
       }
     ]
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".jsx", ".scss"]
+    extensions: [".tsx", ".ts", ".jsx", ".js", ".scss", ".css", ".yml"]
   },
   plugins: [
     new DefinePlugin({
       "process.env": {}
     }),
     new HtmlWebpackPlugin({
-      template: "./renderer/public/index.html",
-      title: "Soxsot"
+      template: "./renderer/public/index.html"
     })
   ]
 };
