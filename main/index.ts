@@ -79,6 +79,11 @@ class Main {
       let window = this.windows.get(id);
       if (window !== undefined) {
         window.show();
+        let mainWindow = this.mainWindow;
+        if (mainWindow !== undefined) {
+          mainWindow.focus();
+          window.focus();
+        }
       }
     });
     ipcMain.on("open-dev-tools", (event, id) => {
