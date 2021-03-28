@@ -8,6 +8,9 @@ import {
   render
 } from "react-dom";
 import {
+  configure as configureHotkeys
+} from "react-hotkeys";
+import {
   Root
 } from "./component/root";
 
@@ -15,11 +18,20 @@ import {
 class Main {
 
   public main(): void {
+    this.setupBlueprint();
+    this.setupHotkeys();
     this.render();
   }
 
-  private render(): void { 
+  private setupBlueprint(): void {
     FocusStyleManager.onlyShowFocusOnTabs();
+  }
+
+  private setupHotkeys(): void {
+    configureHotkeys({ignoreTags: ["select"]});
+  }
+
+  private render(): void { 
     require("./component/root.scss");
     render(<Root/>, document.getElementById("root"));
   }
