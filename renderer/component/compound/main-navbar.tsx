@@ -25,11 +25,21 @@ import {
   WordType
 } from "../../module";
 import {
+  HandlerManager
+} from "../../util/handler-manager";
+import {
   Component
 } from "../component";
 
 
 export class MainNavbar extends Component<Props, State> {
+
+  private handlerManager: HandlerManager;
+
+  public constructor(props: Props) {
+    super(props);
+    this.handlerManager = this.createHandlerManager();
+  }
 
   private renderFileMenu(): ReactElement {
     let node = (
@@ -53,10 +63,10 @@ export class MainNavbar extends Component<Props, State> {
     let node = (
       <Menu>
         <MenuItem text="検索範囲の変更" icon="blank">
-          <MenuItem text="単語" label="Ctrl+W" onClick={() => this.props.changeWordMode("name")}/>
-          <MenuItem text="訳語" label="Ctrl+E" onClick={() => this.props.changeWordMode("equivalent")}/>
-          <MenuItem text="両方" label="Ctrl+Shift+W" onClick={() => this.props.changeWordMode("both")}/>
-          <MenuItem text="内容" label="Ctrl+Q" onClick={() => this.props.changeWordMode("content")}/>
+          <MenuItem text="単語" label={this.handlerManager.getLabel("changeWordModeToName")} onClick={this.handlerManager.getHandler("changeWordModeToName")}/>
+          <MenuItem text="訳語" label={this.handlerManager.getLabel("changeWordModeToEquivalent")} onClick={this.handlerManager.getHandler("changeWordModeToEquivalent")}/>
+          <MenuItem text="両方" label={this.handlerManager.getLabel("changeWordModeToBoth")} onClick={this.handlerManager.getHandler("changeWordModeToBoth")}/>
+          <MenuItem text="内容" label={this.handlerManager.getLabel("changeWordModeToContent")} onClick={this.handlerManager.getHandler("changeWordModeToContent")}/>
         </MenuItem>
         <MenuItem text="検索方式の変更" icon="blank">
           <MenuItem text="完全一致" label="Ctrl+Shift+T" onClick={() => this.props.changeWordType("exact")}/>
@@ -88,16 +98,19 @@ export class MainNavbar extends Component<Props, State> {
   }
 
   private renderHotkeys(): ReactNode {
-    let keyMap = {
-      changeWordModeToName: "ctrl+w",
-      changeWordModeToEquivalent: "ctrl+e"
-    };
-    let handlers = {
-      changeWordModeToName: () => this.props.changeWordMode("name"),
-      changeWordModeToEquivalent: () => this.props.changeWordMode("equivalent")
-    };
-    let node = <GlobalHotKeys keyMap={keyMap} handlers={handlers}/>;
+    let manager = this.handlerManager;
+    let node = <GlobalHotKeys keyMap={manager.getKeys()} handlers={manager.getHandlers()}/>;
     return node;
+  }
+
+  private createHandlerManager(): HandlerManager {
+    let manager = new HandlerManager({
+      changeWordModeToName: {key: "ctrl+w", handler: () => this.props.changeWordMode("name")},
+      changeWordModeToEquivalent: {key: "ctrl+e", handler: () => this.props.changeWordMode("equivalent")},
+      changeWordModeToBoth: {key: "ctrl+shift+w", handler: () => this.props.changeWordMode("both")},
+      changeWordModeToContent: {key: "ctrl+q", handler: () => this.props.changeWordMode("content")}
+    });
+    return manager;
   }
 
   public render(): ReactNode {
