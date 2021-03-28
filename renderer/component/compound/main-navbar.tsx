@@ -14,6 +14,7 @@ import {
 } from "@blueprintjs/popover2";
 import * as react from "react";
 import {
+  Fragment,
   ReactElement,
   ReactNode
 } from "react";
@@ -229,29 +230,32 @@ export class MainNavbar extends Component<Props, State> {
   public render(): ReactNode {
     let hotkeyNode = this.renderHotkeys();
     let node = (
-      <Navbar fixedToTop={true}>
-        <NavbarGroup align="left">
-          <NavbarHeading>
-            <strong>{this.trans("mainNavbar.title")}</strong>
-          </NavbarHeading>
-        </NavbarGroup>
-        <NavbarGroup align="left">
-          <Popover2 content={this.renderFileMenu()} position="bottom-left">
-            <Button text={this.trans("mainNavbar.file")} minimal={true}/>
-          </Popover2>
-          <Popover2 content={this.renderSearchMenu()} position="bottom-left">
-            <Button text={this.trans("mainNavbar.search")} minimal={true}/>
-          </Popover2>
-          <Button text={this.trans("mainNavbar.edit")} minimal={true}/>
-          <Button text={this.trans("mainNavbar.git")} minimal={true}/>
-          <Button text={this.trans("mainNavbar.setting")} minimal={true}/>
-          <Popover2 content={this.renderHelpMenu()} position="bottom-left">
-            <Button text={this.trans("mainNavbar.help")} minimal={true}/>
-          </Popover2>
-        </NavbarGroup>
-      </Navbar>
+      <Fragment>
+        <Navbar fixedToTop={true}>
+          <NavbarGroup align="left">
+            <NavbarHeading>
+              <strong>{this.trans("mainNavbar.title")}</strong>
+            </NavbarHeading>
+          </NavbarGroup>
+          <NavbarGroup align="left">
+            <Popover2 content={this.renderFileMenu()} position="bottom-left">
+              <Button text={this.trans("mainNavbar.file")} minimal={true}/>
+            </Popover2>
+            <Popover2 content={this.renderSearchMenu()} position="bottom-left">
+              <Button text={this.trans("mainNavbar.search")} minimal={true}/>
+            </Popover2>
+            <Button text={this.trans("mainNavbar.edit")} minimal={true}/>
+            <Button text={this.trans("mainNavbar.git")} minimal={true}/>
+            <Button text={this.trans("mainNavbar.setting")} minimal={true}/>
+            <Popover2 content={this.renderHelpMenu()} position="bottom-left">
+              <Button text={this.trans("mainNavbar.help")} minimal={true}/>
+            </Popover2>
+          </NavbarGroup>
+        </Navbar>
+        {hotkeyNode}
+      </Fragment>
     );
-    return [node, hotkeyNode];
+    return node;
   }
 
 }
