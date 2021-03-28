@@ -72,8 +72,9 @@ export class Word {
 
   public static createEmpty(): Word {
     let name = "";
-    let date = 0;
-    let contents = {};
+    let rawDate = new Date();
+    let date = Math.floor((rawDate.getTime() - 1327179600000) / 86400000);
+    let contents = {ja: "+ <>\n= <>\n\nM:"};
     let word = new Word(name, date, contents);
     return word;
   }

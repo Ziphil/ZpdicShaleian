@@ -176,6 +176,20 @@ export class MainNavbar extends Component<Props, State> {
     return node;
   }
 
+  private renderEditMenu(): ReactElement {
+    let node = (
+      <Menu>
+        <MenuItem
+          text={this.trans("mainNavbar.createWord")}
+          label={this.handlerManager.getLabel("createWord")}
+          onClick={this.handlerManager.getHandler("createWord")}
+          icon="blank"
+        />
+      </Menu>
+    );
+    return node;
+  }
+
   private renderHelpMenu(): ReactElement {
     let node = (
       <Menu>
@@ -227,6 +241,7 @@ export class MainNavbar extends Component<Props, State> {
       shuffleResult: {key: "ctrl+r"},
       searchAdvanced: {key: "ctrl+f"},
       searchScript: {key: "ctrl+shift+f"},
+      createWord: {key: "ctrl+n", handler: () => this.props.createWord()},
       openDevTools: {key: "f12", handler: () => this.openDevTools()},
       openHelp: {key: "f1"}
     });
@@ -252,9 +267,11 @@ export class MainNavbar extends Component<Props, State> {
             <Popover2 content={this.renderSearchMenu()} position="bottom-left">
               <Button text={this.trans("mainNavbar.search")} minimal={true}/>
             </Popover2>
-            <Button text={this.trans("mainNavbar.edit")} minimal={true}/>
+            <Popover2 content={this.renderEditMenu()} position="bottom-left">
+              <Button text={this.trans("mainNavbar.edit")} minimal={true}/>
+            </Popover2>
             <Button text={this.trans("mainNavbar.git")} minimal={true}/>
-            <Button text={this.trans("mainNavbar.setting")} minimal={true}/>
+            <Button text={this.trans("mainNavbar.tool")} minimal={true}/>
             <Popover2 content={this.renderHelpMenu()} position="bottom-left">
               <Button text={this.trans("mainNavbar.help")} minimal={true}/>
             </Popover2>
@@ -270,8 +287,9 @@ export class MainNavbar extends Component<Props, State> {
 
 
 type Props = {
-  changeWordMode: (mode: WordMode) => void;
-  changeWordType: (type: WordType) => void;
+  changeWordMode: (mode: WordMode) => void,
+  changeWordType: (type: WordType) => void,
+  createWord: () => void
 };
 type State = {
 };

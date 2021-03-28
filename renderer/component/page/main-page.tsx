@@ -125,7 +125,7 @@ export class MainPage extends Component<Props, State> {
     this.changeParameter(parameter);
   }
 
-  private openWordEditor(word: Word): void {
+  private openWordEditor(word: PlainWord | null): void {
     let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
     this.createWindow("editor", {word}, options);
   }
@@ -136,6 +136,7 @@ export class MainPage extends Component<Props, State> {
         <MainNavbar
           changeWordMode={this.changeWordMode.bind(this)}
           changeWordType={this.changeWordType.bind(this)}
+          createWord={() => this.openWordEditor(null)}
         />
         <Loading loading={this.state.dictionary === null} {...this.state.progress}>
           <div className="zp-search-form-container">
