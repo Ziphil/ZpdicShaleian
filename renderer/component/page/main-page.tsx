@@ -72,16 +72,21 @@ export class MainPage extends Component<Props, State> {
     });
   }
 
-  private changeWordMode(mode: WordMode) {
+  private changeWordMode(mode: WordMode): void {
     let oldParameter = WordParameter.getNormal(this.state.parameter);
     let parameter = new NormalWordParameter(oldParameter.search, mode, oldParameter.type, oldParameter.language);
     this.changeParameter(parameter);
   }
 
-  private changeWordType(type: WordType) {
+  private changeWordType(type: WordType): void {
     let oldParameter = WordParameter.getNormal(this.state.parameter);
     let parameter = new NormalWordParameter(oldParameter.search, oldParameter.mode, type, oldParameter.language);
     this.changeParameter(parameter);
+  }
+
+  private openWordEditor(word: Word): void {
+    let options = {width: 640, height: 480, minWidth: 640, minHeight: 480, type: "toolbar"};
+    this.createWindow("editor", {word}, options);
   }
 
   public render(): ReactNode {
@@ -96,7 +101,7 @@ export class MainPage extends Component<Props, State> {
             <SearchForm parameter={this.state.parameter} onParameterSet={this.changeParameter.bind(this)}/>
           </div>
           <div className="zp-word-list-container" id="word-list-container">
-            <WordList words={this.state.hitResult.words} language="ja"/>
+            <WordList words={this.state.hitResult.words} language="ja" onDoubleClick={this.openWordEditor.bind(this)}/>
           </div>
         </Loading>
       </div>

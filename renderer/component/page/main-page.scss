@@ -25,9 +25,10 @@
   margin-bottom: -$pt-grid-size * 1.5;
   margin-left: -$pt-grid-size * 1.5;
   margin-right: -$pt-grid-size * 1.5;
-  padding: $pt-grid-size * 1.5;
   padding-top: $pt-grid-size * 1.5;
   padding-bottom: $pt-grid-size * 1.5;
+  padding-left: $pt-grid-size * 1.5;
+  padding-right: $pt-grid-size * 1.5;
   flex-grow: 1;
   flex-basis: 0;
   overflow-y: scroll;

@@ -1,8 +1,10 @@
 //
 
+import partial from "lodash-es/partial";
 import * as react from "react";
 import InfiniteScroll from "react-infinite-scroller"
 import {
+  MouseEvent,
   ReactNode
 } from "react";
 import {
@@ -50,7 +52,13 @@ export class WordList extends Component<Props, State> {
     let hasMore = this.props.words.length > this.state.displayedWords.length;
     let wordPanes = this.state.displayedWords.map((word) => {
       let wordPane = (
-        <WordPane key={word.name} word={word} language={this.props.language}/>
+        <WordPane
+          key={word.name}
+          word={word}
+          language={this.props.language}
+          onClick={this.props.onClick && partial(this.props.onClick, word)}
+          onDoubleClick={this.props.onDoubleClick && partial(this.props.onDoubleClick, word)}
+        />
       );
       return wordPane;
     });
@@ -69,7 +77,9 @@ export class WordList extends Component<Props, State> {
 
 type Props = {
   words: Array<Word>,
-  language: string
+  language: string,
+  onClick?: (word: Word, event: MouseEvent<HTMLDivElement>) => void,
+  onDoubleClick?: (word: Word, event: MouseEvent<HTMLDivElement>) => void
 };
 type State = {
   displayedWords: Array<Word>

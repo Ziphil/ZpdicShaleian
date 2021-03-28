@@ -16,8 +16,9 @@ import {
   component
 } from "./decorator";
 import {
+  EditorPage,
   MainPage
-} from "./page/main-page";
+} from "./page";
 import {
   GlobalStore
 } from "./store";
@@ -56,6 +57,8 @@ export class Root extends Component<Props, State> {
     if (props !== null) {
       if (mode === "main") {
         return <MainPage {...props}/>;
+      } else if (mode === "editor") {
+        return <EditorPage {...props}/>;
       } else {
         return <div/>;
       }
@@ -83,5 +86,5 @@ type Props = {
 };
 type State = {
   mode: string,
-  props: object | null
+  props: any | null
 };

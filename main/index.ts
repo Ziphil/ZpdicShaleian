@@ -97,7 +97,7 @@ class Main {
         console.error(error);
       });
       loader.start();
-    })
+    });
   }
 
   private createWindow(mode: string, parentId: string | null, props: object, options: BrowserWindowConstructorOptions): BrowserWindow {
@@ -110,8 +110,6 @@ class Main {
     window.once("closed", () => {
       this.windows.delete(id);
     });
-    window.setMenu(null);
-    window.webContents.openDevTools({mode: "detach"});
     this.windows.set(id, window);
     this.props.set(id, props);
     return window;
@@ -120,6 +118,8 @@ class Main {
   private createMainWindow(): BrowserWindow {
     let options = {width: 640, height: 640, minWidth: 640, minHeight: 640};
     let window = this.createWindow("main", null, {}, options);
+    window.setMenu(null);
+    window.webContents.openDevTools({mode: "detach"});
     this.connectReloadClient(window);
     return window;
   }

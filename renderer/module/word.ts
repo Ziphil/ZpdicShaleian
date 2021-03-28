@@ -1,6 +1,9 @@
 //
 
 import {
+  v1 as uuid
+} from "uuid";
+import {
   ParsedWord
 } from "./parsed-word";
 import {
@@ -11,17 +14,18 @@ import {
 
 export class Word {
 
+  public uid!: string;
   public name: string;
   public date: number;
-  public equivalentNames: EquivalentNames;
+  public equivalentNames!: EquivalentNames;
   public contents: Contents;
 
   public constructor(name: string, date: number, contents: Contents) {
     this.name = name;
-    this.equivalentNames = {};
     this.date = date;
     this.contents = contents;
-    this.update();
+    this.updateUid();
+    this.updateEquivalentNames();
   }
 
   public static fromPlain(plain: Word): Word {
@@ -66,7 +70,19 @@ export class Word {
     }
   }
 
-  private update(): void {
+  public static createEmpty(): Word {
+    let name = "";
+    let date = 0;
+    let contents = {};
+    let word = new Word(name, date, contents);
+    return word;
+  }
+
+  private updateUid(): void {
+    this.uid = uuid();
+  }
+
+  private updateEquivalentNames(): void {
     let equivalentNames = {} as EquivalentNames;
     for (let [language, content] of Object.entries(this.contents)) {
       let eachEquivalentNames = [];

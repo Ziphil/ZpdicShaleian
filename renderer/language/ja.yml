@@ -55,3 +55,10 @@ searchForm:
     part: "部分"
     pair: "対語"
     regular: "正規"
+wordEditor:
+  language:
+    ja: "日本語"
+    en: "English"
+  cancel: "キャンセル"
+  delete: "削除"
+  confirm: "決定"

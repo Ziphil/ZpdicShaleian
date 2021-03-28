@@ -11,10 +11,6 @@ body {
   width: $pt-grid-size * 0.5;
 }
 
-*::-webkit-scrollbar-track {
-  background-color: $pt-app-background-color;
-}
-
 *::-webkit-scrollbar-thumb {
   background-color: $tag-default-color;
   border-radius: $pt-grid-size * 0.5;

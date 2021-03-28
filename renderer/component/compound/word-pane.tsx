@@ -4,6 +4,7 @@ import * as react from "react";
 import {
   Component,
   Fragment,
+  MouseEvent,
   ReactNode
 } from "react";
 import {
@@ -153,7 +154,7 @@ export class WordPane extends Component<Props, State> {
       </div>
     );
     let node = (
-      <div className="swp-word">
+      <div className="swp-word" onClick={this.props.onClick} onDoubleClick={this.props.onDoubleClick}>
         {headNode}
         {sectionNode}
       </div>
@@ -184,7 +185,9 @@ export class WordPane extends Component<Props, State> {
 
 type Props = {
   word: Word,
-  language: string
+  language: string,
+  onClick?: (event: MouseEvent<HTMLDivElement>) => void,
+  onDoubleClick?: (event: MouseEvent<HTMLDivElement>) => void
 };
 type State = {
 };
