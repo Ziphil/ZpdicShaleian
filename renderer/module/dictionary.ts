@@ -1,6 +1,7 @@
 //
 
 import {
+  PlainWord,
   Word
 } from "./word";
 import {
@@ -16,7 +17,7 @@ export class Dictionary {
     this.words = words;
   }
 
-  public static fromPlain(plain: Dictionary): Dictionary {
+  public static fromPlain(plain: PlainDictionary): Dictionary {
     let words = plain.words.map((word) => Word.fromPlain(word));
     let dictionary = new Dictionary(words);
     return dictionary;
@@ -32,7 +33,7 @@ export class Dictionary {
     return word;
   }
 
-  public editWord(uid: string | null, word: Word): void {
+  public editWord(uid: string | null, word: PlainWord): void {
     if (uid !== null) {
       let oldWord = this.words.find((word) => word.uid === uid);
       if (oldWord !== undefined) {
@@ -50,5 +51,12 @@ export class Dictionary {
       this.words.splice(oldWordIndex, 1);
     }
   }
+
+}
+
+
+export interface PlainDictionary {
+
+  words: Array<PlainWord>;
 
 }

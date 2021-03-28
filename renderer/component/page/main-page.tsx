@@ -7,6 +7,7 @@ import {
 import {
   Dictionary,
   NormalWordParameter,
+  PlainWord,
   Word,
   WordMode,
   WordParameter,
@@ -84,7 +85,7 @@ export class MainPage extends Component<Props, State> {
     this.updateWordsImmediately();
   }
 
-  private editWord(uid: string | null, word: Word): void {
+  private editWord(uid: string | null, word: PlainWord): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       dictionary.editWord(uid, word);

@@ -28,7 +28,7 @@ export class Word {
     this.updateEquivalentNames();
   }
 
-  public static fromPlain(plain: Word): Word {
+  public static fromPlain(plain: PlainWord): Word {
     let name = plain.name;
     let date = plain.date;
     let contents = plain.contents;
@@ -78,7 +78,7 @@ export class Word {
     return word;
   }
 
-  public edit(word: Word): void {
+  public edit(word: PlainWord): void {
     this.name = word.name;
     this.date = word.date;
     this.contents = word.contents;
@@ -112,6 +112,16 @@ export class Word {
     let parsedWord = parser.parse(this);
     return parsedWord;
   }
+
+}
+
+
+export interface PlainWord {
+
+  uid: string;
+  name: string;
+  date: number;
+  contents: Contents;
 
 }
 

@@ -5,7 +5,7 @@ import {
   ReactNode
 } from "react";
 import {
-  Word
+  PlainWord
 } from "../../module";
 import {
   Component
@@ -21,7 +21,7 @@ import {
 @component()
 export class EditorPage extends Component<Props, State> {
 
-  private editWord(uid: string | null, word: Word): void {
+  private editWord(uid: string | null, word: PlainWord): void {
     window.api.send("ready-edit-word", uid, word);
     this.closeWindow();
   }
@@ -49,7 +49,7 @@ export class EditorPage extends Component<Props, State> {
 
 
 type Props = {
-  word: Word | null
+  word: PlainWord | null
 };
 type State = {
 };

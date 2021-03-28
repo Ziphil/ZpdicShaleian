@@ -21,6 +21,7 @@ import {
   component
 } from "../decorator";
 import {
+  PlainWord,
   Word
 } from "../../module";
 
@@ -109,13 +110,13 @@ export class WordEditor extends Component<Props, State> {
 
 
 type Props = {
-  word: Word | null,
-  onConfirm?: (uid: string | null, word: Word, event: MouseEvent<HTMLElement>) => void,
+  word: PlainWord | null,
+  onConfirm?: (uid: string | null, word: PlainWord, event: MouseEvent<HTMLElement>) => void,
   onDelete?: (uid: string, event: MouseEvent<HTMLElement>) => void,
   onCancel?: (event: MouseEvent<HTMLElement>) => void
 };
 type State = {
   uid: string | null,
-  word: Word,
+  word: PlainWord,
   language: string
 };
