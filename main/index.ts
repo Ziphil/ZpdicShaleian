@@ -81,6 +81,12 @@ class Main {
         window.show();
       }
     });
+    ipcMain.on("open-dev-tools", (event, id) => {
+      let window = this.windows.get(id);
+      if (window !== undefined) {
+        window.webContents.openDevTools();
+      }
+    })
     ipcMain.on("close-window", (event, id) => {
       let window = this.windows.get(id);
       if (window !== undefined) {
@@ -139,7 +145,6 @@ class Main {
     let options = {width: 720, height: 720, minWidth: 480, minHeight: 320};
     let window = this.createWindow("main", null, {}, options);
     window.setMenu(null);
-    window.webContents.openDevTools({mode: "detach"});
     this.mainWindow = window;
     this.connectReloadClient(window);
     return window;

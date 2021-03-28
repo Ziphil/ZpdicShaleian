@@ -227,7 +227,7 @@ export class MainNavbar extends Component<Props, State> {
       shuffleResult: {key: "ctrl+r"},
       searchAdvanced: {key: "ctrl+f"},
       searchScript: {key: "ctrl+shift+f"},
-      openDevTools: {key: "f12"},
+      openDevTools: {key: "f12", handler: () => this.openDevTools()},
       openHelp: {key: "f1"}
     });
     return manager;

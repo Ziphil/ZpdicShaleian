@@ -41,6 +41,11 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
     }
   }
 
+  protected openDevTools(): void {
+    let id = this.props.store!.id;
+    window.api.send("open-dev-tools", id);
+  }
+
   protected closeWindow(): void {
     let id = this.props.store!.id;
     window.api.send("close-window", id);
