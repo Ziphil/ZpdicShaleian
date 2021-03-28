@@ -24,8 +24,13 @@ export class WordPane extends Component<Props, State> {
 
   private createMarkupResolvers(): MarkupResolvers<ReactNode, ReactNode> {
     let outerThis = this;
+    let onLinkClick = function (name: string, event: MouseEvent<HTMLSpanElement>): void {
+      if (outerThis.props.onLinkClick && event.ctrlKey) {
+        outerThis.props.onLinkClick(name, event);
+      }
+    }
     let resolveLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
-      let node = <span className="swp-link" onClick={outerThis.props.onLinkClick && partial(outerThis.props.onLinkClick, name)}>{children}</span>;
+      let node = <span className="swp-link" onClick={partial(onLinkClick, name)}>{children}</span>;
       return node;
     };
     let resolveBracket = function (children: Array<ReactNode | string>): ReactNode {
