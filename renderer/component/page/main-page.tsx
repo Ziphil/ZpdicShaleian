@@ -35,6 +35,7 @@ export class MainPage extends Component<Props, State> {
 
   public state: State = {
     dictionary: null,
+    language: "ja",
     parameter: NormalWordParameter.createEmpty("ja"),
     hitResult: {words: [], suggestions: []},
     progress: {offset: 0, size: 0}
@@ -57,7 +58,7 @@ export class MainPage extends Component<Props, State> {
     window.api.on("get-dictionary", (event, plainDictionary) => {
       let dictionary = Dictionary.fromPlain(plainDictionary);
       this.setState({dictionary}, () => {
-        this.updateWordsImmediately();
+        this.updateWords();
       });
     });
     window.api.on("edit-word", (event, uid, word) => {
@@ -72,24 +73,29 @@ export class MainPage extends Component<Props, State> {
     window.api.send("ready-get-dictionary", path);
   }
 
-  private updateWordsImmediately(): void {
+  private updateWords(parameter?: WordParameter): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      let hitResult = dictionary.search(this.state.parameter);
+      let hitResult = dictionary.search(parameter ?? this.state.parameter);
       this.setState({hitResult});
     }
   }
 
   @debounce(200)
-  private updateWords(): void {
-    this.updateWordsImmediately();
+  private updateWordsDebounced(): void {
+    this.updateWords();
+  }
+
+  private updateWordsByName(name: string): void {
+    let parameter = new NormalWordParameter(name, "name", "exact", this.state.language);
+    this.updateWords(parameter);
   }
 
   private editWord(uid: string | null, word: PlainWord): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       dictionary.editWord(uid, word);
-      this.updateWordsImmediately();
+      this.updateWords();
     }
   }
 
@@ -97,13 +103,13 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       dictionary.deleteWord(uid);
-      this.updateWordsImmediately();
+      this.updateWords();
     }
   }
 
   private changeParameter(parameter: WordParameter): void {
     this.setState({parameter}, () => {
-      this.updateWords();
+      this.updateWordsDebounced();
     });
   }
 
@@ -136,7 +142,12 @@ export class MainPage extends Component<Props, State> {
             <SearchForm parameter={this.state.parameter} onParameterSet={this.changeParameter.bind(this)}/>
           </div>
           <div className="zp-word-list-container" id="word-list-container">
-            <WordList words={this.state.hitResult.words} language="ja" onDoubleClick={this.openWordEditor.bind(this)}/>
+            <WordList
+              words={this.state.hitResult.words}
+              language={this.state.language}
+              onDoubleClick={this.openWordEditor.bind(this)}
+              onLinkClick={this.updateWordsByName.bind(this)}
+            />
           </div>
         </Loading>
       </div>
@@ -151,6 +162,7 @@ type Props = {
 };
 type State = {
   dictionary: Dictionary | null,
+  language: string,
   parameter: WordParameter,
   hitResult: {words: Array<Word>, suggestions: Array<null>},
   progress: {offset: number, size: number}

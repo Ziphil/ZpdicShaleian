@@ -58,6 +58,7 @@ export class WordList extends Component<Props, State> {
           language={this.props.language}
           onClick={this.props.onClick && partial(this.props.onClick, word)}
           onDoubleClick={this.props.onDoubleClick && partial(this.props.onDoubleClick, word)}
+          onLinkClick={this.props.onLinkClick}
         />
       );
       return wordPane;
@@ -79,7 +80,8 @@ type Props = {
   words: Array<Word>,
   language: string,
   onClick?: (word: Word, event: MouseEvent<HTMLDivElement>) => void,
-  onDoubleClick?: (word: Word, event: MouseEvent<HTMLDivElement>) => void
+  onDoubleClick?: (word: Word, event: MouseEvent<HTMLDivElement>) => void,
+  onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void
 };
 type State = {
   displayedWords: Array<Word>

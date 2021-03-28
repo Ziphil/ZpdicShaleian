@@ -1,5 +1,6 @@
 //
 
+import partial from "lodash-es/partial";
 import * as react from "react";
 import {
   Component,
@@ -22,21 +23,22 @@ import {
 export class WordPane extends Component<Props, State> {
 
   private createMarkupResolvers(): MarkupResolvers<ReactNode, ReactNode> {
+    let outerThis = this;
     let resolveLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
-      let node = <span>{children}</span>;
+      let node = <span className="swp-link" onClick={outerThis.props.onLinkClick && partial(outerThis.props.onLinkClick, name)}>{children}</span>;
       return node;
-    }
+    };
     let resolveBracket = function (children: Array<ReactNode | string>): ReactNode {
       let node = <span className="swp-sans">{children}</span>;
       return node;
-    }
+    };
     let resolveSlash = function (string: string): ReactNode {
       let node = <span className="swp-italic">{string}</span>;
       return node;
-    }
+    };
     let join = function (nodes: Array<ReactNode | string>): ReactNode {
       return nodes;
-    }
+    };
     let resolvers = new MarkupResolvers(resolveLink, resolveBracket, resolveSlash, join);
     return resolvers;
   }
@@ -187,7 +189,8 @@ type Props = {
   word: Word,
   language: string,
   onClick?: (event: MouseEvent<HTMLDivElement>) => void,
-  onDoubleClick?: (event: MouseEvent<HTMLDivElement>) => void
+  onDoubleClick?: (event: MouseEvent<HTMLDivElement>) => void,
+  onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void
 };
 type State = {
 };
