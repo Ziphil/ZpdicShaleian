@@ -144,6 +144,7 @@ export class MainPage extends Component<Props, State> {
           </div>
           <div className="zp-word-list-container" id="word-list-container">
             <WordList
+              dictionary={this.state.dictionary!}
               words={this.state.hitResult.words}
               language={this.state.language}
               onCreate={() => this.openWordEditor(null)}

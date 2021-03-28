@@ -18,6 +18,7 @@ import {
   HotKeys
 } from "react-hotkeys";
 import {
+  Dictionary,
   Word
 } from "../../module";
 import {
@@ -64,6 +65,7 @@ export class WordPaneWrapper extends Component<Props, State> {
       <ContextMenu2 content={menuNode}>
         <HotKeys className="zp-word-pane-wrapper" id={this.props.word.uid} tabIndex={0}>
           <WordPane
+            dictionary={this.props.dictionary}
             word={this.props.word}
             language={this.props.language}
             onDoubleClick={this.props.onEdit}
@@ -79,6 +81,7 @@ export class WordPaneWrapper extends Component<Props, State> {
 
 
 type Props = {
+  dictionary: Dictionary,
   word: Word,
   language: string,
   onCreate?: (event: MouseEvent<HTMLElement>) => void,

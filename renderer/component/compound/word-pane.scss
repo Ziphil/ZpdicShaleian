@@ -46,10 +46,18 @@
 .swp-head {
   @extend %h4;
   margin-bottom: $pt-grid-size / 2;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .swp-head-name {
+  margin-right: $pt-grid-size;
   font-weight: bold;
+}
+
+.swp-head-date {
+  @extend .bp3-text-small;
 }
 
 .swp-head .swp-tag {

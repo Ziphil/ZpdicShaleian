@@ -9,6 +9,7 @@ import {
   ReactNode
 } from "react";
 import {
+  Dictionary,
   Equivalent,
   Information,
   InformationKindUtil,
@@ -54,14 +55,21 @@ export class WordPane extends Component<Props, State> {
       <span className="swp-head-category swp-tag swp-right-margin">{lexicalCategory}</span>
     );
     let nameNode = (
-      <span className="swp-head-name">
+      <span className="swp-head-name swp-right-margin">
         <span className="swp-sans">{word.name}</span>
       </span>
     );
+    let dateNode = (
+      <span className="swp-head-date">{word.date}</span>
+    );
     let node = (
       <div className="swp-head">
-        {categoryNode}
-        {nameNode}
+        <div className="swp-head-left">
+          {categoryNode}
+          {nameNode}
+          {dateNode}
+        </div>
+        <div className="swp-head-right"/>
       </div>
     );
     return node;
@@ -191,6 +199,7 @@ export class WordPane extends Component<Props, State> {
 
 
 type Props = {
+  dictionary: Dictionary,
   word: Word,
   language: string,
   onClick?: (event: MouseEvent<HTMLDivElement>) => void,

@@ -8,6 +8,7 @@ import {
 } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import {
+  Dictionary,
   Word
 } from "../../module";
 import {
@@ -54,6 +55,7 @@ export class WordList extends Component<Props, State> {
       let wordPane = (
         <WordPaneWrapper
           key={word.uid}
+          dictionary={this.props.dictionary}
           word={word}
           language={this.props.language}
           onCreate={this.props.onCreate}
@@ -79,6 +81,7 @@ export class WordList extends Component<Props, State> {
 
 
 type Props = {
+  dictionary: Dictionary,
   words: Array<Word>,
   language: string,
   onCreate?: (event: MouseEvent<HTMLElement>) => void,
