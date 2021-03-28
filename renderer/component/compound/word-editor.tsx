@@ -32,7 +32,7 @@ export class WordEditor extends Component<Props, State> {
   public constructor(props: Props) {
     super(props);
     let uid = props.word?.uid ?? null;
-    let word = (props.word !== null) ? props.word : Word.createEmpty();
+    let word = (props.defaultWord !== undefined) ? props.defaultWord : (props.word !== null) ? props.word : Word.createEmpty();
     let language = "ja";
     this.state = {uid, word, language};
   }
@@ -111,6 +111,7 @@ export class WordEditor extends Component<Props, State> {
 
 type Props = {
   word: PlainWord | null,
+  defaultWord?: PlainWord,
   onConfirm?: (uid: string | null, word: PlainWord, event: MouseEvent<HTMLElement>) => void,
   onDelete?: (uid: string, event: MouseEvent<HTMLElement>) => void,
   onCancel?: (event: MouseEvent<HTMLElement>) => void

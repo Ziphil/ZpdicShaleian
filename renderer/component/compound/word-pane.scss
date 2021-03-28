@@ -1,15 +1,35 @@
 @charset "utf-8";
 
 
+.zp-word-pane-wrapper {
+  margin-bottom: $pt-grid-size * 1.5;
+  padding: 1px;
+  border-radius: $pt-border-radius;
+  box-shadow: input-transition-shadow($input-shadow-color-focus, false);
+  transition: box-shadow ($pt-transition-duration * 2) $pt-transition-ease;
+  outline: none;
+  .zp-word-list >* >*:last-child & {
+    margin-bottom: 0px;
+  }
+}
+
+.zp-word-pane-wrapper:focus {
+  box-shadow: input-transition-shadow($input-shadow-color-focus, true);
+  >.swp-word {
+    box-shadow: 0px 0px 0px 1px $card-background-color, nth($pt-elevation-shadow-0, 2), nth($pt-elevation-shadow-0, 3);
+  }
+  >.swp-word:hover {
+    box-shadow: 0px 0px 0px 1px $card-background-color, nth($pt-elevation-shadow-3, 2), nth($pt-elevation-shadow-3, 3);
+  }
+  >.swp-word:active {
+    box-shadow: 0px 0px 0px 1px $card-background-color, nth($pt-elevation-shadow-1, 2), nth($pt-elevation-shadow-1, 3);
+  }
+}
+
 .swp-word {
   @extend .bp3-card;
   @extend .bp3-interactive;
-  margin: 1px;
-  margin-bottom: $pt-grid-size * 1.5 + 2px;
   padding: $pt-grid-size;
-  &:last-child {
-    margin-bottom: 0px;
-  }
 }
 
 .swp-section {

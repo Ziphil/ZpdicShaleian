@@ -63,3 +63,18 @@ wordEditor:
   cancel: "キャンセル"
   delete: "削除"
   confirm: "決定"
+wordPaneWrapper:
+  create: "新規作成"
+  inherit: "コピーして新規作成"
+  edit: "編集"
+  delete: "削除"
+  addMarker: "マーカーを変更"
+  marker:
+    circle: "マーカー 1"
+    square: "マーカー 2"
+    upTriangle: "マーカー 3"
+    diamond: "マーカー 4"
+    downTriangle: "マーカー 5"
+    cross: "マーカー 6"
+    pentagon: "マーカー 7"
+    heart: "マーカー 8"

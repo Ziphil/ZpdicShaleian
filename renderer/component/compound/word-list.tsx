@@ -2,17 +2,17 @@
 
 import partial from "lodash-es/partial";
 import * as react from "react";
-import InfiniteScroll from "react-infinite-scroller"
 import {
   MouseEvent,
   ReactNode
 } from "react";
+import InfiniteScroll from "react-infinite-scroller"
 import {
   Component
 } from "../component";
 import {
-  WordPane
-} from "../compound/word-pane";
+  WordPaneWrapper
+} from "../compound";
 import {
   component
 } from "../decorator";
@@ -52,12 +52,13 @@ export class WordList extends Component<Props, State> {
     let hasMore = this.props.words.length > this.state.displayedWords.length;
     let wordPanes = this.state.displayedWords.map((word) => {
       let wordPane = (
-        <WordPane
-          key={word.name}
+        <WordPaneWrapper
           word={word}
           language={this.props.language}
-          onClick={this.props.onClick && partial(this.props.onClick, word)}
-          onDoubleClick={this.props.onDoubleClick && partial(this.props.onDoubleClick, word)}
+          onCreate={this.props.onCreate}
+          onInherit={this.props.onInherit && partial(this.props.onInherit, word)}
+          onEdit={this.props.onEdit && partial(this.props.onEdit, word)}
+          onDelete={this.props.onDelete && partial(this.props.onDelete, word)}
           onLinkClick={this.props.onLinkClick}
         />
       );
@@ -79,8 +80,10 @@ export class WordList extends Component<Props, State> {
 type Props = {
   words: Array<Word>,
   language: string,
-  onClick?: (word: Word, event: MouseEvent<HTMLDivElement>) => void,
-  onDoubleClick?: (word: Word, event: MouseEvent<HTMLDivElement>) => void,
+  onCreate?: (event: MouseEvent<HTMLElement>) => void,
+  onInherit?: (word: Word, event: MouseEvent<HTMLElement>) => void,
+  onEdit?: (word: Word, event: MouseEvent<HTMLElement>) => void,
+  onDelete?: (word: Word, event: MouseEvent<HTMLElement>) => void,
   onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void
 };
 type State = {

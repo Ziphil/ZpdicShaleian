@@ -125,9 +125,9 @@ export class MainPage extends Component<Props, State> {
     this.changeParameter(parameter);
   }
 
-  private openWordEditor(word: PlainWord | null): void {
+  private openWordEditor(word: PlainWord | null, defaultWord?: PlainWord): void {
     let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
-    this.createWindow("editor", {word}, options);
+    this.createWindow("editor", {word, defaultWord}, options);
   }
 
   public render(): ReactNode {
@@ -146,7 +146,10 @@ export class MainPage extends Component<Props, State> {
             <WordList
               words={this.state.hitResult.words}
               language={this.state.language}
-              onDoubleClick={this.openWordEditor.bind(this)}
+              onCreate={() => this.openWordEditor(null)}
+              onInherit={(word) => this.openWordEditor(null, word)}
+              onEdit={(word) => this.openWordEditor(word)}
+              onDelete={(word) => this.deleteWord(word.uid)}
               onLinkClick={this.updateWordsByName.bind(this)}
             />
           </div>

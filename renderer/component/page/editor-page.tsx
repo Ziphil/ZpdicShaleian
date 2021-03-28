@@ -36,6 +36,7 @@ export class EditorPage extends Component<Props, State> {
       <div className="zp-editor-page zp-root">
         <WordEditor
           word={this.props.word}
+          defaultWord={this.props.defaultWord}
           onConfirm={this.editWord.bind(this)}
           onDelete={this.deleteWord.bind(this)}
           onCancel={this.closeWindow.bind(this)}
@@ -49,7 +50,8 @@ export class EditorPage extends Component<Props, State> {
 
 
 type Props = {
-  word: PlainWord | null
+  word: PlainWord | null,
+  defaultWord?: PlainWord
 };
 type State = {
 };
