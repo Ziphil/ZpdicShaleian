@@ -2,12 +2,10 @@
 
 import * as react from "react";
 import {
+  Component,
   Fragment,
   ReactNode
 } from "react";
-import {
-  Component
-} from "../component";
 import {
   Equivalent,
   Information,

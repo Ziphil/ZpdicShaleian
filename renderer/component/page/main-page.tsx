@@ -24,8 +24,12 @@ import {
   SearchForm,
   WordList
 } from "../compound";
+import {
+  component
+} from "../decorator";
 
 
+@component()
 export class MainPage extends Component<Props, State> {
 
   public state: State = {

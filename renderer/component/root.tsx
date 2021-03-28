@@ -1,5 +1,8 @@
 //
 
+import {
+  Provider
+} from "mobx-react";
 import * as queryParser from "query-string";
 import * as react from "react";
 import {
@@ -7,15 +10,26 @@ import {
   ReactNode
 } from "react";
 import {
+  IntlProvider
+} from "react-intl";
+import {
+  component
+} from "./decorator";
+import {
   MainPage
 } from "./page/main-page";
+import {
+  GlobalStore
+} from "./store";
 
 
+@component({inject: false, injectIntl: false, observer: true})
 export class Root extends Component<Props, State> {
+
+  private store: GlobalStore = new GlobalStore();
 
   public state: State = {
     mode: "",
-    id: "",
     props: null
   };
 
@@ -30,23 +44,35 @@ export class Root extends Component<Props, State> {
           window.api.send("ready-show", id);
         });
       });
-      this.setState({mode, id});
+      this.store.id = id;
+      this.setState({mode});
     }
   }
 
-  public render(): ReactNode {
+  public renderPage(): ReactNode {
     let props = this.state.props;
     let mode = this.state.mode;
-    let id = this.state.id;
     if (props !== null) {
       if (mode === "main") {
-        return <MainPage id={id} {...props}/>;
+        return <MainPage {...props}/>;
       } else {
         return <div/>;
       }
     } else {
       return <div/>;
     }
+  }
+
+  public render(): ReactNode {
+    let pageNode = this.renderPage();
+    let node = (
+      <Provider store={this.store}>
+        <IntlProvider defaultLocale="ja" locale="ja" messages={{}}>
+          {pageNode}
+        </IntlProvider>
+      </Provider>
+    );
+    return node;
   }
 
 }
@@ -56,6 +82,5 @@ type Props = {
 };
 type State = {
   mode: string,
-  id: string,
   props: object | null
 };

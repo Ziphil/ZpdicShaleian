@@ -21,6 +21,9 @@ import {
   GlobalHotKeys
 } from "react-hotkeys";
 import {
+  component
+} from "../decorator";
+import {
   WordMode,
   WordType
 } from "../../module";
@@ -32,6 +35,7 @@ import {
 } from "../component";
 
 
+@component()
 export class MainNavbar extends Component<Props, State> {
 
   private handlerManager: HandlerManager;

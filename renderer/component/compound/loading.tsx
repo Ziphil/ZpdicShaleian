@@ -11,8 +11,12 @@ import {
 import {
   Component
 } from "../component";
+import {
+  component
+} from "../decorator";
 
 
+@component()
 export class Loading extends Component<Props, State> {
 
   private renderProgressBar(): ReactNode {

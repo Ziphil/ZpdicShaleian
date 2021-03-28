@@ -10,13 +10,11 @@ import {
 } from "@blueprintjs/select";
 import * as react from "react";
 import {
+  Component,
   ReactElement,
   ReactNode,
   SyntheticEvent
 } from "react";
-import {
-  Component
-} from "../component";
 
 
 export class Select<T> extends Component<Props<T>, State> {

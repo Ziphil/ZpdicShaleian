@@ -12,10 +12,14 @@ import {
   WordPane
 } from "../compound/word-pane";
 import {
+  component
+} from "../decorator";
+import {
   Word
 } from "../../module";
 
 
+@component()
 export class WordList extends Component<Props, State> {
 
   public state: State = {

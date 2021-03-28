@@ -15,6 +15,9 @@ import {
   Component
 } from "../component";
 import {
+  component
+} from "../decorator";
+import {
   NormalWordParameter,
   WORD_MODES,
   WordMode,
@@ -24,6 +27,7 @@ import {
 } from "../../module";
 
 
+@component()
 export class SearchForm extends Component<Props, State> {
 
   private handleParameterSet(nextParameter: {search?: string, mode?: WordMode, type?: WordType}): void {
