@@ -42,6 +42,7 @@ export class MainPage extends Component<Props, State> {
 
   public state: State = {
     dictionary: null,
+    selectedWord: null,
     language: "ja",
     parameter: NormalWordParameter.createEmpty("ja"),
     hitResult: {words: [], suggestions: []},
@@ -65,7 +66,8 @@ export class MainPage extends Component<Props, State> {
     });
     window.api.on("load-dictionary", (event, plainDictionary) => {
       let dictionary = Dictionary.fromPlain(plainDictionary);
-      this.setState({dictionary}, () => {
+      let selectedWord = null;
+      this.setState({dictionary, selectedWord}, () => {
         this.updateWords();
       });
     });
@@ -99,11 +101,21 @@ export class MainPage extends Component<Props, State> {
     window.api.send("ready-save-dictionary", dictionary, "C:/Users/Ziphil/Desktop/dic_save");
   }
 
+  private refreshWords(): void {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      let hitResult = {words: this.state.hitResult.words, suggestions: this.state.hitResult.suggestions};
+      this.setState({hitResult});
+    }
+  }
+
   private updateWords(parameter?: WordParameter): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let hitResult = dictionary.search(parameter ?? this.state.parameter);
-      this.setState({hitResult});
+      this.setState({hitResult}, () => {
+        document.getElementById("word-list-container")!.scrollTop = 0;
+      });
     }
   }
 
@@ -121,7 +133,7 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       dictionary.editWord(uid, word);
-      this.updateWords();
+      this.refreshWords();
     }
   }
 
@@ -129,7 +141,7 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       dictionary.deleteWord(uid);
-      this.updateWords();
+      this.refreshWords();
     }
   }
 
@@ -137,7 +149,7 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       dictionary.toggleMarker(word.name, marker);
-      this.updateWords();
+      this.refreshWords();
     }
   }
 
@@ -204,6 +216,7 @@ type Props = {
 type State = {
   dictionary: Dictionary | null,
   language: string,
+  selectedWord: Word | null,
   parameter: WordParameter,
   hitResult: {words: Array<Word>, suggestions: Array<null>},
   loadProgress: {offset: number, size: number},

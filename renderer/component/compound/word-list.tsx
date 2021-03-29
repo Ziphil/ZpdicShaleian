@@ -40,7 +40,6 @@ export class WordList extends Component<Props, State> {
     if (this.props !== previousProps) {
       let displayedWords = this.props.words.slice(0, 10);
       this.setState({displayedWords});
-      document.getElementById("word-list-container")!.scrollTop = 0;
     }
   }
 
