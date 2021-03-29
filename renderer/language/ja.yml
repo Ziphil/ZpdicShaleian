@@ -80,4 +80,4 @@ wordPaneWrapper:
   inherit: "コピーして新規作成"
   edit: "編集"
   delete: "削除"
-  addMarker: "マーカーを変更"
+  toggleMarker: "マーカーを変更"

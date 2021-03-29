@@ -130,6 +130,22 @@ export class MainPage extends Component<Props, State> {
     this.updateWords(parameter);
   }
 
+  private startEditWord(word: PlainWord | null, defaultWord?: PlainWord): void {
+    let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
+    this.createWindow("editor", {word, defaultWord}, options);
+  }
+
+  private startEditActiveWord(word: PlainWord | "active" | null, defaultWord?: PlainWord | "active"): void {
+    let activeWord = this.state.activeWord;
+    if (activeWord !== null) {
+      let nextWord = (word === "active") ? activeWord : word;
+      let nextDefaultWord = (defaultWord === "active") ? activeWord : defaultWord;
+      this.startEditWord(nextWord, nextDefaultWord);
+    } else {
+      CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
+    }
+  }
+
   private editWord(uid: string | null, word: PlainWord): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
@@ -146,7 +162,16 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private toggleMarker(word: Word, marker: Marker): void {
+  private deleteActiveWord(): void {
+    let activeWord = this.state.activeWord;
+    if (activeWord !== null) {
+      this.deleteWord(activeWord.uid);
+    } else {
+      CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
+    }
+  }
+
+  private toggleWordMarker(word: Word, marker: Marker): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       dictionary.toggleMarker(word.name, marker);
@@ -154,10 +179,10 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private toggleMarkerForActive(marker: Marker): void {
+  private toggleActiveWordMarker(marker: Marker): void {
     let activeWord = this.state.activeWord;
     if (activeWord !== null) {
-      this.toggleMarker(activeWord, marker);
+      this.toggleWordMarker(activeWord, marker);
     } else {
       CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
     }
@@ -181,31 +206,6 @@ export class MainPage extends Component<Props, State> {
     this.changeParameter(parameter);
   }
 
-  private openWordEditor(word: PlainWord | null, defaultWord?: PlainWord): void {
-    let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
-    this.createWindow("editor", {word, defaultWord}, options);
-  }
-
-  private openWordEditorForActive(word: PlainWord | "active" | null, defaultWord?: PlainWord | "active"): void {
-    let activeWord = this.state.activeWord;
-    if (activeWord !== null) {
-      let nextWord = (word === "active") ? activeWord : word;
-      let nextDefaultWord = (defaultWord === "active") ? activeWord : defaultWord;
-      this.openWordEditor(nextWord, nextDefaultWord);
-    } else {
-      CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
-    }
-  }
-
-  private deleteActiveWord(): void {
-    let activeWord = this.state.activeWord;
-    if (activeWord !== null) {
-      this.deleteWord(activeWord.uid);
-    } else {
-      CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
-    }
-  }
-
   public render(): ReactNode {
     let node = (
       <div className="zp-main-page zp-root zp-navbar-root">
@@ -213,11 +213,11 @@ export class MainPage extends Component<Props, State> {
           saveDictionary={() => this.saveDictionary(null)}
           changeWordMode={(mode) => this.changeWordMode(mode)}
           changeWordType={(type) => this.changeWordType(type)}
-          createWord={() => this.openWordEditor(null)}
-          inheritWord={() => this.openWordEditorForActive(null, "active")}
-          editWord={() => this.openWordEditorForActive("active")}
-          deleteWord={() => this.deleteActiveWord()}
-          toggleMarker={(marker) => this.toggleMarkerForActive(marker)}
+          createWord={() => this.startEditWord(null)}
+          inheritActiveWord={() => this.startEditActiveWord(null, "active")}
+          editActiveWord={() => this.startEditActiveWord("active")}
+          deleteActiveWord={() => this.deleteActiveWord()}
+          toggleActiveWordMarker={(marker) => this.toggleActiveWordMarker(marker)}
         />
         <Loading loading={this.state.dictionary === null} {...this.state.loadProgress}>
           <div className="zp-search-form-container">
@@ -229,13 +229,13 @@ export class MainPage extends Component<Props, State> {
               words={this.state.hitResult.words}
               activeWord={this.state.activeWord}
               language={this.state.language}
-              onCreate={() => this.openWordEditor(null)}
-              onInherit={(word) => this.openWordEditor(null, word)}
-              onEdit={(word) => this.openWordEditor(word)}
+              onCreate={() => this.startEditWord(null)}
+              onInherit={(word) => this.startEditWord(null, word)}
+              onEdit={(word) => this.startEditWord(word)}
               onDelete={(word) => this.deleteWord(word.uid)}
-              onMarkerToggled={(word, marker) => this.toggleMarker(word, marker)}
+              onMarkerToggled={(word, marker) => this.toggleWordMarker(word, marker)}
               onLinkClick={(name) => this.updateWordsByName(name)}
-              onWordActivated={(activeWord) => this.setState({activeWord})}
+              onActivate={(activeWord) => this.setState({activeWord})}
             />
           </div>
         </Loading>

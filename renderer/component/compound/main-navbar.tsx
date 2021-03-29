@@ -305,17 +305,17 @@ export class MainNavbar extends Component<Props, State> {
       searchAdvanced: {key: "ctrl+f"},
       searchScript: {key: "ctrl+shift+f"},
       createWord: {key: "ctrl+n", handler: () => this.props.createWord()},
-      inheritWord: {handler: () => this.props.inheritWord()},
-      editWord: {key: "ctrl+m", handler: () => this.props.editWord()},
-      deleteWord: {handler: () => this.props.deleteWord()},
-      toggleMarkerCircle: {key: "ctrl+1", handler: () => this.props.toggleMarker("circle")},
-      toggleMarkerSquare: {key: "ctrl+2", handler: () => this.props.toggleMarker("square")},
-      toggleMarkerUp: {key: "ctrl+3", handler: () => this.props.toggleMarker("up")},
-      toggleMarkerDiamond: {key: "ctrl+4", handler: () => this.props.toggleMarker("diamond")},
-      toggleMarkerDown: {key: "ctrl+5", handler: () => this.props.toggleMarker("down")},
-      toggleMarkerCross: {key: "ctrl+6", handler: () => this.props.toggleMarker("cross")},
-      toggleMarkerPentagon: {key: "ctrl+7", handler: () => this.props.toggleMarker("pentagon")},
-      toggleMarkerHeart: {key: "ctrl+8", handler: () => this.props.toggleMarker("heart")},
+      inheritWord: {handler: () => this.props.inheritActiveWord()},
+      editWord: {key: "ctrl+m", handler: () => this.props.editActiveWord()},
+      deleteWord: {handler: () => this.props.deleteActiveWord()},
+      toggleMarkerCircle: {key: "ctrl+1", handler: () => this.props.toggleActiveWordMarker("circle")},
+      toggleMarkerSquare: {key: "ctrl+2", handler: () => this.props.toggleActiveWordMarker("square")},
+      toggleMarkerUp: {key: "ctrl+3", handler: () => this.props.toggleActiveWordMarker("up")},
+      toggleMarkerDiamond: {key: "ctrl+4", handler: () => this.props.toggleActiveWordMarker("diamond")},
+      toggleMarkerDown: {key: "ctrl+5", handler: () => this.props.toggleActiveWordMarker("down")},
+      toggleMarkerCross: {key: "ctrl+6", handler: () => this.props.toggleActiveWordMarker("cross")},
+      toggleMarkerPentagon: {key: "ctrl+7", handler: () => this.props.toggleActiveWordMarker("pentagon")},
+      toggleMarkerHeart: {key: "ctrl+8", handler: () => this.props.toggleActiveWordMarker("heart")},
       openDevTools: {key: "f12", handler: () => this.openDevTools()},
       openHelp: {key: "f1"}
     });
@@ -365,10 +365,10 @@ type Props = {
   changeWordMode: (mode: WordMode) => void,
   changeWordType: (type: WordType) => void,
   createWord: () => void,
-  inheritWord: () => void,
-  editWord: () => void,
-  deleteWord: () => void,
-  toggleMarker: (marker: Marker) => void
+  inheritActiveWord: () => void,
+  editActiveWord: () => void,
+  deleteActiveWord: () => void,
+  toggleActiveWordMarker: (marker: Marker) => void
 };
 type State = {
 };

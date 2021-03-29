@@ -44,7 +44,7 @@ export class WordPaneWrapper extends Component<Props, State> {
         <MenuItem text={this.trans("wordPaneWrapper.edit")} onClick={this.props.onEdit}/>
         <MenuItem text={this.trans("wordPaneWrapper.delete")} intent="danger" onClick={this.props.onDelete}/>
         <MenuDivider/>
-        <MenuItem text={this.trans("wordPaneWrapper.addMarker")}>
+        <MenuItem text={this.trans("wordPaneWrapper.toggleMarker")}>
           <MenuItem text={this.trans("common.marker.circle")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "circle")}/>
           <MenuItem text={this.trans("common.marker.square")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "square")}/>
           <MenuItem text={this.trans("common.marker.up")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "up")}/>
@@ -64,7 +64,7 @@ export class WordPaneWrapper extends Component<Props, State> {
     let className = "zp-word-pane-wrapper" + ((this.props.active) ? " zp-word-active" : "");
     let node = (
       <ContextMenu2 key={this.props.word.uid} content={menuNode}>
-        <div className={className} tabIndex={0} onFocus={this.props.onActive}>
+        <div className={className} tabIndex={0} onFocus={this.props.onActivate}>
           <WordPane
             dictionary={this.props.dictionary}
             word={this.props.word}
@@ -90,7 +90,7 @@ type Props = {
   onInherit?: (event: MouseEvent<HTMLElement>) => void,
   onEdit?: (event: MouseEvent<HTMLElement>) => void,
   onDelete?: (event: MouseEvent<HTMLElement>) => void,
-  onActive?: (event: FocusEvent<HTMLElement>) => void,
+  onActivate?: (event: FocusEvent<HTMLElement>) => void,
   onMarkerToggled?: (marker: Marker) => void,
   onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void
 };
