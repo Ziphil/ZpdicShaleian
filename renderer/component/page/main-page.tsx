@@ -1,5 +1,8 @@
 //
 
+import {
+  Toaster
+} from "@blueprintjs/core";
 import * as react from "react";
 import {
   ReactNode
@@ -16,6 +19,9 @@ import {
 import {
   debounce
 } from "../../util/decorator";
+import {
+  EnhancedProgressBar
+} from "../atom";
 import {
   Component
 } from "../component";
@@ -61,6 +67,19 @@ export class MainPage extends Component<Props, State> {
       this.setState({dictionary}, () => {
         this.updateWords();
       });
+    });
+    window.api.on("get-save-dictionary-progress", (event, saveProgress) => {
+      CustomToaster.show({
+        icon: "floppy-disk",
+        message: <EnhancedProgressBar className="zp-save-progress-bar" offset={saveProgress.offset} size={saveProgress.size} showDetail={false}/>,
+        timeout: 0
+      }, "saveDictionary");
+    });
+    window.api.on("save-dictionary", (event) => {
+      CustomToaster.show({
+        icon: "floppy-disk",
+        message: <EnhancedProgressBar className="zp-save-progress-bar" offset={1} size={1} showDetail={false}/>
+      }, "saveDictionary");
     });
     window.api.on("edit-word", (event, uid, word) => {
       this.editWord(uid, word);
@@ -180,3 +199,5 @@ type State = {
   loadProgress: {offset: number, size: number},
   saveProgress: {offset: number, size: number}
 };
+
+let CustomToaster = Toaster.create({className: "zp-main-toaster", position: "top", maxToasts: 2});

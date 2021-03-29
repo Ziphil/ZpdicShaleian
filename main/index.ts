@@ -132,7 +132,6 @@ class Main {
       });
       saver.on("end", () => {
         event.reply("save-dictionary");
-        console.log("saver end");
       });
       saver.on("error", (error) => {
         event.reply("error");

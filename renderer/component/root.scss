@@ -6,11 +6,11 @@
 @import "~@blueprintjs/popover2/lib/css/blueprint-popover2.css";
 @import "./modification.scss";
 
-@import "./page/main-page.scss";
-@import "./compound/loading.scss";
+@import "./atom/enhanced-progress-bar.scss";
 @import "./compound/search-form.scss";
 @import "./compound/word-editor.scss";
 @import "./compound/word-pane.scss";
+@import "./page/main-page.scss";
 
 
 .zp-root {

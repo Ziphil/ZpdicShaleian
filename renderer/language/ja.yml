@@ -4,9 +4,6 @@ common:
   dateUndefined: "?"
   numberUndefined: "?"
 
-loading:
-  percent: "{percent, number, :: .00} %"
-  offset: "{offset, number} / {size, number}"
 mainNavbar:
   title: "シャレイア語辞典"
   file: "ファイル"
