@@ -2,6 +2,7 @@
 
 import {
   ControlGroup,
+  IRef,
   InputGroup
 } from "@blueprintjs/core";
 import * as react from "react";
@@ -47,7 +48,12 @@ export class SearchForm extends Component<Props, State> {
     let node = (
       <div className="zp-search-form">
         <ControlGroup fill={true}>
-          <InputGroup value={parameter.search} fill={true} onChange={(event) => this.handleParameterSet({search: event.target.value})}/>
+          <InputGroup
+            value={parameter.search}
+            fill={true}
+            inputRef={this.props.inputRef}
+            onChange={(event) => this.handleParameterSet({search: event.target.value})}
+          />
           <Select
             className="zp-search-form-select"
             buttonClassName="zp-search-form-button"
@@ -77,7 +83,8 @@ export class SearchForm extends Component<Props, State> {
 
 type Props = {
   parameter: WordParameter,
-  onParameterSet?: (parameter: WordParameter) => void;
+  onParameterSet?: (parameter: WordParameter) => void,
+  inputRef?: IRef<HTMLInputElement>
 };
 type State = {
 };

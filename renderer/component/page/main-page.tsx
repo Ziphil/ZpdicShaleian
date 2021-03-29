@@ -1,6 +1,7 @@
 //
 
 import {
+  IRefObject,
   Toaster
 } from "@blueprintjs/core";
 import * as react from "react";
@@ -40,6 +41,8 @@ import {
 @component()
 export class MainPage extends Component<Props, State> {
 
+  private searchInputRef: IRefObject<HTMLInputElement>;
+
   public state: State = {
     dictionary: null,
     activeWord: null,
@@ -52,6 +55,7 @@ export class MainPage extends Component<Props, State> {
 
   public constructor(props: Props) {
     super(props);
+    this.searchInputRef = {current: null};
     this.setupIpc();
   }
 
@@ -130,6 +134,14 @@ export class MainPage extends Component<Props, State> {
     this.updateWords(parameter);
   }
 
+  private focusSearchForm(): void {
+    let element = this.searchInputRef.current;
+    if (element !== null) {
+      element.focus();
+      this.setState({activeWord: null});
+    }
+  }
+
   private startEditWord(word: PlainWord | null, defaultWord?: PlainWord): void {
     let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
     this.createWindow("editor", {word, defaultWord}, options);
@@ -194,16 +206,22 @@ export class MainPage extends Component<Props, State> {
     });
   }
 
-  private changeWordMode(mode: WordMode): void {
+  private changeWordMode(mode: WordMode, focus?: boolean): void {
     let oldParameter = WordParameter.getNormal(this.state.parameter);
     let parameter = new NormalWordParameter(oldParameter.search, mode, oldParameter.type, oldParameter.language);
     this.changeParameter(parameter);
+    if (focus) {
+      this.focusSearchForm();
+    }
   }
 
-  private changeWordType(type: WordType): void {
+  private changeWordType(type: WordType, focus?: boolean): void {
     let oldParameter = WordParameter.getNormal(this.state.parameter);
     let parameter = new NormalWordParameter(oldParameter.search, oldParameter.mode, type, oldParameter.language);
     this.changeParameter(parameter);
+    if (focus) {
+      this.focusSearchForm();
+    }
   }
 
   public render(): ReactNode {
@@ -211,8 +229,8 @@ export class MainPage extends Component<Props, State> {
       <div className="zp-main-page zp-root zp-navbar-root">
         <MainNavbar
           saveDictionary={() => this.saveDictionary(null)}
-          changeWordMode={(mode) => this.changeWordMode(mode)}
-          changeWordType={(type) => this.changeWordType(type)}
+          changeWordMode={(mode) => this.changeWordMode(mode, true)}
+          changeWordType={(type) => this.changeWordType(type, true)}
           createWord={() => this.startEditWord(null)}
           inheritActiveWord={() => this.startEditActiveWord(null, "active")}
           editActiveWord={() => this.startEditActiveWord("active")}
@@ -221,7 +239,7 @@ export class MainPage extends Component<Props, State> {
         />
         <Loading loading={this.state.dictionary === null} {...this.state.loadProgress}>
           <div className="zp-search-form-container">
-            <SearchForm parameter={this.state.parameter} onParameterSet={this.changeParameter.bind(this)}/>
+            <SearchForm parameter={this.state.parameter} inputRef={this.searchInputRef} onParameterSet={this.changeParameter.bind(this)}/>
           </div>
           <div className="zp-word-list-container" id="word-list-container">
             <WordList
