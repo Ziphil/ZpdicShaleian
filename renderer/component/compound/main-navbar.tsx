@@ -22,6 +22,7 @@ import {
   GlobalHotKeys
 } from "react-hotkeys";
 import {
+  Marker,
   WordMode,
   WordType
 } from "../../module";
@@ -185,6 +186,68 @@ export class MainNavbar extends Component<Props, State> {
           onClick={this.handlerManager.getHandler("createWord")}
           icon="blank"
         />
+        <MenuItem
+          text={this.trans("mainNavbar.inheritWord")}
+          label={this.handlerManager.getLabel("inheritWord")}
+          onClick={this.handlerManager.getHandler("inheritWord")}
+          icon="blank"
+        />
+        <MenuItem
+          text={this.trans("mainNavbar.editWord")}
+          label={this.handlerManager.getLabel("editWord")}
+          onClick={this.handlerManager.getHandler("editWord")}
+          icon="blank"
+        />
+        <MenuItem
+          text={this.trans("mainNavbar.deleteWord")}
+          label={this.handlerManager.getLabel("deleteWord")}
+          onClick={this.handlerManager.getHandler("deleteWord")}
+          icon="blank"
+          intent="danger"
+        />
+        <MenuDivider/>
+        <MenuItem text={this.trans("mainNavbar.toggleMarker")} icon="blank">
+          <MenuItem
+            text={this.trans("common.marker.circle")}
+            label={this.handlerManager.getLabel("toggleMarkerCircle")}
+            onClick={this.handlerManager.getHandler("toggleMarkerCircle")}
+          />
+          <MenuItem
+            text={this.trans("common.marker.square")}
+            label={this.handlerManager.getLabel("toggleMarkerSquare")}
+            onClick={this.handlerManager.getHandler("toggleMarkerSquare")}
+          />
+          <MenuItem
+            text={this.trans("common.marker.up")}
+            label={this.handlerManager.getLabel("toggleMarkerUp")}
+            onClick={this.handlerManager.getHandler("toggleMarkerUp")}
+          />
+          <MenuItem
+            text={this.trans("common.marker.diamond")}
+            label={this.handlerManager.getLabel("toggleMarkerDiamond")}
+            onClick={this.handlerManager.getHandler("toggleMarkerDiamond")}
+          />
+          <MenuItem
+            text={this.trans("common.marker.down")}
+            label={this.handlerManager.getLabel("toggleMarkerDown")}
+            onClick={this.handlerManager.getHandler("toggleMarkerDown")}
+          />
+          <MenuItem
+            text={this.trans("common.marker.cross")}
+            label={this.handlerManager.getLabel("toggleMarkerCross")}
+            onClick={this.handlerManager.getHandler("toggleMarkerCross")}
+          />
+          <MenuItem
+            text={this.trans("common.marker.pentagon")}
+            label={this.handlerManager.getLabel("toggleMarkerPentagon")}
+            onClick={this.handlerManager.getHandler("toggleMarkerPentagon")}
+          />
+          <MenuItem
+            text={this.trans("common.marker.heart")}
+            label={this.handlerManager.getLabel("toggleMarkerHeart")}
+            onClick={this.handlerManager.getHandler("toggleMarkerHeart")}
+          />
+        </MenuItem>
       </Menu>
     );
     return node;
@@ -242,6 +305,17 @@ export class MainNavbar extends Component<Props, State> {
       searchAdvanced: {key: "ctrl+f"},
       searchScript: {key: "ctrl+shift+f"},
       createWord: {key: "ctrl+n", handler: () => this.props.createWord()},
+      inheritWord: {handler: () => this.props.inheritWord()},
+      editWord: {key: "ctrl+m", handler: () => this.props.editWord()},
+      deleteWord: {handler: () => this.props.deleteWord()},
+      toggleMarkerCircle: {key: "ctrl+1", handler: () => this.props.toggleMarker("circle")},
+      toggleMarkerSquare: {key: "ctrl+2", handler: () => this.props.toggleMarker("square")},
+      toggleMarkerUp: {key: "ctrl+3", handler: () => this.props.toggleMarker("up")},
+      toggleMarkerDiamond: {key: "ctrl+4", handler: () => this.props.toggleMarker("diamond")},
+      toggleMarkerDown: {key: "ctrl+5", handler: () => this.props.toggleMarker("down")},
+      toggleMarkerCross: {key: "ctrl+6", handler: () => this.props.toggleMarker("cross")},
+      toggleMarkerPentagon: {key: "ctrl+7", handler: () => this.props.toggleMarker("pentagon")},
+      toggleMarkerHeart: {key: "ctrl+8", handler: () => this.props.toggleMarker("heart")},
       openDevTools: {key: "f12", handler: () => this.openDevTools()},
       openHelp: {key: "f1"}
     });
@@ -290,7 +364,11 @@ type Props = {
   saveDictionary: () => void,
   changeWordMode: (mode: WordMode) => void,
   changeWordType: (type: WordType) => void,
-  createWord: () => void
+  createWord: () => void,
+  inheritWord: () => void,
+  editWord: () => void,
+  deleteWord: () => void,
+  toggleMarker: (marker: Marker) => void
 };
 type State = {
 };

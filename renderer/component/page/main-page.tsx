@@ -42,7 +42,7 @@ export class MainPage extends Component<Props, State> {
 
   public state: State = {
     dictionary: null,
-    selectedWord: null,
+    activeWord: null,
     language: "ja",
     parameter: NormalWordParameter.createEmpty("ja"),
     hitResult: {words: [], suggestions: []},
@@ -66,8 +66,8 @@ export class MainPage extends Component<Props, State> {
     });
     window.api.on("load-dictionary", (event, plainDictionary) => {
       let dictionary = Dictionary.fromPlain(plainDictionary);
-      let selectedWord = null;
-      this.setState({dictionary, selectedWord}, () => {
+      let activeWord = null;
+      this.setState({dictionary, activeWord}, () => {
         this.updateWords();
       });
     });
@@ -113,7 +113,8 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let hitResult = dictionary.search(parameter ?? this.state.parameter);
-      this.setState({hitResult}, () => {
+      let activeWord = null;
+      this.setState({hitResult, activeWord}, () => {
         document.getElementById("word-list-container")!.scrollTop = 0;
       });
     }
@@ -153,6 +154,15 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  private toggleMarkerForActive(marker: Marker): void {
+    let activeWord = this.state.activeWord;
+    if (activeWord !== null) {
+      this.toggleMarker(activeWord, marker);
+    } else {
+      CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
+    }
+  }
+
   private changeParameter(parameter: WordParameter): void {
     this.setState({parameter}, () => {
       this.updateWordsDebounced();
@@ -176,6 +186,26 @@ export class MainPage extends Component<Props, State> {
     this.createWindow("editor", {word, defaultWord}, options);
   }
 
+  private openWordEditorForActive(word: PlainWord | "active" | null, defaultWord?: PlainWord | "active"): void {
+    let activeWord = this.state.activeWord;
+    if (activeWord !== null) {
+      let nextWord = (word === "active") ? activeWord : word;
+      let nextDefaultWord = (defaultWord === "active") ? activeWord : defaultWord;
+      this.openWordEditor(nextWord, nextDefaultWord);
+    } else {
+      CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
+    }
+  }
+
+  private deleteActiveWord(): void {
+    let activeWord = this.state.activeWord;
+    if (activeWord !== null) {
+      this.deleteWord(activeWord.uid);
+    } else {
+      CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
+    }
+  }
+
   public render(): ReactNode {
     let node = (
       <div className="zp-main-page zp-root zp-navbar-root">
@@ -184,6 +214,10 @@ export class MainPage extends Component<Props, State> {
           changeWordMode={(mode) => this.changeWordMode(mode)}
           changeWordType={(type) => this.changeWordType(type)}
           createWord={() => this.openWordEditor(null)}
+          inheritWord={() => this.openWordEditorForActive(null, "active")}
+          editWord={() => this.openWordEditorForActive("active")}
+          deleteWord={() => this.deleteActiveWord()}
+          toggleMarker={(marker) => this.toggleMarkerForActive(marker)}
         />
         <Loading loading={this.state.dictionary === null} {...this.state.loadProgress}>
           <div className="zp-search-form-container">
@@ -193,6 +227,7 @@ export class MainPage extends Component<Props, State> {
             <WordList
               dictionary={this.state.dictionary!}
               words={this.state.hitResult.words}
+              activeWord={this.state.activeWord}
               language={this.state.language}
               onCreate={() => this.openWordEditor(null)}
               onInherit={(word) => this.openWordEditor(null, word)}
@@ -200,6 +235,7 @@ export class MainPage extends Component<Props, State> {
               onDelete={(word) => this.deleteWord(word.uid)}
               onMarkerToggled={(word, marker) => this.toggleMarker(word, marker)}
               onLinkClick={(name) => this.updateWordsByName(name)}
+              onWordActivated={(activeWord) => this.setState({activeWord})}
             />
           </div>
         </Loading>
@@ -216,7 +252,7 @@ type Props = {
 type State = {
   dictionary: Dictionary | null,
   language: string,
-  selectedWord: Word | null,
+  activeWord: Word | null,
   parameter: WordParameter,
   hitResult: {words: Array<Word>, suggestions: Array<null>},
   loadProgress: {offset: number, size: number},

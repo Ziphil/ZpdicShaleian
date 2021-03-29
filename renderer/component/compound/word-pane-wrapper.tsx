@@ -11,13 +11,11 @@ import {
 import partial from "lodash-es/partial";
 import * as react from "react";
 import {
+  FocusEvent,
   MouseEvent,
   ReactElement,
   ReactNode
 } from "react";
-import {
-  HotKeys
-} from "react-hotkeys";
 import {
   Dictionary,
   Marker,
@@ -63,9 +61,10 @@ export class WordPaneWrapper extends Component<Props, State> {
 
   public render(): ReactNode {
     let menuNode = this.renderMenu();
+    let className = "zp-word-pane-wrapper" + ((this.props.active) ? " zp-word-active" : "");
     let node = (
       <ContextMenu2 key={this.props.word.uid} content={menuNode}>
-        <HotKeys className="zp-word-pane-wrapper" tabIndex={0}>
+        <div className={className} tabIndex={0} onFocus={this.props.onActive}>
           <WordPane
             dictionary={this.props.dictionary}
             word={this.props.word}
@@ -73,7 +72,7 @@ export class WordPaneWrapper extends Component<Props, State> {
             onDoubleClick={this.props.onEdit}
             onLinkClick={this.props.onLinkClick}
           />
-        </HotKeys>
+        </div>
       </ContextMenu2>
     );
     return node;
@@ -86,10 +85,12 @@ type Props = {
   dictionary: Dictionary,
   word: Word,
   language: string,
+  active: boolean,
   onCreate?: (event: MouseEvent<HTMLElement>) => void,
   onInherit?: (event: MouseEvent<HTMLElement>) => void,
   onEdit?: (event: MouseEvent<HTMLElement>) => void,
   onDelete?: (event: MouseEvent<HTMLElement>) => void,
+  onActive?: (event: FocusEvent<HTMLElement>) => void,
   onMarkerToggled?: (marker: Marker) => void,
   onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void
 };

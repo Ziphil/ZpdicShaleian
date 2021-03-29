@@ -25,14 +25,14 @@ common:
     pair: "対語"
     regular: "正規"
   marker:
-    circle: "マーカー 1"
-    square: "マーカー 2"
-    up: "マーカー 3"
-    diamond: "マーカー 4"
-    down: "マーカー 5"
-    cross: "マーカー 6"
-    pentagon: "マーカー 7"
-    heart: "マーカー 8"
+    circle: "丸 (赤色)"
+    square: "正方形 (青色)"
+    up: "上三角形 (緑色)"
+    diamond: "菱形 (橙色)"
+    down: "下三角形 (紫色)"
+    cross: "十字 (黄緑色)"
+    pentagon: "五角形 (水色)"
+    heart: "ハート (桃色)"
   language:
     ja: "JA (日本語)"
     en: "EN (English)"
@@ -58,12 +58,19 @@ mainNavbar:
   searchScript: "スクリプト検索"
   edit: "編集"
   createWord: "単語の新規作成"
+  inheritWord: "単語をコピーして新規作成"
+  editWord: "単語を編集"
+  deleteWord: "単語を削除"
+  toggleMarker: "マーカーを変更"
   git: "Git"
   tool: "ツール"
   help: "ヘルプ"
   openDevTools: "デベロッパーツールを開く"
   openHelp: "ヘルプ"
   aboutApplication: "このアプリについて"
+mainPage:
+  noActiveWord: >-
+    選択している単語がありません。
 wordEditor:
   cancel: "キャンセル"
   delete: "削除"

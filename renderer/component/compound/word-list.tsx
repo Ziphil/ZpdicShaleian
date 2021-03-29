@@ -3,6 +3,7 @@
 import partial from "lodash-es/partial";
 import * as react from "react";
 import {
+  FocusEvent,
   MouseEvent,
   ReactNode
 } from "react";
@@ -58,10 +59,12 @@ export class WordList extends Component<Props, State> {
           dictionary={this.props.dictionary}
           word={word}
           language={this.props.language}
+          active={this.props.activeWord?.uid === word.uid}
           onCreate={this.props.onCreate}
           onInherit={this.props.onInherit && partial(this.props.onInherit, word)}
           onEdit={this.props.onEdit && partial(this.props.onEdit, word)}
           onDelete={this.props.onDelete && partial(this.props.onDelete, word)}
+          onActive={this.props.onWordActivated && partial(this.props.onWordActivated, word)}
           onMarkerToggled={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, word)}
           onLinkClick={this.props.onLinkClick}
         />
@@ -84,13 +87,15 @@ export class WordList extends Component<Props, State> {
 type Props = {
   dictionary: Dictionary,
   words: Array<Word>,
+  activeWord: Word | null,
   language: string,
   onCreate?: (event: MouseEvent<HTMLElement>) => void,
   onInherit?: (word: Word, event: MouseEvent<HTMLElement>) => void,
   onEdit?: (word: Word, event: MouseEvent<HTMLElement>) => void,
   onDelete?: (word: Word, event: MouseEvent<HTMLElement>) => void,
   onMarkerToggled?: (word: Word, marker: Marker) => void,
-  onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void
+  onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void,
+  onWordActivated?: (activeWord: Word | null, event: FocusEvent<HTMLElement>) => void
 };
 type State = {
   displayedWords: Array<Word>
