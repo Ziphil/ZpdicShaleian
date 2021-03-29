@@ -187,65 +187,84 @@ export class MainNavbar extends Component<Props, State> {
           icon="blank"
         />
         <MenuItem
-          text={this.trans("mainNavbar.inheritWord")}
-          label={this.handlerManager.getLabel("inheritWord")}
-          onClick={this.handlerManager.getHandler("inheritWord")}
+          text={this.trans("mainNavbar.inheritActiveWord")}
+          label={this.handlerManager.getLabel("inheritActiveWord")}
+          onClick={this.handlerManager.getHandler("inheritActiveWord")}
           icon="blank"
         />
         <MenuItem
-          text={this.trans("mainNavbar.editWord")}
-          label={this.handlerManager.getLabel("editWord")}
-          onClick={this.handlerManager.getHandler("editWord")}
+          text={this.trans("mainNavbar.editActiveWord")}
+          label={this.handlerManager.getLabel("editActiveWord")}
+          onClick={this.handlerManager.getHandler("editActiveWord")}
           icon="blank"
         />
         <MenuItem
-          text={this.trans("mainNavbar.deleteWord")}
-          label={this.handlerManager.getLabel("deleteWord")}
-          onClick={this.handlerManager.getHandler("deleteWord")}
+          text={this.trans("mainNavbar.deleteActiveWord")}
+          label={this.handlerManager.getLabel("deleteActiveWord")}
+          onClick={this.handlerManager.getHandler("deleteActiveWord")}
           icon="blank"
           intent="danger"
         />
         <MenuDivider/>
-        <MenuItem text={this.trans("mainNavbar.toggleMarker")} icon="blank">
+        <MenuItem
+          text={this.trans("mainNavbar.cutActiveWord")}
+          label={this.handlerManager.getLabel("cutActiveWord")}
+          onClick={this.handlerManager.getHandler("cutActiveWord")}
+          icon="cut"
+        />
+        <MenuItem
+          text={this.trans("mainNavbar.copyActiveWord")}
+          label={this.handlerManager.getLabel("copyActiveWord")}
+          onClick={this.handlerManager.getHandler("copyActiveWord")}
+          icon="duplicate"
+        />
+        <MenuItem
+          text={this.trans("mainNavbar.pasteActiveWord")}
+          label={this.handlerManager.getLabel("pasteActiveWord")}
+          onClick={this.handlerManager.getHandler("pasteActiveWord")}
+          icon="clipboard"
+        />
+        <MenuDivider/>
+        <MenuItem text={this.trans("mainNavbar.toggleActiveWordMarker")} icon="blank">
           <MenuItem
             text={this.trans("common.marker.circle")}
-            label={this.handlerManager.getLabel("toggleMarkerCircle")}
-            onClick={this.handlerManager.getHandler("toggleMarkerCircle")}
+            label={this.handlerManager.getLabel("toggleActiveWordMarkerCircle")}
+            onClick={this.handlerManager.getHandler("toggleActiveWordMarkerCircle")}
           />
           <MenuItem
             text={this.trans("common.marker.square")}
-            label={this.handlerManager.getLabel("toggleMarkerSquare")}
-            onClick={this.handlerManager.getHandler("toggleMarkerSquare")}
+            label={this.handlerManager.getLabel("toggleActiveWordMarkerSquare")}
+            onClick={this.handlerManager.getHandler("toggleActiveWordMarkerSquare")}
           />
           <MenuItem
             text={this.trans("common.marker.up")}
-            label={this.handlerManager.getLabel("toggleMarkerUp")}
-            onClick={this.handlerManager.getHandler("toggleMarkerUp")}
+            label={this.handlerManager.getLabel("toggleActiveWordMarkerUp")}
+            onClick={this.handlerManager.getHandler("toggleActiveWordMarkerUp")}
           />
           <MenuItem
             text={this.trans("common.marker.diamond")}
-            label={this.handlerManager.getLabel("toggleMarkerDiamond")}
-            onClick={this.handlerManager.getHandler("toggleMarkerDiamond")}
+            label={this.handlerManager.getLabel("toggleActiveWordMarkerDiamond")}
+            onClick={this.handlerManager.getHandler("toggleActiveWordMarkerDiamond")}
           />
           <MenuItem
             text={this.trans("common.marker.down")}
-            label={this.handlerManager.getLabel("toggleMarkerDown")}
-            onClick={this.handlerManager.getHandler("toggleMarkerDown")}
+            label={this.handlerManager.getLabel("toggleActiveWordMarkerDown")}
+            onClick={this.handlerManager.getHandler("toggleActiveWordMarkerDown")}
           />
           <MenuItem
             text={this.trans("common.marker.cross")}
-            label={this.handlerManager.getLabel("toggleMarkerCross")}
-            onClick={this.handlerManager.getHandler("toggleMarkerCross")}
+            label={this.handlerManager.getLabel("toggleActiveWordMarkerCross")}
+            onClick={this.handlerManager.getHandler("toggleActiveWordMarkerCross")}
           />
           <MenuItem
             text={this.trans("common.marker.pentagon")}
-            label={this.handlerManager.getLabel("toggleMarkerPentagon")}
-            onClick={this.handlerManager.getHandler("toggleMarkerPentagon")}
+            label={this.handlerManager.getLabel("toggleActiveWordMarkerPentagon")}
+            onClick={this.handlerManager.getHandler("toggleActiveWordMarkerPentagon")}
           />
           <MenuItem
             text={this.trans("common.marker.heart")}
-            label={this.handlerManager.getLabel("toggleMarkerHeart")}
-            onClick={this.handlerManager.getHandler("toggleMarkerHeart")}
+            label={this.handlerManager.getLabel("toggleActiveWordMarkerHeart")}
+            onClick={this.handlerManager.getHandler("toggleActiveWordMarkerHeart")}
           />
         </MenuItem>
       </Menu>
@@ -305,17 +324,17 @@ export class MainNavbar extends Component<Props, State> {
       searchAdvanced: {key: "ctrl+f"},
       searchScript: {key: "ctrl+shift+f"},
       createWord: {key: "ctrl+n", handler: () => this.props.createWord()},
-      inheritWord: {handler: () => this.props.inheritActiveWord()},
-      editWord: {key: "ctrl+m", handler: () => this.props.editActiveWord()},
-      deleteWord: {handler: () => this.props.deleteActiveWord()},
-      toggleMarkerCircle: {key: "ctrl+1", handler: () => this.props.toggleActiveWordMarker("circle")},
-      toggleMarkerSquare: {key: "ctrl+2", handler: () => this.props.toggleActiveWordMarker("square")},
-      toggleMarkerUp: {key: "ctrl+3", handler: () => this.props.toggleActiveWordMarker("up")},
-      toggleMarkerDiamond: {key: "ctrl+4", handler: () => this.props.toggleActiveWordMarker("diamond")},
-      toggleMarkerDown: {key: "ctrl+5", handler: () => this.props.toggleActiveWordMarker("down")},
-      toggleMarkerCross: {key: "ctrl+6", handler: () => this.props.toggleActiveWordMarker("cross")},
-      toggleMarkerPentagon: {key: "ctrl+7", handler: () => this.props.toggleActiveWordMarker("pentagon")},
-      toggleMarkerHeart: {key: "ctrl+8", handler: () => this.props.toggleActiveWordMarker("heart")},
+      inheritActiveWord: {key: "ctrl+i", handler: () => this.props.inheritActiveWord()},
+      editActiveWord: {key: "ctrl+m", handler: () => this.props.editActiveWord()},
+      deleteActiveWord: {handler: () => this.props.deleteActiveWord()},
+      toggleActiveWordMarkerCircle: {key: "ctrl+1", handler: () => this.props.toggleActiveWordMarker("circle")},
+      toggleActiveWordMarkerSquare: {key: "ctrl+2", handler: () => this.props.toggleActiveWordMarker("square")},
+      toggleActiveWordMarkerUp: {key: "ctrl+3", handler: () => this.props.toggleActiveWordMarker("up")},
+      toggleActiveWordMarkerDiamond: {key: "ctrl+4", handler: () => this.props.toggleActiveWordMarker("diamond")},
+      toggleActiveWordMarkerDown: {key: "ctrl+5", handler: () => this.props.toggleActiveWordMarker("down")},
+      toggleActiveWordMarkerCross: {key: "ctrl+6", handler: () => this.props.toggleActiveWordMarker("cross")},
+      toggleActiveWordMarkerPentagon: {key: "ctrl+7", handler: () => this.props.toggleActiveWordMarker("pentagon")},
+      toggleActiveWordMarkerHeart: {key: "ctrl+8", handler: () => this.props.toggleActiveWordMarker("heart")},
       openDevTools: {key: "f12", handler: () => this.openDevTools()},
       openHelp: {key: "f1"}
     });

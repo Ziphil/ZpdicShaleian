@@ -44,6 +44,10 @@ export class WordPaneWrapper extends Component<Props, State> {
         <MenuItem text={this.trans("wordPaneWrapper.edit")} onClick={this.props.onEdit}/>
         <MenuItem text={this.trans("wordPaneWrapper.delete")} intent="danger" onClick={this.props.onDelete}/>
         <MenuDivider/>
+        <MenuItem text={this.trans("wordPaneWrapper.cut")}/>
+        <MenuItem text={this.trans("wordPaneWrapper.copy")}/>
+        <MenuItem text={this.trans("wordPaneWrapper.paste")}/>
+        <MenuDivider/>
         <MenuItem text={this.trans("wordPaneWrapper.toggleMarker")}>
           <MenuItem text={this.trans("common.marker.circle")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "circle")}/>
           <MenuItem text={this.trans("common.marker.square")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "square")}/>
