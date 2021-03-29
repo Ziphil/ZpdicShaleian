@@ -60,8 +60,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   public componentDidMount(): void {
-    let path = "C:/Users/Ziphil/Desktop/dic";
-    this.loadDictionary(path);
+    this.loadDictionary("C:/Users/Ziphil/Desktop/dic");
   }
 
   private setupIpc(): void {
@@ -97,7 +96,19 @@ export class MainPage extends Component<Props, State> {
   }
 
   private loadDictionary(path: string): void {
+    let dictionary = null;
+    let activeWord = null;
+    let loadProgress = {offset: 0, size: 0};
+    this.setState({dictionary, activeWord, loadProgress});
     window.api.send("ready-load-dictionary", path);
+  }
+
+  private reloadDictionary(): void {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null && dictionary.path !== null) {
+      let path = dictionary.path;
+      this.loadDictionary(path);
+    }
   }
 
   private saveDictionary(path: string | null): void {
@@ -228,6 +239,7 @@ export class MainPage extends Component<Props, State> {
     let node = (
       <div className="zp-main-page zp-root zp-navbar-root">
         <MainNavbar
+          reopenDictionary={() => this.reloadDictionary()}
           saveDictionary={() => this.saveDictionary(null)}
           changeWordMode={(mode) => this.changeWordMode(mode, true)}
           changeWordType={(type) => this.changeWordType(type, true)}
