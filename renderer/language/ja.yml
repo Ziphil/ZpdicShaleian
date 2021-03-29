@@ -1,8 +1,44 @@
 common:
-  dateFormat: "yyyy/MM/dd HH:mm"
-  shortDateFormat: "MM/dd"
-  dateUndefined: "?"
   numberUndefined: "?"
+  mode:
+    name: "単語"
+    equivalent: "訳語"
+    both: "両方"
+    content: "内容"
+  modeShort:
+    name: "単語"
+    equivalent: "訳語"
+    both: "両方"
+    content: "内容"
+  type:
+    exact: "完全一致"
+    prefix: "前方一致"
+    suffix: "後方一致"
+    part: "部分一致"
+    pair: "最小対語"
+    regular: "正規表現"
+  typeShort:
+    exact: "完全"
+    prefix: "前方"
+    suffix: "後方"
+    part: "部分"
+    pair: "対語"
+    regular: "正規"
+  marker:
+    circle: "マーカー 1"
+    square: "マーカー 2"
+    up: "マーカー 3"
+    diamond: "マーカー 4"
+    down: "マーカー 5"
+    cross: "マーカー 6"
+    pentagon: "マーカー 7"
+    heart: "マーカー 8"
+  language:
+    ja: "JA (日本語)"
+    en: "EN (English)"
+  languageShort:
+    ja: "JA"
+    en: "EN"
 
 mainNavbar:
   title: "シャレイア語辞典"
@@ -28,35 +64,7 @@ mainNavbar:
   openDevTools: "デベロッパーツールを開く"
   openHelp: "ヘルプ"
   aboutApplication: "このアプリについて"
-searchForm:
-  mode:
-    name: "単語"
-    equivalent: "訳語"
-    both: "両方"
-    content: "内容"
-  modeShort:
-    name: "単語"
-    equivalent: "訳語"
-    both: "両方"
-    content: "内容"
-  type:
-    exact: "完全一致"
-    prefix: "前方一致"
-    suffix: "後方一致"
-    part: "部分一致"
-    pair: "最小対語"
-    regular: "正規表現"
-  typeShort:
-    exact: "完全"
-    prefix: "前方"
-    suffix: "後方"
-    part: "部分"
-    pair: "対語"
-    regular: "正規"
 wordEditor:
-  language:
-    ja: "日本語"
-    en: "English"
   cancel: "キャンセル"
   delete: "削除"
   confirm: "決定"
@@ -66,12 +74,3 @@ wordPaneWrapper:
   edit: "編集"
   delete: "削除"
   addMarker: "マーカーを変更"
-  marker:
-    circle: "マーカー 1"
-    square: "マーカー 2"
-    upTriangle: "マーカー 3"
-    diamond: "マーカー 4"
-    downTriangle: "マーカー 5"
-    cross: "マーカー 6"
-    pentagon: "マーカー 7"
-    heart: "マーカー 8"

@@ -84,7 +84,7 @@ export class WordEditor extends Component<Props, State> {
     let tabNodes = languages.map((language) => {
       let editorNode = this.renderEditor(language);
       let tabNode = (
-        <Tab id={language} title={this.trans(`wordEditor.language.${language}`)} panel={editorNode}/>
+        <Tab id={language} title={this.trans(`common.language.${language}`)} panel={editorNode}/>
       );
       return tabNode;
     });

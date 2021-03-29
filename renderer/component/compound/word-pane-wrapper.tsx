@@ -45,14 +45,14 @@ export class WordPaneWrapper extends Component<Props, State> {
         <MenuItem text={this.trans("wordPaneWrapper.delete")} intent="danger" onClick={this.props.onDelete}/>
         <MenuDivider/>
         <MenuItem text={this.trans("wordPaneWrapper.addMarker")}>
-          <MenuItem text={this.trans("wordPaneWrapper.marker.circle")}/>
-          <MenuItem text={this.trans("wordPaneWrapper.marker.square")}/>
-          <MenuItem text={this.trans("wordPaneWrapper.marker.upTriangle")}/>
-          <MenuItem text={this.trans("wordPaneWrapper.marker.diamond")}/>
-          <MenuItem text={this.trans("wordPaneWrapper.marker.downTriangle")}/>
-          <MenuItem text={this.trans("wordPaneWrapper.marker.cross")}/>
-          <MenuItem text={this.trans("wordPaneWrapper.marker.pentagon")}/>
-          <MenuItem text={this.trans("wordPaneWrapper.marker.heart")}/>
+          <MenuItem text={this.trans("common.marker.circle")}/>
+          <MenuItem text={this.trans("common.marker.square")}/>
+          <MenuItem text={this.trans("common.marker.up")}/>
+          <MenuItem text={this.trans("common.marker.diamond")}/>
+          <MenuItem text={this.trans("common.marker.down")}/>
+          <MenuItem text={this.trans("common.marker.cross")}/>
+          <MenuItem text={this.trans("common.marker.pentagon")}/>
+          <MenuItem text={this.trans("common.marker.heart")}/>
         </MenuItem>
       </Menu>
     );

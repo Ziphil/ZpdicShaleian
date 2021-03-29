@@ -74,4 +74,4 @@ export interface PlainDictionary {
 }
 
 
-export type Marker = "circle" | "square" | "upTriangle" | "diamond" | "downTriangle" | "cross" | "pentagon" | "heart";
+export type Marker = "circle" | "square" | "up" | "diamond" | "down" | "cross" | "pentagon" | "heart";

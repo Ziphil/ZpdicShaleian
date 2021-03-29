@@ -100,54 +100,54 @@ export class MainNavbar extends Component<Props, State> {
       <Menu>
         <MenuItem text={this.trans("mainNavbar.changeWordMode")} icon="blank">
           <MenuItem
-            text={this.trans("searchForm.mode.name")}
+            text={this.trans("common.mode.name")}
             label={this.handlerManager.getLabel("changeWordModeToName")}
             onClick={this.handlerManager.getHandler("changeWordModeToName")}
           />
           <MenuItem
-            text={this.trans("searchForm.mode.equivalent")}
+            text={this.trans("common.mode.equivalent")}
             label={this.handlerManager.getLabel("changeWordModeToEquivalent")}
             onClick={this.handlerManager.getHandler("changeWordModeToEquivalent")}
           />
           <MenuItem
-            text={this.trans("searchForm.mode.both")}
+            text={this.trans("common.mode.both")}
             label={this.handlerManager.getLabel("changeWordModeToBoth")}
             onClick={this.handlerManager.getHandler("changeWordModeToBoth")}
           />
           <MenuItem
-            text={this.trans("searchForm.mode.content")}
+            text={this.trans("common.mode.content")}
             label={this.handlerManager.getLabel("changeWordModeToContent")}
             onClick={this.handlerManager.getHandler("changeWordModeToContent")}
           />
         </MenuItem>
         <MenuItem text={this.trans("mainNavbar.changeWordType")} icon="blank">
           <MenuItem
-            text={this.trans("searchForm.type.exact")}
+            text={this.trans("common.type.exact")}
             label={this.handlerManager.getLabel("changeWordTypeToExact")}
             onClick={this.handlerManager.getHandler("changeWordTypeToExact")}
           />
           <MenuItem
-            text={this.trans("searchForm.type.prefix")}
+            text={this.trans("common.type.prefix")}
             label={this.handlerManager.getLabel("changeWordTypeToPrefix")}
             onClick={this.handlerManager.getHandler("changeWordTypeToPrefix")}
           />
           <MenuItem
-            text={this.trans("searchForm.type.suffix")}
+            text={this.trans("common.type.suffix")}
             label={this.handlerManager.getLabel("changeWordTypeToSuffix")}
             onClick={this.handlerManager.getHandler("changeWordTypeToSuffix")}
           />
           <MenuItem
-            text={this.trans("searchForm.type.part")}
+            text={this.trans("common.type.part")}
             label={this.handlerManager.getLabel("changeWordTypeToPart")}
             onClick={this.handlerManager.getHandler("changeWordTypeToPart")}
           />
           <MenuItem
-            text={this.trans("searchForm.type.pair")}
+            text={this.trans("common.type.pair")}
             label={this.handlerManager.getLabel("changeWordTypeToPair")}
             onClick={this.handlerManager.getHandler("changeWordTypeToPair")}
           />
           <MenuItem
-            text={this.trans("searchForm.type.regular")}
+            text={this.trans("common.type.regular")}
             label={this.handlerManager.getLabel("changeWordTypeToRegular")}
             onClick={this.handlerManager.getHandler("changeWordTypeToRegular")}
           />
