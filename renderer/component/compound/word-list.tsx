@@ -33,20 +33,25 @@ export class WordList extends Component<Props, State> {
 
   public constructor(props: Props) {
     super(props);
-    let displayedWords = props.words.slice(0, 10);
+    let displayedWords = props.words.slice(0, 30);
     this.state = {displayedWords};
   }
 
   public componentDidUpdate(previousProps: any): void {
     if (this.props !== previousProps) {
-      let displayedWords = this.props.words.slice(0, 10);
-      this.setState({displayedWords});
+      if (this.props.words !== previousProps.words) {
+        let displayedWords = this.props.words.slice(0, 30);
+        this.setState({displayedWords});
+      } else {
+        let displayedWords = this.state.displayedWords;
+        this.setState({displayedWords});
+      }
     }
   }
 
   public loadWords(page: number): void {
     let length = this.state.displayedWords.length;
-    let displayedWords = this.props.words.slice(0, length + 10);
+    let displayedWords = this.props.words.slice(0, length + 30);
     this.setState({displayedWords});
   }
 
@@ -73,7 +78,14 @@ export class WordList extends Component<Props, State> {
     });
     let node = (
       <div className="zp-word-list" id="word-list">
-        <InfiniteScroll loadMore={this.loadWords.bind(this)} hasMore={hasMore} initialLoad={false} useWindow={false} getScrollParent={() => document.getElementById("word-list-container")!}>
+        <InfiniteScroll
+          loadMore={this.loadWords.bind(this)}
+          hasMore={hasMore}
+          initialLoad={false}
+          useWindow={false}
+          threshold={500}
+          getScrollParent={() => document.getElementById("word-list-container")!}
+        >
           {wordPanes}
         </InfiniteScroll>
       </div>
