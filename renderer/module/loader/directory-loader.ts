@@ -13,16 +13,14 @@ import {
 } from "./loader";
 
 
-export class SplitLoader extends Loader {
+export class DirectoryLoader extends Loader {
 
-  public path: string;
   private words: Array<Word> = [];
   private size: number = 0;
   private count: number = 0;
 
   public constructor(path: string) {
     super(path);
-    this.path = path;
   }
 
   public start(): void {
@@ -30,10 +28,10 @@ export class SplitLoader extends Loader {
       if (error) {
         this.emit("error", error);
       } else {
-        let childPaths = paths.filter((path) => path.endsWith(".nxdw"));
-        this.size = childPaths.length;
-        for (let childPath of childPaths) {
-          let wordPath = path.join(this.path, childPath);
+        let wordLocalPaths = paths.filter((path) => path.endsWith(".nxdw"));
+        this.size = wordLocalPaths.length;
+        for (let wordLocalPath of wordLocalPaths) {
+          let wordPath = path.join(this.path, wordLocalPath);
           this.loadWord(wordPath);
         }
       }
@@ -53,7 +51,8 @@ export class SplitLoader extends Loader {
           let words = this.words;
           let settings = null;
           let markers = new Map();
-          let dictionary = new Dictionary(words, settings, markers);
+          let path = this.path;
+          let dictionary = new Dictionary(words, settings, markers, path);
           this.emit("end", dictionary);
         }
       }
@@ -65,11 +64,3 @@ export class SplitLoader extends Loader {
   }
 
 }
-
-
-export type LoaderEvent = {
-  word: [word: Word],
-  progress: [progress: number],
-  end: [dictionary: Dictionary],
-  error: [error: Error]
-};

@@ -14,18 +14,21 @@ export class Dictionary {
   public words: Array<Word>;
   public settings: any;
   public markers: Map<string, Array<Marker>>;
+  public path: string | null;
 
-  public constructor(words: Array<Word>, settings: any, markers: Map<string, Array<Marker>>) {
+  public constructor(words: Array<Word>, settings: any, markers: Map<string, Array<Marker>>, path: string | null) {
     this.words = words;
     this.settings = settings;
     this.markers = markers;
+    this.path = path;
   }
 
   public static fromPlain(plain: PlainDictionary): Dictionary {
     let words = plain.words.map((word) => Word.fromPlain(word));
     let settings = plain.settings;
     let markers = plain.markers;
-    let dictionary = new Dictionary(words, settings, markers);
+    let path = plain.path;
+    let dictionary = new Dictionary(words, settings, markers, path);
     return dictionary;
   }
 
@@ -66,6 +69,7 @@ export interface PlainDictionary {
   words: Array<PlainWord>;
   settings: any;
   markers: Map<string, Array<Marker>>;
+  path: string | null;
 
 }
 

@@ -70,6 +70,24 @@ export class Word {
     }
   }
 
+  public toString(): string {
+    let string = "";
+    string += `* ${this.name} @${this.date}\n\n`;
+    let first = true;
+    for (let [language, content] of Object.entries(this.contents)) {
+      if (content !== undefined && content.trim() !== "") {
+        if (!first) {
+          string += "\n";
+        }
+        string += `!${language.toUpperCase()}\n`;
+        string += content.replaceAll(/\r\n|\r|\n/g, "\n").trim();
+        string += "\n";
+        first = false;
+      }
+    }
+    return string;
+  }
+
   public static createEmpty(): Word {
     let name = "";
     let rawDate = new Date();

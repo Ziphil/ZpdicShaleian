@@ -14,8 +14,14 @@ import {
   join as joinPath
 } from "path";
 import {
-  SplitLoader
-} from "../renderer/module/loader/split-loader";
+  Dictionary
+} from "../renderer/module";
+import {
+  DirectoryLoader
+} from "../renderer/module/loader";
+import {
+  DirectorySaver
+} from "../renderer/module/saver";
 
 
 const COMMON_WINDOW_OPTIONS = {
@@ -104,18 +110,35 @@ class Main {
   }
 
   private setupIpc(): void {
-    ipcMain.on("ready-get-dictionary", (event, path) => {
-      let loader = new SplitLoader(path);
+    ipcMain.on("ready-load-dictionary", (event, path) => {
+      let loader = new DirectoryLoader(path);
       loader.on("progress", (offset, size) => {
-        event.reply("get-dictionary-progress", {offset, size});
+        event.reply("get-load-dictionary-progress", {offset, size});
       });
       loader.on("end", (dictionary) => {
-        event.reply("get-dictionary", dictionary);
+        event.reply("load-dictionary", dictionary);
       });
       loader.on("error", (error) => {
+        event.reply("error");
         console.error(error);
       });
       loader.start();
+    });
+    ipcMain.on("ready-save-dictionary", (event, plainDictionary, path) => {
+      let dictionary = Dictionary.fromPlain(plainDictionary);
+      let saver = new DirectorySaver(dictionary, path);
+      saver.on("progress", (offset, size) => {
+        event.reply("get-save-dictionary-progress", {offset, size});
+      });
+      saver.on("end", () => {
+        event.reply("save-dictionary");
+        console.log("saver end");
+      });
+      saver.on("error", (error) => {
+        event.reply("error");
+        console.error(error);
+      });
+      saver.start();
     });
     ipcMain.on("ready-edit-word", (event, uid, word) => {
       let window = this.mainWindow;

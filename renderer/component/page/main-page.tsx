@@ -38,7 +38,8 @@ export class MainPage extends Component<Props, State> {
     language: "ja",
     parameter: NormalWordParameter.createEmpty("ja"),
     hitResult: {words: [], suggestions: []},
-    progress: {offset: 0, size: 0}
+    loadProgress: {offset: 0, size: 0},
+    saveProgress: {offset: 0, size: 0}
   };
 
   public constructor(props: Props) {
@@ -52,10 +53,10 @@ export class MainPage extends Component<Props, State> {
   }
 
   private setupIpc(): void {
-    window.api.on("get-dictionary-progress", (event, progress) => {
-      this.setState({progress});
+    window.api.on("get-load-dictionary-progress", (event, loadProgress) => {
+      this.setState({loadProgress});
     });
-    window.api.on("get-dictionary", (event, plainDictionary) => {
+    window.api.on("load-dictionary", (event, plainDictionary) => {
       let dictionary = Dictionary.fromPlain(plainDictionary);
       this.setState({dictionary}, () => {
         this.updateWords();
@@ -70,7 +71,12 @@ export class MainPage extends Component<Props, State> {
   }
 
   private loadDictionary(path: string): void {
-    window.api.send("ready-get-dictionary", path);
+    window.api.send("ready-load-dictionary", path);
+  }
+
+  private saveDictionary(path: string | null): void {
+    let dictionary = this.state.dictionary;
+    window.api.send("ready-save-dictionary", dictionary, "C:/Users/Ziphil/Desktop/dic_save");
   }
 
   private updateWords(parameter?: WordParameter): void {
@@ -134,11 +140,12 @@ export class MainPage extends Component<Props, State> {
     let node = (
       <div className="zp-main-page zp-root zp-navbar-root">
         <MainNavbar
-          changeWordMode={this.changeWordMode.bind(this)}
-          changeWordType={this.changeWordType.bind(this)}
+          saveDictionary={() => this.saveDictionary(null)}
+          changeWordMode={(mode) => this.changeWordMode(mode)}
+          changeWordType={(type) => this.changeWordType(type)}
           createWord={() => this.openWordEditor(null)}
         />
-        <Loading loading={this.state.dictionary === null} {...this.state.progress}>
+        <Loading loading={this.state.dictionary === null} {...this.state.loadProgress}>
           <div className="zp-search-form-container">
             <SearchForm parameter={this.state.parameter} onParameterSet={this.changeParameter.bind(this)}/>
           </div>
@@ -151,7 +158,7 @@ export class MainPage extends Component<Props, State> {
               onInherit={(word) => this.openWordEditor(null, word)}
               onEdit={(word) => this.openWordEditor(word)}
               onDelete={(word) => this.deleteWord(word.uid)}
-              onLinkClick={this.updateWordsByName.bind(this)}
+              onLinkClick={(name) => this.updateWordsByName(name)}
             />
           </div>
         </Loading>
@@ -170,5 +177,6 @@ type State = {
   language: string,
   parameter: WordParameter,
   hitResult: {words: Array<Word>, suggestions: Array<null>},
-  progress: {offset: number, size: number}
+  loadProgress: {offset: number, size: number},
+  saveProgress: {offset: number, size: number}
 };

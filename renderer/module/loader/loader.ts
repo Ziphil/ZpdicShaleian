@@ -10,7 +10,7 @@ import {
 
 export abstract class Loader extends EventEmitter {
 
-  public path: string;
+  protected readonly path: string;
 
   public constructor(path: string) {
     super();
