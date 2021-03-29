@@ -22,12 +22,14 @@ import {
   Word
 } from "../../module";
 import {
+  MarkerIcon
+} from "../atom";
+import {
   Component
 } from "../component";
 import {
   component
 } from "../decorator";
-
 import {
   WordPane
 } from "./word-pane";
@@ -49,14 +51,46 @@ export class WordPaneWrapper extends Component<Props, State> {
         <MenuItem text={this.trans("wordPaneWrapper.paste")}/>
         <MenuDivider/>
         <MenuItem text={this.trans("wordPaneWrapper.toggleMarker")}>
-          <MenuItem text={this.trans("common.marker.circle")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "circle")}/>
-          <MenuItem text={this.trans("common.marker.square")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "square")}/>
-          <MenuItem text={this.trans("common.marker.up")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "up")}/>
-          <MenuItem text={this.trans("common.marker.diamond")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "diamond")}/>
-          <MenuItem text={this.trans("common.marker.down")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "down")}/>
-          <MenuItem text={this.trans("common.marker.cross")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "cross")}/>
-          <MenuItem text={this.trans("common.marker.pentagon")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "pentagon")}/>
-          <MenuItem text={this.trans("common.marker.heart")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "heart")}/>
+          <MenuItem
+            text={this.trans("common.marker.circle")}
+            onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "circle")}
+            icon={<MarkerIcon marker="circle" icon={true}/>}
+          />
+          <MenuItem
+            text={this.trans("common.marker.square")}
+            onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "square")}
+            icon={<MarkerIcon marker="square" icon={true}/>}
+          />
+          <MenuItem
+            text={this.trans("common.marker.up")}
+            onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "up")}
+            icon={<MarkerIcon marker="up" icon={true}/>}
+          />
+          <MenuItem
+            text={this.trans("common.marker.diamond")}
+            onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "diamond")}
+            icon={<MarkerIcon marker="diamond" icon={true}/>}
+          />
+          <MenuItem
+            text={this.trans("common.marker.down")}
+            onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "down")}
+            icon={<MarkerIcon marker="down" icon={true}/>}
+          />
+          <MenuItem
+            text={this.trans("common.marker.cross")}
+            onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "cross")}
+            icon={<MarkerIcon marker="cross" icon={true}/>}
+          />
+          <MenuItem
+            text={this.trans("common.marker.pentagon")}
+            onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "pentagon")}
+            icon={<MarkerIcon marker="pentagon" icon={true}/>}
+          />
+          <MenuItem
+            text={this.trans("common.marker.heart")}
+            onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "heart")}
+            icon={<MarkerIcon marker="heart" icon={true}/>}
+          />
         </MenuItem>
       </Menu>
     );

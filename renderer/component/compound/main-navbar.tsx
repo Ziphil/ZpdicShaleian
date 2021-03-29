@@ -33,6 +33,9 @@ import {
   HandlerManager
 } from "../../util/handler-manager";
 import {
+  MarkerIcon
+} from "../atom";
+import {
   Component
 } from "../component";
 import {
@@ -230,41 +233,49 @@ export class MainNavbar extends Component<Props, State> {
             text={this.trans("common.marker.circle")}
             label={this.handlerManager.getLabel("toggleActiveWordMarkerCircle")}
             onClick={this.handlerManager.getHandler("toggleActiveWordMarkerCircle")}
+            icon={<MarkerIcon marker="circle" icon={true}/>}
           />
           <MenuItem
             text={this.trans("common.marker.square")}
             label={this.handlerManager.getLabel("toggleActiveWordMarkerSquare")}
             onClick={this.handlerManager.getHandler("toggleActiveWordMarkerSquare")}
+            icon={<MarkerIcon marker="square" icon={true}/>}
           />
           <MenuItem
             text={this.trans("common.marker.up")}
             label={this.handlerManager.getLabel("toggleActiveWordMarkerUp")}
             onClick={this.handlerManager.getHandler("toggleActiveWordMarkerUp")}
+            icon={<MarkerIcon marker="up" icon={true}/>}
           />
           <MenuItem
             text={this.trans("common.marker.diamond")}
             label={this.handlerManager.getLabel("toggleActiveWordMarkerDiamond")}
             onClick={this.handlerManager.getHandler("toggleActiveWordMarkerDiamond")}
+            icon={<MarkerIcon marker="diamond" icon={true}/>}
           />
           <MenuItem
             text={this.trans("common.marker.down")}
             label={this.handlerManager.getLabel("toggleActiveWordMarkerDown")}
             onClick={this.handlerManager.getHandler("toggleActiveWordMarkerDown")}
+            icon={<MarkerIcon marker="down" icon={true}/>}
           />
           <MenuItem
             text={this.trans("common.marker.cross")}
             label={this.handlerManager.getLabel("toggleActiveWordMarkerCross")}
             onClick={this.handlerManager.getHandler("toggleActiveWordMarkerCross")}
+            icon={<MarkerIcon marker="cross" icon={true}/>}
           />
           <MenuItem
             text={this.trans("common.marker.pentagon")}
             label={this.handlerManager.getLabel("toggleActiveWordMarkerPentagon")}
             onClick={this.handlerManager.getHandler("toggleActiveWordMarkerPentagon")}
+            icon={<MarkerIcon marker="pentagon" icon={true}/>}
           />
           <MenuItem
             text={this.trans("common.marker.heart")}
             label={this.handlerManager.getLabel("toggleActiveWordMarkerHeart")}
             onClick={this.handlerManager.getHandler("toggleActiveWordMarkerHeart")}
+            icon={<MarkerIcon marker="heart" icon={true}/>}
           />
         </MenuItem>
       </Menu>

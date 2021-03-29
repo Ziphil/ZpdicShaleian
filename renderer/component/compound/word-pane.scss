@@ -114,9 +114,13 @@ $swp-word-marker-shadow: inset 0px 0px 0px #{$pt-grid-size / 2} var(--marker-bac
   }
 }
 
+.swp-marker >svg {
+  vertical-align: top;
+}
+
 @each $marker, $color in $swp-marker-colors {
-  .swp-marker-#{$marker} {
-    color: $color;
+  .swp-marker-#{$marker} >svg {
+    fill: $color;
   }
 }
 

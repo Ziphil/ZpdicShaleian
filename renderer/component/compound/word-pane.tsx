@@ -20,6 +20,9 @@ import {
   Section,
   Word
 } from "../../module";
+import {
+  MarkerIcon
+} from "../atom/marker-icon";
 
 
 export class WordPane extends Component<Props, State> {
@@ -53,7 +56,7 @@ export class WordPane extends Component<Props, State> {
   private renderMarker(marker: Marker): ReactNode {
     let node = (
       <div key={marker} className={`swp-head-marker swp-marker swp-marker-${marker}`}>
-        ●
+        <MarkerIcon marker={marker}/>
       </div>
     );
     return node;
@@ -180,7 +183,7 @@ export class WordPane extends Component<Props, State> {
 
   private renderWord(word: ParsedWord<ReactNode>, markers: Array<Marker>): ReactNode {
     let headNode = this.renderHead(word, markers);
-    let className = "swp-word" + ((markers.length > 0) ? ` swp-word-${markers[0]}` : "");
+    let className = "swp-word" + ((markers.length > 0) ? ` swp-word-${markers[markers.length - 1]}` : "");
     let sectionNodes = word.parts[this.props.language]?.sections.map((section, index) => this.renderSection(section, index));
     let sectionNode = (sectionNodes !== undefined && sectionNodes.length > 0) && (
       <div className="swp-sections">
