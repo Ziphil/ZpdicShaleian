@@ -9,7 +9,7 @@ import {
 } from "./word-parameter/word-parameter";
 
 
-export class Dictionary {
+export class Dictionary implements PlainDictionary {
 
   public words: Array<Word>;
   public settings: any;

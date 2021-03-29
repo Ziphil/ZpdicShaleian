@@ -12,7 +12,7 @@ import {
 } from "./parser";
 
 
-export class Word {
+export class Word implements PlainWord {
 
   public uid!: string;
   public name: string;
