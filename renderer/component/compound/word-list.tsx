@@ -9,6 +9,7 @@ import {
 import InfiniteScroll from "react-infinite-scroller";
 import {
   Dictionary,
+  Marker,
   Word
 } from "../../module";
 import {
@@ -62,6 +63,7 @@ export class WordList extends Component<Props, State> {
           onInherit={this.props.onInherit && partial(this.props.onInherit, word)}
           onEdit={this.props.onEdit && partial(this.props.onEdit, word)}
           onDelete={this.props.onDelete && partial(this.props.onDelete, word)}
+          onMarkerToggled={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, word)}
           onLinkClick={this.props.onLinkClick}
         />
       );
@@ -88,6 +90,7 @@ type Props = {
   onInherit?: (word: Word, event: MouseEvent<HTMLElement>) => void,
   onEdit?: (word: Word, event: MouseEvent<HTMLElement>) => void,
   onDelete?: (word: Word, event: MouseEvent<HTMLElement>) => void,
+  onMarkerToggled?: (word: Word, marker: Marker) => void,
   onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void
 };
 type State = {

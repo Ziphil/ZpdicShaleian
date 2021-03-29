@@ -1,6 +1,29 @@
 @charset "utf-8";
 
 
+$swp-marker-colors: (
+  circle: $vermilion3,
+  square: $cobalt3,
+  up: $forest3,
+  diamond: $gold3,
+  down: $violet3,
+  cross: $lime3,
+  pentagon: $turquoise3,
+  heart: $rose3
+);
+$swp-marker-background-colors: (
+  circle: mix($vermilion5, $card-background-color, 20%),
+  square: mix($cobalt5, $card-background-color, 20%),
+  up: mix($forest5, $card-background-color, 20%),
+  diamond: mix($gold5, $card-background-color, 20%),
+  down: mix($violet5, $card-background-color, 20%),
+  cross: mix($lime5, $card-background-color, 20%),
+  pentagon: mix($turquoise5, $card-background-color, 20%),
+  heart: mix($rose5, $card-background-color, 20%)
+);
+
+$swp-word-marker-shadow: inset 0px 0px 0px #{$pt-grid-size / 2} var(--marker-background-color);
+
 .zp-word-pane-wrapper {
   margin-bottom: $pt-grid-size * 1.5;
   padding: 1px;
@@ -16,20 +39,34 @@
 .zp-word-pane-wrapper:focus {
   box-shadow: input-transition-shadow($input-shadow-color-focus, true);
   >.swp-word {
-    box-shadow: 0px 0px 0px 1px $card-background-color, nth($pt-elevation-shadow-0, 2), nth($pt-elevation-shadow-0, 3);
+    box-shadow: 0px 0px 0px 1px var(--marker-background-color), nth($pt-elevation-shadow-0, 2), nth($pt-elevation-shadow-0, 3), $swp-word-marker-shadow;
   }
   >.swp-word:hover {
-    box-shadow: 0px 0px 0px 1px $card-background-color, nth($pt-elevation-shadow-3, 2), nth($pt-elevation-shadow-3, 3);
+    box-shadow: 0px 0px 0px 1px var(--marker-background-color), nth($pt-elevation-shadow-3, 2), nth($pt-elevation-shadow-3, 3), $swp-word-marker-shadow;
   }
   >.swp-word:active {
-    box-shadow: 0px 0px 0px 1px $card-background-color, nth($pt-elevation-shadow-1, 2), nth($pt-elevation-shadow-1, 3);
+    box-shadow: 0px 0px 0px 1px var(--marker-background-color), nth($pt-elevation-shadow-1, 2), nth($pt-elevation-shadow-1, 3), $swp-word-marker-shadow;
   }
 }
 
 .swp-word {
   @extend .bp3-card;
   @extend .bp3-interactive;
+  --marker-background-color: #{$card-background-color};
   padding: $pt-grid-size;
+  box-shadow: $pt-elevation-shadow-0, $swp-word-marker-shadow;
+  &:hover {
+    box-shadow: $pt-elevation-shadow-3, $swp-word-marker-shadow;
+  }
+  &:active {
+    box-shadow: $pt-elevation-shadow-1, $swp-word-marker-shadow;
+  }
+}
+
+@each $marker, $color in $swp-marker-background-colors {
+  .swp-word-#{$marker} {
+    --marker-background-color: #{$color};
+  }
 }
 
 .swp-section {
@@ -63,6 +100,24 @@
 .swp-head .swp-tag {
   position: relative;
   bottom: 1px;
+}
+
+.swp-markers {
+  display: flex;
+  flex-direction: row;
+}
+
+.swp-marker {
+  margin-right: $pt-grid-size / 2;
+  &:last-child {
+    margin-right: 0px;
+  }
+}
+
+@each $marker, $color in $swp-marker-colors {
+  .swp-marker-#{$marker} {
+    color: $color;
+  }
 }
 
 .swp-section-item {

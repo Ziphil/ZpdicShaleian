@@ -8,6 +8,7 @@ import {
 import {
   ContextMenu2
 } from "@blueprintjs/popover2";
+import partial from "lodash-es/partial";
 import * as react from "react";
 import {
   MouseEvent,
@@ -19,6 +20,7 @@ import {
 } from "react-hotkeys";
 import {
   Dictionary,
+  Marker,
   Word
 } from "../../module";
 import {
@@ -45,14 +47,14 @@ export class WordPaneWrapper extends Component<Props, State> {
         <MenuItem text={this.trans("wordPaneWrapper.delete")} intent="danger" onClick={this.props.onDelete}/>
         <MenuDivider/>
         <MenuItem text={this.trans("wordPaneWrapper.addMarker")}>
-          <MenuItem text={this.trans("common.marker.circle")}/>
-          <MenuItem text={this.trans("common.marker.square")}/>
-          <MenuItem text={this.trans("common.marker.up")}/>
-          <MenuItem text={this.trans("common.marker.diamond")}/>
-          <MenuItem text={this.trans("common.marker.down")}/>
-          <MenuItem text={this.trans("common.marker.cross")}/>
-          <MenuItem text={this.trans("common.marker.pentagon")}/>
-          <MenuItem text={this.trans("common.marker.heart")}/>
+          <MenuItem text={this.trans("common.marker.circle")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "circle")}/>
+          <MenuItem text={this.trans("common.marker.square")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "square")}/>
+          <MenuItem text={this.trans("common.marker.up")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "up")}/>
+          <MenuItem text={this.trans("common.marker.diamond")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "diamond")}/>
+          <MenuItem text={this.trans("common.marker.down")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "down")}/>
+          <MenuItem text={this.trans("common.marker.cross")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "cross")}/>
+          <MenuItem text={this.trans("common.marker.pentagon")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "pentagon")}/>
+          <MenuItem text={this.trans("common.marker.heart")} onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "heart")}/>
         </MenuItem>
       </Menu>
     );
@@ -62,8 +64,8 @@ export class WordPaneWrapper extends Component<Props, State> {
   public render(): ReactNode {
     let menuNode = this.renderMenu();
     let node = (
-      <ContextMenu2 content={menuNode}>
-        <HotKeys className="zp-word-pane-wrapper" id={this.props.word.uid} tabIndex={0}>
+      <ContextMenu2 key={this.props.word.uid} content={menuNode}>
+        <HotKeys className="zp-word-pane-wrapper" tabIndex={0}>
           <WordPane
             dictionary={this.props.dictionary}
             word={this.props.word}
@@ -88,6 +90,7 @@ type Props = {
   onInherit?: (event: MouseEvent<HTMLElement>) => void,
   onEdit?: (event: MouseEvent<HTMLElement>) => void,
   onDelete?: (event: MouseEvent<HTMLElement>) => void,
+  onMarkerToggled?: (marker: Marker) => void,
   onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void
 };
 type State = {

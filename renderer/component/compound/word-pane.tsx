@@ -13,6 +13,7 @@ import {
   Equivalent,
   Information,
   InformationKindUtil,
+  Marker,
   MarkupResolvers,
   ParsedWord,
   Relation,
@@ -49,8 +50,18 @@ export class WordPane extends Component<Props, State> {
     return resolvers;
   }
 
-  private renderHead(word: ParsedWord<ReactNode>): ReactNode {
+  private renderMarker(marker: Marker): ReactNode {
+    let node = (
+      <div key={marker} className={`swp-head-marker swp-marker swp-marker-${marker}`}>
+        ●
+      </div>
+    );
+    return node;
+  }
+
+  private renderHead(word: ParsedWord<ReactNode>, markers: Array<Marker>): ReactNode {
     let lexicalCategory = word.parts[this.props.language]?.lexicalCategory ?? null;
+    let markerNodes = markers.map((marker) => this.renderMarker(marker));
     let categoryNode = (lexicalCategory !== null) && (
       <span className="swp-head-category swp-tag swp-right-margin">{lexicalCategory}</span>
     );
@@ -62,6 +73,11 @@ export class WordPane extends Component<Props, State> {
     let dateNode = (
       <span className="swp-head-date">{word.date}</span>
     );
+    let markerNode = (
+      <div className="swp-head-markers swp-markers">
+        {markerNodes}
+      </div>
+    );
     let node = (
       <div className="swp-head">
         <div className="swp-head-left">
@@ -69,7 +85,9 @@ export class WordPane extends Component<Props, State> {
           {nameNode}
           {dateNode}
         </div>
-        <div className="swp-head-right"/>
+        <div className="swp-head-right">
+          {markerNode}
+        </div>
       </div>
     );
     return node;
@@ -160,8 +178,9 @@ export class WordPane extends Component<Props, State> {
     return node;
   }
 
-  private renderWord(word: ParsedWord<ReactNode>): ReactNode {
-    let headNode = this.renderHead(word);
+  private renderWord(word: ParsedWord<ReactNode>, markers: Array<Marker>): ReactNode {
+    let headNode = this.renderHead(word, markers);
+    let className = "swp-word" + ((markers.length > 0) ? ` swp-word-${markers[0]}` : "");
     let sectionNodes = word.parts[this.props.language]?.sections.map((section, index) => this.renderSection(section, index));
     let sectionNode = (sectionNodes !== undefined && sectionNodes.length > 0) && (
       <div className="swp-sections">
@@ -169,7 +188,7 @@ export class WordPane extends Component<Props, State> {
       </div>
     );
     let node = (
-      <div className="swp-word" onClick={this.props.onClick} onDoubleClick={this.props.onDoubleClick}>
+      <div className={className} onClick={this.props.onClick} onDoubleClick={this.props.onDoubleClick}>
         {headNode}
         {sectionNode}
       </div>
@@ -180,7 +199,8 @@ export class WordPane extends Component<Props, State> {
   public render(): ReactNode {
     let markupResolvers = this.createMarkupResolvers();
     let word = this.props.word.parse(markupResolvers);
-    let node = this.renderWord(word);
+    let markers = this.props.dictionary.getMarkers(this.props.word);
+    let node = this.renderWord(word, markers);
     return node;
   }
 

@@ -42,6 +42,16 @@ export class Dictionary implements PlainDictionary {
     return word;
   }
 
+  public findByName(name: string): Word | undefined {
+    let word = this.words.find((word) => word.name === name);
+    return word;
+  }
+
+  public getMarkers(word: Word): Array<Marker> {
+    let markers = this.markers.get(word.name) ?? [];
+    return markers;
+  }
+
   public editWord(uid: string | null, word: PlainWord): void {
     if (uid !== null) {
       let oldWord = this.words.find((word) => word.uid === uid);
@@ -58,6 +68,21 @@ export class Dictionary implements PlainDictionary {
     let oldWordIndex = this.words.findIndex((word) => word.uid === uid);
     if (oldWordIndex >= 0) {
       this.words.splice(oldWordIndex, 1);
+    }
+  }
+
+  public toggleMarker(name: string, marker: Marker): void {
+    let markers = [...(this.markers.get(name) ?? [])];
+    let index = markers.findIndex((existingMarker) => existingMarker === marker);
+    if (index >= 0) {
+      markers.splice(index, 1);
+    } else {
+      markers.push(marker);
+    }
+    if (markers.length > 0) {
+      this.markers.set(name, markers);
+    } else {
+      this.markers.delete(name);
     }
   }
 

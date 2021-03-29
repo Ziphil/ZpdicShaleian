@@ -9,6 +9,7 @@ import {
 } from "react";
 import {
   Dictionary,
+  Marker,
   NormalWordParameter,
   PlainWord,
   Word,
@@ -132,6 +133,14 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  private toggleMarker(word: Word, marker: Marker): void {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      dictionary.toggleMarker(word.name, marker);
+      this.updateWords();
+    }
+  }
+
   private changeParameter(parameter: WordParameter): void {
     this.setState({parameter}, () => {
       this.updateWordsDebounced();
@@ -177,6 +186,7 @@ export class MainPage extends Component<Props, State> {
               onInherit={(word) => this.openWordEditor(null, word)}
               onEdit={(word) => this.openWordEditor(word)}
               onDelete={(word) => this.deleteWord(word.uid)}
+              onMarkerToggled={(word, marker) => this.toggleMarker(word, marker)}
               onLinkClick={(name) => this.updateWordsByName(name)}
             />
           </div>
