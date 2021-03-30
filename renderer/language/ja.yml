@@ -72,6 +72,8 @@ mainNavbar:
   openHelp: "ヘルプ"
   aboutApplication: "このアプリについて"
 mainPage:
+  errorLoadDictionary: >-
+    辞書データの読み込み中にエラーが発生しました。
   noActiveWord: >-
     選択している単語がありません。
 wordEditor:
