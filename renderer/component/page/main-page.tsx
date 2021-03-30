@@ -121,7 +121,9 @@ export class MainPage extends Component<Props, State> {
 
   private saveDictionary(path: string | null): void {
     let dictionary = this.state.dictionary;
-    window.api.send("ready-save-dictionary", dictionary, "C:/Users/Ziphil/Desktop/dic_save");
+    if (dictionary !== null) {
+      window.api.send("ready-save-dictionary", dictionary);
+    }
   }
 
   private refreshWords(): void {
