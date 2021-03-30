@@ -40,7 +40,7 @@ export class DirectorySaver extends Saver {
       } else {
         try {
           for (let word of words) {
-            let wordPath = path.join(this.path, word.name + ".nxdw");
+            let wordPath = path.join(this.path, word.getFileName() + ".nxdw");
             this.saveWord(word, wordPath);
           }
           let settingsPath = path.join(this.path, "$SETTINGS.nxds");
