@@ -1,6 +1,10 @@
 //
 
 import {
+  DictionarySettings,
+  PlainDictionarySettings
+} from "./dictionary-settings";
+import {
   PlainWord,
   Word
 } from "./word";
@@ -12,11 +16,11 @@ import {
 export class Dictionary implements PlainDictionary {
 
   public words: Array<Word>;
-  public settings: any;
+  public settings: DictionarySettings;
   public markers: Map<string, Array<Marker>>;
   public path: string | null;
 
-  public constructor(words: Array<Word>, settings: any, markers: Map<string, Array<Marker>>, path: string | null) {
+  public constructor(words: Array<Word>, settings: DictionarySettings, markers: Map<string, Array<Marker>>, path: string | null) {
     this.words = words;
     this.settings = settings;
     this.markers = markers;
@@ -24,12 +28,20 @@ export class Dictionary implements PlainDictionary {
   }
 
   public static fromPlain(plain: PlainDictionary): Dictionary {
-    let words = plain.words.map((word) => Word.fromPlain(word));
-    let settings = plain.settings;
+    let words = plain.words.map((plainWord) => Word.fromPlain(plainWord));
+    let settings = DictionarySettings.fromPlain(plain.settings);
     let markers = plain.markers;
     let path = plain.path;
     let dictionary = new Dictionary(words, settings, markers, path);
     return dictionary;
+  }
+
+  public static fromString(string: string): Dictionary {
+    throw new Error("not yet implemented");
+  }
+
+  public toString(): string {
+    throw new Error("not yet implemented");
   }
 
   public search(parameter: WordParameter): {words: Array<Word>, suggestions: []} {
@@ -92,7 +104,7 @@ export class Dictionary implements PlainDictionary {
 export interface PlainDictionary {
 
   words: Array<PlainWord>;
-  settings: any;
+  settings: PlainDictionarySettings;
   markers: Map<string, Array<Marker>>;
   path: string | null;
 
