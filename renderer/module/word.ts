@@ -14,25 +14,28 @@ import {
 
 export class Word implements PlainWord {
 
-  public uid!: string;
-  public name: string;
+  public uid: string;
+  public name!: string;
+  public uniqueName: string;
   public date: number;
   public equivalentNames!: EquivalentNames;
   public contents: Contents;
+  private comparisonString: string | null;
 
-  public constructor(name: string, date: number, contents: Contents) {
-    this.name = name;
+  protected constructor(uniqueName: string, date: number, contents: Contents) {
+    this.uid = uuid();
+    this.uniqueName = uniqueName;
     this.date = date;
     this.contents = contents;
-    this.updateUid();
-    this.updateEquivalentNames();
+    this.comparisonString = null;
+    this.update();
   }
 
   public static fromPlain(plain: PlainWord): Word {
-    let name = plain.name;
+    let uniqueName = plain.uniqueName;
     let date = plain.date;
     let contents = plain.contents;
-    let word = new Word(name, date, contents);
+    let word = new Word(uniqueName, date, contents);
     return word;
   }
 
@@ -40,7 +43,7 @@ export class Word implements PlainWord {
     let lines = string.trim().split(/\r\n|\r|\n/);
     let match = lines[0]?.match(/^\*\s*(.+?)\s*@(\d+)/);
     if (match) {
-      let name = match[1];
+      let uniqueName = match[1];
       let date = parseInt(match[2], 10);
       let contents = {} as Contents;
       let before = true;
@@ -63,7 +66,7 @@ export class Word implements PlainWord {
       if (!before) {
         contents[currentLanguage] = currentContent.trim();
       }
-      let word = new Word(name, date, contents);
+      let word = new Word(uniqueName, date, contents);
       return word;
     } else {
       throw new Error("parse failed");
@@ -98,14 +101,21 @@ export class Word implements PlainWord {
   }
 
   public edit(word: PlainWord): void {
-    this.name = word.name;
+    this.uniqueName = word.uniqueName;
     this.date = word.date;
     this.contents = word.contents;
-    this.updateEquivalentNames();
+    this.update();
   }
 
-  private updateUid(): void {
-    this.uid = uuid();
+  public update(): void {
+    this.updateName();
+    this.updateEquivalentNames();
+    this.comparisonString = null;
+  }
+
+  private updateName(): void {
+    let name = this.uniqueName.replaceAll("~", "");
+    this.name = name;
   }
 
   private updateEquivalentNames(): void {
@@ -128,6 +138,31 @@ export class Word implements PlainWord {
     this.equivalentNames = equivalentNames;
   }
 
+  public getComparisonString(alphabetRule: string): string {
+    let comparisonString = this.comparisonString;
+    if (comparisonString !== null) {
+      return comparisonString;
+    } else {
+      let comparisonString = "";
+      let apostrophe = alphabetRule.includes("'");
+      for (let i = 0 ; i < this.uniqueName.length ; i ++) {
+        let char = this.uniqueName.charAt(i);
+        if ((apostrophe || char !== "'") && char !== "+" && char !== "~" && char !== "-") {
+          let position = alphabetRule.indexOf(char);
+          if (position >= 0) {
+            comparisonString += String.fromCodePoint(position + 174);
+          } else {
+            comparisonString += String.fromCodePoint(1000);
+          }
+        } else {
+          comparisonString += String.fromCodePoint(1100);
+        }
+      }
+      this.comparisonString = comparisonString;
+      return comparisonString;
+    }
+  }
+
   public parse<S, E>(resolvers: MarkupResolvers<S, E>): ParsedWord<S> {
     let parser = new Parser(resolvers);
     let parsedWord = parser.parse(this);
@@ -140,7 +175,7 @@ export class Word implements PlainWord {
 export interface PlainWord {
 
   uid: string;
-  name: string;
+  uniqueName: string;
   date: number;
   contents: Contents;
 

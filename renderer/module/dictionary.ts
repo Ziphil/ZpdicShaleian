@@ -50,6 +50,7 @@ export class Dictionary implements PlainDictionary {
 
   public search(parameter: WordParameter): {words: Array<Word>, suggestions: []} {
     let words = this.words.filter((word) => parameter.match(word));
+    this.sortWords(words);
     return {words, suggestions: []};
   }
 
@@ -58,8 +59,8 @@ export class Dictionary implements PlainDictionary {
     return word;
   }
 
-  public findByName(name: string): Word | undefined {
-    let word = this.words.find((word) => word.name === name);
+  public findByUniqueName(uniqueName: string): Word | undefined {
+    let word = this.words.find((word) => word.uniqueName === uniqueName);
     return word;
   }
 
@@ -94,6 +95,22 @@ export class Dictionary implements PlainDictionary {
   public changeSettings(settings: PlainDictionarySettings): void {
     let nextSettings = DictionarySettings.fromPlain(settings);
     this.settings = nextSettings;
+  }
+
+  private sortWords(words: Array<Word>): Array<Word> {
+    let alphabetRule = this.settings.alphabetRule;
+    let sortedWords = words.sort((firstWord, secondWord) => {
+      let firstComparisonString = firstWord.getComparisonString(alphabetRule);
+      let secondComparisonString = secondWord.getComparisonString(alphabetRule);
+      if (firstComparisonString < secondComparisonString) {
+        return -1;
+      } else if (firstComparisonString > secondComparisonString) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    return sortedWords;
   }
 
 }

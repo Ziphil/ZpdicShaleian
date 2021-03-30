@@ -69,7 +69,7 @@ export class WordEditor extends Component<Props, State> {
     let node = (
       <div className="zp-word-editor-tab zp-editor-tab" key={language}>
         <div className="zp-word-editor-head">
-          <InputGroup fill={true} value={word.name} onChange={this.setWord((event) => word.name = event.target.value)}/>
+          <InputGroup fill={true} value={word.uniqueName} onChange={this.setWord((event) => word.uniqueName = event.target.value)}/>
           <NumericInput className="zp-word-editor-date" value={word.date} onValueChange={this.setWord((date) => word.date = date)}/>
         </div>
         <TextArea className="zp-word-editor-content" fill={true} value={word.contents[language] ?? ""} onChange={this.setWord((event) => word.contents[language] = event.target.value)}/>
