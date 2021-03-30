@@ -22,7 +22,7 @@ export class Word implements PlainWord {
   public contents: Contents;
   private comparisonString: string | null;
 
-  protected constructor(uniqueName: string, date: number, contents: Contents) {
+  public constructor(uniqueName: string, date: number, contents: Contents) {
     this.uid = uuid();
     this.uniqueName = uniqueName;
     this.date = date;

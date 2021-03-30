@@ -6,6 +6,7 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
   public constructor(...args: any) {
     super(...args);
     Object.setPrototypeOf(this, new.target.prototype);
+    this.normalize();
   }
 
   public static fromPlain(plain: Map<string, Array<Marker>>): Markers {
@@ -50,22 +51,28 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
     return string;
   }
 
+  private normalize(): void {
+    for (let [, wordMarkers] of this.entries()) {
+      MarkerUtil.sort(wordMarkers);
+    }
+  }
+
   public get(name: string): Array<Marker> {
     let markers = super.get(name) ?? [];
     return markers;
   }
 
   public toggle(name: string, marker: Marker): void {
-    let markers = [...this.get(name)];
-    let index = markers.findIndex((existingMarker) => existingMarker === marker);
+    let wordMarkers = [...this.get(name)];
+    let index = wordMarkers.findIndex((existingMarker) => existingMarker === marker);
     if (index >= 0) {
-      markers.splice(index, 1);
+      wordMarkers.splice(index, 1);
     } else {
-      markers.push(marker);
+      wordMarkers.push(marker);
     }
-    if (markers.length > 0) {
-      MarkerUtil.sort(markers);
-      super.set(name, markers);
+    if (wordMarkers.length > 0) {
+      MarkerUtil.sort(wordMarkers);
+      super.set(name, wordMarkers);
     } else {
       super.delete(name);
     }
