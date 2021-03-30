@@ -12,6 +12,7 @@ import {
   Dictionary,
   Marker,
   NormalWordParameter,
+  PlainDictionarySettings,
   PlainWord,
   Word,
   WordMode,
@@ -90,6 +91,9 @@ export class MainPage extends Component<Props, State> {
     });
     window.api.on("delete-word", (event, uid) => {
       this.deleteWord(uid);
+    });
+    window.api.on("change-dictionary-settings", (event, settings) => {
+      this.changeDictionarySettings(settings);
     });
   }
 
@@ -233,11 +237,24 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  private startChangeDictionarySettings(): void {
+    let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
+    let dictionary = this.state.dictionary;
+    this.createWindow("dictionary-settings", {dictionary}, options);
+  }
+
+  private changeDictionarySettings(settings: PlainDictionarySettings): void {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      dictionary.changeSettings(settings);
+    }
+  }
+
   public render(): ReactNode {
     let node = (
       <div className="zp-main-page zp-root zp-navbar-root">
         <MainNavbar
-          reopenDictionary={() => this.reloadDictionary()}
+          reloadDictionary={() => this.reloadDictionary()}
           saveDictionary={() => this.saveDictionary(null)}
           changeWordMode={(mode) => this.changeWordMode(mode, true)}
           changeWordType={(type) => this.changeWordType(type, true)}
@@ -246,6 +263,7 @@ export class MainPage extends Component<Props, State> {
           editActiveWord={() => this.startEditActiveWord("active")}
           deleteActiveWord={() => this.deleteActiveWord()}
           toggleActiveWordMarker={(marker) => this.toggleActiveWordMarker(marker)}
+          openDictionarySettings={() => this.startChangeDictionarySettings()}
         />
         <Loading loading={this.state.dictionary === null} {...this.state.loadProgress}>
           <div className="zp-search-form-container">

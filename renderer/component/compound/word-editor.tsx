@@ -33,8 +33,7 @@ export class WordEditor extends Component<Props, State> {
     super(props);
     let uid = props.word?.uid ?? null;
     let word = (props.defaultWord !== undefined) ? props.defaultWord : (props.word !== null) ? props.word : Word.createEmpty();
-    let language = "ja";
-    this.state = {uid, word, language};
+    this.state = {uid, word};
   }
 
   private handleCancel(event: MouseEvent<HTMLElement>): void {
@@ -68,7 +67,7 @@ export class WordEditor extends Component<Props, State> {
   public renderEditor(language: string): ReactElement {
     let word = this.state.word;
     let node = (
-      <div className="zp-word-editor-tab" key={language}>
+      <div className="zp-word-editor-tab zp-editor-tab" key={language}>
         <div className="zp-word-editor-head">
           <InputGroup fill={true} value={word.name} onChange={this.setWord((event) => word.name = event.target.value)}/>
           <NumericInput className="zp-word-editor-date" value={word.date} onValueChange={this.setWord((date) => word.date = date)}/>
@@ -92,11 +91,11 @@ export class WordEditor extends Component<Props, State> {
       <Button text={this.trans("wordEditor.delete")} intent="danger" icon="trash" onClick={this.handleDelete.bind(this)}/>
     );
     let node = (
-      <div className="zp-word-editor">
-        <Tabs selectedTabId={this.state.language} onChange={(language) => this.setState({language: "" + language})}>
+      <div className="zp-word-editor zp-editor">
+        <Tabs defaultSelectedTabId="ja">
           {tabNodes}
         </Tabs>
-        <div className="zp-word-editor-button">
+        <div className="zp-word-editor-button zp-editor-button">
           <Button text={this.trans("wordEditor.cancel")} icon="cross" onClick={this.handleCancel.bind(this)}/>
           {deleteButton}
           <Button text={this.trans("wordEditor.confirm")} intent="primary" icon="confirm" onClick={this.handleConfirm.bind(this)}/>
@@ -118,6 +117,5 @@ type Props = {
 };
 type State = {
   uid: string | null,
-  word: PlainWord,
-  language: string
+  word: PlainWord
 };

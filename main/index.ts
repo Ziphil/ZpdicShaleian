@@ -151,6 +151,12 @@ class Main {
         window.webContents.send("delete-word", uid);
       }
     });
+    ipcMain.on("ready-change-dictionary-settings", (event, settings) => {
+      let window = this.mainWindow;
+      if (window !== undefined) {
+        window.webContents.send("change-dictionary-settings", settings);
+      }
+    });
   }
 
   private createWindow(mode: string, parentId: string | null, props: object, options: BrowserWindowConstructorOptions): BrowserWindow {

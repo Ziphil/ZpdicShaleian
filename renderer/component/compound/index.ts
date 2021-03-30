@@ -1,5 +1,6 @@
 //
 
+export * from "./dictionary-settings-editor";
 export * from "./loading";
 export * from "./main-navbar";
 export * from "./search-form";

@@ -98,6 +98,11 @@ export class Dictionary implements PlainDictionary {
     }
   }
 
+  public changeSettings(settings: PlainDictionarySettings): void {
+    let nextSettings = DictionarySettings.fromPlain(settings);
+    this.settings = nextSettings;
+  }
+
 }
 
 

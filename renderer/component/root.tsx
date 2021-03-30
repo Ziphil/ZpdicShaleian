@@ -16,6 +16,7 @@ import {
   component
 } from "./decorator";
 import {
+  DictionarySettingsPage,
   EditorPage,
   MainPage
 } from "./page";
@@ -59,8 +60,8 @@ export class Root extends Component<Props, State> {
         return <MainPage {...props}/>;
       } else if (mode === "editor") {
         return <EditorPage {...props}/>;
-      } else {
-        return <div/>;
+      } else if (mode === "dictionary-settings") {
+        return <DictionarySettingsPage {...props}/>;
       }
     } else {
       return <div/>;

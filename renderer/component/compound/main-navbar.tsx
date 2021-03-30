@@ -57,15 +57,15 @@ export class MainNavbar extends Component<Props, State> {
     let node = (
       <Menu>
         <MenuItem
-          text={this.trans("mainNavbar.openDictionary")}
-          label={this.handlerManager.getLabel("openDictionary")}
-          onClick={this.handlerManager.getHandler("openDictionary")}
+          text={this.trans("mainNavbar.loadDictionary")}
+          label={this.handlerManager.getLabel("loadDictionary")}
+          onClick={this.handlerManager.getHandler("loadDictionary")}
           icon="document-open"
         />
         <MenuItem
-          text={this.trans("mainNavbar.reopenDictionary")}
-          label={this.handlerManager.getLabel("reopenDictionary")}
-          onClick={this.handlerManager.getHandler("reopenDictionary")}
+          text={this.trans("mainNavbar.reloadDictionary")}
+          label={this.handlerManager.getLabel("reloadDictionary")}
+          onClick={this.handlerManager.getHandler("reloadDictionary")}
           icon="blank"
         />
         <MenuDivider/>
@@ -283,6 +283,26 @@ export class MainNavbar extends Component<Props, State> {
     return node;
   }
 
+  private renderToolMenu(): ReactElement {
+    let node = (
+      <Menu>
+        <MenuItem
+          text={this.trans("mainNavbar.openDictionarySettings")}
+          label={this.handlerManager.getLabel("openDictionarySettings")}
+          onClick={this.handlerManager.getHandler("openDictionarySettings")}
+          icon="blank"
+        />
+        <MenuItem
+          text={this.trans("mainNavbar.openSettings")}
+          label={this.handlerManager.getLabel("openSettings")}
+          onClick={this.handlerManager.getHandler("openSettings")}
+          icon="cog"
+        />
+      </Menu>
+    );
+    return node;
+  }
+
   private renderHelpMenu(): ReactElement {
     let node = (
       <Menu>
@@ -318,8 +338,8 @@ export class MainNavbar extends Component<Props, State> {
 
   private createHandlerManager(): HandlerManager {
     let manager = new HandlerManager({
-      openDictionary: {key: "ctrl+o"},
-      reopenDictionary: {key: "ctrl+shift+o", handler: () => this.props.reopenDictionary()},
+      loadDictionary: {key: "ctrl+o"},
+      reloadDictionary: {key: "ctrl+shift+o", handler: () => this.props.reloadDictionary()},
       saveDictionary: {key: "ctrl+s", handler: () => this.props.saveDictionary()},
       changeWordModeToName: {key: "ctrl+w", handler: () => this.props.changeWordMode("name")},
       changeWordModeToEquivalent: {key: "ctrl+e", handler: () => this.props.changeWordMode("equivalent")},
@@ -346,6 +366,8 @@ export class MainNavbar extends Component<Props, State> {
       toggleActiveWordMarkerCross: {key: "ctrl+6", handler: () => this.props.toggleActiveWordMarker("cross")},
       toggleActiveWordMarkerPentagon: {key: "ctrl+7", handler: () => this.props.toggleActiveWordMarker("pentagon")},
       toggleActiveWordMarkerHeart: {key: "ctrl+8", handler: () => this.props.toggleActiveWordMarker("heart")},
+      openDictionarySettings: {key: "ctrl+p", handler: () => this.props.openDictionarySettings()},
+      openSettings: {key: "ctrl+shift+p"},
       openDevTools: {key: "f12", handler: () => this.openDevTools()},
       openHelp: {key: "f1"}
     });
@@ -375,7 +397,9 @@ export class MainNavbar extends Component<Props, State> {
               <Button text={this.trans("mainNavbar.edit")} minimal={true}/>
             </Popover2>
             <Button text={this.trans("mainNavbar.git")} minimal={true}/>
-            <Button text={this.trans("mainNavbar.tool")} minimal={true}/>
+            <Popover2 content={this.renderToolMenu()} position="bottom-left">
+              <Button text={this.trans("mainNavbar.tool")} minimal={true}/>
+            </Popover2>
             <Popover2 content={this.renderHelpMenu()} position="bottom-left">
               <Button text={this.trans("mainNavbar.help")} minimal={true}/>
             </Popover2>
@@ -391,7 +415,7 @@ export class MainNavbar extends Component<Props, State> {
 
 
 type Props = {
-  reopenDictionary: () => void,
+  reloadDictionary: () => void,
   saveDictionary: () => void,
   changeWordMode: (mode: WordMode) => void,
   changeWordType: (type: WordType) => void,
@@ -399,7 +423,8 @@ type Props = {
   inheritActiveWord: () => void,
   editActiveWord: () => void,
   deleteActiveWord: () => void,
-  toggleActiveWordMarker: (marker: Marker) => void
+  toggleActiveWordMarker: (marker: Marker) => void,
+  openDictionarySettings: () => void
 };
 type State = {
 };
