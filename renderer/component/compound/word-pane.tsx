@@ -202,7 +202,7 @@ export class WordPane extends Component<Props, State> {
   public render(): ReactNode {
     let markupResolvers = this.createMarkupResolvers();
     let word = this.props.word.parse(markupResolvers);
-    let markers = this.props.dictionary.getMarkers(this.props.word);
+    let markers = this.props.dictionary.getMarkers(this.props.word.name);
     let node = this.renderWord(word, markers);
     return node;
   }

@@ -7,6 +7,7 @@ export * from "./dictionary-settings";
 export * from "./equivalent";
 export * from "./information-kind";
 export * from "./information";
+export * from "./marker";
 export * from "./parsed-word";
 export * from "./parser";
 export * from "./part";

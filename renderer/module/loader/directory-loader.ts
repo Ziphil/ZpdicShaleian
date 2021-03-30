@@ -9,6 +9,9 @@ import {
   DictionarySettings
 } from "../dictionary-settings";
 import {
+  Markers
+} from "../marker";
+import {
   Word
 } from "../word";
 import {
@@ -20,14 +23,17 @@ export class DirectoryLoader extends Loader {
 
   private words: Array<Word>;
   private settings: DictionarySettings;
+  private markers: Markers;
   private size: number = 0;
   private count: number = 0;
   private settingsLoaded: boolean = false;
+  private markersLoaded: boolean = false;
 
   public constructor(path: string) {
     super(path);
     this.words = [];
     this.settings = DictionarySettings.createEmpty();
+    this.markers = new Markers();
   }
 
   public start(): void {
@@ -43,7 +49,9 @@ export class DirectoryLoader extends Loader {
             this.loadWord(wordPath);
           }
           let settingsPath = path.join(this.path, "$SETTINGS.nxds");
+          let markersPath = path.join(this.path, "$MARKER.nxds");
           this.loadSettings(settingsPath);
+          this.loadMarkers(markersPath);;
         } catch (error) {
           this.emit("error", error);
         }
@@ -86,14 +94,35 @@ export class DirectoryLoader extends Loader {
     });
   }
 
+  private loadMarkers(markersPath: string): void {
+    fs.readFile(markersPath, {encoding: "utf-8"}, (error, string) => {
+      if (error) {
+        this.emit("error", error);
+      } else {
+        try {
+          let markers = Markers.fromString(string);
+          this.markers = markers;
+          this.markersLoaded = true;
+          this.checkEnded();
+        } catch (error) {
+          this.emit("error", error);
+        }
+      }
+    });
+  }
+
   private checkEnded(): void {
-    if (this.count >= this.size && this.settingsLoaded) {
-      let words = this.words;
-      let settings = this.settings;
-      let markers = new Map();
-      let path = this.path;
-      let dictionary = new Dictionary(words, settings, markers, path);
-      this.emit("end", dictionary);
+    if (this.count >= this.size && this.settingsLoaded && this.markersLoaded) {
+      try {
+        let words = this.words;
+        let settings = this.settings;
+        let markers = this.markers;
+        let path = this.path;
+        let dictionary = new Dictionary(words, settings, markers, path);
+        this.emit("end", dictionary);
+      } catch (error) {
+        this.emit("error", error);
+      }
     }
   }
 

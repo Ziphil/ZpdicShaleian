@@ -9,6 +9,9 @@ import {
   DictionarySettings
 } from "../dictionary-settings";
 import {
+  Markers
+} from "../marker";
+import {
   Word
 } from "../word";
 import {
@@ -21,6 +24,7 @@ export class DirectorySaver extends Saver {
   private size: number = 0;
   private count: number = 0;
   private settingsSaved: boolean = false;
+  private markersSaved: boolean = false;
 
   public constructor(dictionary: Dictionary, path?: string | null) {
     super(dictionary, path);
@@ -34,12 +38,18 @@ export class DirectorySaver extends Saver {
       if (error) {
         this.emit("error", error);
       } else {
-        for (let word of words) {
-          let wordPath = path.join(this.path, word.name + ".nxdw");
-          this.saveWord(word, wordPath);
+        try {
+          for (let word of words) {
+            let wordPath = path.join(this.path, word.name + ".nxdw");
+            this.saveWord(word, wordPath);
+          }
+          let settingsPath = path.join(this.path, "$SETTINGS.nxds");
+          let markersPath = path.join(this.path, "$MARKER.nxds");
+          this.saveSettings(dictionary.settings, settingsPath);
+          this.saveMarkers(dictionary.markers, markersPath);
+        } catch (error) {
+          this.emit("error", error);
         }
-        let settingsPath = path.join(this.path, "$SETTINGS.nxds");
-        this.saveSettings(dictionary.settings, settingsPath);
       }
     });
   }
@@ -70,8 +80,21 @@ export class DirectorySaver extends Saver {
     });
   }
 
+  private saveMarkers(markers: Markers, markersPath: string): void {
+    let string = markers.toString();
+    fs.writeFile(markersPath, string, {encoding: "utf-8"}, (error) => {
+      if (error) {
+        this.emit("error", error);
+      } else {
+        this.markersSaved = true;
+        this.emitProgress();
+        this.checkEnded();
+      }
+    });
+  }
+
   private checkEnded(): void {
-    if (this.count >= this.size && this.settingsSaved) {
+    if (this.count >= this.size && this.settingsSaved && this.markersSaved) {
       this.emit("end");
     }
   }

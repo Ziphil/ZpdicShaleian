@@ -5,6 +5,10 @@ import {
   PlainDictionarySettings
 } from "./dictionary-settings";
 import {
+  Marker,
+  Markers
+} from "./marker";
+import {
   PlainWord,
   Word
 } from "./word";
@@ -17,10 +21,10 @@ export class Dictionary implements PlainDictionary {
 
   public words: Array<Word>;
   public settings: DictionarySettings;
-  public markers: Map<string, Array<Marker>>;
+  public markers: Markers;
   public path: string | null;
 
-  public constructor(words: Array<Word>, settings: DictionarySettings, markers: Map<string, Array<Marker>>, path: string | null) {
+  public constructor(words: Array<Word>, settings: DictionarySettings, markers: Markers, path: string | null) {
     this.words = words;
     this.settings = settings;
     this.markers = markers;
@@ -30,7 +34,7 @@ export class Dictionary implements PlainDictionary {
   public static fromPlain(plain: PlainDictionary): Dictionary {
     let words = plain.words.map((plainWord) => Word.fromPlain(plainWord));
     let settings = DictionarySettings.fromPlain(plain.settings);
-    let markers = plain.markers;
+    let markers = Markers.fromPlain(plain.markers);
     let path = plain.path;
     let dictionary = new Dictionary(words, settings, markers, path);
     return dictionary;
@@ -59,11 +63,6 @@ export class Dictionary implements PlainDictionary {
     return word;
   }
 
-  public getMarkers(word: Word): Array<Marker> {
-    let markers = this.markers.get(word.name) ?? [];
-    return markers;
-  }
-
   public editWord(uid: string | null, word: PlainWord): void {
     if (uid !== null) {
       let oldWord = this.words.find((word) => word.uid === uid);
@@ -83,19 +82,13 @@ export class Dictionary implements PlainDictionary {
     }
   }
 
+  public getMarkers(name: string): Array<Marker> {
+    let markers = this.markers.get(name);
+    return markers;
+  }
+
   public toggleMarker(name: string, marker: Marker): void {
-    let markers = [...(this.markers.get(name) ?? [])];
-    let index = markers.findIndex((existingMarker) => existingMarker === marker);
-    if (index >= 0) {
-      markers.splice(index, 1);
-    } else {
-      markers.push(marker);
-    }
-    if (markers.length > 0) {
-      this.markers.set(name, markers);
-    } else {
-      this.markers.delete(name);
-    }
+    this.markers.toggle(name, marker);
   }
 
   public changeSettings(settings: PlainDictionarySettings): void {
@@ -114,6 +107,3 @@ export interface PlainDictionary {
   path: string | null;
 
 }
-
-
-export type Marker = "circle" | "square" | "up" | "diamond" | "down" | "cross" | "pentagon" | "heart";
