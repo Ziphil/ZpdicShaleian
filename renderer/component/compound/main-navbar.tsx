@@ -283,6 +283,26 @@ export class MainNavbar extends Component<Props, State> {
     return node;
   }
 
+  private renderGitMenu(): ReactElement {
+    let node = (
+      <Menu>
+        <MenuItem
+          text={this.trans("mainNavbar.gitCommit")}
+          label={this.handlerManager.getLabel("gitCommit")}
+          onClick={this.handlerManager.getHandler("gitCommit")}
+          icon="git-commit"
+        />
+        <MenuItem
+          text={this.trans("mainNavbar.gitPush")}
+          label={this.handlerManager.getLabel("gitPush")}
+          onClick={this.handlerManager.getHandler("gitPush")}
+          icon="git-push"
+        />
+      </Menu>
+    );
+    return node;
+  }
+
   private renderToolMenu(): ReactElement {
     let node = (
       <Menu>
@@ -366,6 +386,8 @@ export class MainNavbar extends Component<Props, State> {
       toggleActiveWordMarkerCross: {key: "ctrl+6", handler: () => this.props.toggleActiveWordMarker("cross")},
       toggleActiveWordMarkerPentagon: {key: "ctrl+7", handler: () => this.props.toggleActiveWordMarker("pentagon")},
       toggleActiveWordMarkerHeart: {key: "ctrl+8", handler: () => this.props.toggleActiveWordMarker("heart")},
+      gitCommit: {key: "ctrl+alt+c", handler: () => this.props.gitCommit()},
+      gitPush: {key: "ctrl+alt+p", handler: () => this.props.gitPush()},
       openDictionarySettings: {key: "ctrl+p", handler: () => this.props.openDictionarySettings()},
       openSettings: {key: "ctrl+shift+p"},
       openDevTools: {key: "f12", handler: () => this.openDevTools()},
@@ -396,7 +418,9 @@ export class MainNavbar extends Component<Props, State> {
             <Popover2 content={this.renderEditMenu()} position="bottom-left">
               <Button text={this.trans("mainNavbar.edit")} minimal={true}/>
             </Popover2>
-            <Button text={this.trans("mainNavbar.git")} minimal={true}/>
+            <Popover2 content={this.renderGitMenu()} position="bottom-left">
+              <Button text={this.trans("mainNavbar.git")} minimal={true}/>
+            </Popover2>
             <Popover2 content={this.renderToolMenu()} position="bottom-left">
               <Button text={this.trans("mainNavbar.tool")} minimal={true}/>
             </Popover2>
@@ -425,6 +449,8 @@ type Props = {
   editActiveWord: () => void,
   deleteActiveWord: () => void,
   toggleActiveWordMarker: (marker: Marker) => void,
+  gitCommit: () => void,
+  gitPush: () => void,
   openDictionarySettings: () => void
 };
 type State = {

@@ -95,6 +95,12 @@ export class MainPage extends Component<Props, State> {
     window.api.on("change-dictionary-settings", (event, settings) => {
       this.changeDictionarySettings(settings);
     });
+    window.api.on("succeed-git-commit", (event) => {
+      CustomToaster.show({message: this.trans("mainPage.succeedGitCommit"), icon: "tick", intent: "success"});
+    });
+    window.api.on("succeed-git-push", (event) => {
+      CustomToaster.show({message: this.trans("mainPage.succeedGitPush"), icon: "tick", intent: "success"});
+    });
   }
 
   private loadDictionary(path: string): void {
@@ -260,6 +266,21 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  private gitCommit(): void {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      let path = dictionary.path;
+      window.api.send("git-commit", path, "");
+    }
+  }
+
+  private gitPush(): void {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      window.api.send("git-push");
+    }
+  }
+
   public render(): ReactNode {
     let node = (
       <div className="zp-main-page zp-root zp-navbar-root">
@@ -274,6 +295,8 @@ export class MainPage extends Component<Props, State> {
           editActiveWord={() => this.startEditActiveWord("active")}
           deleteActiveWord={() => this.deleteActiveWord()}
           toggleActiveWordMarker={(marker) => this.toggleActiveWordMarker(marker)}
+          gitCommit={() => this.gitCommit()}
+          gitPush={() => this.gitPush()}
           openDictionarySettings={() => this.startChangeDictionarySettings()}
         />
         <Loading loading={this.state.dictionary === null} {...this.state.loadProgress}>

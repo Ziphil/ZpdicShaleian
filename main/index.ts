@@ -13,6 +13,7 @@ import {
 import {
   join as joinPath
 } from "path";
+import simpleGit from "simple-git";
 import {
   Dictionary
 } from "../renderer/module";
@@ -155,6 +156,27 @@ class Main {
       let window = this.mainWindow;
       if (window !== undefined) {
         window.webContents.send("change-dictionary-settings", settings);
+      }
+    });
+    ipcMain.on("git-commit", async (event, path, message) => {
+      try {
+        let git = simpleGit(path);
+        await git.add(".");
+        await git.commit(message);
+        event.reply("succeed-git-commit");
+      } catch (error) {
+        event.reply("error-git-commit");
+        console.error(error);
+      }
+    });
+    ipcMain.on("git-push", async (event, path) => {
+      try {
+        let git = simpleGit(path);
+        await git.push();
+        event.reply("succeed-git-push");
+      } catch (error) {
+        event.reply("error-git-push");
+        console.error(error);
       }
     });
   }
