@@ -18,7 +18,7 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
     let lines = string.trim().split(/\r\n|\r|\n/);
     let rawMarkers = new Map<string, Array<Marker>>();
     for (let line of lines) {
-      if (line.trim() !== "" || line.trim() === "!MARKER") {
+      if (line.trim() !== "" && line.trim() !== "!MARKER") {
         let match = line.match(/^\-\s*(?:\{(.*?)\}|(.*?))\s*:\s*(.*?)\s*$/);
         if (match) {
           let name = match[1] ?? match[2];
@@ -34,7 +34,7 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
             rawMarkers.set(name, wordMarkers);
           }
         } else {
-          throw new Error("parse failed");
+          throw new Error("parse failed: " + line);
         }
       }
     }
