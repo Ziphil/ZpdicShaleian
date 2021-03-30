@@ -64,6 +64,7 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
       markers.push(marker);
     }
     if (markers.length > 0) {
+      MarkerUtil.sort(markers);
       super.set(name, markers);
     } else {
       super.delete(name);
