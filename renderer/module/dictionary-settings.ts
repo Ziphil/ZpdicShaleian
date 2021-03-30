@@ -1,7 +1,7 @@
 //
 
 import {
-  PlainRevisions,
+  PlainRevision,
   Revisions
 } from "./revision";
 
@@ -101,6 +101,6 @@ export interface PlainDictionarySettings {
 
   version: string;
   alphabetRule: string;
-  revisions: PlainRevisions;
+  revisions: Array<PlainRevision>;
 
 }

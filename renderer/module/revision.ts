@@ -1,7 +1,7 @@
 //
 
 
-export class Revisions extends Array<Revision> implements PlainRevisions {
+export class Revisions extends Array<Revision> implements Array<PlainRevision> {
 
   public constructor(...args: any) {
     super(...args);
@@ -96,6 +96,3 @@ export interface PlainRevision {
   afterName: string;
 
 }
-
-
-export type PlainRevisions = Array<PlainRevision>;
