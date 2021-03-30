@@ -74,18 +74,16 @@ export class MainPage extends Component<Props, State> {
         this.updateWords();
       });
     });
+    window.api.on("error-load-dictionary", (event, error) => {
+      CustomToaster.show({message: this.trans("mainPage.errorLoadDictionary"), icon: "error", intent: "danger"});
+    });
     window.api.on("get-save-dictionary-progress", (event, saveProgress) => {
-      CustomToaster.show({
-        icon: "floppy-disk",
-        message: <EnhancedProgressBar className="zp-save-progress-bar" offset={saveProgress.offset} size={saveProgress.size} showDetail={false}/>,
-        timeout: 0
-      }, "saveDictionary");
+      let message = <EnhancedProgressBar className="zp-save-progress-bar" offset={saveProgress.offset} size={saveProgress.size} showDetail={false}/>;
+      CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
     });
     window.api.on("save-dictionary", (event) => {
-      CustomToaster.show({
-        icon: "floppy-disk",
-        message: <EnhancedProgressBar className="zp-save-progress-bar" offset={1} size={1} showDetail={false}/>
-      }, "saveDictionary");
+      let message = <EnhancedProgressBar className="zp-save-progress-bar" offset={1} size={1} showDetail={false}/>;
+      CustomToaster.show({message, icon: "floppy-disk"}, "saveDictionary");
     });
     window.api.on("edit-word", (event, uid, word) => {
       this.editWord(uid, word);

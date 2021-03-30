@@ -119,7 +119,7 @@ class Main {
         event.reply("load-dictionary", dictionary);
       });
       loader.on("error", (error) => {
-        event.reply("error");
+        event.reply("error-load-dictionary", error);
         console.error(error);
       });
       loader.start();
@@ -134,7 +134,7 @@ class Main {
         event.reply("save-dictionary");
       });
       saver.on("error", (error) => {
-        event.reply("error");
+        event.reply("error-save-dictionary");
         console.error(error);
       });
       saver.start();
