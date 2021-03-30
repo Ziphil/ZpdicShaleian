@@ -37,6 +37,10 @@ export class DirectoryLoader extends Loader {
   }
 
   public start(): void {
+    this.loadWords();
+  }
+
+  private loadWords(): void {
     fs.readdir(this.path, (error, paths) => {
       if (error) {
         this.emit("error", error);
@@ -59,8 +63,8 @@ export class DirectoryLoader extends Loader {
     });
   }
 
-  private loadWord(wordPath: string): void {
-    fs.readFile(wordPath, {encoding: "utf-8"}, (error, string) => {
+  private loadWord(path: string): void {
+    fs.readFile(path, {encoding: "utf-8"}, (error, string) => {
       if (error) {
         this.emit("error", error);
       } else {
@@ -77,8 +81,8 @@ export class DirectoryLoader extends Loader {
     });
   }
 
-  private loadSettings(settingsPath: string): void {
-    fs.readFile(settingsPath, {encoding: "utf-8"}, (error, string) => {
+  private loadSettings(path: string): void {
+    fs.readFile(path, {encoding: "utf-8"}, (error, string) => {
       if (error) {
         this.emit("error", error);
       } else {
@@ -94,8 +98,8 @@ export class DirectoryLoader extends Loader {
     });
   }
 
-  private loadMarkers(markersPath: string): void {
-    fs.readFile(markersPath, {encoding: "utf-8"}, (error, string) => {
+  private loadMarkers(path: string): void {
+    fs.readFile(path, {encoding: "utf-8"}, (error, string) => {
       if (error) {
         this.emit("error", error);
       } else {

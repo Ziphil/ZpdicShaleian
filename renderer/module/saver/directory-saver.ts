@@ -91,9 +91,9 @@ export class DirectorySaver extends Saver {
     });
   }
 
-  private saveWord(word: Word, wordPath: string): void {
+  private saveWord(word: Word, path: string): void {
     let string = word.toString();
-    fs.writeFile(wordPath, string, {encoding: "utf-8"}, (error) => {
+    fs.writeFile(path, string, {encoding: "utf-8"}, (error) => {
       if (error) {
         this.emit("error", error);
       } else {
@@ -104,9 +104,9 @@ export class DirectorySaver extends Saver {
     });
   }
 
-  private saveSettings(settings: DictionarySettings, settingsPath: string): void {
+  private saveSettings(settings: DictionarySettings, path: string): void {
     let string = settings.toString();
-    fs.writeFile(settingsPath, string, {encoding: "utf-8"}, (error) => {
+    fs.writeFile(path, string, {encoding: "utf-8"}, (error) => {
       if (error) {
         this.emit("error", error);
       } else {
@@ -117,9 +117,9 @@ export class DirectorySaver extends Saver {
     });
   }
 
-  private saveMarkers(markers: Markers, markersPath: string): void {
+  private saveMarkers(markers: Markers, path: string): void {
     let string = markers.toString();
-    fs.writeFile(markersPath, string, {encoding: "utf-8"}, (error) => {
+    fs.writeFile(path, string, {encoding: "utf-8"}, (error) => {
       if (error) {
         this.emit("error", error);
       } else {
