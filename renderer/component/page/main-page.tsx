@@ -213,9 +213,13 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private changeParameter(parameter: WordParameter): void {
+  private changeParameter(parameter: WordParameter, immediate?: boolean): void {
     this.setState({parameter}, () => {
-      this.updateWordsDebounced();
+      if (immediate) {
+        this.updateWords();
+      } else {
+        this.updateWordsDebounced();
+      }
     });
   }
 
@@ -235,6 +239,12 @@ export class MainPage extends Component<Props, State> {
     if (focus) {
       this.focusSearchForm();
     }
+  }
+
+  private shuffleWords(): void {
+    let parameter = this.state.parameter;
+    parameter.shuffle = true;
+    this.changeParameter(parameter, true);
   }
 
   private startChangeDictionarySettings(): void {
@@ -258,6 +268,7 @@ export class MainPage extends Component<Props, State> {
           saveDictionary={() => this.saveDictionary(null)}
           changeWordMode={(mode) => this.changeWordMode(mode, true)}
           changeWordType={(type) => this.changeWordType(type, true)}
+          shuffleWords={() => this.shuffleWords()}
           createWord={() => this.startEditWord(null)}
           inheritActiveWord={() => this.startEditActiveWord(null, "active")}
           editActiveWord={() => this.startEditActiveWord("active")}

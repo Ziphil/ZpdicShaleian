@@ -157,9 +157,9 @@ export class MainNavbar extends Component<Props, State> {
           />
         </MenuItem>
         <MenuItem
-          text={this.trans("mainNavbar.shuffleResult")}
-          label={this.handlerManager.getLabel("shuffleResult")}
-          onClick={this.handlerManager.getHandler("shuffleResult")}
+          text={this.trans("mainNavbar.shuffleWords")}
+          label={this.handlerManager.getLabel("shuffleWords")}
+          onClick={this.handlerManager.getHandler("shuffleWords")}
           icon="random"
         />
         <MenuDivider/>
@@ -351,7 +351,7 @@ export class MainNavbar extends Component<Props, State> {
       changeWordTypeToPart: {handler: () => this.props.changeWordType("part")},
       changeWordTypeToPair: {key: "ctrl+shift+g", handler: () => this.props.changeWordType("pair")},
       changeWordTypeToRegular: {key: "ctrl+g", handler: () => this.props.changeWordType("regular")},
-      shuffleResult: {key: "ctrl+r"},
+      shuffleWords: {key: "ctrl+r", handler: () => this.props.shuffleWords()},
       searchAdvanced: {key: "ctrl+f"},
       searchScript: {key: "ctrl+shift+f"},
       createWord: {key: "ctrl+n", handler: () => this.props.createWord()},
@@ -419,6 +419,7 @@ type Props = {
   saveDictionary: () => void,
   changeWordMode: (mode: WordMode) => void,
   changeWordType: (type: WordType) => void,
+  shuffleWords: () => void,
   createWord: () => void,
   inheritActiveWord: () => void,
   editActiveWord: () => void,

@@ -50,7 +50,11 @@ export class Dictionary implements PlainDictionary {
 
   public search(parameter: WordParameter): {words: Array<Word>, suggestions: []} {
     let words = this.words.filter((word) => parameter.match(word));
-    this.sortWords(words);
+    if (parameter.shuffle) {
+      this.shuffleWords(words);
+    } else {
+      this.sortWords(words);
+    }
     return {words, suggestions: []};
   }
 
@@ -111,6 +115,16 @@ export class Dictionary implements PlainDictionary {
       }
     });
     return sortedWords;
+  }
+
+  private shuffleWords(words: Array<Word>): Array<Word> {
+    for (let i = words.length - 1 ; i > 0 ; i --) {
+      let j = Math.floor(Math.random() * (i + 1));
+      let temp = words[i];
+      words[i] = words[j];
+      words[j] = temp;
+    }
+    return words;
   }
 
 }

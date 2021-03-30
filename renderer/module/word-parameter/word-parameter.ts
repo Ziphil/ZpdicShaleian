@@ -11,6 +11,7 @@ import {
 export abstract class WordParameter {
 
   public abstract language: string;
+  public abstract shuffle: boolean;
 
   public abstract match(word: Word): boolean;
 
