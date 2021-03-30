@@ -11,6 +11,7 @@ import {
 export abstract class Loader extends EventEmitter {
 
   protected readonly path: string;
+  private lastProgressDate: Date | null = null;
 
   public constructor(path: string) {
     super();
@@ -25,8 +26,20 @@ export abstract class Loader extends EventEmitter {
 
   public emit<E extends keyof LoaderEvent>(event: E, ...args: LoaderEvent[E]): boolean;
   public emit(event: string | symbol, ...args: any): boolean {
-    let result = super.emit(event, ...args);
-    return result;
+    if (event === "progress") {
+      let date = new Date();
+      let lastDate = this.lastProgressDate;
+      if (lastDate === null || date.getTime() - lastDate.getTime() >= 200) {
+        let result = super.emit(event, ...args);
+        this.lastProgressDate = date;
+        return result;
+      } else {
+        return false;
+      }
+    } else {
+      let result = super.emit(event, ...args);
+      return result;
+    }
   }
 
   public abstract start(): void;
