@@ -173,8 +173,11 @@ export class MainPage extends Component<Props, State> {
   }
 
   private startEditWord(word: PlainWord | null, defaultWord?: PlainWord): void {
-    let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
-    this.createWindow("editor", {word, defaultWord}, options);
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
+      this.createWindow("editor", {word, defaultWord, dictionary}, options);
+    }
   }
 
   private startEditActiveWord(word: PlainWord | "active" | null, defaultWord?: PlainWord | "active"): void {

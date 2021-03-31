@@ -87,6 +87,10 @@ wordEditor:
   cancel: "キャンセル"
   delete: "削除"
   confirm: "決定"
+  invalidUniqueName: >-
+    綴りのフォーマットが正しくありません。
+  duplicateUniqueName: >-
+    その綴りの単語はすでに登録されています。
 wordPaneWrapper:
   create: "新規作成"
   inherit: "コピーして新規作成"

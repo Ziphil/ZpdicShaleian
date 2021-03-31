@@ -192,6 +192,10 @@ export class Word implements PlainWord {
     return parsedWord;
   }
 
+  public static isValidName(uniqueName: string): boolean {
+    return uniqueName.match(/^(\+)?(\p{L}+?)(\+)?(~*)$/u) !== null;
+  }
+
 }
 
 

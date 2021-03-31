@@ -5,6 +5,7 @@ import {
   ReactNode
 } from "react";
 import {
+  PlainDictionary,
   PlainWord
 } from "../../module";
 import {
@@ -37,6 +38,7 @@ export class EditorPage extends Component<Props, State> {
         <WordEditor
           word={this.props.word}
           defaultWord={this.props.defaultWord}
+          dictionary={this.props.dictionary}
           onConfirm={this.editWord.bind(this)}
           onDelete={this.deleteWord.bind(this)}
           onCancel={this.closeWindow.bind(this)}
@@ -51,7 +53,8 @@ export class EditorPage extends Component<Props, State> {
 
 type Props = {
   word: PlainWord | null,
-  defaultWord?: PlainWord
+  defaultWord?: PlainWord,
+  dictionary: PlainDictionary
 };
 type State = {
 };

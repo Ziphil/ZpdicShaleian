@@ -6,7 +6,8 @@ import {
   NumericInput,
   Tab,
   Tabs,
-  TextArea
+  TextArea,
+  Toaster
 } from "@blueprintjs/core";
 import * as react from "react";
 import {
@@ -15,6 +16,8 @@ import {
   ReactNode
 } from "react";
 import {
+  Dictionary,
+  PlainDictionary,
   PlainWord,
   Word
 } from "../../module";
@@ -33,7 +36,8 @@ export class WordEditor extends Component<Props, State> {
     super(props);
     let uid = props.word?.uid ?? null;
     let word = (props.defaultWord !== undefined) ? props.defaultWord : (props.word !== null) ? props.word : Word.createEmpty();
-    this.state = {uid, word};
+    let dictionary = Dictionary.fromPlain(props.dictionary);
+    this.state = {uid, word, dictionary};
   }
 
   private handleCancel(event: MouseEvent<HTMLElement>): void {
@@ -43,8 +47,15 @@ export class WordEditor extends Component<Props, State> {
   }
 
   private handleConfirm(event: MouseEvent<HTMLElement>): void {
-    if (this.props.onConfirm) {
-      this.props.onConfirm(this.state.uid, this.state.word, event);
+    let uniqueName = this.state.word.uniqueName;
+    if (!Word.isValidName(uniqueName)) {
+      CustomToaster.show({message: this.trans("wordEditor.invalidUniqueName"), icon: "error", intent: "danger"});
+    } else if (this.state.dictionary.findByUniqueName(uniqueName) !== undefined) {
+      CustomToaster.show({message: this.trans("wordEditor.duplicateUniqueName"), icon: "error", intent: "danger"});
+    } else {
+      if (this.props.onConfirm) {
+        this.props.onConfirm(this.state.uid, this.state.word, event);
+      }
     }
   }
 
@@ -111,11 +122,15 @@ export class WordEditor extends Component<Props, State> {
 type Props = {
   word: PlainWord | null,
   defaultWord?: PlainWord,
+  dictionary: PlainDictionary,
   onConfirm?: (uid: string | null, word: PlainWord, event: MouseEvent<HTMLElement>) => void,
   onDelete?: (uid: string, event: MouseEvent<HTMLElement>) => void,
   onCancel?: (event: MouseEvent<HTMLElement>) => void
 };
 type State = {
   uid: string | null,
-  word: PlainWord
+  word: PlainWord,
+  dictionary: Dictionary
 };
+
+let CustomToaster = Toaster.create({className: "zp-word-editor-toaster", position: "top", maxToasts: 2});
