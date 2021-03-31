@@ -41,9 +41,9 @@ const PRODUCTION_WINDOW_OPTIONS = {
 class Main {
 
   private app: App;
-  private windows: Map<string, BrowserWindow>;
+  private windows: Map<number, BrowserWindow>;
   private mainWindow: BrowserWindow | undefined;
-  private props: Map<string, object>;
+  private props: Map<number, object>;
 
   public constructor(app: App) {
     this.app = app;
@@ -181,13 +181,15 @@ class Main {
     });
   }
 
-  private createWindow(mode: string, parentId: string | null, props: object, options: BrowserWindowConstructorOptions): BrowserWindow {
+  private createWindow(mode: string, parentId: number | null, props: object, options: BrowserWindowConstructorOptions): BrowserWindow {
     let show = false;
     let parent = (parentId !== null) ? this.windows.get(parentId) : undefined;
     let additionalOptions = (!this.app.isPackaged) ? {} : PRODUCTION_WINDOW_OPTIONS;
     let window = new BrowserWindow({...COMMON_WINDOW_OPTIONS, ...additionalOptions, show, parent, ...options});
-    let id = window.id.toString();
-    window.loadFile(joinPath(__dirname, "index.html"), {query: {id, mode}});
+    let id = window.id;
+    let idString = id.toString();
+    window.loadFile(joinPath(__dirname, "index.html"), {query: {idString, mode}});
+    window.setMenu(null);
     window.once("closed", () => {
       this.windows.delete(id);
     });
@@ -199,7 +201,6 @@ class Main {
   private createMainWindow(): BrowserWindow {
     let options = {width: 720, height: 720, minWidth: 480, minHeight: 320};
     let window = this.createWindow("main", null, {}, options);
-    window.setMenu(null);
     this.mainWindow = window;
     this.connectReloadClient(window);
     return window;

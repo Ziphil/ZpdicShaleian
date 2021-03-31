@@ -8,6 +8,6 @@ import {
 export class GlobalStore {
 
   @observable
-  public id: string = "";
+  public id: number = -1;
 
 }

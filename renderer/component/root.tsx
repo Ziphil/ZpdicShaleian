@@ -39,8 +39,9 @@ export class Root extends Component<Props, State> {
   public componentDidMount(): void {
     let query = queryParser.parse(window.location.search);
     let mode = query.mode;
-    let id = query.id;
-    if (typeof mode === "string" && typeof id === "string") {
+    let idString = query.idString;
+    if (typeof mode === "string" && typeof idString === "string") {
+      let id = parseInt(idString, 10);
       window.api.send("ready-get-props", id);
       window.api.on("get-props", (event, props) => {
         this.setState({props}, () => {
