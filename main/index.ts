@@ -193,25 +193,23 @@ class Main {
         window.webContents.send("change-dictionary-settings", settings);
       }
     });
-    ipcMain.on("git-commit", async (event, path, message) => {
+    promiseIpcMain.on("git-commit", async (path, message) => {
       try {
         let git = simpleGit(path);
         await git.add(".");
         await git.commit(message);
-        event.reply("succeed-git-commit");
       } catch (error) {
-        event.reply("error-git-commit");
         console.error(error);
+        throw error;
       }
     });
-    ipcMain.on("git-push", async (event, path) => {
+    promiseIpcMain.on("git-push", async (path) => {
       try {
         let git = simpleGit(path);
         await git.push();
-        event.reply("succeed-git-push");
       } catch (error) {
-        event.reply("error-git-push");
         console.error(error);
+        throw error;
       }
     });
   }

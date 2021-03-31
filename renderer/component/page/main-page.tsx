@@ -109,12 +109,6 @@ export class MainPage extends Component<Props, State> {
     window.api.on("change-dictionary-settings", (event, settings) => {
       this.changeDictionarySettings(settings);
     });
-    window.api.on("succeed-git-commit", (event) => {
-      CustomToaster.show({message: this.trans("mainPage.succeedGitCommit"), icon: "tick", intent: "success"});
-    });
-    window.api.on("succeed-git-push", (event) => {
-      CustomToaster.show({message: this.trans("mainPage.succeedGitPush"), icon: "tick", intent: "success"});
-    });
     window.addEventListener("beforeunload", (event) => {
       this.checkCloseWindow();
       event.returnValue = false;
@@ -315,18 +309,29 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private gitCommit(): void {
+  private async gitCommit(): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let path = dictionary.path;
-      window.api.send("git-commit", path, "");
+      try {
+        await window.api.sendAsync("git-commit", path, "");
+        CustomToaster.show({message: this.trans("mainPage.succeedGitCommit"), icon: "tick", intent: "success"});
+      } catch (error) {
+        CustomToaster.show({message: this.trans("mainPage.errorGitCommit"), icon: "error", intent: "danger"});
+      }
     }
   }
 
   private gitPush(): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      window.api.send("git-push");
+      let path = dictionary.path;
+      try {
+        window.api.send("git-push", path);
+        CustomToaster.show({message: this.trans("mainPage.succeedGitPush"), icon: "tick", intent: "success"});
+      } catch (error) {
+        CustomToaster.show({message: this.trans("mainPage.errorGitPush"), icon: "error", intent: "danger"});
+      }
     }
   }
 
