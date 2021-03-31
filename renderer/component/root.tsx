@@ -36,20 +36,17 @@ export class Root extends Component<Props, State> {
     props: null
   };
 
-  public componentDidMount(): void {
+  public async componentDidMount(): Promise<void> {
     let query = queryParser.parse(window.location.search);
     let mode = query.mode;
     let idString = query.idString;
     if (typeof mode === "string" && typeof idString === "string") {
       let id = parseInt(idString, 10);
-      window.api.send("ready-get-props", id);
-      window.api.on("get-props", (event, props) => {
-        this.setState({props}, () => {
-          window.api.send("ready-show", id);
-        });
-      });
       this.store.id = id;
-      this.setState({mode});
+      let props = await window.api.sendAsync("get-props", id);
+      this.setState({mode, props}, () => {
+        window.api.send("show", id);
+      });
     }
   }
 

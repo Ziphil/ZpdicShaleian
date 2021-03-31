@@ -77,16 +77,17 @@ class Main {
   }
 
   private setupBasicIpc(): void {
-    ipcMain.on("ready-get-props", (event, id) => {
+    promiseIpcMain.on("get-props", async (id) => {
       let props = this.props.get(id);
       if (props !== undefined) {
-        event.reply("get-props", this.props.get(id));
+        let props = this.props.get(id);
         this.props.delete(id);
+        return props;
       } else {
-        event.reply("get-props", {});
+        return {};
       }
     });
-    ipcMain.on("ready-show", (event, id) => {
+    ipcMain.on("show", (event, id) => {
       let window = this.windows.get(id);
       if (window !== undefined) {
         window.show();
@@ -112,9 +113,6 @@ class Main {
     ipcMain.on("create-window", (event, mode, parentId, props, options) => {
       this.createWindow(mode, parentId, props, options);
     });
-  }
-
-  private setupIpc(): void {
     promiseIpcMain.on("show-open-dialog", async (id, options) => {
       let window = this.windows.get(id);
       if (window !== undefined) {
@@ -123,6 +121,9 @@ class Main {
         return await dialog.showOpenDialog(options);
       }
     });
+  }
+
+  private setupIpc(): void {
     ipcMain.on("ready-load-dictionary", (event, path) => {
       let loader = new DirectoryLoader(path);
       loader.on("progress", (offset, size) => {
