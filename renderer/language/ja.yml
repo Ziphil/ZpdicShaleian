@@ -60,6 +60,7 @@ mainNavbar:
   search: "検索"
   changeWordMode: "検索範囲の変更"
   changeWordType: "検索方式の変更"
+  changeLanguage: "表示言語の変更"
   shuffleWords: "検索結果のシャッフル"
   searchAdvanced: "高度な検索"
   searchScript: "スクリプト検索"

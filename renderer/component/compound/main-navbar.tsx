@@ -156,6 +156,18 @@ export class MainNavbar extends Component<Props, State> {
             onClick={this.handlerManager.getHandler("changeWordTypeToRegular")}
           />
         </MenuItem>
+        <MenuItem text={this.trans("mainNavbar.changeLanguage")} icon="blank">
+          <MenuItem
+            text={this.trans("common.language.ja")}
+            label={this.handlerManager.getLabel("changeLanguageToJa")}
+            onClick={this.handlerManager.getHandler("changeLanguageToJa")}
+          />
+          <MenuItem
+            text={this.trans("common.language.en")}
+            label={this.handlerManager.getLabel("changeLanguageToEn")}
+            onClick={this.handlerManager.getHandler("changeLanguageToEn")}
+          />
+        </MenuItem>
         <MenuItem
           text={this.trans("mainNavbar.shuffleWords")}
           label={this.handlerManager.getLabel("shuffleWords")}
@@ -371,6 +383,8 @@ export class MainNavbar extends Component<Props, State> {
       changeWordTypeToPart: {handler: () => this.props.changeWordType("part")},
       changeWordTypeToPair: {key: "ctrl+shift+g", handler: () => this.props.changeWordType("pair")},
       changeWordTypeToRegular: {key: "ctrl+g", handler: () => this.props.changeWordType("regular")},
+      changeLanguageToJa: {handler: () => this.props.changeLanguage("ja")},
+      changeLanguageToEn: {handler: () => this.props.changeLanguage("en")},
       shuffleWords: {key: "ctrl+r", handler: () => this.props.shuffleWords()},
       searchAdvanced: {key: "ctrl+f"},
       searchScript: {key: "ctrl+shift+f"},
@@ -443,6 +457,7 @@ type Props = {
   saveDictionary: () => void,
   changeWordMode: (mode: WordMode) => void,
   changeWordType: (type: WordType) => void,
+  changeLanguage: (language: string) => void,
   shuffleWords: () => void,
   createWord: () => void,
   inheritActiveWord: () => void,

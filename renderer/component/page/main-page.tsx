@@ -258,6 +258,16 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  private changeLanguage(language: string, focus?: boolean): void {
+    let parameter = this.state.parameter;
+    parameter.language = language;
+    this.setState({language});
+    this.changeParameter(parameter);
+    if (focus) {
+      this.focusSearchForm();
+    }
+  }
+
   private startChangeDictionarySettings(): void {
     let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
     let dictionary = this.state.dictionary;
@@ -294,6 +304,7 @@ export class MainPage extends Component<Props, State> {
           saveDictionary={() => this.saveDictionary(null)}
           changeWordMode={(mode) => this.changeWordMode(mode, true)}
           changeWordType={(type) => this.changeWordType(type, true)}
+          changeLanguage={(language) => this.changeLanguage(language, true)}
           shuffleWords={() => this.shuffleWords()}
           createWord={() => this.startEditWord(null)}
           inheritActiveWord={() => this.startEditActiveWord(null, "active")}
