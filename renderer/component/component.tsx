@@ -41,19 +41,24 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
     }
   }
 
-  protected openDevTools(): void {
-    let id = this.props.store!.id;
-    window.api.send("open-dev-tools", id);
-  }
-
   protected closeWindow(): void {
     let id = this.props.store!.id;
     window.api.send("close-window", id);
   }
 
+  protected destroyWindow(): void {
+    let id = this.props.store!.id;
+    window.api.send("destroy-window", id);
+  }
+
   protected createWindow(mode: string, props: object, options: BrowserWindowConstructorOptions): void {
     let id = this.props.store!.id;
     window.api.send("create-window", mode, id, props, options);
+  }
+
+  protected openDevTools(): void {
+    let id = this.props.store!.id;
+    window.api.send("open-dev-tools", id);
   }
 
 }

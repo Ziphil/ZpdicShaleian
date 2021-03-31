@@ -1,6 +1,7 @@
 //
 
 import {
+  Alert,
   IRefObject,
   Toaster
 } from "@blueprintjs/core";
@@ -53,6 +54,8 @@ export class MainPage extends Component<Props, State> {
     language: "ja",
     parameter: NormalWordParameter.createEmpty("ja"),
     hitResult: {words: [], suggestions: []},
+    changed: false,
+    alertOpen: false,
     loadProgress: {offset: 0, size: 0},
     saveProgress: {offset: 0, size: 0}
   };
@@ -86,6 +89,7 @@ export class MainPage extends Component<Props, State> {
       CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
     });
     window.api.on("save-dictionary", (event) => {
+      this.setState({changed: false});
       CustomToaster.show({message: this.trans("mainPage.succeedSaveDictionary"), icon: "tick", intent: "success"}, "saveDictionary");
     });
     window.api.on("edit-word", (event, uid, word) => {
@@ -111,6 +115,10 @@ export class MainPage extends Component<Props, State> {
     window.api.on("succeed-git-push", (event) => {
       CustomToaster.show({message: this.trans("mainPage.succeedGitPush"), icon: "tick", intent: "success"});
     });
+    window.addEventListener("beforeunload", (event) => {
+      this.checkClose();
+      event.returnValue = false;
+    });
   }
 
   private async startLoadDictionary(): Promise<void> {
@@ -124,8 +132,9 @@ export class MainPage extends Component<Props, State> {
   private loadDictionary(path: string): void {
     let dictionary = null;
     let activeWord = null;
+    let changed = false;
     let loadProgress = {offset: 0, size: 0};
-    this.setState({dictionary, activeWord, loadProgress});
+    this.setState({dictionary, activeWord, changed, loadProgress});
     window.api.send("ready-load-dictionary", path);
   }
 
@@ -210,6 +219,7 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       dictionary.editWord(uid, word);
+      this.setState({changed: true});
       this.refreshWords();
     }
   }
@@ -218,6 +228,7 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       dictionary.deleteWord(uid);
+      this.setState({changed: true});
       this.refreshWords();
     }
   }
@@ -235,6 +246,7 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       dictionary.toggleMarker(word.name, marker);
+      this.setState({changed: true});
       this.refreshWords();
     }
   }
@@ -299,6 +311,7 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       dictionary.changeSettings(settings);
+      this.setState({changed: true});
     }
   }
 
@@ -317,26 +330,63 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  private checkClose(): void {
+    if (this.state.changed) {
+      this.setState({alertOpen: true});
+    } else {
+      this.destroyWindow();
+    }
+  }
+
+  private renderNavbar(): ReactNode {
+    let node = (
+      <MainNavbar
+        loadDictionary={() => this.startLoadDictionary()}
+        reloadDictionary={() => this.reloadDictionary()}
+        saveDictionary={() => this.saveDictionary(null)}
+        changeWordMode={(mode) => this.changeWordMode(mode, true)}
+        changeWordType={(type) => this.changeWordType(type, true)}
+        changeLanguage={(language) => this.changeLanguage(language, true)}
+        shuffleWords={() => this.shuffleWords()}
+        createWord={() => this.startEditWord(null)}
+        inheritActiveWord={() => this.startEditActiveWord(null, "active")}
+        editActiveWord={() => this.startEditActiveWord("active")}
+        deleteActiveWord={() => this.deleteActiveWord()}
+        toggleActiveWordMarker={(marker) => this.toggleActiveWordMarker(marker)}
+        gitCommit={() => this.gitCommit()}
+        gitPush={() => this.gitPush()}
+        openDictionarySettings={() => this.startChangeDictionarySettings()}
+      />
+    );
+    return node;
+  }
+
+  private renderAlert(): ReactNode {
+    let node = (
+      <Alert
+        isOpen={this.state.alertOpen}
+        cancelButtonText={this.trans("mainPage.alertCancel")}
+        confirmButtonText={this.trans("mainPage.alertConfirm")}
+        icon="warning-sign"
+        intent="danger"
+        canEscapeKeyCancel={true}
+        canOutsideClickCancel={true}
+        onCancel={() => this.setState({alertOpen: false})}
+        onConfirm={() => this.destroyWindow()}
+      >
+        <p>{this.trans("mainPage.alert")}</p>
+      </Alert>
+    );
+    return node;
+  }
+
   public render(): ReactNode {
+    let navbarNode = this.renderNavbar();
+    let alertNode = this.renderAlert();
     let node = (
       <div className="zp-main-page zp-root zp-navbar-root">
-        <MainNavbar
-          loadDictionary={() => this.startLoadDictionary()}
-          reloadDictionary={() => this.reloadDictionary()}
-          saveDictionary={() => this.saveDictionary(null)}
-          changeWordMode={(mode) => this.changeWordMode(mode, true)}
-          changeWordType={(type) => this.changeWordType(type, true)}
-          changeLanguage={(language) => this.changeLanguage(language, true)}
-          shuffleWords={() => this.shuffleWords()}
-          createWord={() => this.startEditWord(null)}
-          inheritActiveWord={() => this.startEditActiveWord(null, "active")}
-          editActiveWord={() => this.startEditActiveWord("active")}
-          deleteActiveWord={() => this.deleteActiveWord()}
-          toggleActiveWordMarker={(marker) => this.toggleActiveWordMarker(marker)}
-          gitCommit={() => this.gitCommit()}
-          gitPush={() => this.gitPush()}
-          openDictionarySettings={() => this.startChangeDictionarySettings()}
-        />
+        {navbarNode}
+        {alertNode}
         <Loading loading={this.state.dictionary === null} {...this.state.loadProgress}>
           <div className="zp-search-form-container">
             <SearchForm parameter={this.state.parameter} inputRef={this.searchInputRef} onParameterSet={this.changeParameter.bind(this)}/>
@@ -372,6 +422,8 @@ type State = {
   activeWord: Word | null,
   parameter: WordParameter,
   hitResult: {words: Array<Word>, suggestions: Array<null>},
+  changed: boolean,
+  alertOpen: boolean,
   loadProgress: {offset: number, size: number},
   saveProgress: {offset: number, size: number}
 };

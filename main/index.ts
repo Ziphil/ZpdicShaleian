@@ -98,20 +98,26 @@ class Main {
         }
       }
     });
-    ipcMain.on("open-dev-tools", (event, id) => {
-      let window = this.windows.get(id);
-      if (window !== undefined) {
-        window.webContents.openDevTools();
-      }
-    });
     ipcMain.on("close-window", (event, id) => {
       let window = this.windows.get(id);
       if (window !== undefined) {
         window.close();
       }
     });
+    ipcMain.on("destroy-window", (event, id) => {
+      let window = this.windows.get(id);
+      if (window !== undefined) {
+        window.destroy();
+      }
+    });
     ipcMain.on("create-window", (event, mode, parentId, props, options) => {
       this.createWindow(mode, parentId, props, options);
+    });
+    ipcMain.on("open-dev-tools", (event, id) => {
+      let window = this.windows.get(id);
+      if (window !== undefined) {
+        window.webContents.openDevTools();
+      }
     });
     promiseIpcMain.on("show-open-dialog", async (id, options) => {
       let window = this.windows.get(id);
@@ -119,6 +125,13 @@ class Main {
         return await dialog.showOpenDialog(window, options);
       } else {
         return await dialog.showOpenDialog(options);
+      }
+    });
+    ipcMain.on("register-close-handler", (event, id) => {
+      let window = this.windows.get(id);
+      if (window !== undefined) {
+        window.on("close", (event) => {
+        });
       }
     });
   }
