@@ -51,6 +51,11 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
     return string;
   }
 
+  public static createEmpty(): Markers {
+    let markers = new Markers();
+    return markers;
+  }
+
   private normalize(): void {
     for (let [, wordMarkers] of this.entries()) {
       MarkerUtil.sort(wordMarkers);

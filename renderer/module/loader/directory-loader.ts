@@ -72,18 +72,34 @@ export class DirectoryLoader extends Loader {
 
   private async loadSettings(): Promise<DictionarySettings> {
     let path = joinPath(this.path, "$SETTINGS.nxds");
-    let string = await fs.readFile(path, {encoding: "utf-8"});
-    let settings = DictionarySettings.fromString(string);
-    this.emitProgress();
-    return settings;
+    try {
+      let string = await fs.readFile(path, {encoding: "utf-8"});
+      let settings = DictionarySettings.fromString(string);
+      this.emitProgress();
+      return settings;
+    } catch (error) {
+      if (error.code === "ENOENT") {
+        return DictionarySettings.createEmpty();
+      } else {
+        throw error;
+      }
+    }
   }
 
   private async loadMarkers(): Promise<Markers> {
     let path = joinPath(this.path, "$MARKER.nxds");
-    let string = await fs.readFile(path, {encoding: "utf-8"});
-    let markers = Markers.fromString(string);
-    this.emitProgress();
-    return markers;
+    try {
+      let string = await fs.readFile(path, {encoding: "utf-8"});
+      let markers = Markers.fromString(string);
+      this.emitProgress();
+      return markers;
+    } catch (error) {
+      if (error.code === "ENOENT") {
+        return Markers.createEmpty();
+      } else {
+        throw error;
+      }
+    }
   }
 
   private emitProgress(): void {
