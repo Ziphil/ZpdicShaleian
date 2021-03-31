@@ -99,10 +99,9 @@ export class WordPaneWrapper extends Component<Props, State> {
 
   public render(): ReactNode {
     let menuNode = this.renderMenu();
-    let className = "zp-word-pane-wrapper" + ((this.props.active) ? " zp-word-active" : "");
     let node = (
       <ContextMenu2 key={this.props.word.uid} content={menuNode}>
-        <div className={className} tabIndex={0} onFocus={this.props.onActivate}>
+        <div className="zp-word-pane-wrapper" tabIndex={0} onFocus={this.props.onActivate}>
           <WordPane
             dictionary={this.props.dictionary}
             word={this.props.word}
@@ -123,7 +122,6 @@ type Props = {
   dictionary: Dictionary,
   word: Word,
   language: string,
-  active: boolean,
   onCreate?: (event: MouseEvent<HTMLElement>) => void,
   onInherit?: (event: MouseEvent<HTMLElement>) => void,
   onEdit?: (event: MouseEvent<HTMLElement>) => void,

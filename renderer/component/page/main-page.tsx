@@ -329,7 +329,6 @@ export class MainPage extends Component<Props, State> {
             <WordList
               dictionary={this.state.dictionary!}
               words={this.state.hitResult.words}
-              activeWord={this.state.activeWord}
               language={this.state.language}
               onCreate={() => this.startEditWord(null)}
               onInherit={(word) => this.startEditWord(null, word)}

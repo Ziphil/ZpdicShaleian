@@ -64,7 +64,6 @@ export class WordList extends Component<Props, State> {
           dictionary={this.props.dictionary}
           word={word}
           language={this.props.language}
-          active={this.props.activeWord?.uid === word.uid}
           onCreate={this.props.onCreate}
           onInherit={this.props.onInherit && partial(this.props.onInherit, word)}
           onEdit={this.props.onEdit && partial(this.props.onEdit, word)}
@@ -99,7 +98,6 @@ export class WordList extends Component<Props, State> {
 type Props = {
   dictionary: Dictionary,
   words: Array<Word>,
-  activeWord: Word | null,
   language: string,
   onCreate?: (event: MouseEvent<HTMLElement>) => void,
   onInherit?: (word: Word, event: MouseEvent<HTMLElement>) => void,
