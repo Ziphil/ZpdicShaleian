@@ -355,7 +355,7 @@ export class MainNavbar extends Component<Props, State> {
           text={this.trans("mainNavbar.aboutApplication")}
           label={this.handlerManager.getLabel("aboutApplication")}
           onClick={this.handlerManager.getHandler("aboutApplication")}
-          icon="blank"
+          icon="info-sign"
         />
       </Menu>
     );
