@@ -16,7 +16,6 @@ import {
   ReactNode
 } from "react";
 import {
-  PlainDictionary,
   PlainDictionarySettings,
   Revisions
 } from "../../module";
@@ -33,9 +32,9 @@ export class DictionarySettingsEditor extends Component<Props, State> {
 
   public constructor(props: Props) {
     super(props);
-    let rawSettings = props.dictionary.settings;
-    let revisionString = Revisions.fromPlain(rawSettings.revisions).toString();
-    let settings = {...rawSettings, revisionString};
+    let oldSettings = props.settings;
+    let revisionString = Revisions.fromPlain(oldSettings.revisions).toString();
+    let settings = {...oldSettings, revisionString};
     this.state = {settings};
   }
 
@@ -114,7 +113,7 @@ export class DictionarySettingsEditor extends Component<Props, State> {
 
 
 type Props = {
-  dictionary: PlainDictionary,
+  settings: PlainDictionarySettings,
   onConfirm?: (settings: PlainDictionarySettings, event: MouseEvent<HTMLElement>) => void,
   onCancel?: (event: MouseEvent<HTMLElement>) => void
 };

@@ -272,9 +272,12 @@ export class MainPage extends Component<Props, State> {
   }
 
   private startChangeDictionarySettings(): void {
-    let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
     let dictionary = this.state.dictionary;
-    this.createWindow("dictionary-settings", {dictionary}, options);
+    if (dictionary !== null) {
+      let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
+      let settings = dictionary.settings;
+      this.createWindow("dictionary-settings", {settings}, options);
+    }
   }
 
   private changeDictionarySettings(settings: PlainDictionarySettings): void {

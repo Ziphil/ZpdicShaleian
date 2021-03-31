@@ -31,7 +31,7 @@ export class DictionarySettingsPage extends Component<Props, State> {
     let node = (
       <div className="zp-dictionary-settings-page zp-root">
         <DictionarySettingsEditor
-          dictionary={this.props.dictionary}
+          settings={this.props.settings}
           onConfirm={this.changeDictionarySettings.bind(this)}
           onCancel={this.closeWindow.bind(this)}
         />
@@ -44,7 +44,7 @@ export class DictionarySettingsPage extends Component<Props, State> {
 
 
 type Props = {
-  dictionary: PlainDictionary
+  settings: PlainDictionarySettings
 };
 type State = {
 };
