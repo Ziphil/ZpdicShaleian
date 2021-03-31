@@ -59,8 +59,14 @@ export class Dictionary implements PlainDictionary {
     return word;
   }
 
-  public findByUniqueName(uniqueName: string): Word | undefined {
-    let word = this.words.find((word) => word.uniqueName === uniqueName);
+  public findByUniqueName(uniqueName: string, excludedUniqueName?: string): Word | undefined {
+    let word = this.words.find((word) => {
+      if (excludedUniqueName !== undefined) {
+        return word.uniqueName !== excludedUniqueName && word.uniqueName === uniqueName;
+      } else {
+        return word.uniqueName === uniqueName;
+      }
+    });
     return word;
   }
 

@@ -34,7 +34,8 @@ export class WordEditor extends Component<Props, State> {
     super(props);
     let uid = props.word?.uid ?? null;
     let word = (props.defaultWord !== undefined) ? props.defaultWord : (props.word !== null) ? props.word : Word.createEmpty();
-    this.state = {uid, word};
+    let originalUniqueName = props.word?.uniqueName ?? null;
+    this.state = {uid, word, originalUniqueName};
   }
 
   private handleCancel(event: MouseEvent<HTMLElement>): void {
@@ -43,11 +44,14 @@ export class WordEditor extends Component<Props, State> {
     }
   }
 
-  private handleConfirm(event: MouseEvent<HTMLElement>): void {
+  private async handleConfirm(event: MouseEvent<HTMLElement>): Promise<void> {
     let uniqueName = this.state.word.uniqueName;
-    if (!Word.isValidUniqueName(uniqueName)) {
+    let originalUniqueName = this.state.originalUniqueName;
+    let invalidUniqueName = !Word.isValidUniqueName(uniqueName);
+    let duplicateUniqueName = await window.api.sendAsync("check-duplicate-unique-name", uniqueName, originalUniqueName ?? undefined);
+    if (invalidUniqueName) {
       CustomToaster.show({message: this.trans("wordEditor.invalidUniqueName"), icon: "error", intent: "danger"});
-    } else if (false) {
+    } else if (duplicateUniqueName) {
       CustomToaster.show({message: this.trans("wordEditor.duplicateUniqueName"), icon: "error", intent: "danger"});
     } else {
       if (this.props.onConfirm) {
@@ -125,7 +129,8 @@ type Props = {
 };
 type State = {
   uid: string | null,
-  word: PlainWord
+  word: PlainWord,
+  originalUniqueName: string | null
 };
 
 let CustomToaster = Toaster.create({className: "zp-word-editor-toaster", position: "top", maxToasts: 2});

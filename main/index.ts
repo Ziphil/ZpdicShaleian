@@ -13,6 +13,9 @@ import {
 import {
   join as joinPath
 } from "path";
+import {
+  promiseIpcMain
+} from "promisify-electron-ipc";
 import simpleGit from "simple-git";
 import {
   Dictionary
@@ -150,6 +153,15 @@ class Main {
       let window = this.mainWindow;
       if (window !== undefined) {
         window.webContents.send("delete-word", uid);
+      }
+    });
+    promiseIpcMain.on("check-duplicate-unique-name", async (uniqueName, excludedUniqueName) => {
+      let window = this.mainWindow;
+      if (window !== undefined) {
+        let predicate = await promiseIpcMain.send("do-check-duplicate-unique-name", window.webContents, uniqueName, excludedUniqueName);
+        return predicate;
+      } else {
+        return true;
       }
     });
     ipcMain.on("ready-change-dictionary-settings", (event, settings) => {
