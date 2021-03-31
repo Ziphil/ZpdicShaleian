@@ -86,8 +86,7 @@ export class MainPage extends Component<Props, State> {
       CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
     });
     window.api.on("save-dictionary", (event) => {
-      let message = <EnhancedProgressBar className="zp-save-progress-bar" offset={1} size={1} showDetail={false}/>;
-      CustomToaster.show({message, icon: "floppy-disk"}, "saveDictionary");
+      CustomToaster.show({message: this.trans("mainPage.succeedSaveDictionary"), icon: "tick", intent: "success"}, "saveDictionary");
     });
     window.api.on("edit-word", (event, uid, word) => {
       this.editWord(uid, word);
