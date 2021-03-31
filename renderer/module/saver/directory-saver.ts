@@ -1,7 +1,11 @@
 //
 
-import * as fs from "fs";
-import * as path from "path";
+import {
+  promises as fs
+} from "fs";
+import {
+  join as joinPath
+} from "path";
 import {
   Dictionary
 } from "../dictionary";
@@ -25,121 +29,74 @@ export class DirectorySaver extends Saver {
   private count: number = 0;
   private deleteSize: number = 0;
   private deleteCount: number = 0;
-  private settingsSaved: boolean = false;
-  private markersSaved: boolean = false;
 
   public constructor(dictionary: Dictionary, path?: string | null) {
     super(dictionary, path);
   }
 
   public start(): void {
-    this.deleteOlds();
-  }
-
-  private deleteOlds(): void {
-    this.size = this.dictionary.words.length;
-    fs.readdir(this.path, (error, paths) => {
-      if (error) {
-        this.emit("error", error);
-      } else {
-        try {
-          let oldLocalPaths = paths.filter((path) => path.endsWith(".nxdw") || path.endsWith(".nxds"));
-          this.deleteSize = oldLocalPaths.length;
-          for (let oldLocalPath of oldLocalPaths) {
-            let oldPath = path.join(this.path, oldLocalPath);
-            this.deleteOld(oldPath);
-          }
-        } catch (error) {
-          this.emit("error", error);
-        }
-      }
-    });
-  }
-
-  private deleteOld(path: string): void {
-    fs.unlink(path, (error) => {
-      if (error) {
-        this.emit("error", error);
-      } else {
-        this.deleteCount ++;
-        this.emitProgress();
-        this.checkDeleteEnded();
-      }
-    });
-  }
-
-  private saveWords(): void {
-    let dictionary = this.dictionary;
-    let words = this.dictionary.words;
-    fs.mkdir(this.path, {recursive: true}, (error) => {
-      if (error) {
-        this.emit("error", error);
-      } else {
-        try {
-          for (let word of words) {
-            let wordPath = path.join(this.path, word.getFileName() + ".nxdw");
-            this.saveWord(word, wordPath);
-          }
-          let settingsPath = path.join(this.path, "$SETTINGS.nxds");
-          let markersPath = path.join(this.path, "$MARKER.nxds");
-          this.saveSettings(dictionary.settings, settingsPath);
-          this.saveMarkers(dictionary.markers, markersPath);
-        } catch (error) {
-          this.emit("error", error);
-        }
-      }
-    });
-  }
-
-  private saveWord(word: Word, path: string): void {
-    let string = word.toString();
-    fs.writeFile(path, string, {encoding: "utf-8"}, (error) => {
-      if (error) {
-        this.emit("error", error);
-      } else {
-        this.count ++;
-        this.emitProgress();
-        this.checkEnded();
-      }
-    });
-  }
-
-  private saveSettings(settings: DictionarySettings, path: string): void {
-    let string = settings.toString();
-    fs.writeFile(path, string, {encoding: "utf-8"}, (error) => {
-      if (error) {
-        this.emit("error", error);
-      } else {
-        this.settingsSaved = true;
-        this.emitProgress();
-        this.checkEnded();
-      }
-    });
-  }
-
-  private saveMarkers(markers: Markers, path: string): void {
-    let string = markers.toString();
-    fs.writeFile(path, string, {encoding: "utf-8"}, (error) => {
-      if (error) {
-        this.emit("error", error);
-      } else {
-        this.markersSaved = true;
-        this.emitProgress();
-        this.checkEnded();
-      }
-    });
-  }
-
-  private checkDeleteEnded(): void {
-    if (this.deleteCount >= this.deleteSize) {
-      this.saveWords();
-    }
-  }
-
-  private checkEnded(): void {
-    if (this.count >= this.size && this.settingsSaved && this.markersSaved) {
+    let promise = Promise.resolve().then(this.deleteFiles.bind(this)).then(this.saveDictionary.bind(this));
+    promise.then(() => {
       this.emit("end");
-    }
+    }).catch((error) => {
+      this.emit("error", error);
+    });
+  }
+
+  private async deleteFiles(): Promise<void> {
+    let paths = await fs.readdir(this.path);
+    let fileLocalPaths = paths.filter((path) => path.endsWith(".nxdw") || path.endsWith(".nxds"));
+    this.size = this.dictionary.words.length;
+    this.deleteSize = fileLocalPaths.length;
+    let promises = fileLocalPaths.map((fileLocalPath) => {
+      let filePath = joinPath(this.path, fileLocalPath);
+      return this.deleteFile(filePath);
+    });
+    await Promise.all(promises);
+  }
+
+  private async deleteFile(path: string): Promise<void> {
+    await fs.unlink(path);
+    this.deleteCount ++;
+    this.emitProgress();
+  }
+
+  private async saveDictionary(): Promise<void> {
+    let dictionary = this.dictionary;
+    await fs.mkdir(this.path, {recursive: true});
+    let wordsPromise = this.saveWords(dictionary.words);
+    let settingsPromise = this.saveSettings(dictionary.settings);
+    let markersPromise = this.saveMarkers(dictionary.markers);
+    await Promise.all([wordsPromise, settingsPromise, markersPromise]);
+  }
+
+  private async saveWords(words: Array<Word>): Promise<void> {
+    let promises = words.map((word) => {
+      let wordPath = joinPath(this.path, word.getFileName() + ".nxdw");
+      return this.saveWord(word, wordPath);
+    });
+    await Promise.all(promises);
+  }
+
+  private async saveWord(word: Word, path: string): Promise<void> {
+    let string = word.toString();
+    await fs.writeFile(path, string, {encoding: "utf-8"});
+    this.count ++;
+    this.emitProgress();
+  }
+
+  private async saveSettings(settings: DictionarySettings): Promise<void> {
+    let path = joinPath(this.path, "$SETTINGS.nxds");
+    let string = settings.toString();
+    await fs.writeFile(path, string, {encoding: "utf-8"});
+    this.emitProgress();
+  }
+
+  private async saveMarkers(markers: Markers): Promise<void> {
+    let path = joinPath(this.path, "$MARKER.nxds");
+    let string = markers.toString();
+    await fs.writeFile(path, string, {encoding: "utf-8"});
+    this.emitProgress();
   }
 
   private emitProgress(): void {

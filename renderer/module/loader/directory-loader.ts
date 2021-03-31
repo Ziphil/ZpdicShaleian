@@ -1,7 +1,11 @@
 //
 
-import * as fs from "fs";
-import * as path from "path";
+import {
+  promises as fs
+} from "fs";
+import {
+  join as joinPath
+} from "path";
 import {
   Dictionary
 } from "../dictionary";
@@ -21,113 +25,65 @@ import {
 
 export class DirectoryLoader extends Loader {
 
-  private words: Array<Word>;
-  private settings: DictionarySettings;
-  private markers: Markers;
   private size: number = 0;
   private count: number = 0;
-  private settingsLoaded: boolean = false;
-  private markersLoaded: boolean = false;
 
   public constructor(path: string) {
     super(path);
-    this.words = [];
-    this.settings = DictionarySettings.createEmpty();
-    this.markers = new Markers();
   }
 
   public start(): void {
-    this.loadWords();
-  }
-
-  private loadWords(): void {
-    fs.readdir(this.path, (error, paths) => {
-      if (error) {
-        this.emit("error", error);
-      } else {
-        try {
-          let wordLocalPaths = paths.filter((path) => path.endsWith(".nxdw"));
-          this.size = wordLocalPaths.length;
-          for (let wordLocalPath of wordLocalPaths) {
-            let wordPath = path.join(this.path, wordLocalPath);
-            this.loadWord(wordPath);
-          }
-          let settingsPath = path.join(this.path, "$SETTINGS.nxds");
-          let markersPath = path.join(this.path, "$MARKER.nxds");
-          this.loadSettings(settingsPath);
-          this.loadMarkers(markersPath);;
-        } catch (error) {
-          this.emit("error", error);
-        }
-      }
+    let promise = Promise.resolve().then(this.loadDictionary.bind(this));
+    promise.then((dictionary) => {
+      this.emit("end", dictionary);
+    }).catch((error) => {
+      this.emit("error", error);
     });
   }
 
-  private loadWord(path: string): void {
-    fs.readFile(path, {encoding: "utf-8"}, (error, string) => {
-      if (error) {
-        this.emit("error", error);
-      } else {
-        try {
-          let word = Word.fromString(string);
-          this.words.push(word);
-          this.count ++;
-          this.emitProgress();
-          this.checkEnded();
-        } catch (error) {
-          this.emit("error", error);
-        }
-      }
-    });
+  private async loadDictionary(): Promise<Dictionary> {
+    let wordsPromise = this.loadWords();
+    let settingsPromise = this.loadSettings();
+    let markersPromise = this.loadMarkers();
+    let [words, settings, markers] = await Promise.all([wordsPromise, settingsPromise, markersPromise]);
+    let dictionary = new Dictionary(words, settings, markers, this.path);
+    return dictionary;
   }
 
-  private loadSettings(path: string): void {
-    fs.readFile(path, {encoding: "utf-8"}, (error, string) => {
-      if (error) {
-        this.emit("error", error);
-      } else {
-        try {
-          let settings = DictionarySettings.fromString(string);
-          this.settings = settings;
-          this.settingsLoaded = true;
-          this.checkEnded();
-        } catch (error) {
-          this.emit("error", error);
-        }
-      }
+  private async loadWords(): Promise<Array<Word>> {
+    let paths = await fs.readdir(this.path);
+    let wordLocalPaths = paths.filter((path) => path.endsWith(".nxdw"));
+    this.size = wordLocalPaths.length;
+    let promises = wordLocalPaths.map((wordLocalPath) => {
+      let wordPath = joinPath(this.path, wordLocalPath);
+      return this.loadWord(wordPath);
     });
+    let words = await Promise.all(promises);
+    return words;
   }
 
-  private loadMarkers(path: string): void {
-    fs.readFile(path, {encoding: "utf-8"}, (error, string) => {
-      if (error) {
-        this.emit("error", error);
-      } else {
-        try {
-          let markers = Markers.fromString(string);
-          this.markers = markers;
-          this.markersLoaded = true;
-          this.checkEnded();
-        } catch (error) {
-          this.emit("error", error);
-        }
-      }
-    });
+  private async loadWord(path: string): Promise<Word> {
+    let string = await fs.readFile(path, {encoding: "utf-8"});
+    let word = Word.fromString(string);
+    this.count ++;
+    this.emitProgress();
+    return word;
   }
 
-  private checkEnded(): void {
-    if (this.count >= this.size && this.settingsLoaded && this.markersLoaded) {
-      try {
-        let words = this.words;
-        let settings = this.settings;
-        let markers = this.markers;
-        let path = this.path;
-        let dictionary = new Dictionary(words, settings, markers, path);
-        this.emit("end", dictionary);
-      } catch (error) {
-        this.emit("error", error);
-      }
-    }
+  private async loadSettings(): Promise<DictionarySettings> {
+    let path = joinPath(this.path, "$SETTINGS.nxds");
+    let string = await fs.readFile(path, {encoding: "utf-8"});
+    let settings = DictionarySettings.fromString(string);
+    this.emitProgress();
+    return settings;
+  }
+
+  private async loadMarkers(): Promise<Markers> {
+    let path = joinPath(this.path, "$MARKER.nxds");
+    let string = await fs.readFile(path, {encoding: "utf-8"});
+    let markers = Markers.fromString(string);
+    this.emitProgress();
+    return markers;
   }
 
   private emitProgress(): void {
