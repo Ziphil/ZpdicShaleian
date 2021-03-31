@@ -89,9 +89,9 @@ export class MainNavbar extends Component<Props, State> {
         </MenuItem>
         <MenuDivider/>
         <MenuItem
-          text={this.trans("mainNavbar.quit")}
-          label={this.handlerManager.getLabel("quit")}
-          onClick={this.handlerManager.getHandler("quit")}
+          text={this.trans("mainNavbar.closeWindow")}
+          label={this.handlerManager.getLabel("closeWindow")}
+          onClick={this.handlerManager.getHandler("closeWindow")}
           icon="cross"
         />
       </Menu>
@@ -373,6 +373,7 @@ export class MainNavbar extends Component<Props, State> {
       loadDictionary: {key: "ctrl+o", handler: () => this.props.loadDictionary()},
       reloadDictionary: {key: "ctrl+shift+o", handler: () => this.props.reloadDictionary()},
       saveDictionary: {key: "ctrl+s", handler: () => this.props.saveDictionary()},
+      closeWindow: {handler: () => this.props.closeWindow()},
       changeWordModeToName: {key: "ctrl+w", handler: () => this.props.changeWordMode("name")},
       changeWordModeToEquivalent: {key: "ctrl+e", handler: () => this.props.changeWordMode("equivalent")},
       changeWordModeToBoth: {key: "ctrl+shift+w", handler: () => this.props.changeWordMode("both")},
@@ -456,6 +457,7 @@ type Props = {
   loadDictionary: () => void,
   reloadDictionary: () => void,
   saveDictionary: () => void,
+  closeWindow: () => void,
   changeWordMode: (mode: WordMode) => void,
   changeWordType: (type: WordType) => void,
   changeLanguage: (language: string) => void,

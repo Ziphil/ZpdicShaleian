@@ -116,7 +116,7 @@ export class MainPage extends Component<Props, State> {
       CustomToaster.show({message: this.trans("mainPage.succeedGitPush"), icon: "tick", intent: "success"});
     });
     window.addEventListener("beforeunload", (event) => {
-      this.checkClose();
+      this.checkCloseWindow();
       event.returnValue = false;
     });
   }
@@ -330,7 +330,7 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private checkClose(): void {
+  private checkCloseWindow(): void {
     if (this.state.changed) {
       this.setState({alertOpen: true});
     } else {
@@ -344,6 +344,7 @@ export class MainPage extends Component<Props, State> {
         loadDictionary={() => this.startLoadDictionary()}
         reloadDictionary={() => this.reloadDictionary()}
         saveDictionary={() => this.saveDictionary(null)}
+        closeWindow={() => this.closeWindow()}
         changeWordMode={(mode) => this.changeWordMode(mode, true)}
         changeWordType={(type) => this.changeWordType(type, true)}
         changeLanguage={(language) => this.changeLanguage(language, true)}
