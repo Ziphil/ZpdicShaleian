@@ -210,14 +210,22 @@ class Main {
   }
 
   private createWindow(mode: string, parentId: number | null, props: object, options: BrowserWindowConstructorOptions): BrowserWindow {
-    let show = true;
+    let show = false;
     let parent = (parentId !== null) ? this.windows.get(parentId) : undefined;
     let additionalOptions = (!this.app.isPackaged) ? {} : PRODUCTION_WINDOW_OPTIONS;
     let window = new BrowserWindow({...COMMON_WINDOW_OPTIONS, ...additionalOptions, show, parent, ...options});
+    if (parent !== undefined) {
+      let parentBounds = parent.getBounds();
+      let bounds = window.getBounds();
+      bounds.x = (parentBounds.width - bounds.width) / 2 + parentBounds.x;
+      bounds.y = (parentBounds.height - bounds.height) / 2 + parentBounds.y;
+      window.setBounds(bounds);
+    }
     let id = window.id;
     let idString = id.toString();
     window.loadFile(joinPath(__dirname, "index.html"), {query: {idString, mode}});
     window.setMenu(null);
+    window.show();
     window.once("closed", () => {
       this.windows.delete(id);
     });
