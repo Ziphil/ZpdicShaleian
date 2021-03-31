@@ -127,13 +127,6 @@ class Main {
         return await dialog.showOpenDialog(options);
       }
     });
-    ipcMain.on("register-close-handler", (event, id) => {
-      let window = this.windows.get(id);
-      if (window !== undefined) {
-        window.on("close", (event) => {
-        });
-      }
-    });
   }
 
   private setupIpc(): void {
