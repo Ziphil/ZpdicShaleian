@@ -176,7 +176,7 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
-      this.createWindow("editor", {word, defaultWord, dictionary}, options);
+      this.createWindow("editor", {word, defaultWord}, options);
     }
   }
 

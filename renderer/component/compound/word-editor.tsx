@@ -16,8 +16,6 @@ import {
   ReactNode
 } from "react";
 import {
-  Dictionary,
-  PlainDictionary,
   PlainWord,
   Word
 } from "../../module";
@@ -36,8 +34,7 @@ export class WordEditor extends Component<Props, State> {
     super(props);
     let uid = props.word?.uid ?? null;
     let word = (props.defaultWord !== undefined) ? props.defaultWord : (props.word !== null) ? props.word : Word.createEmpty();
-    let dictionary = Dictionary.fromPlain(props.dictionary);
-    this.state = {uid, word, dictionary};
+    this.state = {uid, word};
   }
 
   private handleCancel(event: MouseEvent<HTMLElement>): void {
@@ -48,9 +45,9 @@ export class WordEditor extends Component<Props, State> {
 
   private handleConfirm(event: MouseEvent<HTMLElement>): void {
     let uniqueName = this.state.word.uniqueName;
-    if (!Word.isValidName(uniqueName)) {
+    if (!Word.isValidUniqueName(uniqueName)) {
       CustomToaster.show({message: this.trans("wordEditor.invalidUniqueName"), icon: "error", intent: "danger"});
-    } else if (this.state.dictionary.findByUniqueName(uniqueName) !== undefined) {
+    } else if (false) {
       CustomToaster.show({message: this.trans("wordEditor.duplicateUniqueName"), icon: "error", intent: "danger"});
     } else {
       if (this.props.onConfirm) {
@@ -122,15 +119,13 @@ export class WordEditor extends Component<Props, State> {
 type Props = {
   word: PlainWord | null,
   defaultWord?: PlainWord,
-  dictionary: PlainDictionary,
   onConfirm?: (uid: string | null, word: PlainWord, event: MouseEvent<HTMLElement>) => void,
   onDelete?: (uid: string, event: MouseEvent<HTMLElement>) => void,
   onCancel?: (event: MouseEvent<HTMLElement>) => void
 };
 type State = {
   uid: string | null,
-  word: PlainWord,
-  dictionary: Dictionary
+  word: PlainWord
 };
 
 let CustomToaster = Toaster.create({className: "zp-word-editor-toaster", position: "top", maxToasts: 2});
