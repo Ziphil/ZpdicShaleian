@@ -2,10 +2,13 @@
 
 
 .zp-editor {
-  margin-top: -$pt-grid-size;
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.zp-editor >.bp3-tabs {
+  margin-top: -$pt-grid-size;
 }
 
 .zp-editor >.bp3-tabs,
