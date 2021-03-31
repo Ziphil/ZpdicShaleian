@@ -16,15 +16,13 @@ export class NormalWordParameter extends WordParameter {
   public mode: WordMode;
   public type: WordType;
   public language: string;
-  public shuffle: boolean;
 
-  public constructor(search: string, mode: WordMode, type: WordType, language: string, shuffle?: boolean) {
+  public constructor(search: string, mode: WordMode, type: WordType, language: string) {
     super();
     this.search = search;
     this.mode = mode;
     this.type = type;
     this.language = language;
-    this.shuffle = shuffle ?? false;
   }
 
   public static createEmpty(language: string): NormalWordParameter {

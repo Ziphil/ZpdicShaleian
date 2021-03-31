@@ -20,6 +20,9 @@ import {
   WordType
 } from "../../module";
 import {
+  ArrayUtil
+} from "../../util/array";
+import {
   debounce
 } from "../../util/decorator";
 import {
@@ -127,11 +130,17 @@ export class MainPage extends Component<Props, State> {
   }
 
   private refreshWords(): void {
-    let dictionary = this.state.dictionary;
-    if (dictionary !== null) {
-      let hitResult = {words: this.state.hitResult.words, suggestions: this.state.hitResult.suggestions};
-      this.setState({hitResult});
-    }
+    let hitResult = {...this.state.hitResult};
+    this.setState({hitResult});
+  }
+
+  private shuffleWords(): void {
+    let oldWords = this.state.hitResult.words;
+    let words = [...ArrayUtil.shuffle(oldWords)];
+    let hitResult = {...this.state.hitResult, words};
+    this.setState({hitResult}, () => {
+      document.getElementById("word-list-container")!.scrollTop = 0;
+    });
   }
 
   private updateWords(parameter?: WordParameter): void {
@@ -247,12 +256,6 @@ export class MainPage extends Component<Props, State> {
     if (focus) {
       this.focusSearchForm();
     }
-  }
-
-  private shuffleWords(): void {
-    let parameter = this.state.parameter;
-    parameter.shuffle = true;
-    this.changeParameter(parameter, true);
   }
 
   private startChangeDictionarySettings(): void {
