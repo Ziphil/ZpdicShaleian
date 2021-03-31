@@ -33,6 +33,7 @@ class Main {
 
   private render(): void {
     require("./component/root.scss");
+    require("./util/code-mirror");
     render(<Root/>, document.getElementById("root"));
   }
 

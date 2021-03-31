@@ -12,6 +12,46 @@ body {
   background: rgba(255, 255, 255, 0);
 }
 
+.react-codemirror2 {
+  @extend .bp3-input;
+  height: initial;
+  padding: 0px;
+  line-height: inherit;
+  display: block;
+  position: relative;
+  &:focus-within {
+    box-shadow: input-transition-shadow($input-shadow-color-focus, true), $input-box-shadow-focus;
+  }
+}
+
+.react-codemirror2 >div {
+  height: 100%;
+  padding: 0em;
+  font-family: inherit;
+  background: transparent;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  position: absolute;
+}
+
+.react-codemirror2 >div *[class~="CodeMirror-lines"] {
+  padding: $input-padding-horizontal 0px !important;
+} 
+
+.react-codemirror2 >div *[class~="CodeMirror-line"] {
+  padding: 0px $input-padding-horizontal !important;
+}
+
+.react-codemirror2 >div *[class~="CodeMirror-selected"] {
+  background: transparent !important;
+}
+
+.react-codemirror2 >div[class~="CodeMirror-focused"] *[class~="CodeMirror-selected"] {
+  background: $pt-text-selection-color !important;
+}
+
 *::-webkit-scrollbar {
   width: $pt-grid-size * 0.5;
 }

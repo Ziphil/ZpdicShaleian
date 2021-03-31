@@ -6,7 +6,6 @@ import {
   InputGroup,
   Tab,
   Tabs,
-  TextArea,
   Toaster
 } from "@blueprintjs/core";
 import * as react from "react";
@@ -15,6 +14,9 @@ import {
   ReactElement,
   ReactNode
 } from "react";
+import {
+  Controlled as CodeMirror
+} from "react-codemirror2";
 import {
   PlainDictionarySettings,
   Revisions
@@ -85,7 +87,12 @@ export class DictionarySettingsEditor extends Component<Props, State> {
     let settings = this.state.settings;
     let node = (
       <div className="zp-dictionary-settings-editor-tab zp-editor-tab">
-        <TextArea className="zp-dictionary-settings-editor-revision" fill={true} value={settings.revisionString} onChange={this.setSettings((event) => settings.revisionString = event.target.value)}/>
+        <CodeMirror
+          className="zp-dictionary-settings-editor-revision"
+          value={settings.revisionString}
+          options={{theme: "zpshcontent", mode: {name: "shcontent"}, lineWrapping: true}}
+          onBeforeChange={this.setSettings((editor, data, value) => settings.revisionString = value)}
+        />
       </div>
     );
     return node;

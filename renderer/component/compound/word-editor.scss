@@ -66,3 +66,23 @@
   flex-grow: 1;
   resize: none;
 }
+
+.cm-s-zpshcontent .cm-operator {
+  color: $turquoise3;
+}
+
+.cm-s-zpshcontent .cm-tag {
+  color: $forest3;
+}
+
+.cm-s-zpshcontent .cm-date {
+  color: $cobalt3;
+}
+
+.cm-s-zpshcontent .cm-markup {
+  color: $pt-text-color-disabled;
+}
+
+.cm-s-zpshcontent .cm-escape {
+  color: $gold3;
+}

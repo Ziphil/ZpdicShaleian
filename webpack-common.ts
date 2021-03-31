@@ -117,7 +117,8 @@ let renderer = {
       "BUILD_DATE": new Date().toISOString()
     }),
     new DefinePlugin({
-      "process.env": {}
+      "process.env": {},
+      "global": "globalThis"
     }),
     new HtmlWebpackPlugin({
       template: "./renderer/public/index.html"

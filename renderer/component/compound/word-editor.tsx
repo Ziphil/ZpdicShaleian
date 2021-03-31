@@ -6,7 +6,6 @@ import {
   NumericInput,
   Tab,
   Tabs,
-  TextArea,
   Toaster
 } from "@blueprintjs/core";
 import * as react from "react";
@@ -15,6 +14,9 @@ import {
   ReactElement,
   ReactNode
 } from "react";
+import {
+  Controlled as CodeMirror
+} from "react-codemirror2";
 import {
   PlainWord,
   Word
@@ -84,7 +86,12 @@ export class WordEditor extends Component<Props, State> {
           <InputGroup fill={true} value={word.uniqueName} onChange={this.setWord((event) => word.uniqueName = event.target.value)}/>
           <NumericInput className="zp-word-editor-date" value={word.date} onValueChange={this.setWord((date) => word.date = date)}/>
         </div>
-        <TextArea className="zp-word-editor-content" fill={true} value={word.contents[language] ?? ""} onChange={this.setWord((event) => word.contents[language] = event.target.value)}/>
+        <CodeMirror
+          className="zp-word-editor-content"
+          value={word.contents[language] ?? ""}
+          options={{theme: "zpshcontent", mode: {name: "shcontent"}, lineWrapping: true}}
+          onBeforeChange={this.setWord((editor, data, value) => word.contents[language] = value)}
+        />
       </div>
     );
     return node;
