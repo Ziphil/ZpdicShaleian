@@ -35,6 +35,8 @@ const COMMON_WINDOW_OPTIONS = {
   autoHideMenuBar: true,
   acceptFirstMouse: true,
   useContentSize: true,
+  title: "ZpDIC for Shaleian",
+  backgroundColor: "#F5F8FA",
   webPreferences: {preload: joinPath(__dirname, "preload.js"), devTools: true}
 };
 const PRODUCTION_WINDOW_OPTIONS = {
@@ -208,7 +210,7 @@ class Main {
   }
 
   private createWindow(mode: string, parentId: number | null, props: object, options: BrowserWindowConstructorOptions): BrowserWindow {
-    let show = false;
+    let show = true;
     let parent = (parentId !== null) ? this.windows.get(parentId) : undefined;
     let additionalOptions = (!this.app.isPackaged) ? {} : PRODUCTION_WINDOW_OPTIONS;
     let window = new BrowserWindow({...COMMON_WINDOW_OPTIONS, ...additionalOptions, show, parent, ...options});
