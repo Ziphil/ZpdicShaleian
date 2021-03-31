@@ -15,6 +15,7 @@ import {
   NormalWordParameter,
   PlainDictionarySettings,
   PlainWord,
+  SearchResult,
   Word,
   WordMode,
   WordParameter,
@@ -53,7 +54,7 @@ export class MainPage extends Component<Props, State> {
     activeWord: null,
     language: "ja",
     parameter: NormalWordParameter.createEmpty("ja"),
-    hitResult: {words: [], suggestions: []},
+    searchResult: {words: [], suggestions: [], elapsedTime: 0},
     changed: false,
     alertOpen: false,
     loadProgress: {offset: 0, size: 0},
@@ -148,15 +149,15 @@ export class MainPage extends Component<Props, State> {
   }
 
   private refreshWords(): void {
-    let hitResult = {...this.state.hitResult};
-    this.setState({hitResult});
+    let searchResult = {...this.state.searchResult};
+    this.setState({searchResult});
   }
 
   private shuffleWords(): void {
-    let oldWords = this.state.hitResult.words;
+    let oldWords = this.state.searchResult.words;
     let words = [...ArrayUtil.shuffle(oldWords)];
-    let hitResult = {...this.state.hitResult, words};
-    this.setState({hitResult}, () => {
+    let searchResult = {...this.state.searchResult, words};
+    this.setState({searchResult}, () => {
       document.getElementById("word-list-container")!.scrollTop = 0;
     });
   }
@@ -164,9 +165,9 @@ export class MainPage extends Component<Props, State> {
   private updateWords(parameter?: WordParameter): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      let hitResult = dictionary.search(parameter ?? this.state.parameter);
+      let searchResult = dictionary.search(parameter ?? this.state.parameter);
       let activeWord = null;
-      this.setState({hitResult, activeWord}, () => {
+      this.setState({searchResult, activeWord}, () => {
         document.getElementById("word-list-container")!.scrollTop = 0;
       });
     }
@@ -395,12 +396,17 @@ export class MainPage extends Component<Props, State> {
         {alertNode}
         <Loading loading={this.state.dictionary === null} {...this.state.loadProgress}>
           <div className="zp-search-form-container">
-            <SearchForm parameter={this.state.parameter} inputRef={this.searchInputRef} onParameterSet={this.changeParameter.bind(this)}/>
+            <SearchForm
+              parameter={this.state.parameter}
+              searchResult={this.state.searchResult}
+              inputRef={this.searchInputRef}
+              onParameterSet={this.changeParameter.bind(this)}
+            />
           </div>
           <div className="zp-word-list-container" id="word-list-container">
             <WordList
               dictionary={this.state.dictionary!}
-              words={this.state.hitResult.words}
+              words={this.state.searchResult.words}
               language={this.state.language}
               onCreate={() => this.startEditWord(null)}
               onInherit={(word) => this.startEditWord(null, word)}
@@ -427,7 +433,7 @@ type State = {
   language: string,
   activeWord: Word | null,
   parameter: WordParameter,
-  hitResult: {words: Array<Word>, suggestions: Array<null>},
+  searchResult: SearchResult,
   changed: boolean,
   alertOpen: boolean,
   loadProgress: {offset: number, size: number},

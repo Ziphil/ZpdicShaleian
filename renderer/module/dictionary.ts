@@ -48,10 +48,14 @@ export class Dictionary implements PlainDictionary {
     throw new Error("not yet implemented");
   }
 
-  public search(parameter: WordParameter): {words: Array<Word>, suggestions: []} {
+  public search(parameter: WordParameter): SearchResult {
+    let beforeDate = new Date();
     let words = this.words.filter((word) => parameter.match(word));
+    let suggestions = new Array<never>();
     this.sortWords(words);
-    return {words, suggestions: []};
+    let afterDate = new Date();
+    let elapsedTime = afterDate.getTime() - beforeDate.getTime();
+    return {words, suggestions, elapsedTime};
   }
 
   public findByUid(uid: string): Word | undefined {
@@ -130,3 +134,6 @@ export interface PlainDictionary {
   path: string | null;
 
 }
+
+
+export type SearchResult = {words: Array<Word>, suggestions: Array<never>, elapsedTime: number};

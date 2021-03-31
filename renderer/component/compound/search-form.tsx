@@ -3,7 +3,8 @@
 import {
   ControlGroup,
   IRef,
-  InputGroup
+  InputGroup,
+  Tag
 } from "@blueprintjs/core";
 import * as react from "react";
 import {
@@ -11,6 +12,7 @@ import {
 } from "react";
 import {
   NormalWordParameter,
+  SearchResult,
   WORD_MODES,
   WORD_TYPES,
   WordMode,
@@ -45,11 +47,17 @@ export class SearchForm extends Component<Props, State> {
 
   public render(): ReactNode {
     let parameter = WordParameter.getNormal(this.props.parameter);
+    let supplementNode = (
+      <Tag minimal={true}>
+        {this.transNumber(this.props.searchResult.words.length)}
+      </Tag>
+    );
     let node = (
       <div className="zp-search-form">
         <ControlGroup fill={true}>
           <InputGroup
             value={parameter.search}
+            rightElement={supplementNode}
             fill={true}
             inputRef={this.props.inputRef}
             onChange={(event) => this.handleParameterSet({search: event.target.value})}
@@ -83,6 +91,7 @@ export class SearchForm extends Component<Props, State> {
 
 type Props = {
   parameter: WordParameter,
+  searchResult: SearchResult,
   onParameterSet?: (parameter: WordParameter) => void,
   inputRef?: IRef<HTMLInputElement>
 };
