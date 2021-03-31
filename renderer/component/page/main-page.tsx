@@ -114,6 +114,14 @@ export class MainPage extends Component<Props, State> {
     });
   }
 
+  private async startLoadDictionary(): Promise<void> {
+    let result = await window.api.sendAsync("show-open-dialog", this.props.store!.id, {properties: ["openDirectory"]});
+    if (!result.canceled) {
+      let path = result.filePaths[0];
+      this.loadDictionary(path);
+    }
+  }
+
   private loadDictionary(path: string): void {
     let dictionary = null;
     let activeWord = null;
@@ -314,6 +322,7 @@ export class MainPage extends Component<Props, State> {
     let node = (
       <div className="zp-main-page zp-root zp-navbar-root">
         <MainNavbar
+          loadDictionary={() => this.startLoadDictionary()}
           reloadDictionary={() => this.reloadDictionary()}
           saveDictionary={() => this.saveDictionary(null)}
           changeWordMode={(mode) => this.changeWordMode(mode, true)}

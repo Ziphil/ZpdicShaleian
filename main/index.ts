@@ -4,6 +4,7 @@ import {
   App,
   BrowserWindow,
   BrowserWindowConstructorOptions,
+  dialog,
   app as electronApp,
   ipcMain
 } from "electron";
@@ -114,6 +115,14 @@ class Main {
   }
 
   private setupIpc(): void {
+    promiseIpcMain.on("show-open-dialog", async (id, options) => {
+      let window = this.windows.get(id);
+      if (window !== undefined) {
+        return await dialog.showOpenDialog(window, options);
+      } else {
+        return await dialog.showOpenDialog(options);
+      }
+    });
     ipcMain.on("ready-load-dictionary", (event, path) => {
       let loader = new DirectoryLoader(path);
       loader.on("progress", (offset, size) => {
