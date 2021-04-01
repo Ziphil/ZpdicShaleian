@@ -25,12 +25,20 @@ export class NormalWordParameter extends WordParameter {
     this.mode = mode;
     this.type = type;
     this.language = language;
-    this.ignoreOptions = ignoreOptions ?? {case: false, diacritic: true};
+    this.ignoreOptions = ignoreOptions ?? NormalWordParameter.getDefaultIgnoreOptions(mode, type);
   }
 
   public static createEmpty(language: string): NormalWordParameter {
     let parameter = new NormalWordParameter("", "both", "prefix", language);
     return parameter;
+  }
+
+  private static getDefaultIgnoreOptions(mode: WordMode, type: WordType): IgnoreOptions {
+    if ((mode === "name" || mode === "both") && (type !== "pair" && type !== "regular")) {
+      return {case: false, diacritic: true};
+    } else {
+      return {case: false, diacritic: false};
+    }
   }
 
   public match(word: Word): boolean {
