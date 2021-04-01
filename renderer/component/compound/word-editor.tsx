@@ -84,7 +84,7 @@ export class WordEditor extends Component<Props, State> {
       <div className="zp-word-editor-tab zp-editor-tab" key={language}>
         <div className="zp-word-editor-head">
           <InputGroup fill={true} value={word.uniqueName} onChange={this.setWord((event) => word.uniqueName = event.target.value)}/>
-          <NumericInput className="zp-word-editor-date" value={word.date} onValueChange={this.setWord((date) => word.date = date)}/>
+          <NumericInput className="zp-word-editor-date" value={word.date} minorStepSize={null} onValueChange={this.setWord((date) => word.date = Math.floor(date))}/>
         </div>
         <CodeMirror
           className="zp-word-editor-content"
