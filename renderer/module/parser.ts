@@ -293,6 +293,8 @@ export class MarkupParser<S, E> {
       let char = this.source.charAt(this.pointer);
       if (char === "{" || char === "[" || char === "/" || char === "") {
         break;
+      } else if (char === "`") {
+        string += this.consumeEsacpe();
       } else {
         this.pointer ++;
         string += char;
@@ -307,6 +309,8 @@ export class MarkupParser<S, E> {
       let char = this.source.charAt(this.pointer);
       if (char === "}" || char === "/" || char === "" || char === " " || char === "," || char === "." || char === "!" || char === "?") {
         break;
+      } else if (char === "`") {
+        string += this.consumeEsacpe();
       } else {
         this.pointer ++;
         string += char;
@@ -321,6 +325,8 @@ export class MarkupParser<S, E> {
       let char = this.source.charAt(this.pointer);
       if (char === "]" || char === "/" || char === "") {
         break;
+      } else if (char === "`") {
+        string += this.consumeEsacpe();
       } else {
         this.pointer ++;
         string += char;
@@ -335,12 +341,20 @@ export class MarkupParser<S, E> {
       let char = this.source.charAt(this.pointer);
       if (char === "/" || char === "") {
         break;
+      } else if (char === "`") {
+        string += this.consumeEsacpe();
       } else {
         this.pointer ++;
         string += char;
       }
     }
     return string;
+  }
+
+  private consumeEsacpe(): string {
+    this.pointer ++;
+    let char = this.source.charAt(this.pointer ++);
+    return char;
   }
 
 }
