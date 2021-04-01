@@ -62,6 +62,8 @@ mainNavbar:
   changeWordType: "検索方式の変更"
   changeLanguage: "表示言語の変更"
   shuffleWords: "検索結果のシャッフル"
+  movePreviousPage: "前のページへ移動"
+  moveNextPage: "次のページへ移動"
   searchAdvanced: "高度な検索"
   searchScript: "スクリプト検索"
   edit: "編集"

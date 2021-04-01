@@ -32,9 +32,6 @@ $swp-word-marker-shadow: inset 0px 0px 0px #{$pt-grid-size / 2} var(--marker-bac
   box-shadow: input-transition-shadow($input-shadow-color-focus, false);
   transition: box-shadow ($pt-transition-duration * 2) $pt-transition-ease;
   outline: none;
-  .zp-word-list >* >*:last-child & {
-    margin-bottom: 0px;
-  }
 }
 
 .zp-word-pane-wrapper:focus {

@@ -176,6 +176,19 @@ export class MainNavbar extends Component<Props, State> {
         />
         <MenuDivider/>
         <MenuItem
+          text={this.trans("mainNavbar.movePreviousPage")}
+          label={this.handlerManager.getLabel("movePreviousPage")}
+          onClick={this.handlerManager.getHandler("movePreviousPage")}
+          icon="blank"
+        />
+        <MenuItem
+          text={this.trans("mainNavbar.moveNextPage")}
+          label={this.handlerManager.getLabel("moveNextPage")}
+          onClick={this.handlerManager.getHandler("moveNextPage")}
+          icon="blank"
+        />
+        <MenuDivider/>
+        <MenuItem
           text={this.trans("mainNavbar.searchAdvanced")}
           label={this.handlerManager.getLabel("searchAdvanced")}
           onClick={this.handlerManager.getHandler("searchAdvanced")}
@@ -387,6 +400,8 @@ export class MainNavbar extends Component<Props, State> {
       changeLanguageToJa: {handler: () => this.props.changeLanguage("ja")},
       changeLanguageToEn: {handler: () => this.props.changeLanguage("en")},
       shuffleWords: {key: "ctrl+r", handler: () => this.props.shuffleWords()},
+      movePreviousPage: {key: "ctrl+,", handler: () => this.props.movePreviousPage()},
+      moveNextPage: {key: "ctrl+.", handler: () => this.props.moveNextPage()},
       searchAdvanced: {key: "ctrl+f"},
       searchScript: {key: "ctrl+shift+f"},
       createWord: {key: "ctrl+n", handler: () => this.props.createWord()},
@@ -462,6 +477,8 @@ type Props = {
   changeWordType: (type: WordType) => void,
   changeLanguage: (language: string) => void,
   shuffleWords: () => void,
+  moveNextPage: () => void,
+  movePreviousPage: () => void,
   createWord: () => void,
   inheritActiveWord: () => void,
   editActiveWord: () => void,
