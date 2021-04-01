@@ -134,34 +134,40 @@ class Main {
   }
 
   private setupIpc(): void {
-    ipcMain.on("ready-load-dictionary", (event, path) => {
+    ipcMain.onAsync("load-dictionary", (event, path) => {
       let loader = new DirectoryLoader(path);
-      loader.on("progress", (offset, size) => {
-        event.reply("get-load-dictionary-progress", {offset, size});
+      let promise = new Promise<Dictionary>((resolve, reject) => {
+        loader.on("progress", (offset, size) => {
+          event.reply("get-load-dictionary-progress", {offset, size});
+        });
+        loader.on("end", (dictionary) => {
+          resolve(dictionary);
+        });
+        loader.on("error", (error) => {
+          console.error(error);
+          reject(error);
+        });
+        loader.start();
       });
-      loader.on("end", (dictionary) => {
-        event.reply("load-dictionary", dictionary);
-      });
-      loader.on("error", (error) => {
-        event.reply("error-load-dictionary", error);
-        console.error(error);
-      });
-      loader.start();
+      return promise;
     });
-    ipcMain.on("ready-save-dictionary", (event, plainDictionary, path) => {
+    ipcMain.onAsync("save-dictionary", (event, plainDictionary, path) => {
       let dictionary = Dictionary.fromPlain(plainDictionary);
       let saver = new DirectorySaver(dictionary, path);
-      saver.on("progress", (offset, size) => {
-        event.reply("get-save-dictionary-progress", {offset, size});
+      let promise = new Promise<void>((resolve, reject) => {
+        saver.on("progress", (offset, size) => {
+          event.reply("get-save-dictionary-progress", {offset, size});
+        });
+        saver.on("end", () => {
+          resolve();
+        });
+        saver.on("error", (error) => {
+          console.error(error);
+          reject(error);
+        });
+        saver.start();
       });
-      saver.on("end", () => {
-        event.reply("save-dictionary");
-      });
-      saver.on("error", (error) => {
-        event.reply("error-save-dictionary");
-        console.error(error);
-      });
-      saver.start();
+      return promise;
     });
     ipcMain.on("ready-edit-word", (event, uid, word) => {
       let window = this.mainWindow;

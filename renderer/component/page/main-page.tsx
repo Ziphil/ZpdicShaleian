@@ -75,23 +75,9 @@ export class MainPage extends Component<Props, State> {
     window.api.on("get-load-dictionary-progress", (event, loadProgress) => {
       this.setState({loadProgress});
     });
-    window.api.on("load-dictionary", (event, plainDictionary) => {
-      let dictionary = Dictionary.fromPlain(plainDictionary);
-      let activeWord = null;
-      this.setState({dictionary, activeWord}, () => {
-        this.updateWords();
-      });
-    });
-    window.api.on("error-load-dictionary", (event, error) => {
-      CustomToaster.show({message: this.trans("mainPage.errorLoadDictionary"), icon: "error", intent: "danger"});
-    });
     window.api.on("get-save-dictionary-progress", (event, saveProgress) => {
       let message = <EnhancedProgressBar className="zp-save-progress-bar" offset={saveProgress.offset} size={saveProgress.size} showDetail={false}/>;
       CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
-    });
-    window.api.on("save-dictionary", (event) => {
-      this.setState({changed: false});
-      CustomToaster.show({message: this.trans("mainPage.succeedSaveDictionary"), icon: "tick", intent: "success"}, "saveDictionary");
     });
     window.api.on("edit-word", (event, uid, word) => {
       this.editWord(uid, word);
@@ -124,27 +110,41 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private loadDictionary(path: string): void {
+  private async loadDictionary(path: string): Promise<void> {
     let dictionary = null;
     let activeWord = null;
     let changed = false;
     let loadProgress = {offset: 0, size: 0};
     this.setState({dictionary, activeWord, changed, loadProgress});
-    window.api.send("ready-load-dictionary", path);
-  }
-
-  private reloadDictionary(): void {
-    let dictionary = this.state.dictionary;
-    if (dictionary !== null && dictionary.path !== null) {
-      let path = dictionary.path;
-      this.loadDictionary(path);
+    try {
+      let plainDictionary = await window.api.sendAsync("load-dictionary", path);
+      let dictionary = Dictionary.fromPlain(plainDictionary);
+      this.setState({dictionary}, () => {
+        this.updateWords();
+      });
+    } catch (error) {
+      CustomToaster.show({message: this.trans("mainPage.errorLoadDictionary"), icon: "error", intent: "danger"});
     }
   }
 
-  private saveDictionary(path: string | null): void {
+  private async reloadDictionary(): Promise<void> {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null && dictionary.path !== null) {
+      let path = dictionary.path;
+      await this.loadDictionary(path);
+    }
+  }
+
+  private async saveDictionary(path: string | null): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      window.api.send("ready-save-dictionary", dictionary);
+      try {
+        await window.api.sendAsync("save-dictionary", dictionary, path);
+        this.setState({changed: false});
+        CustomToaster.show({message: this.trans("mainPage.succeedSaveDictionary"), icon: "tick", intent: "success"}, "saveDictionary");
+      } catch (error) {
+        CustomToaster.show({message: this.trans("mainPage.errorLoadDictionary"), icon: "error", intent: "danger"}, "saveDictionary");
+      }
     }
   }
 
