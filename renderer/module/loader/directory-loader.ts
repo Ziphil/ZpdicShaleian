@@ -52,7 +52,7 @@ export class DirectoryLoader extends Loader {
 
   private async loadWords(): Promise<Array<Word>> {
     let paths = await fs.readdir(this.path);
-    let wordLocalPaths = paths.filter((path) => path.endsWith(".nxdw"));
+    let wordLocalPaths = paths.filter((path) => path.endsWith(".xdnw"));
     this.size = wordLocalPaths.length;
     let promises = wordLocalPaths.map((wordLocalPath) => {
       let wordPath = joinPath(this.path, wordLocalPath);
@@ -71,7 +71,7 @@ export class DirectoryLoader extends Loader {
   }
 
   private async loadSettings(): Promise<DictionarySettings> {
-    let path = joinPath(this.path, "$SETTINGS.nxds");
+    let path = joinPath(this.path, "$SETTINGS.xdns");
     try {
       let string = await fs.readFile(path, {encoding: "utf-8"});
       let settings = DictionarySettings.fromString(string);
@@ -87,7 +87,7 @@ export class DirectoryLoader extends Loader {
   }
 
   private async loadMarkers(): Promise<Markers> {
-    let path = joinPath(this.path, "$MARKER.nxds");
+    let path = joinPath(this.path, "$MARKER.xdns");
     try {
       let string = await fs.readFile(path, {encoding: "utf-8"});
       let markers = Markers.fromString(string);

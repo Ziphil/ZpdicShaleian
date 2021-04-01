@@ -45,7 +45,7 @@ export class DirectorySaver extends Saver {
 
   private async deleteFiles(): Promise<void> {
     let paths = await fs.readdir(this.path);
-    let fileLocalPaths = paths.filter((path) => path.endsWith(".nxdw") || path.endsWith(".nxds"));
+    let fileLocalPaths = paths.filter((path) => path.endsWith(".xdnw") || path.endsWith(".xdns"));
     this.size = this.dictionary.words.length;
     this.deleteSize = fileLocalPaths.length;
     let promises = fileLocalPaths.map((fileLocalPath) => {
@@ -72,7 +72,7 @@ export class DirectorySaver extends Saver {
 
   private async saveWords(words: Array<Word>): Promise<void> {
     let promises = words.map((word) => {
-      let wordPath = joinPath(this.path, word.getFileName() + ".nxdw");
+      let wordPath = joinPath(this.path, word.getFileName() + ".xdnw");
       return this.saveWord(word, wordPath);
     });
     await Promise.all(promises);
@@ -86,14 +86,14 @@ export class DirectorySaver extends Saver {
   }
 
   private async saveSettings(settings: DictionarySettings): Promise<void> {
-    let path = joinPath(this.path, "$SETTINGS.nxds");
+    let path = joinPath(this.path, "$SETTINGS.xdns");
     let string = settings.toString();
     await fs.writeFile(path, string, {encoding: "utf-8"});
     this.emitProgress();
   }
 
   private async saveMarkers(markers: Markers): Promise<void> {
-    let path = joinPath(this.path, "$MARKER.nxds");
+    let path = joinPath(this.path, "$MARKER.xdns");
     let string = markers.toString();
     await fs.writeFile(path, string, {encoding: "utf-8"});
     this.emitProgress();
