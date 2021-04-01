@@ -5,8 +5,7 @@ import {
   BrowserWindow,
   BrowserWindowConstructorOptions,
   dialog,
-  app as electronApp,
-  ipcMain
+  app as electronApp
 } from "electron";
 import {
   client
@@ -14,9 +13,6 @@ import {
 import {
   join as joinPath
 } from "path";
-import {
-  promiseIpcMain
-} from "promisify-electron-ipc";
 import simpleGit from "simple-git";
 import {
   Dictionary
@@ -30,6 +26,9 @@ import {
 import {
   BrowserWindowUtil
 } from "./util/browser-window";
+import {
+  ipcMain
+} from "./util/ipc/ipc-main";
 
 
 const COMMON_WINDOW_OPTIONS = {
@@ -82,7 +81,7 @@ class Main {
   }
 
   private setupBasicIpc(): void {
-    promiseIpcMain.on("get-props", async (id) => {
+    ipcMain.onAsync("get-props", async (id) => {
       let props = this.props.get(id);
       if (props !== undefined) {
         let props = this.props.get(id);
@@ -124,7 +123,7 @@ class Main {
         window.webContents.openDevTools();
       }
     });
-    promiseIpcMain.on("show-open-dialog", async (id, options) => {
+    ipcMain.onAsync("show-open-dialog", async (id, options) => {
       let window = this.windows.get(id);
       if (window !== undefined) {
         return await dialog.showOpenDialog(window, options);
@@ -176,10 +175,10 @@ class Main {
         window.webContents.send("delete-word", uid);
       }
     });
-    promiseIpcMain.on("check-duplicate-unique-name", async (uniqueName, excludedUniqueName) => {
+    ipcMain.onAsync("check-duplicate-unique-name", async (uniqueName, excludedUniqueName) => {
       let window = this.mainWindow;
       if (window !== undefined) {
-        let predicate = await promiseIpcMain.send("do-check-duplicate-unique-name", window.webContents, uniqueName, excludedUniqueName);
+        let predicate = await ipcMain.sendAsync("do-check-duplicate-unique-name", window.webContents, uniqueName, excludedUniqueName);
         return predicate;
       } else {
         return true;
@@ -191,7 +190,7 @@ class Main {
         window.webContents.send("change-dictionary-settings", settings);
       }
     });
-    promiseIpcMain.on("git-commit", async (path, message) => {
+    ipcMain.onAsync("git-commit", async (path, message) => {
       try {
         let git = simpleGit(path);
         await git.add(".");
@@ -201,7 +200,7 @@ class Main {
         throw error;
       }
     });
-    promiseIpcMain.on("git-push", async (path) => {
+    ipcMain.onAsync("git-push", async (path) => {
       try {
         let git = simpleGit(path);
         await git.push();

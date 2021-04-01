@@ -1,17 +1,17 @@
 //
 
 import {
-  IpcRendererEvent
-} from "electron";
+  PromisifiedIpcRenderer
+} from "../main/util/ipc/ipc-renderer";
 
 
 declare global {
 
   class WindowApi {
-    public send(channel: string, ...args: Array<any>): void;
-    public sendAsync(channel: string, ...args: Array<any>): Promise<any>;
-    public on(channel: string, listener: (event: IpcRendererEvent, ...args: Array<any>) => void): void;
-    public onAsync(channel: string, listener: (...args: Array<any>) => void): void;
+    public send: PromisifiedIpcRenderer["send"];
+    public sendAsync: PromisifiedIpcRenderer["sendAsync"];
+    public on: PromisifiedIpcRenderer["on"];
+    public onAsync: PromisifiedIpcRenderer["onAsync"];
   }
 
   interface Window {
