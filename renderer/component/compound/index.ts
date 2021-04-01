@@ -3,6 +3,7 @@
 export * from "./dictionary-settings-editor";
 export * from "./loading";
 export * from "./main-navbar";
+export * from "./pagination";
 export * from "./search-form";
 export * from "./word-editor";
 export * from "./word-list";

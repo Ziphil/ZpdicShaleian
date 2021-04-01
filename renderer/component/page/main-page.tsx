@@ -55,6 +55,7 @@ export class MainPage extends Component<Props, State> {
     language: "ja",
     parameter: NormalWordParameter.createEmpty("ja"),
     searchResult: {words: [], suggestions: [], elapsedTime: 0},
+    page: 0,
     changed: false,
     alertOpen: false,
     loadProgress: {offset: 0, size: 0},
@@ -112,10 +113,8 @@ export class MainPage extends Component<Props, State> {
 
   private async loadDictionary(path: string): Promise<void> {
     let dictionary = null;
-    let activeWord = null;
-    let changed = false;
     let loadProgress = {offset: 0, size: 0};
-    this.setState({dictionary, activeWord, changed, loadProgress});
+    this.setState({dictionary, loadProgress, activeWord: null, changed: false});
     try {
       let plainDictionary = await window.api.sendAsync("load-dictionary", path);
       let dictionary = Dictionary.fromPlain(plainDictionary);
@@ -157,19 +156,14 @@ export class MainPage extends Component<Props, State> {
     let oldWords = this.state.searchResult.words;
     let words = [...ArrayUtil.shuffle(oldWords)];
     let searchResult = {...this.state.searchResult, words};
-    this.setState({searchResult}, () => {
-      document.getElementById("word-list-container")!.scrollTop = 0;
-    });
+    this.setState({searchResult, page: 0, activeWord: null});
   }
 
   private updateWords(parameter?: WordParameter): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let searchResult = dictionary.search(parameter ?? this.state.parameter);
-      let activeWord = null;
-      this.setState({searchResult, activeWord}, () => {
-        document.getElementById("word-list-container")!.scrollTop = 0;
-      });
+      this.setState({searchResult, page: 0, activeWord: null});
     }
   }
 
@@ -408,6 +402,7 @@ export class MainPage extends Component<Props, State> {
               dictionary={this.state.dictionary!}
               words={this.state.searchResult.words}
               language={this.state.language}
+              page={this.state.page}
               onCreate={() => this.startEditWord(null)}
               onInherit={(word) => this.startEditWord(null, word)}
               onEdit={(word) => this.startEditWord(word)}
@@ -415,6 +410,7 @@ export class MainPage extends Component<Props, State> {
               onMarkerToggled={(word, marker) => this.toggleWordMarker(word, marker)}
               onLinkClick={(name) => this.updateWordsByName(name)}
               onActivate={(activeWord) => this.setState({activeWord})}
+              onPageSet={(page) => this.setState({page})}
             />
           </div>
         </Loading>
@@ -434,6 +430,7 @@ type State = {
   activeWord: Word | null,
   parameter: WordParameter,
   searchResult: SearchResult,
+  page: number,
   changed: boolean,
   alertOpen: boolean,
   loadProgress: {offset: number, size: number},

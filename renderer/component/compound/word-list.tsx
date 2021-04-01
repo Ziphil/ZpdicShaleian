@@ -7,7 +7,6 @@ import {
   MouseEvent,
   ReactNode
 } from "react";
-import InfiniteScroll from "react-infinite-scroller";
 import {
   Dictionary,
   Marker,
@@ -17,6 +16,7 @@ import {
   Component
 } from "../component";
 import {
+  Pagination,
   WordPaneWrapper
 } from "../compound";
 import {
@@ -27,37 +27,24 @@ import {
 @component()
 export class WordList extends Component<Props, State> {
 
-  public state: State = {
-    displayedWords: []
-  };
-
-  public constructor(props: Props) {
-    super(props);
-    let displayedWords = props.words.slice(0, 30);
-    this.state = {displayedWords};
-  }
-
   public componentDidUpdate(previousProps: any): void {
-    if (this.props !== previousProps) {
-      if (this.props.words !== previousProps.words) {
-        let displayedWords = this.props.words.slice(0, 30);
-        this.setState({displayedWords});
-      } else {
-        let displayedWords = this.state.displayedWords;
-        this.setState({displayedWords});
-      }
+    if (this.props.words !== previousProps.words) {
+      document.getElementById("word-list-container")!.scrollTop = 0;
     }
   }
 
-  public loadWords(page: number): void {
-    let length = this.state.displayedWords.length;
-    let displayedWords = this.props.words.slice(0, length + 30);
-    this.setState({displayedWords});
+  private handlePageSet(page: number) {
+    if (this.props.onPageSet) {
+      this.props.onPageSet(page);
+      document.getElementById("word-list-container")!.scrollTop = 0;
+    }
   }
 
   public render(): ReactNode {
-    let hasMore = this.props.words.length > this.state.displayedWords.length;
-    let wordPanes = this.state.displayedWords.map((word) => {
+    let page = this.props.page;
+    let maxPage = Math.max(Math.ceil(this.props.words.length / 30) - 1, 0);
+    let displayedWords = this.props.words.slice(page * 30, page * 30 + 30);
+    let wordPanes = displayedWords.map((word) => {
       let wordPane = (
         <WordPaneWrapper
           key={word.uid}
@@ -77,16 +64,10 @@ export class WordList extends Component<Props, State> {
     });
     let node = (
       <div className="zp-word-list" id="word-list">
-        <InfiniteScroll
-          loadMore={this.loadWords.bind(this)}
-          hasMore={hasMore}
-          initialLoad={false}
-          useWindow={false}
-          threshold={500}
-          getScrollParent={() => document.getElementById("word-list-container")!}
-        >
-          {wordPanes}
-        </InfiniteScroll>
+        {wordPanes}
+        <div className="zp-word-list-pagination-container">
+          <Pagination page={this.props.page} minPage={0} maxPage={maxPage} onSet={this.handlePageSet.bind(this)}/>
+        </div>
       </div>
     );
     return node;
@@ -99,14 +80,15 @@ type Props = {
   dictionary: Dictionary,
   words: Array<Word>,
   language: string,
+  page: number,
   onCreate?: (event: MouseEvent<HTMLElement>) => void,
   onInherit?: (word: Word, event: MouseEvent<HTMLElement>) => void,
   onEdit?: (word: Word, event: MouseEvent<HTMLElement>) => void,
   onDelete?: (word: Word, event: MouseEvent<HTMLElement>) => void,
   onMarkerToggled?: (word: Word, marker: Marker) => void,
   onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void,
-  onActivate?: (activeWord: Word | null, event: FocusEvent<HTMLElement>) => void
+  onActivate?: (activeWord: Word | null, event: FocusEvent<HTMLElement>) => void,
+  onPageSet?: (page: number) => void
 };
 type State = {
-  displayedWords: Array<Word>
 };

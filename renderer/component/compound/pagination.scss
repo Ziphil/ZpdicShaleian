@@ -1,0 +1,28 @@
+@charset "utf-8";
+
+
+.zp-pagination {
+  display: flex;
+  flex-direction: row;
+}
+
+.zp-pagination-left {
+  width: 100%;
+  text-align: right;
+  flex-grow: 1;
+}
+
+.zp-pagination-right {
+  width: 100%;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.zp-pagination-left .bp3-button,
+.zp-pagination-right .bp3-button,
+.zp-pagination-center .bp3-button {
+  width: $pt-grid-size * 4;
+  padding-left: 0px;
+  padding-right: 0px;
+  text-align: center;
+}
