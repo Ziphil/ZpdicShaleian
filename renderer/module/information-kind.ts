@@ -34,7 +34,7 @@ export const INFORMATION_KIND_DATA = {
   task: {code: "O", names: {ja: "タスク", en: "Task"}},
   history: {code: "H", names: {ja: "履歴", en: "History"}},
   phrase: {code: "P", names: {ja: "成句", en: "Phrase"}},
-  example: {code: "E", names: {ja: "例文", en: "Example"}}
+  example: {code: "S", names: {ja: "例文", en: "Example"}}
 } as const;
 
 export type InformationKind = keyof typeof INFORMATION_KIND_DATA;

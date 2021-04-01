@@ -128,7 +128,7 @@ export class Parser<S, E> {
         if (textMatch) {
           let expression = this.markupParser.parse(textMatch[1]);
           let equivalents = textMatch[2].split(/\s*,\s*/).map((rawName) => this.markupParser.parse(rawName));
-          let text = (textMatch[3] !== undefined || textMatch[3] !== "") ? this.markupParser.parse(textMatch[3]) : null;
+          let text = (textMatch[3] !== undefined && textMatch[3] !== "") ? this.markupParser.parse(textMatch[3]) : null;
           let information = new PhraseInformation(expression, equivalents, text, date, hidden);
           return information;
         } else {
