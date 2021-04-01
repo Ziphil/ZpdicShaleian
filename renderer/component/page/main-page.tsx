@@ -99,7 +99,7 @@ export class MainPage extends Component<Props, State> {
     window.api.on("delete-word", (event, uid) => {
       this.deleteWord(uid);
     });
-    window.api.onAsync("do-check-duplicate-unique-name", async (uniqueName, excludedUniqueName) => {
+    window.api.onAsync("do-check-duplicate-unique-name", async (event, uniqueName, excludedUniqueName) => {
       let dictionary = this.state.dictionary;
       if (dictionary !== null) {
         return dictionary.findByUniqueName(uniqueName, excludedUniqueName) !== undefined;

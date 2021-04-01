@@ -45,9 +45,9 @@ export class PromisifiedIpcMain {
     this.electronIpcMain.on(channel, listener);
   }
 
-  public onAsync(channel: string, listener: (...args: Array<any>) => Promise<any>): void {
+  public onAsync(channel: string, listener: (event: IpcMainEvent, ...args: Array<any>) => Promise<any>): void {
     this.electronIpcMain.on(channel, (event, replyChannel, ...args) => {
-      Promise.resolve().then(() => listener(...args)).then((result) => {
+      Promise.resolve().then(() => listener(event, ...args)).then((result) => {
         event.sender.send(replyChannel, 0, result);
       }).catch((error) => {
         event.sender.send(replyChannel, 1, serializeError(error));

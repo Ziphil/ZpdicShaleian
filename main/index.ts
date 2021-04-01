@@ -81,7 +81,7 @@ class Main {
   }
 
   private setupBasicIpc(): void {
-    ipcMain.onAsync("get-props", async (id) => {
+    ipcMain.onAsync("get-props", async (event, id) => {
       let props = this.props.get(id);
       if (props !== undefined) {
         let props = this.props.get(id);
@@ -123,7 +123,7 @@ class Main {
         window.webContents.openDevTools();
       }
     });
-    ipcMain.onAsync("show-open-dialog", async (id, options) => {
+    ipcMain.onAsync("show-open-dialog", async (event, id, options) => {
       let window = this.windows.get(id);
       if (window !== undefined) {
         return await dialog.showOpenDialog(window, options);
@@ -175,7 +175,7 @@ class Main {
         window.webContents.send("delete-word", uid);
       }
     });
-    ipcMain.onAsync("check-duplicate-unique-name", async (uniqueName, excludedUniqueName) => {
+    ipcMain.onAsync("check-duplicate-unique-name", async (event, uniqueName, excludedUniqueName) => {
       let window = this.mainWindow;
       if (window !== undefined) {
         let predicate = await ipcMain.sendAsync("do-check-duplicate-unique-name", window.webContents, uniqueName, excludedUniqueName);
@@ -190,7 +190,7 @@ class Main {
         window.webContents.send("change-dictionary-settings", settings);
       }
     });
-    ipcMain.onAsync("git-commit", async (path, message) => {
+    ipcMain.onAsync("git-commit", async (event, path, message) => {
       try {
         let git = simpleGit(path);
         await git.add(".");
@@ -200,7 +200,7 @@ class Main {
         throw error;
       }
     });
-    ipcMain.onAsync("git-push", async (path) => {
+    ipcMain.onAsync("git-push", async (event, path) => {
       try {
         let git = simpleGit(path);
         await git.push();
