@@ -63,9 +63,11 @@ export class WordList extends Component<Props, State> {
       return wordPane;
     });
     let node = (
-      <div className="zp-word-list" id="word-list">
-        {wordPanes}
-        <div className="zp-word-list-pagination-container">
+      <div className="zp-word-list-wrapper" id="word-list">
+        <div className="zp-word-list">
+          {wordPanes}
+        </div>
+        <div className="zp-pagination-container">
           <Pagination page={this.props.page} minPage={0} maxPage={maxPage} onSet={this.handlePageSet.bind(this)}/>
         </div>
       </div>

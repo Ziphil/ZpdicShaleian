@@ -22,6 +22,7 @@ $swp-marker-background-colors: (
   heart: mix($rose5, $card-background-color, 20%)
 );
 
+$pt-modified-elevation-shadow-0: 0px 0px 0px 1px var(--marker-background-color), nth($pt-elevation-shadow-0, 2), nth($pt-elevation-shadow-0, 3);
 $swp-word-marker-shadow: inset 0px 0px 0px #{$pt-grid-size / 2} var(--marker-background-color);
 
 .zp-word-pane-wrapper {
@@ -39,7 +40,7 @@ $swp-word-marker-shadow: inset 0px 0px 0px #{$pt-grid-size / 2} var(--marker-bac
 .zp-word-pane-wrapper:focus {
   box-shadow: input-transition-shadow($input-shadow-color-focus, true);
   >.swp-word {
-    box-shadow: 0px 0px 0px 1px var(--marker-background-color), nth($pt-elevation-shadow-0, 2), nth($pt-elevation-shadow-0, 3), $swp-word-marker-shadow;
+    box-shadow: $pt-modified-elevation-shadow-0, $swp-word-marker-shadow;
   }
 }
 
