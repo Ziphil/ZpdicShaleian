@@ -8,13 +8,13 @@ import {
   PlainDictionary,
   PlainDictionarySettings,
   PlainWord
-} from "../../renderer/module";
+} from "../../renderer/module/dictionary";
 import {
   DirectoryLoader
-} from "../../renderer/module/loader";
+} from "../../renderer/module/dictionary/loader";
 import {
   DirectorySaver
-} from "../../renderer/module/saver";
+} from "../../renderer/module/dictionary/saver";
 import {
   Main
 } from "../index";

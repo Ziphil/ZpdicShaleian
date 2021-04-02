@@ -11,7 +11,7 @@ import {
   Dictionary,
   Marker,
   Word
-} from "../../module";
+} from "../../module/dictionary";
 import {
   Component
 } from "../component";

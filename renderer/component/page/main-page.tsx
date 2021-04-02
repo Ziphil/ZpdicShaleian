@@ -20,7 +20,7 @@ import {
   WordMode,
   WordParameter,
   WordType
-} from "../../module";
+} from "../../module/dictionary";
 import {
   ArrayUtil
 } from "../../util/array";

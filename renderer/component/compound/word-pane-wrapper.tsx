@@ -20,7 +20,7 @@ import {
   Dictionary,
   Marker,
   Word
-} from "../../module";
+} from "../../module/dictionary";
 import {
   MarkerIcon
 } from "../atom";

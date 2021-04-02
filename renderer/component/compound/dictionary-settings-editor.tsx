@@ -20,7 +20,7 @@ import {
 import {
   PlainDictionarySettings,
   Revisions
-} from "../../module";
+} from "../../module/dictionary";
 import {
   Component
 } from "../component";

@@ -19,7 +19,7 @@ import {
   Relation,
   Section,
   Word
-} from "../../module";
+} from "../../module/dictionary";
 import {
   MarkerIcon
 } from "../atom/marker-icon";

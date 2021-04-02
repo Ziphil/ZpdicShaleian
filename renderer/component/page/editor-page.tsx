@@ -5,9 +5,8 @@ import {
   ReactNode
 } from "react";
 import {
-  PlainDictionary,
   PlainWord
-} from "../../module";
+} from "../../module/dictionary";
 import {
   Component
 } from "../component";
