@@ -21,11 +21,16 @@ import {
 export class GitHandler extends Handler {
 
   @onAsync("git-commit")
-  private async gitCommit(this: Main, event: IpcMainEvent, path: string, message: string): Promise<void> {
+  private async gitCommit(this: Main, event: IpcMainEvent, path: string, message?: string): Promise<void> {
     try {
       let git = simpleGit(path);
-      await git.add(".");
-      await git.commit(message);
+      let nextMessage = message ?? this.settings.defaultCommitMessage;
+      if (nextMessage !== undefined) {
+        await git.add(".");
+        await git.commit(nextMessage);
+      } else {
+        throw new Error("message not specified");
+      }
     } catch (error) {
       console.error(error);
       throw error;

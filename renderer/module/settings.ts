@@ -4,6 +4,7 @@
 export class Settings {
 
   public defaultDictionaryPath?: string;
+  public defaultCommitMessage?: string;
 
   private constructor(object: any) {
     Object.assign(this, object);
