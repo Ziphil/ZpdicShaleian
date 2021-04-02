@@ -210,6 +210,21 @@ export class Word implements PlainWord {
     }
   }
 
+  public static sortWords(words: Array<Word>): Array<Word> {
+    let sortedWords = words.sort((firstWord, secondWord) => {
+      let firstComparisonString = firstWord.comparisonString;
+      let secondComparisonString = secondWord.comparisonString;
+      if (firstComparisonString < secondComparisonString) {
+        return -1;
+      } else if (firstComparisonString > secondComparisonString) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    return sortedWords;
+  }
+
   public static isValidUniqueName(uniqueName: string): boolean {
     return uniqueName.match(/^(\+)?((?:\p{L}|-)+?)(\+)?(~*)$/u) !== null;
   }

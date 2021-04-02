@@ -63,7 +63,7 @@ export class Dictionary implements PlainDictionary {
     let beforeDate = new Date();
     let words = this.words.filter((word) => parameter.match(word));
     let suggestions = new Array<never>();
-    this.sortWords(words);
+    Word.sortWords(words);
     let afterDate = new Date();
     let elapsedTime = afterDate.getTime() - beforeDate.getTime();
     return {words, suggestions, elapsedTime};
@@ -117,21 +117,6 @@ export class Dictionary implements PlainDictionary {
   public changeSettings(settings: PlainDictionarySettings): void {
     let nextSettings = DictionarySettings.fromPlain(settings);
     this.settings = nextSettings;
-  }
-
-  private sortWords(words: Array<Word>): Array<Word> {
-    let sortedWords = words.sort((firstWord, secondWord) => {
-      let firstComparisonString = firstWord.comparisonString;
-      let secondComparisonString = secondWord.comparisonString;
-      if (firstComparisonString < secondComparisonString) {
-        return -1;
-      } else if (firstComparisonString > secondComparisonString) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
-    return sortedWords;
   }
 
 }
