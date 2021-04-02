@@ -1,10 +1,10 @@
 {
-  "name": "soxsot",
+  "name": "zpdic-shaleian",
   "version": "1.0.0",
   "author": "Ziphil",
-  "description": "",
+  "description": "Desktop application for manipulating the new Shaleian dictionary format",
   "main": "dist/index.js",
-  "homepage": "./",
+  "homepage": "https://github.com/Ziphil/ZpdicShaleian",
   "scripts": {
     "develop": "cross-env NODE_ENV=development webpack --watch --mode development --config webpack-develop.ts",
     "build": "webpack --mode production --config webpack-product.ts",
@@ -19,13 +19,17 @@
     "ignorePatterns": "webpack-*.ts"
   },
   "build": {
-    "appId": "com.ziphil.soxsot",
-    "productName": "Soxsot",
+    "appId": "com.ziphil.zpdic-shaleian",
+    "productName": "ZpDIC for Shaleian",
     "files": [
       "dist/**/*"
     ],
     "directories": {
-      "output": "product"
+      "output": "product/${os}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   },
   "dependencies": {
