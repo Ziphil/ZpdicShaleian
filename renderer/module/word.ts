@@ -90,7 +90,7 @@ export class Word implements PlainWord {
 
   public toString(): string {
     let string = "";
-    string += `* ${this.name} @${this.date}\n\n`;
+    string += `* ${this.uniqueName} @${this.date}\n\n`;
     let first = true;
     for (let [language, content] of Object.entries(this.contents)) {
       if (content !== undefined && content.trim() !== "") {
