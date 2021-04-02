@@ -27,6 +27,7 @@
     "directories": {
       "output": "product/${os}"
     },
+    "publish": null,
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
