@@ -40,6 +40,14 @@ export class Dictionary implements PlainDictionary {
     return dictionary;
   }
 
+  public toPlain(): PlainDictionary {
+    let words = this.words.map((word) => word.toPlain());
+    let settings = this.settings;
+    let markers = this.markers;
+    let path = this.path;
+    return {words, settings, markers, path};
+  }
+
   public static fromString(string: string): Dictionary {
     throw new Error("not yet implemented");
   }

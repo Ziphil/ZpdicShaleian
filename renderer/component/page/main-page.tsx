@@ -138,7 +138,7 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       try {
-        await window.api.sendAsync("save-dictionary", dictionary, path);
+        await window.api.sendAsync("save-dictionary", dictionary.toPlain(), path);
         this.setState({changed: false});
         CustomToaster.show({message: this.trans("mainPage.succeedSaveDictionary"), icon: "tick", intent: "success"}, "saveDictionary");
       } catch (error) {

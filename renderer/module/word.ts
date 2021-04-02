@@ -4,6 +4,9 @@ import {
   v1 as uuid
 } from "uuid";
 import {
+  Dictionary
+} from "./dictionary";
+import {
   ParsedWord
 } from "./parsed-word";
 import {
@@ -14,6 +17,7 @@ import {
 
 export class Word implements PlainWord {
 
+  private dictionary: Dictionary | null = null;
   public uid: string;
   public name!: string;
   public uniqueName: string;
@@ -37,6 +41,14 @@ export class Word implements PlainWord {
     let contents = plain.contents;
     let word = new Word(uniqueName, date, contents);
     return word;
+  }
+
+  public toPlain(): PlainWord {
+    let uid = this.uid;
+    let uniqueName = this.uniqueName;
+    let date = this.date;
+    let contents = this.contents;
+    return {uid, uniqueName, date, contents};
   }
 
   public static fromString(string: string): Word {
@@ -89,6 +101,12 @@ export class Word implements PlainWord {
       }
     }
     return string;
+  }
+
+  public toParsed<S, E>(resolvers: MarkupResolvers<S, E>): ParsedWord<S> {
+    let parser = new Parser(resolvers);
+    let parsedWord = parser.parse(this);
+    return parsedWord;
   }
 
   public static createEmpty(): Word {
@@ -184,12 +202,6 @@ export class Word implements PlainWord {
     } else {
       throw new Error("cannot happen");
     }
-  }
-
-  public parse<S, E>(resolvers: MarkupResolvers<S, E>): ParsedWord<S> {
-    let parser = new Parser(resolvers);
-    let parsedWord = parser.parse(this);
-    return parsedWord;
   }
 
   public static isValidUniqueName(uniqueName: string): boolean {

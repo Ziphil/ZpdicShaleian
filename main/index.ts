@@ -15,7 +15,8 @@ import {
 } from "path";
 import simpleGit from "simple-git";
 import {
-  Dictionary
+  Dictionary,
+  PlainDictionary
 } from "../renderer/module";
 import {
   DirectoryLoader
@@ -136,12 +137,12 @@ class Main {
   private setupIpc(): void {
     ipcMain.onAsync("load-dictionary", (event, path) => {
       let loader = new DirectoryLoader(path);
-      let promise = new Promise<Dictionary>((resolve, reject) => {
+      let promise = new Promise<PlainDictionary>((resolve, reject) => {
         loader.on("progress", (offset, size) => {
           event.reply("get-load-dictionary-progress", {offset, size});
         });
         loader.on("end", (dictionary) => {
-          resolve(dictionary);
+          resolve(dictionary.toPlain());
         });
         loader.on("error", (error) => {
           console.error(error);
