@@ -28,7 +28,8 @@ import {
   debounce
 } from "../../util/decorator";
 import {
-  EnhancedProgressBar
+  EnhancedProgressBar,
+  Progress
 } from "../atom";
 import {
   Component
@@ -73,13 +74,8 @@ export class MainPage extends Component<Props, State> {
   }
 
   private setupIpc(): void {
-    window.api.on("get-load-dictionary-progress", (event, loadProgress) => {
-      this.setState({loadProgress});
-    });
-    window.api.on("get-save-dictionary-progress", (event, saveProgress) => {
-      let message = <EnhancedProgressBar className="zp-save-progress-bar" offset={saveProgress.offset} size={saveProgress.size} showDetail={false}/>;
-      CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
-    });
+    window.api.on("get-load-dictionary-progress", (event, progress) => this.updateLoadDictionaryProgress(progress));
+    window.api.on("get-save-dictionary-progress", (event, progress) => this.updateSaveDictionaryProgress(progress));
     window.api.on("edit-word", (event, uid, word) => this.editWord(uid, word));
     window.api.on("delete-word", (event, uid) => this.deleteWord(uid));
     window.api.onAsync("do-validate-edit-word", (event, uid, word) => this.validateEditWord(uid, word));
@@ -121,6 +117,10 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  private updateLoadDictionaryProgress(progress: Progress): void {
+    this.setState({loadProgress: progress});
+  }
+
   private async saveDictionary(path: string | null): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
@@ -132,6 +132,11 @@ export class MainPage extends Component<Props, State> {
         CustomToaster.show({message: this.trans("mainPage.errorLoadDictionary"), icon: "error", intent: "danger"}, "saveDictionary");
       }
     }
+  }
+
+  private updateSaveDictionaryProgress(progress: Progress): void {
+    let message = <EnhancedProgressBar className="zp-save-progress-bar" progress={progress} showDetail={false}/>;
+    CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
   }
 
   private refreshWords(): void {
@@ -399,7 +404,7 @@ export class MainPage extends Component<Props, State> {
       <div className="zp-main-page zp-root zp-navbar-root">
         {navbarNode}
         {alertNode}
-        <Loading loading={this.state.dictionary === null} {...this.state.loadProgress}>
+        <Loading loading={this.state.dictionary === null} progress={this.state.loadProgress}>
           <div className="zp-search-form-container">
             <SearchForm
               parameter={this.state.parameter}
@@ -444,8 +449,8 @@ type State = {
   page: number,
   changed: boolean,
   alertOpen: boolean,
-  loadProgress: {offset: number, size: number},
-  saveProgress: {offset: number, size: number}
+  loadProgress: Progress,
+  saveProgress: Progress
 };
 
 let CustomToaster = Toaster.create({className: "zp-main-toaster", position: "top", maxToasts: 2});

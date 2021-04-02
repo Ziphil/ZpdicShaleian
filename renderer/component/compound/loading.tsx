@@ -6,7 +6,8 @@ import {
   ReactNode
 } from "react";
 import {
-  EnhancedProgressBar
+  EnhancedProgressBar,
+  Progress
 } from "../atom";
 import {
   Component
@@ -21,7 +22,7 @@ export class Loading extends Component<Props, State> {
 
   public render(): ReactNode {
     if (this.props.loading) {
-      let node = <EnhancedProgressBar offset={this.props.offset} size={this.props.size} showDetail={true}/>;
+      let node = <EnhancedProgressBar progress={this.props.progress} showDetail={true}/>;
       return node;
     } else {
       let node = <Fragment>{this.props.children}</Fragment>;
@@ -34,8 +35,7 @@ export class Loading extends Component<Props, State> {
 
 type Props = {
   loading: boolean,
-  offset: number,
-  size: number
+  progress: Progress
 };
 type State = {
 };
