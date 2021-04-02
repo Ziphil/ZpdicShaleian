@@ -47,9 +47,6 @@ export class DirectoryLoader extends Loader {
     let markersPromise = this.loadMarkers();
     let [words, settings, markers] = await Promise.all([wordsPromise, settingsPromise, markersPromise]);
     let dictionary = new Dictionary(words, settings, markers, this.path);
-    for (let word of words) {
-      word.setDictionary(dictionary);
-    }
     return dictionary;
   }
 

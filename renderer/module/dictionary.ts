@@ -29,6 +29,9 @@ export class Dictionary implements PlainDictionary {
     this.settings = settings;
     this.markers = markers;
     this.path = path;
+    for (let word of words) {
+      word.setDictionary(this);
+    }
   }
 
   public static fromPlain(plain: PlainDictionary): Dictionary {
@@ -37,9 +40,6 @@ export class Dictionary implements PlainDictionary {
     let markers = Markers.fromPlain(plain.markers);
     let path = plain.path;
     let dictionary = new Dictionary(words, settings, markers, path);
-    for (let word of words) {
-      word.setDictionary(dictionary);
-    }
     return dictionary;
   }
 
