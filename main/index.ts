@@ -4,7 +4,6 @@ import {
   App,
   BrowserWindow,
   BrowserWindowConstructorOptions,
-  dialog,
   app as electronApp
 } from "electron";
 import {
@@ -13,21 +12,16 @@ import {
 import {
   join as joinPath
 } from "path";
-import simpleGit from "simple-git";
 import {
-  Dictionary,
-  PlainDictionary
-} from "../renderer/module";
-import {
-  DirectoryLoader
-} from "../renderer/module/loader";
-import {
-  DirectorySaver
-} from "../renderer/module/saver";
+  BasicHandler,
+  DictionaryHandler,
+  GitHandler
+} from "./handler";
 import {
   BrowserWindowUtil
 } from "./util/browser-window";
 import {
+  PromisifiedIpcMain,
   ipcMain
 } from "./util/ipc/ipc-main";
 
@@ -47,15 +41,17 @@ const PRODUCTION_WINDOW_OPTIONS = {
 };
 
 
-class Main {
+export class Main {
 
-  private app: App;
-  private windows: Map<number, BrowserWindow>;
-  private mainWindow: BrowserWindow | undefined;
-  private props: Map<number, object>;
+  protected app: App;
+  protected ipcMain: PromisifiedIpcMain;
+  protected windows: Map<number, BrowserWindow>;
+  protected mainWindow: BrowserWindow | undefined;
+  protected props: Map<number, object>;
 
   public constructor(app: App) {
     this.app = app;
+    this.ipcMain = ipcMain;
     this.windows = new Map();
     this.mainWindow = undefined;
     this.props = new Map();
@@ -63,8 +59,7 @@ class Main {
 
   public main(): void {
     this.setupEventHandlers();
-    this.setupBasicIpc();
-    this.setupIpc();
+    this.setupHandlers();
   }
 
   private setupEventHandlers(): void {
@@ -81,144 +76,13 @@ class Main {
     });
   }
 
-  private setupBasicIpc(): void {
-    ipcMain.onAsync("get-props", async (event, id) => {
-      let props = this.props.get(id);
-      if (props !== undefined) {
-        let props = this.props.get(id);
-        this.props.delete(id);
-        return props;
-      } else {
-        return {};
-      }
-    });
-    ipcMain.on("show", (event, id) => {
-      let window = this.windows.get(id);
-      if (window !== undefined) {
-        window.show();
-        let mainWindow = this.mainWindow;
-        if (mainWindow !== undefined) {
-          mainWindow.focus();
-          window.focus();
-        }
-      }
-    });
-    ipcMain.on("close-window", (event, id) => {
-      let window = this.windows.get(id);
-      if (window !== undefined) {
-        window.close();
-      }
-    });
-    ipcMain.on("destroy-window", (event, id) => {
-      let window = this.windows.get(id);
-      if (window !== undefined) {
-        window.destroy();
-      }
-    });
-    ipcMain.on("create-window", (event, mode, parentId, props, options) => {
-      this.createWindow(mode, parentId, props, options);
-    });
-    ipcMain.on("open-dev-tools", (event, id) => {
-      let window = this.windows.get(id);
-      if (window !== undefined) {
-        window.webContents.openDevTools();
-      }
-    });
-    ipcMain.onAsync("show-open-dialog", async (event, id, options) => {
-      let window = this.windows.get(id);
-      if (window !== undefined) {
-        return await dialog.showOpenDialog(window, options);
-      } else {
-        return await dialog.showOpenDialog(options);
-      }
-    });
+  private setupHandlers(): void {
+    BasicHandler.setup(this);
+    GitHandler.setup(this);
+    DictionaryHandler.setup(this);
   }
 
-  private setupIpc(): void {
-    ipcMain.onAsync("load-dictionary", (event, path) => {
-      let loader = new DirectoryLoader(path);
-      let promise = new Promise<PlainDictionary>((resolve, reject) => {
-        loader.on("progress", (offset, size) => {
-          event.reply("get-load-dictionary-progress", {offset, size});
-        });
-        loader.on("end", (dictionary) => {
-          resolve(dictionary.toPlain());
-        });
-        loader.on("error", (error) => {
-          console.error(error);
-          reject(error);
-        });
-        loader.start();
-      });
-      return promise;
-    });
-    ipcMain.onAsync("save-dictionary", (event, plainDictionary, path) => {
-      let dictionary = Dictionary.fromPlain(plainDictionary);
-      let saver = new DirectorySaver(dictionary, path);
-      let promise = new Promise<void>((resolve, reject) => {
-        saver.on("progress", (offset, size) => {
-          event.reply("get-save-dictionary-progress", {offset, size});
-        });
-        saver.on("end", () => {
-          resolve();
-        });
-        saver.on("error", (error) => {
-          console.error(error);
-          reject(error);
-        });
-        saver.start();
-      });
-      return promise;
-    });
-    ipcMain.on("ready-edit-word", (event, uid, word) => {
-      let window = this.mainWindow;
-      if (window !== undefined) {
-        window.webContents.send("edit-word", uid, word);
-      }
-    });
-    ipcMain.on("ready-delete-word", (event, uid) => {
-      let window = this.mainWindow;
-      if (window !== undefined) {
-        window.webContents.send("delete-word", uid);
-      }
-    });
-    ipcMain.onAsync("validate-edit-word", async (event, uid, word) => {
-      let window = this.mainWindow;
-      if (window !== undefined) {
-        let errorType = await ipcMain.sendAsync("do-validate-edit-word", window.webContents, uid, word);
-        return errorType;
-      } else {
-        return "";
-      }
-    });
-    ipcMain.on("ready-change-dictionary-settings", (event, settings) => {
-      let window = this.mainWindow;
-      if (window !== undefined) {
-        window.webContents.send("change-dictionary-settings", settings);
-      }
-    });
-    ipcMain.onAsync("git-commit", async (event, path, message) => {
-      try {
-        let git = simpleGit(path);
-        await git.add(".");
-        await git.commit(message);
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
-    });
-    ipcMain.onAsync("git-push", async (event, path) => {
-      try {
-        let git = simpleGit(path);
-        await git.push();
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
-    });
-  }
-
-  private createWindow(mode: string, parentId: number | null, props: object, options: BrowserWindowConstructorOptions): BrowserWindow {
+  protected createWindow(mode: string, parentId: number | null, props: object, options: BrowserWindowConstructorOptions): BrowserWindow {
     let show = false;
     let parent = (parentId !== null) ? this.windows.get(parentId) : undefined;
     let additionalOptions = (!this.app.isPackaged) ? {} : PRODUCTION_WINDOW_OPTIONS;

@@ -45,7 +45,7 @@ export class Root extends Component<Props, State> {
       this.store.id = id;
       let props = await window.api.sendAsync("get-props", id);
       this.setState({mode, props}, () => {
-        window.api.send("show", id);
+        window.api.send("show-window", id);
       });
     }
   }

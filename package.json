@@ -45,6 +45,7 @@
     "react-hotkeys": "^2.0.0",
     "react-infinite-scroller": "^1.2.4",
     "react-intl": "^5.15.1",
+    "reflect-metadata": "^0.1.13",
     "serialize-error": "^8.0.1",
     "simple-git": "^2.37.0",
     "uuid": "^8.3.2"
