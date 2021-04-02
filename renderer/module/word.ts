@@ -208,7 +208,7 @@ export class Word implements PlainWord {
           comparisonString += String.fromCodePoint(161);
         }
         if (match[6].length > 0) {
-          comparisonString += String.fromCodePoint(match[4].length + 100);
+          comparisonString += String.fromCodePoint(match[6].length + 100);
         }
       } else {
         throw new Error("cannot happen");
