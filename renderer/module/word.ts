@@ -173,13 +173,31 @@ export class Word implements PlainWord {
         if ((apostrophe || char !== "'") && char !== "+" && char !== "~" && char !== "-") {
           let position = alphabetRule.indexOf(char);
           if (position >= 0) {
-            comparisonString += String.fromCodePoint(position + 174);
+            comparisonString += String.fromCodePoint(position + 200);
           } else {
             comparisonString += String.fromCodePoint(1000);
           }
-        } else {
-          comparisonString += String.fromCodePoint(1100);
         }
+      }
+      let match = this.uniqueName.match(/^(\+)?(')?(.+?)(')?(\+)?(~*)$/);
+      if (match) {
+        if (match[2]) {
+          comparisonString += String.fromCodePoint(150);
+        }
+        if (match[4]) {
+          comparisonString += String.fromCodePoint(151);
+        }
+        if (match[1]) {
+          comparisonString += String.fromCodePoint(160);
+        }
+        if (match[5]) {
+          comparisonString += String.fromCodePoint(161);
+        }
+        if (match[6].length > 0) {
+          comparisonString += String.fromCodePoint(match[4].length + 100);
+        }
+      } else {
+        throw new Error("cannot happen");
       }
       this.comparisonString = comparisonString;
     } else {
