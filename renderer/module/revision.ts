@@ -1,5 +1,9 @@
 //
 
+import {
+  ParseError
+} from "./error";
+
 
 export class Revisions extends Array<Revision> implements Array<PlainRevision> {
 
@@ -72,7 +76,7 @@ export class Revision implements PlainRevision {
       let revision = new Revision(date, beforeName, afterName);
       return revision;
     } else {
-      throw new Error("parse failed");
+      throw new ParseError("invalidRevisionLine", `invalid line: '${string}'`);
     }
   }
 

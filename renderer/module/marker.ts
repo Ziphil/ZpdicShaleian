@@ -1,5 +1,9 @@
 //
 
+import {
+  ParseError
+} from "./error";
+
 
 export class Markers extends Map<string, Array<Marker>> implements Map<string, Array<Marker>> {
 
@@ -27,14 +31,14 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
             if (wordMarker !== undefined) {
               return wordMarker;
             } else {
-              throw new Error("parse failed");
+              throw new ParseError("noSuchMarker", `no such marker with name '${value}'`);
             }
           });
           if (wordMarkers.length > 0) {
             rawMarkers.set(name, wordMarkers);
           }
         } else {
-          throw new Error("parse failed: " + line);
+          throw new ParseError("invalidMarkerLine", `invalid line: '${line}'`);
         }
       }
     }

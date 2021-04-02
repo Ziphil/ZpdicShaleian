@@ -1,6 +1,9 @@
 //
 
 import {
+  ParseError
+} from "./error";
+import {
   PlainRevision,
   Revisions
 } from "./revision";
@@ -69,7 +72,7 @@ export class DictionarySettings implements PlainDictionarySettings {
       let settings = new DictionarySettings(version, alphabetRule, revisions);
       return settings;
     } else {
-      throw new Error("parse failed");
+      throw new ParseError("insufficientDictionarySettings", "there are not enough sections in the dictionary settings");
     }
   }
 

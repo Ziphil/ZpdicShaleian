@@ -7,6 +7,9 @@ import {
   Dictionary
 } from "./dictionary";
 import {
+  ParseError
+} from "./error";
+import {
   ParsedWord
 } from "./parsed-word";
 import {
@@ -80,7 +83,7 @@ export class Word implements PlainWord {
       let word = new Word(uniqueName, date, contents);
       return word;
     } else {
-      throw new Error("parse failed");
+      throw new ParseError("invalidWordLine", `invalid line: ${lines[0]}`);
     }
   }
 
