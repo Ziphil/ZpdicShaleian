@@ -69,8 +69,12 @@ export class MainPage extends Component<Props, State> {
     this.setupIpc();
   }
 
-  public componentDidMount(): void {
-    this.loadDictionary("C:/Users/Ziphil/Desktop/dic");
+  public async componentDidMount(): Promise<void> {
+    let settings = await window.api.sendAsync("get-settings");
+    let path = settings.defaultDictionaryPath;
+    if (path !== undefined) {
+      this.loadDictionary(path);
+    }
   }
 
   private setupIpc(): void {
@@ -101,6 +105,7 @@ export class MainPage extends Component<Props, State> {
     try {
       let plainDictionary = await window.api.sendAsync("load-dictionary", path);
       let dictionary = Dictionary.fromPlain(plainDictionary);
+      window.api.sendAsync("change-settings", "defaultDictionaryPath", path);
       this.setState({dictionary}, () => {
         this.updateWords();
       });

@@ -8,6 +8,9 @@ import {
   dialog
 } from "electron";
 import {
+  Settings
+} from "../../renderer/module/settings";
+import {
   Main
 } from "../index";
 import {
@@ -66,6 +69,16 @@ export class BasicHandler extends Handler {
   @on("create-window")
   private createWindow(this: Main, event: IpcMainEvent, mode: string, parentId: number | null, props: object, options: BrowserWindowConstructorOptions): void {
     this.createWindow(mode, parentId, props, options);
+  }
+
+  @onAsync("get-settings")
+  private async getSettings(this: Main, event: IpcMainEvent): Promise<Settings> {
+    return this.settings;
+  }
+
+  @onAsync("change-settings")
+  private async changeSettings<K extends keyof Settings>(this: Main, event: IpcMainEvent, key: K, value: Settings[K]): Promise<void> {
+    this.settings[key] = value;
   }
 
   @on("open-dev-tools")

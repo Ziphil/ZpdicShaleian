@@ -10,8 +10,14 @@ import {
   client
 } from "electron-connect";
 import {
+  promises as fs
+} from "fs";
+import {
   join as joinPath
 } from "path";
+import {
+  Settings
+} from "../renderer/module/settings";
 import {
   BasicHandler,
   DictionaryHandler,
@@ -45,6 +51,7 @@ export class Main {
 
   protected app: App;
   protected ipcMain: PromisifiedIpcMain;
+  protected settings!: Settings;
   protected windows: Map<number, BrowserWindow>;
   protected mainWindow: BrowserWindow | undefined;
   protected props: Map<number, object>;
@@ -63,7 +70,8 @@ export class Main {
   }
 
   private setupEventHandlers(): void {
-    this.app.on("ready", () => {
+    this.app.on("ready", async () => {
+      await this.loadSettings();
       this.createMainWindow();
     });
     this.app.on("activate", () => {
@@ -71,7 +79,8 @@ export class Main {
         this.createMainWindow();
       }
     });
-    this.app.on("window-all-closed", () => {
+    this.app.on("window-all-closed", async () => {
+      await this.saveSettings();
       this.app.quit();
     });
   }
@@ -80,6 +89,27 @@ export class Main {
     BasicHandler.setup(this);
     GitHandler.setup(this);
     DictionaryHandler.setup(this);
+  }
+
+  private async loadSettings(): Promise<void> {
+    let path = (this.app.isPackaged) ? "./settings.json" : "./dist/settings.json";
+    try {
+      let string = await fs.readFile(path, {encoding: "utf-8"});
+      let settings = Settings.fromString(string);
+      this.settings = settings;
+    } catch (error) {
+      this.settings = Settings.createEmpty();
+    }
+  }
+
+  private async saveSettings(): Promise<void> {
+    let path = (this.app.isPackaged) ? "./settings.json" : "./dist/settings.json";
+    try {
+      let string = this.settings.toString();
+      await fs.writeFile(path, string, {encoding: "utf-8"});
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   protected createWindow(mode: string, parentId: number | null, props: object, options: BrowserWindowConstructorOptions): BrowserWindow {
