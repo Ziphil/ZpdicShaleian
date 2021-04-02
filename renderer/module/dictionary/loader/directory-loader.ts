@@ -71,7 +71,7 @@ export class DirectoryLoader extends Loader {
   }
 
   private async loadSettings(): Promise<DictionarySettings> {
-    let path = joinPath(this.path, "$SETTINGS.xdns");
+    let path = joinPath(this.path, "#SETTINGS.xdns");
     try {
       let string = await fs.readFile(path, {encoding: "utf-8"});
       let settings = DictionarySettings.fromString(string);
@@ -87,7 +87,7 @@ export class DirectoryLoader extends Loader {
   }
 
   private async loadMarkers(): Promise<Markers> {
-    let path = joinPath(this.path, "$MARKER.xdns");
+    let path = joinPath(this.path, "#MARKER.xdns");
     try {
       let string = await fs.readFile(path, {encoding: "utf-8"});
       let markers = Markers.fromString(string);

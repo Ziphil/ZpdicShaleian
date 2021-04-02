@@ -86,14 +86,14 @@ export class DirectorySaver extends Saver {
   }
 
   private async saveSettings(settings: DictionarySettings): Promise<void> {
-    let path = joinPath(this.path, "$SETTINGS.xdns");
+    let path = joinPath(this.path, "#SETTINGS.xdns");
     let string = settings.toString();
     await fs.writeFile(path, string, {encoding: "utf-8"});
     this.emitProgress();
   }
 
   private async saveMarkers(markers: Markers): Promise<void> {
-    let path = joinPath(this.path, "$MARKER.xdns");
+    let path = joinPath(this.path, "#MARKER.xdns");
     let string = markers.toString();
     await fs.writeFile(path, string, {encoding: "utf-8"});
     this.emitProgress();
