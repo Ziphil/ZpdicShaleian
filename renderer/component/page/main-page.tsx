@@ -80,23 +80,10 @@ export class MainPage extends Component<Props, State> {
       let message = <EnhancedProgressBar className="zp-save-progress-bar" offset={saveProgress.offset} size={saveProgress.size} showDetail={false}/>;
       CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
     });
-    window.api.on("edit-word", (event, uid, word) => {
-      this.editWord(uid, word);
-    });
-    window.api.on("delete-word", (event, uid) => {
-      this.deleteWord(uid);
-    });
-    window.api.onAsync("do-check-duplicate-unique-name", async (event, uniqueName, excludedUniqueName) => {
-      let dictionary = this.state.dictionary;
-      if (dictionary !== null) {
-        return dictionary.findByUniqueName(uniqueName, excludedUniqueName) !== undefined;
-      } else {
-        return true;
-      }
-    });
-    window.api.on("change-dictionary-settings", (event, settings) => {
-      this.changeDictionarySettings(settings);
-    });
+    window.api.on("edit-word", (event, uid, word) => this.editWord(uid, word));
+    window.api.on("delete-word", (event, uid) => this.deleteWord(uid));
+    window.api.onAsync("do-validate-edit-word", (event, uid, word) => this.validateEditWord(uid, word));
+    window.api.on("change-dictionary-settings", (event, settings) => this.changeDictionarySettings(settings));
     window.addEventListener("beforeunload", (event) => {
       this.checkCloseWindow();
       event.returnValue = false;
@@ -223,6 +210,15 @@ export class MainPage extends Component<Props, State> {
       dictionary.editWord(uid, word);
       this.setState({changed: true});
       this.refreshWords();
+    }
+  }
+
+  private async validateEditWord(uid: string | null, word: PlainWord): Promise<string | null> {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      return dictionary.validateEditWord(uid, word);
+    } else {
+      return "";
     }
   }
 

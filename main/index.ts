@@ -182,13 +182,13 @@ class Main {
         window.webContents.send("delete-word", uid);
       }
     });
-    ipcMain.onAsync("check-duplicate-unique-name", async (event, uniqueName, excludedUniqueName) => {
+    ipcMain.onAsync("validate-edit-word", async (event, uid, word) => {
       let window = this.mainWindow;
       if (window !== undefined) {
-        let predicate = await ipcMain.sendAsync("do-check-duplicate-unique-name", window.webContents, uniqueName, excludedUniqueName);
-        return predicate;
+        let errorType = await ipcMain.sendAsync("do-validate-edit-word", window.webContents, uid, word);
+        return errorType;
       } else {
-        return true;
+        return "";
       }
     });
     ipcMain.on("ready-change-dictionary-settings", (event, settings) => {

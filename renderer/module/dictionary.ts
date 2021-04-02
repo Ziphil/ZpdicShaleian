@@ -5,6 +5,9 @@ import {
   PlainDictionarySettings
 } from "./dictionary-settings";
 import {
+  ValidationError
+} from "./error";
+import {
   Marker,
   Markers
 } from "./marker";
@@ -85,16 +88,38 @@ export class Dictionary implements PlainDictionary {
     return word;
   }
 
-  public editWord(uid: string | null, word: PlainWord): void {
+  public editWord(uid: string | null, word: PlainWord, skipValidate?: boolean): void {
+    let errorType = (skipValidate) ? null : this.validateEditWord(uid, word);
+    if (errorType === null) {
+      if (uid !== null) {
+        let oldWord = this.words.find((word) => word.uid === uid);
+        if (oldWord !== undefined) {
+          oldWord.edit(word);
+        }
+      } else {
+        let newWord = Word.fromPlain(word);
+        newWord.setDictionary(this);
+        this.words.push(newWord);
+      }
+    } else {
+      throw new ValidationError(errorType);
+    }
+  }
+
+  public validateEditWord(uid: string | null, word: PlainWord): string | null {
     if (uid !== null) {
       let oldWord = this.words.find((word) => word.uid === uid);
       if (oldWord !== undefined) {
-        oldWord.edit(word);
+        if (this.findByUniqueName(word.uniqueName, oldWord.uniqueName) !== undefined) {
+          return "duplicateUniqueName";
+        } else {
+          return oldWord.validateEdit(word);
+        }
+      } else {
+        return "noSuchWord";
       }
     } else {
-      let newWord = Word.fromPlain(word);
-      newWord.setDictionary(this);
-      this.words.push(newWord);
+      return null;
     }
   }
 

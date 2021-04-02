@@ -47,17 +47,18 @@ export class WordEditor extends Component<Props, State> {
   }
 
   private async handleConfirm(event: MouseEvent<HTMLElement>): Promise<void> {
-    let uniqueName = this.state.word.uniqueName;
-    let originalUniqueName = this.state.originalUniqueName;
-    let invalidUniqueName = !Word.isValidUniqueName(uniqueName);
-    let duplicateUniqueName = await window.api.sendAsync("check-duplicate-unique-name", uniqueName, originalUniqueName ?? undefined);
-    if (invalidUniqueName) {
-      CustomToaster.show({message: this.trans("wordEditor.invalidUniqueName"), icon: "error", intent: "danger"});
-    } else if (duplicateUniqueName) {
-      CustomToaster.show({message: this.trans("wordEditor.duplicateUniqueName"), icon: "error", intent: "danger"});
-    } else {
+    let errorType = await window.api.sendAsync("validate-edit-word", this.state.uid, this.state.word);
+    if (errorType === null) {
       if (this.props.onConfirm) {
         this.props.onConfirm(this.state.uid, this.state.word, event);
+      }
+    } else {
+      if (errorType === "invalidUniqueName") {
+        CustomToaster.show({message: this.trans("wordEditor.invalidUniqueName"), icon: "error", intent: "danger"});
+      } else if (errorType === "duplicateUniqueName") {
+        CustomToaster.show({message: this.trans("wordEditor.duplicateUniqueName"), icon: "error", intent: "danger"});
+      } else {
+        CustomToaster.show({message: this.trans("wordEditor.error"), icon: "error", intent: "danger"});
       }
     }
   }

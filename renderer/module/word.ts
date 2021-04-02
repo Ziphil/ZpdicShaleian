@@ -7,7 +7,8 @@ import {
   Dictionary
 } from "./dictionary";
 import {
-  ParseError
+  ParseError,
+  ValidationError
 } from "./error";
 import {
   ParsedWord
@@ -125,11 +126,24 @@ export class Word implements PlainWord {
     this.updateComparisonString();
   }
 
-  public edit(word: PlainWord): void {
-    this.uniqueName = word.uniqueName;
-    this.date = word.date;
-    this.contents = word.contents;
-    this.update();
+  public edit(word: PlainWord, skipValidate?: boolean): void {
+    let errorType = (skipValidate) ? null : this.validateEdit(word);
+    if (errorType === null) {
+      this.uniqueName = word.uniqueName;
+      this.date = word.date;
+      this.contents = word.contents;
+      this.update();
+    } else {
+      throw new ValidationError(errorType);
+    }
+  }
+
+  public validateEdit(word: PlainWord): string | null {
+    if (!Word.isValidUniqueName(word.uniqueName)) {
+      return "invalidUniqueName";
+    } else {
+      return null;
+    }
   }
 
   public update(): void {
@@ -170,7 +184,7 @@ export class Word implements PlainWord {
       let apostrophe = alphabetRule.includes("'");
       for (let i = 0 ; i < this.uniqueName.length ; i ++) {
         let char = this.uniqueName.charAt(i);
-        if ((apostrophe || char !== "'") && char !== "+" && char !== "~" && char !== "-") {
+        if ((apostrophe || char !== "'") && char !== "-" && char !== "+" && char !== "~") {
           let position = alphabetRule.indexOf(char);
           if (position >= 0) {
             comparisonString += String.fromCodePoint(position + 200);
@@ -244,7 +258,7 @@ export class Word implements PlainWord {
   }
 
   public static isValidUniqueName(uniqueName: string): boolean {
-    return uniqueName.match(/^(\+)?((?:\p{L}|-)+?)(\+)?(~*)$/u) !== null;
+    return uniqueName.match(/^(\+)?((?:\p{L}|-|')+?)(\+)?(~*)$/u) !== null;
   }
 
 }

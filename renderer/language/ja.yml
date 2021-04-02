@@ -93,6 +93,8 @@ wordEditor:
     綴りのフォーマットが正しくありません。
   duplicateUniqueName: >-
     その綴りの単語はすでに登録されています。
+  error: >-
+    エラーが発生しました。
 wordPaneWrapper:
   create: "新規作成"
   inherit: "コピーして新規作成"
