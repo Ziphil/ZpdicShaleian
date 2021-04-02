@@ -1,0 +1,32 @@
+on: 
+  - push
+  - pull_request
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup Node 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install packages
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Pack for Windows
+        run: npm run pack:windows
+      - name: Upload for Windows
+        uses: actions/upload-artifact@v2
+        with:
+          name: ZpDIC for Shaleian (Windows)
+          path: product/win/
+      - name: Pack for Linux
+        run: npm run pack:linux
+      - name: Upload for Linux
+        uses: actions/upload-artifact@v2
+        with:
+          name: ZpDIC for Shaleian (Linux)
+          path: product/linux/
