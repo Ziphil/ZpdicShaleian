@@ -24,14 +24,13 @@ export class Word implements PlainWord {
   public date: number;
   public equivalentNames!: EquivalentNames;
   public contents: Contents;
-  private comparisonString: string | null;
+  public comparisonString!: string;
 
   public constructor(uniqueName: string, date: number, contents: Contents) {
     this.uid = uuid();
     this.uniqueName = uniqueName;
     this.date = date;
     this.contents = contents;
-    this.comparisonString = null;
     this.update();
   }
 
@@ -118,6 +117,11 @@ export class Word implements PlainWord {
     return word;
   }
 
+  public setDictionary(dictionary: Dictionary): void {
+    this.dictionary = dictionary;
+    this.updateComparisonString();
+  }
+
   public edit(word: PlainWord): void {
     this.uniqueName = word.uniqueName;
     this.date = word.date;
@@ -128,7 +132,7 @@ export class Word implements PlainWord {
   public update(): void {
     this.updateName();
     this.updateEquivalentNames();
-    this.comparisonString = null;
+    this.updateComparisonString();
   }
 
   private updateName(): void {
@@ -156,12 +160,10 @@ export class Word implements PlainWord {
     this.equivalentNames = equivalentNames;
   }
 
-  public getComparisonString(alphabetRule: string): string {
-    let comparisonString = this.comparisonString;
-    if (comparisonString !== null) {
-      return comparisonString;
-    } else {
-      let comparisonString = "";
+  private updateComparisonString(): void {
+    let comparisonString = "";
+    let alphabetRule = this.dictionary?.settings.alphabetRule;
+    if (alphabetRule !== undefined) {
       let apostrophe = alphabetRule.includes("'");
       for (let i = 0 ; i < this.uniqueName.length ; i ++) {
         let char = this.uniqueName.charAt(i);
@@ -177,7 +179,8 @@ export class Word implements PlainWord {
         }
       }
       this.comparisonString = comparisonString;
-      return comparisonString;
+    } else {
+      this.comparisonString = "";
     }
   }
 

@@ -37,6 +37,9 @@ export class Dictionary implements PlainDictionary {
     let markers = Markers.fromPlain(plain.markers);
     let path = plain.path;
     let dictionary = new Dictionary(words, settings, markers, path);
+    for (let word of words) {
+      word.setDictionary(dictionary);
+    }
     return dictionary;
   }
 
@@ -90,6 +93,7 @@ export class Dictionary implements PlainDictionary {
       }
     } else {
       let newWord = Word.fromPlain(word);
+      newWord.setDictionary(this);
       this.words.push(newWord);
     }
   }
@@ -116,10 +120,9 @@ export class Dictionary implements PlainDictionary {
   }
 
   private sortWords(words: Array<Word>): Array<Word> {
-    let alphabetRule = this.settings.alphabetRule;
     let sortedWords = words.sort((firstWord, secondWord) => {
-      let firstComparisonString = firstWord.getComparisonString(alphabetRule);
-      let secondComparisonString = secondWord.getComparisonString(alphabetRule);
+      let firstComparisonString = firstWord.comparisonString;
+      let secondComparisonString = secondWord.comparisonString;
       if (firstComparisonString < secondComparisonString) {
         return -1;
       } else if (firstComparisonString > secondComparisonString) {
