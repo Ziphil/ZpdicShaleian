@@ -119,7 +119,11 @@ export class Dictionary implements PlainDictionary {
         return "noSuchWord";
       }
     } else {
-      return null;
+      if (this.findByUniqueName(word.uniqueName) !== undefined) {
+        return "duplicateUniqueName";
+      } else {
+        return null;
+      }
     }
   }
 
