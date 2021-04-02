@@ -46,7 +46,7 @@ export class PromisifiedIpcRenderer {
 
   public onAsync(channel: string, listener: (event: IpcRendererEvent, ...args: Array<any>) => Promise<any>) {
     this.electronIpcRenderer.on(channel, (event, replyChannel, ...args) => {
-      Promise.resolve().then(() => listener(event, ...args)).then((result) => {
+      listener(event, ...args).then((result) => {
         event.sender.send(replyChannel, 0, result);
       }).catch((error) => {
         event.sender.send(replyChannel, 1, serializeError(error));
