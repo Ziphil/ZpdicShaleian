@@ -107,9 +107,6 @@ export class WordEditor extends Component<Props, State> {
       );
       return tabNode;
     });
-    let deleteButton = (this.props.word !== null) && (
-      <Button text={this.trans("wordEditor.delete")} intent="danger" icon="trash" onClick={this.handleDelete.bind(this)}/>
-    );
     let node = (
       <div className="zp-word-editor zp-editor">
         <Tabs defaultSelectedTabId="ja">
@@ -117,7 +114,6 @@ export class WordEditor extends Component<Props, State> {
         </Tabs>
         <div className="zp-word-editor-button zp-editor-button">
           <Button text={this.trans("wordEditor.cancel")} icon="cross" onClick={this.handleCancel.bind(this)}/>
-          {deleteButton}
           <Button text={this.trans("wordEditor.confirm")} intent="primary" icon="confirm" onClick={this.handleConfirm.bind(this)}/>
         </div>
       </div>
