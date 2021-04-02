@@ -22,7 +22,27 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ZpDIC for Shaleian (Windows)
-          path: product/win/
+          path: product/*.exe
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup Node 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install packages
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Pack for Mac
+        run: npm run pack:mac
+      - name: Upload for Mac
+        uses: actions/upload-artifact@v2
+        with:
+          name: ZpDIC for Shaleian (Mac)
+          path: product/*.dmg
   build-linux:
     runs-on: ubuntu-latest
     steps:
@@ -42,4 +62,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ZpDIC for Shaleian (Linux)
-          path: product/linux/
+          path: product/*.AppImage
