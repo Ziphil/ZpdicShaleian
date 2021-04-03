@@ -15,21 +15,25 @@ export class MarkerIcon extends Component<Props, State> {
   public renderPath(): ReactNode {
     let marker = this.props.marker;
     if (marker === "circle") {
-      return <circle cx="4.5" cy="4.5" r="4.5"/>;
+      return <circle cx="5.5" cy="5.5" r="5.5"/>;
     } else if (marker === "square") {
-      return <path d="M 0 0 L 0 9 L 9 9 L 9 0 Z"/>;
+      return <path d="M 0 0 L 0 11 L 11 11 L 11 0 Z"/>;
     } else if (marker === "up") {
-      return <path d="M 4.5 0 L 0 9 L 9 9 Z"/>;
+      return <path d="M 5.5 0 L 0 11 L 11 11 Z"/>;
     } else if (marker === "diamond") {
-      return <path d="M 4.5 0 L 0 4.5 L 4.5 9 L 9 4.5 Z"/>;
+      return <path d="M 5.5 0 L 0 5.5 L 5.5 11 L 11 5.5 Z"/>;
     } else if (marker === "down") {
-      return <path d="M 4.5 9 L 0 0 L 9 0 Z"/>;
+      return <path d="M 5.5 11 L 0 0 L 11 0 Z"/>;
     } else if (marker === "cross") {
-      return <path d="M 3 0 L 3 3 L 0 3 L 0 6 L 3 6 L 3 9 L 6 9 L 6 6 L 9 6 L 9 3 L 6 3 L 6 0 Z"/>;
-    } else if (marker === "pentagon") {
-      return <path d="M 4.5 0 L 0 4 L 2 9 L 7 9 L 9 4 Z"/>;
+      return <path d="M 3 0 L 3 3 L 0 3 L 0 8 L 3 8 L 3 11 L 8 11 L 8 8 L 11 8 L 11 3 L 8 3 L 8 0 Z"/>;
     } else if (marker === "heart") {
-      return <path d="M 0 2 C 0 5, 4.5 9, 4.5 9 C 4.5 9, 9 5, 9 2 C 9 1, 8 0, 7 0 C 6 0, 4.5 1, 4.5 2 C 4.5 1, 3 0, 2 0 C 1 0, 0 1, 0 2 Z"/>;
+      return <path d="M 0 3 C 0 5, 5.5 11, 5.5 11 C 5.5 11, 11 5, 11 3 C 11 1.75, 9.5 0, 8.25 0 C 7 0, 5.5 2, 5.5 3 C 5.5 2, 4 0, 2.75 0 C 1.5 0, 0 1.75, 0 3 Z"/>;
+    } else if (marker === "pentagon") {
+      return <path d="M 5.5 0 L 0 4 L 2 11 L 9 11 L 11 4 Z"/>;
+    } else if (marker === "hexagon") {
+      return <path d="M 0 5.5 L 3 0 L 8 0 L 11 5.5 L 8 11 L 3 11 Z"/>;
+    } else if (marker === "trapezoid") {
+      return <path d="M 3 0 L 0 11 L 11 11 L 8 0 Z"/>;
     } else {
       throw new Error("cannot happen");
     }
@@ -41,7 +45,7 @@ export class MarkerIcon extends Component<Props, State> {
       let className = "bp3-icon" + ((this.props.className !== undefined) ? ` ${this.props.className}` : "");
       let node = (
         <span className={className}>
-          <svg width="9" height="16" viewBox="0 -4 9 16">
+          <svg width="11" height="16" viewBox="0 -2 11 16">
             {pathNode}
           </svg>
         </span>
@@ -49,7 +53,7 @@ export class MarkerIcon extends Component<Props, State> {
       return node;
     } else {
       let node = (
-        <svg className={this.props.className} width="9" height="9" viewBox="0 0 9 9">
+        <svg className={this.props.className} width="11" height="11" viewBox="0 0 11 11">
           {pathNode}
         </svg>
       );

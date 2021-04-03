@@ -291,16 +291,28 @@ export class MainNavbar extends Component<Props, State> {
             icon={<MarkerIcon marker="cross" icon={true}/>}
           />
           <MenuItem
+            text={this.trans("common.marker.heart")}
+            label={this.handlerManager.getLabel("toggleActiveWordMarkerHeart")}
+            onClick={this.handlerManager.getHandler("toggleActiveWordMarkerHeart")}
+            icon={<MarkerIcon marker="heart" icon={true}/>}
+          />
+          <MenuItem
             text={this.trans("common.marker.pentagon")}
             label={this.handlerManager.getLabel("toggleActiveWordMarkerPentagon")}
             onClick={this.handlerManager.getHandler("toggleActiveWordMarkerPentagon")}
             icon={<MarkerIcon marker="pentagon" icon={true}/>}
           />
           <MenuItem
-            text={this.trans("common.marker.heart")}
-            label={this.handlerManager.getLabel("toggleActiveWordMarkerHeart")}
-            onClick={this.handlerManager.getHandler("toggleActiveWordMarkerHeart")}
-            icon={<MarkerIcon marker="heart" icon={true}/>}
+            text={this.trans("common.marker.hexagon")}
+            label={this.handlerManager.getLabel("toggleActiveWordMarkerHexagon")}
+            onClick={this.handlerManager.getHandler("toggleActiveWordMarkerHexagon")}
+            icon={<MarkerIcon marker="hexagon" icon={true}/>}
+          />
+          <MenuItem
+            text={this.trans("common.marker.trapezoid")}
+            label={this.handlerManager.getLabel("toggleActiveWordMarkerTrapezoid")}
+            onClick={this.handlerManager.getHandler("toggleActiveWordMarkerTrapezoid")}
+            icon={<MarkerIcon marker="trapezoid" icon={true}/>}
           />
         </MenuItem>
       </Menu>
@@ -414,8 +426,10 @@ export class MainNavbar extends Component<Props, State> {
       toggleActiveWordMarkerDiamond: {key: "ctrl+4", handler: () => this.props.toggleActiveWordMarker("diamond")},
       toggleActiveWordMarkerDown: {key: "ctrl+5", handler: () => this.props.toggleActiveWordMarker("down")},
       toggleActiveWordMarkerCross: {key: "ctrl+6", handler: () => this.props.toggleActiveWordMarker("cross")},
-      toggleActiveWordMarkerPentagon: {key: "ctrl+7", handler: () => this.props.toggleActiveWordMarker("pentagon")},
-      toggleActiveWordMarkerHeart: {key: "ctrl+8", handler: () => this.props.toggleActiveWordMarker("heart")},
+      toggleActiveWordMarkerHeart: {key: "ctrl+7", handler: () => this.props.toggleActiveWordMarker("heart")},
+      toggleActiveWordMarkerPentagon: {key: "ctrl+8", handler: () => this.props.toggleActiveWordMarker("pentagon")},
+      toggleActiveWordMarkerHexagon: {key: "ctrl+9", handler: () => this.props.toggleActiveWordMarker("hexagon")},
+      toggleActiveWordMarkerTrapezoid: {key: "ctrl+0", handler: () => this.props.toggleActiveWordMarker("trapezoid")},
       gitCommit: {key: "ctrl+alt+c", handler: () => this.props.gitCommit()},
       gitPush: {key: "ctrl+alt+p", handler: () => this.props.gitPush()},
       openDictionarySettings: {key: "ctrl+p", handler: () => this.props.openDictionarySettings()},

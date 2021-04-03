@@ -8,8 +8,10 @@ $swp-marker-colors: (
   diamond: $gold3,
   down: $violet3,
   cross: $lime3,
+  heart: $rose3,
   pentagon: $turquoise3,
-  heart: $rose3
+  hexagon: $indigo3,
+  trapezoid: $sepia3
 );
 $swp-marker-background-colors: (
   circle: mix($vermilion5, $card-background-color, 20%),
@@ -18,8 +20,10 @@ $swp-marker-background-colors: (
   diamond: mix($gold5, $card-background-color, 20%),
   down: mix($violet5, $card-background-color, 20%),
   cross: mix($lime5, $card-background-color, 20%),
+  heart: mix($rose5, $card-background-color, 20%),
   pentagon: mix($turquoise5, $card-background-color, 20%),
-  heart: mix($rose5, $card-background-color, 20%)
+  hexagon: mix($indigo5, $card-background-color, 20%),
+  trapezoid: mix($sepia5, $card-background-color, 20%),
 );
 
 $pt-modified-elevation-shadow-0: 0px 0px 0px 1px var(--marker-background-color), nth($pt-elevation-shadow-0, 2), nth($pt-elevation-shadow-0, 3);

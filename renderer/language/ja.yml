@@ -31,8 +31,10 @@ common:
     diamond: "菱形 (橙色)"
     down: "下三角形 (紫色)"
     cross: "十字 (黄緑色)"
-    pentagon: "五角形 (水色)"
     heart: "ハート (桃色)"
+    pentagon: "五角形 (水色)"
+    hexagon: "六角形 (青紫色)"
+    trapezoid: "台形 (茶色)"
   language:
     ja: "JA (日本語)"
     en: "EN (English)"

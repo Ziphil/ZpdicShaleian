@@ -82,14 +82,24 @@ export class WordPaneWrapper extends Component<Props, State> {
             icon={<MarkerIcon marker="cross" icon={true}/>}
           />
           <MenuItem
+            text={this.trans("common.marker.heart")}
+            onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "heart")}
+            icon={<MarkerIcon marker="heart" icon={true}/>}
+          />
+          <MenuItem
             text={this.trans("common.marker.pentagon")}
             onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "pentagon")}
             icon={<MarkerIcon marker="pentagon" icon={true}/>}
           />
           <MenuItem
-            text={this.trans("common.marker.heart")}
-            onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "heart")}
-            icon={<MarkerIcon marker="heart" icon={true}/>}
+            text={this.trans("common.marker.hexagon")}
+            onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "hexagon")}
+            icon={<MarkerIcon marker="hexagon" icon={true}/>}
+          />
+          <MenuItem
+            text={this.trans("common.marker.trapezoid")}
+            onClick={this.props.onMarkerToggled && partial(this.props.onMarkerToggled, "trapezoid")}
+            icon={<MarkerIcon marker="trapezoid" icon={true}/>}
           />
         </MenuItem>
       </Menu>

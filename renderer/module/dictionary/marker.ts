@@ -123,5 +123,5 @@ export class MarkerUtil {
 }
 
 
-export const MARKERS = ["circle", "square", "up", "diamond", "down", "cross", "pentagon", "heart"] as const;
+export const MARKERS = ["circle", "square", "up", "diamond", "down", "cross", "heart", "pentagon", "hexagon", "trapezoid"] as const;
 export type Marker = (typeof MARKERS)[number];
