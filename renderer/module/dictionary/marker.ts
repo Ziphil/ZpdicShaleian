@@ -50,7 +50,7 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
     let string = "";
     string += "!MARKER\n";
     for (let [uniqueName, wordMarkers] of this.entries()) {
-      string += `- {${uniqueName}}: ${wordMarkers.join(", ")}\n`;
+      string += `- ${uniqueName}: ${wordMarkers.join(", ")}\n`;
     }
     return string;
   }
