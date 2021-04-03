@@ -109,7 +109,7 @@ export class WordEditor extends Component<Props, State> {
     });
     let node = (
       <div className="zp-word-editor zp-editor">
-        <Tabs defaultSelectedTabId="ja">
+        <Tabs defaultSelectedTabId="ja" renderActiveTabPanelOnly={true}>
           {tabNodes}
         </Tabs>
         <div className="zp-word-editor-button zp-editor-button">
