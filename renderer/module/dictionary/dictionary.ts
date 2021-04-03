@@ -134,13 +134,13 @@ export class Dictionary implements PlainDictionary {
     }
   }
 
-  public getMarkers(name: string): Array<Marker> {
-    let markers = this.markers.get(name);
+  public getMarkers(uniqueName: string): Array<Marker> {
+    let markers = this.markers.get(uniqueName);
     return markers;
   }
 
-  public toggleMarker(name: string, marker: Marker): void {
-    this.markers.toggle(name, marker);
+  public toggleMarker(uniqueName: string, marker: Marker): void {
+    this.markers.toggle(uniqueName, marker);
   }
 
   public changeSettings(settings: PlainDictionarySettings): void {

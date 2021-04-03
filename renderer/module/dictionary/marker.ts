@@ -25,7 +25,7 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
       if (line.trim() !== "" && line.trim() !== "!MARKER") {
         let match = line.match(/^\-\s*(?:\{(.*?)\}|(.*?))\s*:\s*(.*?)\s*$/);
         if (match) {
-          let name = match[1] ?? match[2];
+          let uniqueName = match[1] ?? match[2];
           let wordMarkers = match[3].split(/\s*,\s*/).map((value) => {
             let wordMarker = MarkerUtil.cast(value);
             if (wordMarker !== undefined) {
@@ -35,7 +35,7 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
             }
           });
           if (wordMarkers.length > 0) {
-            rawMarkers.set(name, wordMarkers);
+            rawMarkers.set(uniqueName, wordMarkers);
           }
         } else {
           throw new ParseError("invalidMarkerLine", `invalid line: '${line}'`);
@@ -49,8 +49,8 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
   public toString(): string {
     let string = "";
     string += "!MARKER\n";
-    for (let [name, wordMarkers] of this.entries()) {
-      string += `- {${name}}: ${wordMarkers.join(", ")}\n`;
+    for (let [uniqueName, wordMarkers] of this.entries()) {
+      string += `- {${uniqueName}}: ${wordMarkers.join(", ")}\n`;
     }
     return string;
   }
@@ -66,13 +66,13 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
     }
   }
 
-  public get(name: string): Array<Marker> {
-    let markers = super.get(name) ?? [];
+  public get(uniqueName: string): Array<Marker> {
+    let markers = super.get(uniqueName) ?? [];
     return markers;
   }
 
-  public toggle(name: string, marker: Marker): void {
-    let wordMarkers = [...this.get(name)];
+  public toggle(uniqueName: string, marker: Marker): void {
+    let wordMarkers = [...this.get(uniqueName)];
     let index = wordMarkers.findIndex((existingMarker) => existingMarker === marker);
     if (index >= 0) {
       wordMarkers.splice(index, 1);
@@ -81,9 +81,9 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
     }
     if (wordMarkers.length > 0) {
       MarkerUtil.sort(wordMarkers);
-      super.set(name, wordMarkers);
+      super.set(uniqueName, wordMarkers);
     } else {
-      super.delete(name);
+      super.delete(uniqueName);
     }
   }
 
