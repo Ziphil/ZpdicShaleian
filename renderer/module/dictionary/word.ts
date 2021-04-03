@@ -131,7 +131,7 @@ export class Word implements PlainWord {
     if (errorType === null) {
       this.uniqueName = word.uniqueName;
       this.date = word.date;
-      this.contents = word.contents;
+      this.contents = Object.fromEntries(Object.entries(word.contents).map(([language, content]) => [language, content?.trim()]));
       this.update();
     } else {
       throw new ValidationError(errorType);
