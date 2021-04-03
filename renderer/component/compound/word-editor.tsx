@@ -2,17 +2,22 @@
 
 import {
   Button,
+  IRefObject,
   InputGroup,
   NumericInput,
   Tab,
   Tabs,
   Toaster
 } from "@blueprintjs/core";
+import {
+  Editor
+} from "codemirror";
 import * as react from "react";
 import {
   MouseEvent,
   ReactElement,
-  ReactNode
+  ReactNode,
+  createRef
 } from "react";
 import {
   Controlled as CodeMirror
@@ -35,12 +40,26 @@ import {
 @component()
 export class WordEditor extends Component<Props, State> {
 
+  private nameRef: IRefObject<HTMLInputElement> = createRef();
+
   public constructor(props: Props) {
     super(props);
     let uid = props.word?.uid ?? null;
     let word = (props.defaultWord !== undefined) ? props.defaultWord : (props.word !== null) ? props.word : Word.createEmpty();
     let originalUniqueName = props.word?.uniqueName ?? null;
     this.state = {uid, word, originalUniqueName};
+  }
+
+  public componentDidMount(): void {
+    if (this.props.word === null) {
+      this.nameRef.current?.focus();
+    }
+  }
+
+  private contentEditorDidMount(editor: Editor): void {
+    if (this.props.word !== null) {
+      editor.focus();
+    }
   }
 
   private handleCancel(event: MouseEvent<HTMLElement>): void {
@@ -87,7 +106,7 @@ export class WordEditor extends Component<Props, State> {
     let node = (
       <div className="zp-word-editor-tab zp-editor-tab" key={language}>
         <div className="zp-word-editor-head">
-          <InputGroup fill={true} value={word.uniqueName} onChange={this.setWord((event) => word.uniqueName = event.target.value)}/>
+          <InputGroup inputRef={this.nameRef} fill={true} value={word.uniqueName} onChange={this.setWord((event) => word.uniqueName = event.target.value)}/>
           <NumericInput className="zp-word-editor-date" value={word.date} minorStepSize={null} onValueChange={this.setWord((date) => word.date = Math.floor(date))}/>
         </div>
         <CodeMirror
@@ -95,6 +114,7 @@ export class WordEditor extends Component<Props, State> {
           value={word.contents[language] ?? ""}
           options={{theme: "zpshcontent", mode: {name: "shcontent"}, lineWrapping: true}}
           onBeforeChange={this.setWord((editor, data, value) => word.contents[language] = value)}
+          editorDidMount={this.contentEditorDidMount.bind(this)}
         />
       </div>
     );
