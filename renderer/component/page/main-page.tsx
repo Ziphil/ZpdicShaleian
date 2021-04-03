@@ -7,7 +7,8 @@ import {
 } from "@blueprintjs/core";
 import * as react from "react";
 import {
-  ReactNode
+  ReactNode,
+  createRef
 } from "react";
 import {
   Dictionary,
@@ -48,7 +49,7 @@ import {
 @component()
 export class MainPage extends Component<Props, State> {
 
-  private searchInputRef: IRefObject<HTMLInputElement>;
+  private searchInputRef: IRefObject<HTMLInputElement> = createRef();
 
   public state: State = {
     dictionary: null,
@@ -65,7 +66,6 @@ export class MainPage extends Component<Props, State> {
 
   public constructor(props: Props) {
     super(props);
-    this.searchInputRef = {current: null};
     this.setupIpc();
   }
 
