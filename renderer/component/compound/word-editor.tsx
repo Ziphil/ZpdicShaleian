@@ -18,6 +18,9 @@ import {
   Controlled as CodeMirror
 } from "react-codemirror2";
 import {
+  HotKeys
+} from "react-hotkeys";
+import {
   PlainWord,
   Word
 } from "../../module/dictionary";
@@ -46,7 +49,7 @@ export class WordEditor extends Component<Props, State> {
     }
   }
 
-  private async handleConfirm(event: MouseEvent<HTMLElement>): Promise<void> {
+  private async handleConfirm(event?: MouseEvent<HTMLElement> | KeyboardEvent): Promise<void> {
     let errorType = await window.api.sendAsync("validate-edit-word", this.state.uid, this.state.word);
     if (errorType === null) {
       if (this.props.onConfirm) {
@@ -107,15 +110,19 @@ export class WordEditor extends Component<Props, State> {
       );
       return tabNode;
     });
+    let keys = {confirm: "ctrl+enter"};
+    let handlers = {confirm: this.handleConfirm.bind(this)};
     let node = (
       <div className="zp-word-editor zp-editor">
-        <Tabs defaultSelectedTabId="ja" renderActiveTabPanelOnly={true}>
-          {tabNodes}
-        </Tabs>
-        <div className="zp-word-editor-button zp-editor-button">
-          <Button text={this.trans("wordEditor.cancel")} onClick={this.handleCancel.bind(this)}/>
-          <Button text={this.trans("wordEditor.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
-        </div>
+        <HotKeys keyMap={keys} handlers={handlers}>
+          <Tabs defaultSelectedTabId="ja" renderActiveTabPanelOnly={true}>
+            {tabNodes}
+          </Tabs>
+          <div className="zp-word-editor-button zp-editor-button">
+            <Button text={this.trans("wordEditor.cancel")} onClick={this.handleCancel.bind(this)}/>
+            <Button text={this.trans("wordEditor.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
+          </div>
+        </HotKeys>
       </div>
     );
     return node;
@@ -127,7 +134,7 @@ export class WordEditor extends Component<Props, State> {
 type Props = {
   word: PlainWord | null,
   defaultWord?: PlainWord,
-  onConfirm?: (uid: string | null, word: PlainWord, event: MouseEvent<HTMLElement>) => void,
+  onConfirm?: (uid: string | null, word: PlainWord, event?: MouseEvent<HTMLElement> | KeyboardEvent) => void,
   onDelete?: (uid: string, event: MouseEvent<HTMLElement>) => void,
   onCancel?: (event: MouseEvent<HTMLElement>) => void
 };

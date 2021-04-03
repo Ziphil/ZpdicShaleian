@@ -7,11 +7,12 @@
   flex-direction: column;
 }
 
-.zp-editor >.bp3-tabs {
+.zp-editor >div >.bp3-tabs {
   margin-top: -$pt-grid-size;
 }
 
-.zp-editor >.bp3-tabs,
+.zp-editor >div,
+.zp-editor >div >.bp3-tabs,
 .zp-editor .bp3-tab-panel,
 .zp-editor .bp3-tab-panel >* {
   flex-grow: 1;
