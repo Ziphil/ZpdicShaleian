@@ -113,8 +113,8 @@ export class WordEditor extends Component<Props, State> {
           {tabNodes}
         </Tabs>
         <div className="zp-word-editor-button zp-editor-button">
-          <Button text={this.trans("wordEditor.cancel")} icon="cross" onClick={this.handleCancel.bind(this)}/>
-          <Button text={this.trans("wordEditor.confirm")} intent="primary" icon="confirm" onClick={this.handleConfirm.bind(this)}/>
+          <Button text={this.trans("wordEditor.cancel")} onClick={this.handleCancel.bind(this)}/>
+          <Button text={this.trans("wordEditor.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
         </div>
       </div>
     );
