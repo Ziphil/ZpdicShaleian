@@ -328,7 +328,7 @@ export class MainPage extends Component<Props, State> {
     if (dictionary !== null) {
       let path = dictionary.path;
       try {
-        await window.api.sendAsync("git-commit", path, "");
+        await window.api.sendAsync("git-commit", path);
         CustomToaster.show({message: this.trans("mainPage.succeedGitCommit"), icon: "tick", intent: "success"});
       } catch (error) {
         CustomToaster.show({message: this.trans("mainPage.errorGitCommit"), icon: "error", intent: "danger"});

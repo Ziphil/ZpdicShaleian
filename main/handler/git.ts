@@ -24,8 +24,8 @@ export class GitHandler extends Handler {
   private async gitCommit(this: Main, event: IpcMainEvent, path: string, message?: string): Promise<void> {
     try {
       let git = simpleGit(path);
-      let nextMessage = message ?? this.settings.defaultCommitMessage;
-      if (nextMessage !== undefined) {
+      let nextMessage = message || this.settings.defaultCommitMessage;
+      if (nextMessage !== undefined && nextMessage !== "") {
         await git.add(".");
         await git.commit(nextMessage);
       } else {
