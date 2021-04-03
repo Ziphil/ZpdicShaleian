@@ -336,12 +336,12 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private gitPush(): void {
+  private async gitPush(): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let path = dictionary.path;
       try {
-        window.api.send("git-push", path);
+        await window.api.sendAsync("git-push", path);
         CustomToaster.show({message: this.trans("mainPage.succeedGitPush"), icon: "tick", intent: "success"});
       } catch (error) {
         CustomToaster.show({message: this.trans("mainPage.errorGitPush"), icon: "error", intent: "danger"});
