@@ -10,6 +10,7 @@ import {
 import {
   Dictionary,
   Marker,
+  SearchResult,
   Word
 } from "../../module/dictionary";
 import {
@@ -27,11 +28,11 @@ import {
 @component()
 export class WordList extends Component<Props, State> {
 
-  public componentDidUpdate(previousProps: any): void {
-    if (this.props.words !== previousProps.words || this.props.page !== previousProps.page) {
-      document.getElementById("word-list-container")!.scrollTop = 0;
-    }
-  }
+  // public componentDidUpdate(previousProps: any): void {
+  //   if (this.props.words !== previousProps.words || this.props.page !== previousProps.page) {
+  //     document.getElementById("word-list-container")!.scrollTop = 0;
+  //   }
+  // }
 
   private handlePageSet(page: number) {
     if (this.props.onPageSet) {
@@ -41,8 +42,8 @@ export class WordList extends Component<Props, State> {
 
   public render(): ReactNode {
     let page = this.props.page;
-    let maxPage = Math.max(Math.ceil(this.props.words.length / 30) - 1, 0);
-    let displayedWords = this.props.words.slice(page * 30, page * 30 + 30);
+    let maxPage = Math.max(Math.ceil(this.props.searchResult.words.length / 30) - 1, 0);
+    let displayedWords = this.props.searchResult.words.slice(page * 30, page * 30 + 30);
     let wordPanes = displayedWords.map((word) => {
       let wordPane = (
         <WordPaneWrapper
@@ -62,7 +63,7 @@ export class WordList extends Component<Props, State> {
       return wordPane;
     });
     let node = (
-      <div className="zp-word-list-wrapper" id="word-list">
+      <div className="zp-word-list-wrapper">
         <div className="zp-word-list">
           {wordPanes}
         </div>
@@ -79,7 +80,7 @@ export class WordList extends Component<Props, State> {
 
 type Props = {
   dictionary: Dictionary,
-  words: Array<Word>,
+  searchResult: SearchResult,
   language: string,
   page: number,
   onCreate?: (event: MouseEvent<HTMLElement>) => void,

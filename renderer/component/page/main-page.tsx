@@ -8,6 +8,7 @@ import {
 import * as react from "react";
 import {
   ReactNode,
+  RefObject,
   createRef
 } from "react";
 import {
@@ -50,6 +51,7 @@ import {
 export class MainPage extends Component<Props, State> {
 
   private searchInputRef: IRefObject<HTMLInputElement> = createRef();
+  private wordListRef: RefObject<HTMLDivElement> = createRef();
 
   public state: State = {
     dictionary: null,
@@ -144,23 +146,39 @@ export class MainPage extends Component<Props, State> {
     CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
   }
 
-  private refreshWords(): void {
-    let searchResult = {...this.state.searchResult};
-    this.setState({searchResult});
+  // 検索結果ペインを再描画します。
+  // 引数の search に true を渡すと、現在の検索パラメータを用いて再検索することで表示する単語データの更新も行います。
+  // 検索結果ペインのスクロール位置は変化しません。
+  private refreshWords(search?: boolean): void {
+    let dictionary = this.state.dictionary;
+    if (!search || dictionary === null) {
+      let searchResult = {...this.state.searchResult};
+      this.setState({searchResult});
+    } else {
+      let searchResult = dictionary.search(this.state.parameter);
+      this.setState({searchResult});
+    }
   }
 
+  // 検索結果の単語リストをシャッフルします。
+  // 検索結果ペインのスクロール位置はリセットされます。
   private shuffleWords(): void {
     let oldWords = this.state.searchResult.words;
     let words = [...ArrayUtil.shuffle(oldWords)];
     let searchResult = {...this.state.searchResult, words};
     this.setState({searchResult, page: 0, activeWord: null});
+    this.scrollWordList();
   }
 
+  // 現在の検索パラメータを用いて検索結果ペインを更新します。
+  // 引数の parameter に検索パラメータを渡すと、その引数の方を用いて (ステートに保持されている現在の検索パラメータを無視して) 検索結果ペインが更新されます。
+  // 検索結果ペインのスクロール位置はリセットされます。
   private updateWords(parameter?: WordParameter): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let searchResult = dictionary.search(parameter ?? this.state.parameter);
       this.setState({searchResult, page: 0, activeWord: null});
+      this.scrollWordList();
     }
   }
 
@@ -179,6 +197,13 @@ export class MainPage extends Component<Props, State> {
     if (element !== null) {
       element.focus();
       this.setState({activeWord: null});
+    }
+  }
+
+  private scrollWordList(): void {
+    let wordListElement = this.wordListRef.current;
+    if (wordListElement !== null) {
+      wordListElement.scrollTop = 0;
     }
   }
 
@@ -219,7 +244,7 @@ export class MainPage extends Component<Props, State> {
     if (dictionary !== null) {
       dictionary.editWord(uid, word);
       this.setState({changed: true});
-      this.refreshWords();
+      this.refreshWords(true);
     }
   }
 
@@ -237,7 +262,7 @@ export class MainPage extends Component<Props, State> {
     if (dictionary !== null) {
       dictionary.deleteWord(uid);
       this.setState({changed: true});
-      this.refreshWords();
+      this.refreshWords(true);
     }
   }
 
@@ -418,10 +443,10 @@ export class MainPage extends Component<Props, State> {
               onParameterSet={this.changeParameter.bind(this)}
             />
           </div>
-          <div className="zp-word-list-container" id="word-list-container">
+          <div className="zp-word-list-container" ref={this.wordListRef}>
             <WordList
               dictionary={this.state.dictionary!}
-              words={this.state.searchResult.words}
+              searchResult={this.state.searchResult}
               language={this.state.language}
               page={this.state.page}
               onCreate={() => this.startEditWord(null)}
