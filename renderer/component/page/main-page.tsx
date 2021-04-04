@@ -52,7 +52,7 @@ export class MainPage extends Component<Props, State> {
 
   private searchInputRef: IRefObject<HTMLInputElement> = createRef();
   private wordListRef: RefObject<HTMLDivElement> = createRef();
-  private leaveHander?: (confirmed: boolean) => void;
+  private handleAlertClose!: (confirmed: boolean) => void;
 
   public state: State = {
     dictionary: null,
@@ -398,8 +398,8 @@ export class MainPage extends Component<Props, State> {
   private checkLeave(): Promise<boolean> {
     if (this.state.changed) {
       let promise = new Promise<boolean>((resolve, reject) => {
-        this.leaveHander = function (confirmed: boolean): void {
-          this.leaveHander = undefined;
+        this.handleAlertClose = function (confirmed: boolean): void {
+          this.setState({alertOpen: false});
           resolve(confirmed);
         };
         this.setState({alertOpen: true});
@@ -408,13 +408,6 @@ export class MainPage extends Component<Props, State> {
     } else {
       let promise = Promise.resolve(true);
       return promise;
-    }
-  }
-
-  private handleAlertClose(confirmed: boolean): void {
-    this.setState({alertOpen: false});
-    if (this.leaveHander) {
-      this.leaveHander(confirmed);
     }
   }
 
