@@ -1,9 +1,5 @@
 //
 
-import {
-  ParseError
-} from "./error";
-
 
 export class Markers extends Map<string, Array<Marker>> implements Map<string, Array<Marker>> {
 
@@ -15,34 +11,6 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
 
   public static fromPlain(plain: Map<string, Array<Marker>>): Markers {
     let markers = new Markers(plain.entries());
-    return markers;
-  }
-
-  public static fromString(string: string): Markers {
-    let lines = string.trim().split(/\r\n|\r|\n/);
-    let rawMarkers = new Map<string, Array<Marker>>();
-    for (let line of lines) {
-      if (line.trim() !== "" && line.trim() !== "!MARKER") {
-        let match = line.match(/^\-\s*(?:\{(.*?)\}|(.*?))\s*:\s*(.*?)\s*$/);
-        if (match) {
-          let uniqueName = match[1] ?? match[2];
-          let wordMarkers = match[3].split(/\s*,\s*/).map((value) => {
-            let wordMarker = MarkerUtil.cast(value);
-            if (wordMarker !== undefined) {
-              return wordMarker;
-            } else {
-              throw new ParseError("noSuchMarker", `no such marker with name '${value}'`);
-            }
-          });
-          if (wordMarkers.length > 0) {
-            rawMarkers.set(uniqueName, wordMarkers);
-          }
-        } else {
-          throw new ParseError("invalidMarkerLine", `invalid line: '${line}'`);
-        }
-      }
-    }
-    let markers = new Markers(rawMarkers.entries());
     return markers;
   }
 

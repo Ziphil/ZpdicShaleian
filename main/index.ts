@@ -95,7 +95,7 @@ export class Main {
     let path = (this.app.isPackaged) ? "./settings.json" : "./dist/settings.json";
     try {
       let string = await fs.readFile(path, {encoding: "utf-8"});
-      let settings = Settings.fromString(string);
+      let settings = new Settings(JSON.parse(string));
       this.settings = settings;
     } catch (error) {
       this.settings = Settings.createEmpty();
@@ -105,7 +105,7 @@ export class Main {
   private async saveSettings(): Promise<void> {
     let path = (this.app.isPackaged) ? "./settings.json" : "./dist/settings.json";
     try {
-      let string = this.settings.toString();
+      let string = JSON.stringify(this.settings, null, 2);
       await fs.writeFile(path, string, {encoding: "utf-8"});
     } catch (error) {
       console.error(error);

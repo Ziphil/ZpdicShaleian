@@ -19,17 +19,22 @@ import {
   Word
 } from "../word";
 import {
+  Deserializer
+} from "./deserializer";
+import {
   Loader
 } from "./loader";
 
 
 export class DirectoryLoader extends Loader {
 
+  private deserializer: Deserializer;
   private size: number = 0;
   private count: number = 0;
 
   public constructor(path: string) {
     super(path);
+    this.deserializer = new Deserializer();
   }
 
   public start(): void {
@@ -64,7 +69,7 @@ export class DirectoryLoader extends Loader {
 
   private async loadWord(path: string): Promise<Word> {
     let string = await fs.readFile(path, {encoding: "utf-8"});
-    let word = Word.fromString(string);
+    let word = this.deserializer.parseWord(string);
     this.count ++;
     this.emitProgress();
     return word;
@@ -74,7 +79,7 @@ export class DirectoryLoader extends Loader {
     let path = joinPath(this.path, "#SETTINGS.xdns");
     try {
       let string = await fs.readFile(path, {encoding: "utf-8"});
-      let settings = DictionarySettings.fromString(string);
+      let settings = this.deserializer.parseDictionarySettings(string);
       this.emitProgress();
       return settings;
     } catch (error) {
@@ -90,7 +95,7 @@ export class DirectoryLoader extends Loader {
     let path = joinPath(this.path, "#MARKER.xdns");
     try {
       let string = await fs.readFile(path, {encoding: "utf-8"});
-      let markers = Markers.fromString(string);
+      let markers = this.deserializer.parseMarkers(string);
       this.emitProgress();
       return markers;
     } catch (error) {

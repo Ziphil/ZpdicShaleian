@@ -1,9 +1,6 @@
 //
 
 import {
-  ParseError
-} from "./error";
-import {
   PlainRevision,
   Revisions
 } from "./revision";
@@ -27,53 +24,6 @@ export class DictionarySettings implements PlainDictionarySettings {
     let revisions = Revisions.fromPlain(plain.revisions);
     let settings = new DictionarySettings(version, alphabetRule, revisions);
     return settings;
-  }
-
-  public static fromString(string: string): DictionarySettings {
-    let lines = string.trim().split(/\r\n|\r|\n/);
-    let version;
-    let alphabetRule;
-    let revisions;
-    let before = true;
-    let currentMode = "";
-    let currentString = "";
-    let setProperty = function (mode: string, string: string) {
-      if (mode === "VERSION") {
-        let match = string.match(/^\-\s*(.*)$/m);
-        if (match) {
-          version = match[1];
-        }
-      } else if (mode === "ALPHABET") {
-        let match = string.match(/^\-\s*(.*)$/m);
-        if (match) {
-          alphabetRule = match[1];
-        }
-      } else if (mode === "REVISION") {
-        revisions = Revisions.fromString(string);
-      }
-    };
-    for (let line of lines) {
-      let headerMatch = line.match(/^!(\w+)/);
-      if (headerMatch) {
-        if (!before) {
-          setProperty(currentMode, currentString);
-        }
-        before = false;
-        currentMode = headerMatch[1];
-        currentString = "";
-      } else {
-        currentString += line + "\n";
-      }
-    }
-    if (!before) {
-      setProperty(currentMode, currentString);
-    }
-    if (version !== undefined && alphabetRule !== undefined && revisions !== undefined) {
-      let settings = new DictionarySettings(version, alphabetRule, revisions);
-      return settings;
-    } else {
-      throw new ParseError("insufficientDictionarySettings", "there are not enough sections in the dictionary settings");
-    }
   }
 
   public toString(): string {

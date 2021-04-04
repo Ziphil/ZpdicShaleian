@@ -7,7 +7,6 @@ import {
   Dictionary
 } from "./dictionary";
 import {
-  ParseError,
   ValidationError
 } from "./error";
 import {
@@ -38,6 +37,15 @@ export class Word implements PlainWord {
     this.update();
   }
 
+  public static createEmpty(): Word {
+    let name = "";
+    let rawDate = new Date();
+    let date = Math.floor((rawDate.getTime() - 1327179600000) / 86400000);
+    let contents = {ja: "+ <>\n= <>\n\nM:"};
+    let word = new Word(name, date, contents);
+    return word;
+  }
+
   public static fromPlain(plain: PlainWord): Word {
     let uniqueName = plain.uniqueName;
     let date = plain.date;
@@ -52,40 +60,6 @@ export class Word implements PlainWord {
     let date = this.date;
     let contents = this.contents;
     return {uid, uniqueName, date, contents};
-  }
-
-  public static fromString(string: string): Word {
-    let lines = string.trim().split(/\r\n|\r|\n/);
-    let match = lines[0]?.match(/^\*\s*(.+?)\s*@(\d+)/);
-    if (match) {
-      let uniqueName = match[1];
-      let date = parseInt(match[2], 10);
-      let contents = {} as Contents;
-      let before = true;
-      let currentLanguage = "";
-      let currentContent = "";
-      for (let i = 1 ; i < lines.length ; i ++) {
-        let line = lines[i];
-        let languageMatch = line.match(/^!(\w{2})/);
-        if (languageMatch) {
-          if (!before) {
-            contents[currentLanguage] = currentContent.trim();
-          }
-          before = false;
-          currentLanguage = languageMatch[1].toLowerCase();
-          currentContent = "";
-        } else {
-          currentContent += line + "\n";
-        }
-      }
-      if (!before) {
-        contents[currentLanguage] = currentContent.trim();
-      }
-      let word = new Word(uniqueName, date, contents);
-      return word;
-    } else {
-      throw new ParseError("invalidWordLine", `invalid line: ${lines[0]}`);
-    }
   }
 
   public toString(): string {
@@ -110,15 +84,6 @@ export class Word implements PlainWord {
     let parser = new Parser(resolvers);
     let parsedWord = parser.parse(this);
     return parsedWord;
-  }
-
-  public static createEmpty(): Word {
-    let name = "";
-    let rawDate = new Date();
-    let date = Math.floor((rawDate.getTime() - 1327179600000) / 86400000);
-    let contents = {ja: "+ <>\n= <>\n\nM:"};
-    let word = new Word(name, date, contents);
-    return word;
   }
 
   public setDictionary(dictionary: Dictionary): void {

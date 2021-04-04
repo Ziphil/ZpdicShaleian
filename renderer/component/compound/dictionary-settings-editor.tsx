@@ -22,6 +22,9 @@ import {
   Revisions
 } from "../../module/dictionary";
 import {
+  Deserializer
+} from "../../module/dictionary/loader/deserializer";
+import {
   Component
 } from "../component";
 import {
@@ -50,7 +53,8 @@ export class DictionarySettingsEditor extends Component<Props, State> {
     if (this.props.onConfirm) {
       try {
         let settings = this.state.settings;
-        settings.revisions = Revisions.fromString(settings.revisionString);
+        let deserializer = new Deserializer();
+        settings.revisions = deserializer.parseRevisions(settings.revisionString);
         this.props.onConfirm(settings, event);
       } catch (error) {
         CustomToaster.show({message: this.trans("dictionarySettingsEditor.errorRevisions"), icon: "error", intent: "danger"});

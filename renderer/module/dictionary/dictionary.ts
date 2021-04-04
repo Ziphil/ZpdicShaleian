@@ -54,14 +54,6 @@ export class Dictionary implements PlainDictionary {
     return {words, settings, markers, path};
   }
 
-  public static fromString(string: string): Dictionary {
-    throw new Error("not yet implemented");
-  }
-
-  public toString(): string {
-    throw new Error("not yet implemented");
-  }
-
   public search(parameter: WordParameter): SearchResult {
     let beforeDate = new Date();
     let words = this.words.filter((word) => parameter.match(word));

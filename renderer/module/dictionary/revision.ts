@@ -1,9 +1,5 @@
 //
 
-import {
-  ParseError
-} from "./error";
-
 
 export class Revisions extends Array<Revision> implements Array<PlainRevision> {
 
@@ -21,18 +17,6 @@ export class Revisions extends Array<Revision> implements Array<PlainRevision> {
       return revision;
     });
     let revisions = new Revisions(...rawRevisions);
-    return revisions;
-  }
-
-  public static fromString(string: string): Revisions {
-    let lines = string.trim().split(/\r\n|\r|\n/);
-    let revisions = new Revisions();
-    for (let line of lines) {
-      if (line.trim() !== "") {
-        let revision = Revision.fromString(line.trim());
-        revisions.push(revision);
-      }
-    }
     return revisions;
   }
 
@@ -65,19 +49,6 @@ export class Revision implements PlainRevision {
     let afterName = plain.afterName;
     let revision = new Revision(date, beforeName, afterName);
     return revision;
-  }
-
-  public static fromString(string: string): Revision {
-    let match = string.match(/^\-\s*(?:@(\d+)\s*)?\{(.*?)\}\s*→\s*\{(.*?)\}\s*$/);
-    if (match) {
-      let date = (match[1] !== undefined) ? parseInt(match[1], 10) : null;
-      let beforeName = match[2];
-      let afterName = match[3];
-      let revision = new Revision(date, beforeName, afterName);
-      return revision;
-    } else {
-      throw new ParseError("invalidRevisionLine", `invalid line: '${string}'`);
-    }
   }
 
   public toString(): string {
