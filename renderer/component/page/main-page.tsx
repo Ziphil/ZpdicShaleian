@@ -101,10 +101,13 @@ export class MainPage extends Component<Props, State> {
   }
 
   private async startLoadDictionary(): Promise<void> {
-    let result = await window.api.sendAsync("show-open-dialog", this.props.store!.id, {properties: ["openDirectory"]});
-    if (!result.canceled) {
-      let path = result.filePaths[0];
-      this.loadDictionary(path);
+    let confirmed = await this.checkLeave();
+    if (confirmed) {
+      let result = await window.api.sendAsync("show-open-dialog", this.props.store!.id, {properties: ["openDirectory"]});
+      if (!result.canceled) {
+        let path = result.filePaths[0];
+        this.loadDictionary(path);
+      }
     }
   }
 
@@ -127,8 +130,11 @@ export class MainPage extends Component<Props, State> {
   private async reloadDictionary(): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null && dictionary.path !== null) {
-      let path = dictionary.path;
-      await this.loadDictionary(path);
+      let confirmed = await this.checkLeave();
+      if (confirmed) {
+        let path = dictionary.path;
+        await this.loadDictionary(path);
+      }
     }
   }
 
