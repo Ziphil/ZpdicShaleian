@@ -61,6 +61,11 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
     window.api.send("open-dev-tools", id);
   }
 
+  protected async getPackaged(): Promise<boolean> {
+    let packaged = await window.api.sendAsync("get-packaged");
+    return packaged;
+  }
+
 }
 
 

@@ -99,4 +99,9 @@ export class BasicHandler extends Handler {
     }
   }
 
+  @onAsync("get-packaged")
+  private async getPackaged(this: Main, event: IpcMainEvent): Promise<boolean> {
+    return this.app.isPackaged;
+  }
+
 }

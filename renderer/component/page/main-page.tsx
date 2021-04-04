@@ -70,6 +70,7 @@ export class MainPage extends Component<Props, State> {
   public constructor(props: Props) {
     super(props);
     this.setupIpc();
+    this.setupEventListener();
   }
 
   public async componentDidMount(): Promise<void> {
@@ -87,10 +88,16 @@ export class MainPage extends Component<Props, State> {
     window.api.on("delete-word", (event, uid) => this.deleteWord(uid));
     window.api.onAsync("do-validate-edit-word", (event, uid, word) => this.validateEditWord(uid, word));
     window.api.on("change-dictionary-settings", (event, settings) => this.changeDictionarySettings(settings));
-    window.addEventListener("beforeunload", (event) => {
-      this.requestCloseWindow();
-      event.returnValue = false;
-    });
+  }
+
+  private async setupEventListener(): Promise<void> {
+    let packaged = await this.getPackaged();
+    if (packaged) {
+      window.addEventListener("beforeunload", (event) => {
+        this.requestCloseWindow();
+        event.returnValue = false;
+      });
+    }
   }
 
   private async startLoadDictionary(): Promise<void> {
