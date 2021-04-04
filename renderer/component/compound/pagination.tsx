@@ -8,6 +8,9 @@ import {
   ReactNode
 } from "react";
 import {
+  CustomIcon
+} from "../atom/custom-icon";
+import {
   Component
 } from "../component";
 import {
@@ -52,8 +55,8 @@ export class Pagination extends Component<Props, State> {
       <div className="zp-pagination">
         <div className="zp-pagination-leftmost">
           <ButtonGroup minimal={true}>
-            <Button icon="double-chevron-left" onClick={() => this.handleSet(this.props.minPage)}/>
-            <Button icon="chevron-left" onClick={() => this.handleSet(page - 1)}/>
+            <Button icon={<CustomIcon name="circleArrowLeftmost"/>} onClick={() => this.handleSet(this.props.minPage)}/>
+            <Button icon="circle-arrow-left" onClick={() => this.handleSet(page - 1)}/>
           </ButtonGroup>
         </div>
         <div className="zp-pagination-left">
@@ -71,8 +74,8 @@ export class Pagination extends Component<Props, State> {
         </div>
         <div className="zp-pagination-rightmost">
           <ButtonGroup minimal={true}>
-            <Button icon="chevron-right" onClick={() => this.handleSet(page + 1)}/>
-            <Button icon="double-chevron-right" onClick={() => this.handleSet(this.props.maxPage)}/>
+            <Button icon="circle-arrow-right" onClick={() => this.handleSet(page + 1)}/>
+            <Button icon={<CustomIcon name="circleArrowRightmost"/>} onClick={() => this.handleSet(this.props.maxPage)}/>
           </ButtonGroup>
         </div>
       </div>

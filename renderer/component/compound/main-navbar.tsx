@@ -33,6 +33,7 @@ import {
   HandlerManager
 } from "../../util/handler-manager";
 import {
+  CustomIcon,
   MarkerIcon
 } from "../atom";
 import {
@@ -176,16 +177,28 @@ export class MainNavbar extends Component<Props, State> {
         />
         <MenuDivider/>
         <MenuItem
+          text={this.trans("mainNavbar.moveFirstPage")}
+          label={this.handlerManager.getLabel("moveFirstPage")}
+          onClick={this.handlerManager.getHandler("moveFirstPage")}
+          icon={<CustomIcon name="circleArrowLeftmost"/>}
+        />
+        <MenuItem
           text={this.trans("mainNavbar.movePreviousPage")}
           label={this.handlerManager.getLabel("movePreviousPage")}
           onClick={this.handlerManager.getHandler("movePreviousPage")}
-          icon="blank"
+          icon="circle-arrow-left"
         />
         <MenuItem
           text={this.trans("mainNavbar.moveNextPage")}
           label={this.handlerManager.getLabel("moveNextPage")}
           onClick={this.handlerManager.getHandler("moveNextPage")}
-          icon="blank"
+          icon="circle-arrow-right"
+        />
+        <MenuItem
+          text={this.trans("mainNavbar.moveLastPage")}
+          label={this.handlerManager.getLabel("moveLastPage")}
+          onClick={this.handlerManager.getHandler("moveLastPage")}
+          icon={<CustomIcon name="circleArrowRightmost"/>}
         />
         <MenuDivider/>
         <MenuItem
@@ -412,8 +425,10 @@ export class MainNavbar extends Component<Props, State> {
       changeLanguageToJa: {handler: () => this.props.changeLanguage("ja")},
       changeLanguageToEn: {handler: () => this.props.changeLanguage("en")},
       shuffleWords: {key: "ctrl+r", handler: () => this.props.shuffleWords()},
+      moveFirstPage: {key: "ctrl+shift+,", handler: () => this.props.moveFirstPage()},
       movePreviousPage: {key: "ctrl+,", handler: () => this.props.movePreviousPage()},
       moveNextPage: {key: "ctrl+.", handler: () => this.props.moveNextPage()},
+      moveLastPage: {key: "ctrl+shift+.", handler: () => this.props.moveLastPage()},
       searchAdvanced: {key: "ctrl+f"},
       searchScript: {key: "ctrl+shift+f"},
       createWord: {key: "ctrl+n", handler: () => this.props.createWord()},
@@ -491,8 +506,10 @@ type Props = {
   changeWordType: (type: WordType) => void,
   changeLanguage: (language: string) => void,
   shuffleWords: () => void,
-  moveNextPage: () => void,
+  moveFirstPage: () => void,
   movePreviousPage: () => void,
+  moveNextPage: () => void,
+  moveLastPage: () => void,
   createWord: () => void,
   inheritActiveWord: () => void,
   editActiveWord: () => void,

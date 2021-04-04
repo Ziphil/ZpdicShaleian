@@ -217,6 +217,10 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  private moveFirstPage(): void {
+    this.setState({page: 0});
+  }
+
   private movePreviousPage(): void {
     if (this.state.page > 0) {
       this.setState({page: this.state.page - 1});
@@ -228,6 +232,11 @@ export class MainPage extends Component<Props, State> {
     if (this.state.page < maxPage) {
       this.setState({page: this.state.page + 1});
     }
+  }
+
+  private moveLastPage(): void {
+    let maxPage = Math.max(Math.ceil(this.state.searchResult.words.length / 30) - 1, 0);
+    this.setState({page: maxPage});
   }
 
   private startEditWord(word: PlainWord | null, defaultWord?: PlainWord): void {
@@ -422,8 +431,10 @@ export class MainPage extends Component<Props, State> {
         changeWordType={(type) => this.changeWordType(type, true)}
         changeLanguage={(language) => this.changeLanguage(language, true)}
         shuffleWords={() => this.shuffleWords()}
+        moveFirstPage={() => this.moveFirstPage()}
         movePreviousPage={() => this.movePreviousPage()}
         moveNextPage={() => this.moveNextPage()}
+        moveLastPage={() => this.moveLastPage()}
         createWord={() => this.startEditWord(null)}
         inheritActiveWord={() => this.startEditActiveWord(null, "active")}
         editActiveWord={() => this.startEditActiveWord("active")}
