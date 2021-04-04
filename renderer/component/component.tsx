@@ -25,6 +25,9 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
   protected initialize(): void {
   }
 
+  protected setupIpc(): void {
+  }
+
   protected trans(id: string | number, values?: Record<string, Primitive | FormatFunction<string, string>>): string;
   protected trans(id: string | number, values?: Record<string, Primitive | ReactNode | FormatFunction<ReactNode, ReactNode>>): ReactNode;
   protected trans(id: string | number, values?: Record<string, any>): ReactNode {

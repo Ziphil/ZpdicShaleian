@@ -43,11 +43,14 @@ import {
   WordList
 } from "../compound";
 import {
-  component
+  component,
+  handler,
+  on,
+  onAsync
 } from "../decorator";
 
 
-@component()
+@component() @handler()
 export class MainPage extends Component<Props, State> {
 
   private searchInputRef: IRefObject<HTMLInputElement> = createRef();
@@ -79,15 +82,6 @@ export class MainPage extends Component<Props, State> {
     if (path !== undefined) {
       this.loadDictionary(path);
     }
-  }
-
-  private setupIpc(): void {
-    window.api.on("get-load-dictionary-progress", (event, progress) => this.updateLoadDictionaryProgress(progress));
-    window.api.on("get-save-dictionary-progress", (event, progress) => this.updateSaveDictionaryProgress(progress));
-    window.api.on("edit-word", (event, uid, word) => this.editWord(uid, word));
-    window.api.on("delete-word", (event, uid) => this.deleteWord(uid));
-    window.api.onAsync("do-validate-edit-word", (event, uid, word) => this.validateEditWord(uid, word));
-    window.api.on("change-dictionary-settings", (event, settings) => this.changeDictionarySettings(settings));
   }
 
   private async setupEventListener(): Promise<void> {
@@ -138,6 +132,7 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  @on("get-load-dictionary-progress")
   private updateLoadDictionaryProgress(progress: Progress): void {
     this.setState({loadProgress: progress});
   }
@@ -155,6 +150,7 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  @on("get-save-dictionary-progress")
   private updateSaveDictionaryProgress(progress: Progress): void {
     let message = <EnhancedProgressBar className="zp-save-progress-bar" progress={progress} showDetail={false}/>;
     CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
@@ -253,6 +249,7 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  @on("edit-word")
   private editWord(uid: string | null, word: PlainWord): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
@@ -262,6 +259,7 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  @onAsync("do-validate-edit-word")
   private async validateEditWord(uid: string | null, word: PlainWord): Promise<string | null> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
@@ -271,6 +269,7 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  @on("delete-word")
   private deleteWord(uid: string): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
@@ -354,6 +353,7 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  @on("change-dictionary-settings")
   private changeDictionarySettings(settings: PlainDictionarySettings): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
