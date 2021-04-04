@@ -52,6 +52,7 @@ export class MainPage extends Component<Props, State> {
 
   private searchInputRef: IRefObject<HTMLInputElement> = createRef();
   private wordListRef: RefObject<HTMLDivElement> = createRef();
+  private leaveHander?: (confirmed: boolean) => void;
 
   public state: State = {
     dictionary: null,
@@ -87,7 +88,7 @@ export class MainPage extends Component<Props, State> {
     window.api.onAsync("do-validate-edit-word", (event, uid, word) => this.validateEditWord(uid, word));
     window.api.on("change-dictionary-settings", (event, settings) => this.changeDictionarySettings(settings));
     window.addEventListener("beforeunload", (event) => {
-      this.checkCloseWindow();
+      this.requestCloseWindow();
       event.returnValue = false;
     });
   }
@@ -374,11 +375,33 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private checkCloseWindow(): void {
-    if (this.state.changed) {
-      this.setState({alertOpen: true});
-    } else {
+  private async requestCloseWindow(): Promise<void> {
+    let confirmed = await this.checkLeave();
+    if (confirmed) {
       this.destroyWindow();
+    }
+  }
+
+  private checkLeave(): Promise<boolean> {
+    if (this.state.changed) {
+      let promise = new Promise<boolean>((resolve, reject) => {
+        this.leaveHander = function (confirmed: boolean): void {
+          this.leaveHander = undefined;
+          resolve(confirmed);
+        };
+        this.setState({alertOpen: true});
+      });
+      return promise;
+    } else {
+      let promise = Promise.resolve(true);
+      return promise;
+    }
+  }
+
+  private handleAlertClose(confirmed: boolean): void {
+    this.setState({alertOpen: false});
+    if (this.leaveHander) {
+      this.leaveHander(confirmed);
     }
   }
 
@@ -418,8 +441,8 @@ export class MainPage extends Component<Props, State> {
         intent="danger"
         canEscapeKeyCancel={true}
         canOutsideClickCancel={true}
-        onCancel={() => this.setState({alertOpen: false})}
-        onConfirm={() => this.destroyWindow()}
+        onCancel={() => this.handleAlertClose(false)}
+        onConfirm={() => this.handleAlertClose(true)}
       >
         <p>{this.trans("mainPage.alert")}</p>
       </Alert>
