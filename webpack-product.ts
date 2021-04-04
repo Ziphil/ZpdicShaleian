@@ -4,17 +4,20 @@ import {
   CleanWebpackPlugin
 } from "clean-webpack-plugin";
 import merge from "webpack-merge";
-import common from "./webpack-common";
+import {
+  commonMain,
+  commonRenderer
+} from "./webpack-develop";
 
 
-let main = merge(common[0], {
+let main = merge(commonMain, {
   mode: "production",
   plugins: [
     new CleanWebpackPlugin()
   ]
 });
 
-let renderer = merge(common[1], {
+let renderer = merge(commonRenderer, {
   mode: "production"
 });
 
