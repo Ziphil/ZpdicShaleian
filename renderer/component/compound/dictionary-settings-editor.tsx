@@ -18,6 +18,9 @@ import {
   Controlled as CodeMirror
 } from "react-codemirror2";
 import {
+  HotKeys
+} from "react-hotkeys";
+import {
   PlainDictionarySettings
 } from "../../module/dictionary";
 import {
@@ -52,7 +55,7 @@ export class DictionarySettingsEditor extends Component<Props, State> {
     }
   }
 
-  private handleConfirm(event: MouseEvent<HTMLElement>): void {
+  private handleConfirm(event?: MouseEvent<HTMLElement> | KeyboardEvent): void {
     if (this.props.onConfirm) {
       try {
         let deserializer = new Deserializer();
@@ -108,16 +111,20 @@ export class DictionarySettingsEditor extends Component<Props, State> {
   public render(): ReactNode {
     let basicNode = this.renderBasic();
     let revisionNode = this.renderRevision();
+    let keys = {confirm: "ctrl+enter"};
+    let handlers = {confirm: this.handleConfirm.bind(this)};
     let node = (
       <div className="zp-dictionary-settings-editor zp-editor">
-        <Tabs defaultSelectedTabId="revision">
-          <Tab id="basic" title={this.trans("dictionarySettingsEditor.basic")} panel={basicNode}/>
-          <Tab id="revision" title={this.trans("dictionarySettingsEditor.revision")} panel={revisionNode}/>
-        </Tabs>
-        <div className="zp-dictionary-settings-editor-button zp-editor-button">
-          <Button text={this.trans("dictionarySettingsEditor.cancel")} icon="cross" onClick={this.handleCancel.bind(this)}/>
-          <Button text={this.trans("dictionarySettingsEditor.confirm")} intent="primary" icon="confirm" onClick={this.handleConfirm.bind(this)}/>
-        </div>
+        <HotKeys keyMap={keys} handlers={handlers}>
+          <Tabs defaultSelectedTabId="revision">
+            <Tab id="basic" title={this.trans("dictionarySettingsEditor.basic")} panel={basicNode}/>
+            <Tab id="revision" title={this.trans("dictionarySettingsEditor.revision")} panel={revisionNode}/>
+          </Tabs>
+          <div className="zp-dictionary-settings-editor-button zp-editor-button">
+            <Button text={this.trans("dictionarySettingsEditor.cancel")} icon="cross" onClick={this.handleCancel.bind(this)}/>
+            <Button text={this.trans("dictionarySettingsEditor.confirm")} intent="primary" icon="confirm" onClick={this.handleConfirm.bind(this)}/>
+          </div>
+        </HotKeys>
       </div>
     );
     return node;
@@ -128,7 +135,7 @@ export class DictionarySettingsEditor extends Component<Props, State> {
 
 type Props = {
   settings: PlainDictionarySettings,
-  onConfirm?: (settings: PlainDictionarySettings, event: MouseEvent<HTMLElement>) => void,
+  onConfirm?: (settings: PlainDictionarySettings, event?: MouseEvent<HTMLElement> | KeyboardEvent) => void,
   onCancel?: (event: MouseEvent<HTMLElement>) => void
 };
 type State = {
