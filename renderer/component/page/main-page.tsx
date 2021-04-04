@@ -217,30 +217,25 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private moveFirstPage(): void {
-    this.setState({page: 0});
-    this.scrollWordList();
-  }
-
-  private movePreviousPage(): void {
-    if (this.state.page > 0) {
-      this.setState({page: this.state.page - 1});
+  private movePage(spec: {page: number} | {difference: number} | "first" | "last"): void {
+    let currentPage = this.state.page;
+    let maxPage = Math.max(Math.ceil(this.state.searchResult.words.length / 30) - 1, 0);
+    let page = (() => {
+      if (spec === "first") {
+        return 0;
+      } else if (spec === "last") {
+        return maxPage;
+      } else if ("page" in spec) {
+        return spec.page;
+      } else {
+        return currentPage + spec.difference;
+      }
+    })();
+    let clampedPage = Math.max(Math.min(page, maxPage), 0);
+    if (clampedPage !== currentPage) {
+      this.setState({page: clampedPage});
       this.scrollWordList();
     }
-  }
-
-  private moveNextPage(): void {
-    let maxPage = Math.max(Math.ceil(this.state.searchResult.words.length / 30) - 1, 0);
-    if (this.state.page < maxPage) {
-      this.setState({page: this.state.page + 1});
-      this.scrollWordList();
-    }
-  }
-
-  private moveLastPage(): void {
-    let maxPage = Math.max(Math.ceil(this.state.searchResult.words.length / 30) - 1, 0);
-    this.setState({page: maxPage});
-    this.scrollWordList();
   }
 
   private startEditWord(word: PlainWord | null, defaultWord?: PlainWord): void {
@@ -435,10 +430,10 @@ export class MainPage extends Component<Props, State> {
         changeWordType={(type) => this.changeWordType(type, true)}
         changeLanguage={(language) => this.changeLanguage(language, true)}
         shuffleWords={() => this.shuffleWords()}
-        moveFirstPage={() => this.moveFirstPage()}
-        movePreviousPage={() => this.movePreviousPage()}
-        moveNextPage={() => this.moveNextPage()}
-        moveLastPage={() => this.moveLastPage()}
+        moveFirstPage={() => this.movePage("first")}
+        movePreviousPage={() => this.movePage({difference: -1})}
+        moveNextPage={() => this.movePage({difference: 1})}
+        moveLastPage={() => this.movePage("last")}
         createWord={() => this.startEditWord(null)}
         inheritActiveWord={() => this.startEditActiveWord(null, "active")}
         editActiveWord={() => this.startEditActiveWord("active")}
@@ -500,7 +495,7 @@ export class MainPage extends Component<Props, State> {
               onMarkerToggled={(word, marker) => this.toggleWordMarker(word, marker)}
               onLinkClick={(name) => this.updateWordsByName(name)}
               onActivate={(activeWord) => this.setState({activeWord})}
-              onPageSet={(page) => this.setState({page})}
+              onPageSet={(page) => this.movePage({page})}
             />
           </div>
         </Loading>

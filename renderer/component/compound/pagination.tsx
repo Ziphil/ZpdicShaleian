@@ -21,8 +21,19 @@ import {
 @component()
 export class Pagination extends Component<Props, State> {
 
-  private handleSet(page: number): void {
-    let clampedPage = Math.max(Math.min(page, this.props.maxPage), this.props.minPage);
+  private handleSet(page: number | "first" | "last"): void {
+    let minPage = this.props.minPage;
+    let maxPage = this.props.maxPage;
+    let nextPage = (() => {
+      if (page === "first") {
+        return 0;
+      } else if (page === "last") {
+        return maxPage;
+      } else {
+        return page;
+      }
+    })();
+    let clampedPage = Math.max(Math.min(nextPage, maxPage), minPage);
     if (this.props.onSet) {
       this.props.onSet(clampedPage);
     }
@@ -55,7 +66,7 @@ export class Pagination extends Component<Props, State> {
       <div className="zp-pagination">
         <div className="zp-pagination-leftmost">
           <ButtonGroup minimal={true}>
-            <Button icon={<CustomIcon name="circleArrowLeftmost"/>} onClick={() => this.handleSet(this.props.minPage)}/>
+            <Button icon={<CustomIcon name="circleArrowLeftmost"/>} onClick={() => this.handleSet("first")}/>
             <Button icon="circle-arrow-left" onClick={() => this.handleSet(page - 1)}/>
           </ButtonGroup>
         </div>
@@ -75,7 +86,7 @@ export class Pagination extends Component<Props, State> {
         <div className="zp-pagination-rightmost">
           <ButtonGroup minimal={true}>
             <Button icon="circle-arrow-right" onClick={() => this.handleSet(page + 1)}/>
-            <Button icon={<CustomIcon name="circleArrowRightmost"/>} onClick={() => this.handleSet(this.props.maxPage)}/>
+            <Button icon={<CustomIcon name="circleArrowRightmost"/>} onClick={() => this.handleSet("last")}/>
           </ButtonGroup>
         </div>
       </div>
