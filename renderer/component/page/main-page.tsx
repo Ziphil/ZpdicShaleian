@@ -219,11 +219,13 @@ export class MainPage extends Component<Props, State> {
 
   private moveFirstPage(): void {
     this.setState({page: 0});
+    this.scrollWordList();
   }
 
   private movePreviousPage(): void {
     if (this.state.page > 0) {
       this.setState({page: this.state.page - 1});
+      this.scrollWordList();
     }
   }
 
@@ -231,12 +233,14 @@ export class MainPage extends Component<Props, State> {
     let maxPage = Math.max(Math.ceil(this.state.searchResult.words.length / 30) - 1, 0);
     if (this.state.page < maxPage) {
       this.setState({page: this.state.page + 1});
+      this.scrollWordList();
     }
   }
 
   private moveLastPage(): void {
     let maxPage = Math.max(Math.ceil(this.state.searchResult.words.length / 30) - 1, 0);
     this.setState({page: maxPage});
+    this.scrollWordList();
   }
 
   private startEditWord(word: PlainWord | null, defaultWord?: PlainWord): void {
