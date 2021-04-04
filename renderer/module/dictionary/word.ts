@@ -62,24 +62,6 @@ export class Word implements PlainWord {
     return {uid, uniqueName, date, contents};
   }
 
-  public toString(): string {
-    let string = "";
-    string += `* ${this.uniqueName} @${this.date}\n\n`;
-    let first = true;
-    for (let [language, content] of Object.entries(this.contents)) {
-      if (content !== undefined && content.trim() !== "") {
-        if (!first) {
-          string += "\n";
-        }
-        string += `!${language.toUpperCase()}\n`;
-        string += content.replaceAll(/\r\n|\r|\n/g, "\n").trim();
-        string += "\n";
-        first = false;
-      }
-    }
-    return string;
-  }
-
   public toParsed<S, E>(resolvers: MarkupResolvers<S, E>): ParsedWord<S> {
     let parser = new Parser(resolvers);
     let parsedWord = parser.parse(this);

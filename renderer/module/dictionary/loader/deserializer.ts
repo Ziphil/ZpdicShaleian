@@ -23,7 +23,7 @@ import {
 
 export class Deserializer {
 
-  public parseWord(string: string): Word {
+  public deserializeWord(string: string): Word {
     let lines = string.trim().split(/\r\n|\r|\n/);
     let match = lines[0]?.match(/^\*\s*(.+?)\s*@(\d+)/);
     if (match) {
@@ -57,7 +57,7 @@ export class Deserializer {
     }
   }
 
-  public parseDictionarySettings(string: string): DictionarySettings {
+  public deserializeDictionarySettings(string: string): DictionarySettings {
     let lines = string.trim().split(/\r\n|\r|\n/);
     let version;
     let alphabetRule;
@@ -78,7 +78,7 @@ export class Deserializer {
           alphabetRule = match[1];
         }
       } else if (mode === "REVISION") {
-        revisions = outerThis.parseRevisions(string);
+        revisions = outerThis.deserializeRevisions(string);
       }
     };
     for (let line of lines) {
@@ -105,19 +105,19 @@ export class Deserializer {
     }
   }
 
-  public parseRevisions(string: string): Revisions {
+  public deserializeRevisions(string: string): Revisions {
     let lines = string.trim().split(/\r\n|\r|\n/);
     let revisions = new Revisions();
     for (let line of lines) {
       if (line.trim() !== "") {
-        let revision = this.parseRevision(line.trim());
+        let revision = this.deserializeRevision(line.trim());
         revisions.push(revision);
       }
     }
     return revisions;
   }
 
-  public parseRevision(string: string): Revision {
+  public deserializeRevision(string: string): Revision {
     let match = string.match(/^\-\s*(?:@(\d+)\s*)?\{(.*?)\}\s*→\s*\{(.*?)\}\s*$/);
     if (match) {
       let date = (match[1] !== undefined) ? parseInt(match[1], 10) : null;
@@ -130,12 +130,12 @@ export class Deserializer {
     }
   }
 
-  public parseMarkers(string: string): Markers {
+  public deserializeMarkers(string: string): Markers {
     let lines = string.trim().split(/\r\n|\r|\n/);
     let rawMarkers = new Map<string, Array<Marker>>();
     for (let line of lines) {
       if (line.trim() !== "" && line.trim() !== "!MARKER") {
-        let [uniqueName, wordMarkers] = this.parseWordMarker(line.trim());
+        let [uniqueName, wordMarkers] = this.deserializeWordMarker(line.trim());
         if (wordMarkers.length > 0) {
           rawMarkers.set(uniqueName, wordMarkers);
         }
@@ -145,7 +145,7 @@ export class Deserializer {
     return markers;
   }
 
-  public parseWordMarker(string: string): [string, Array<Marker>] {
+  public deserializeWordMarker(string: string): [string, Array<Marker>] {
     let match = string.match(/^\-\s*(?:\{(.*?)\}|(.*?))\s*:\s*(.*?)\s*$/);
     if (match) {
       let uniqueName = match[1] ?? match[2];

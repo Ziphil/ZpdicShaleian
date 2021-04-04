@@ -20,14 +20,6 @@ export class Revisions extends Array<Revision> implements Array<PlainRevision> {
     return revisions;
   }
 
-  public toString(): string {
-    let string = "";
-    for (let revision of this) {
-      string += revision.toString();
-    }
-    return string;
-  }
-
 }
 
 
@@ -49,16 +41,6 @@ export class Revision implements PlainRevision {
     let afterName = plain.afterName;
     let revision = new Revision(date, beforeName, afterName);
     return revision;
-  }
-
-  public toString(): string {
-    let string = "";
-    string += "- ";
-    if (this.date !== null) {
-      string += `@${this.date} `;
-    }
-    string += `{${this.beforeName}} → {${this.afterName}}\n`;
-    return string;
   }
 
 }

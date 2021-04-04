@@ -21,10 +21,14 @@ import {
 import {
   Saver
 } from "./saver";
+import {
+  Serializer
+} from "./serializer";
 
 
 export class DirectorySaver extends Saver {
 
+  private readonly serializer: Serializer;
   private size: number = 0;
   private count: number = 0;
   private deleteSize: number = 0;
@@ -32,6 +36,7 @@ export class DirectorySaver extends Saver {
 
   public constructor(dictionary: Dictionary, path?: string | null) {
     super(dictionary, path);
+    this.serializer = new Serializer();
   }
 
   public start(): void {
@@ -79,7 +84,7 @@ export class DirectorySaver extends Saver {
   }
 
   private async saveWord(word: Word, path: string): Promise<void> {
-    let string = word.toString();
+    let string = this.serializer.serializeWord(word);
     await fs.writeFile(path, string, {encoding: "utf-8"});
     this.count ++;
     this.emitProgress();
@@ -87,14 +92,14 @@ export class DirectorySaver extends Saver {
 
   private async saveSettings(settings: DictionarySettings): Promise<void> {
     let path = joinPath(this.path, "#SETTINGS.xdns");
-    let string = settings.toString();
+    let string = this.serializer.serializeDictionarySettings(settings);
     await fs.writeFile(path, string, {encoding: "utf-8"});
     this.emitProgress();
   }
 
   private async saveMarkers(markers: Markers): Promise<void> {
     let path = joinPath(this.path, "#MARKER.xdns");
-    let string = markers.toString();
+    let string = this.serializer.serializeMarkers(markers);
     await fs.writeFile(path, string, {encoding: "utf-8"});
     this.emitProgress();
   }

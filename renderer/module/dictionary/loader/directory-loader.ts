@@ -28,7 +28,7 @@ import {
 
 export class DirectoryLoader extends Loader {
 
-  private deserializer: Deserializer;
+  private readonly deserializer: Deserializer;
   private size: number = 0;
   private count: number = 0;
 
@@ -69,7 +69,7 @@ export class DirectoryLoader extends Loader {
 
   private async loadWord(path: string): Promise<Word> {
     let string = await fs.readFile(path, {encoding: "utf-8"});
-    let word = this.deserializer.parseWord(string);
+    let word = this.deserializer.deserializeWord(string);
     this.count ++;
     this.emitProgress();
     return word;
@@ -79,7 +79,7 @@ export class DirectoryLoader extends Loader {
     let path = joinPath(this.path, "#SETTINGS.xdns");
     try {
       let string = await fs.readFile(path, {encoding: "utf-8"});
-      let settings = this.deserializer.parseDictionarySettings(string);
+      let settings = this.deserializer.deserializeDictionarySettings(string);
       this.emitProgress();
       return settings;
     } catch (error) {
@@ -95,7 +95,7 @@ export class DirectoryLoader extends Loader {
     let path = joinPath(this.path, "#MARKER.xdns");
     try {
       let string = await fs.readFile(path, {encoding: "utf-8"});
-      let markers = this.deserializer.parseMarkers(string);
+      let markers = this.deserializer.deserializeMarkers(string);
       this.emitProgress();
       return markers;
     } catch (error) {

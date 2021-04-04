@@ -18,12 +18,14 @@ import {
   Controlled as CodeMirror
 } from "react-codemirror2";
 import {
-  PlainDictionarySettings,
-  Revisions
+  PlainDictionarySettings
 } from "../../module/dictionary";
 import {
   Deserializer
 } from "../../module/dictionary/loader/deserializer";
+import {
+  Serializer
+} from "../../module/dictionary/saver/serializer";
 import {
   Component
 } from "../component";
@@ -37,8 +39,9 @@ export class DictionarySettingsEditor extends Component<Props, State> {
 
   public constructor(props: Props) {
     super(props);
+    let serializer = new Serializer();
     let oldSettings = props.settings;
-    let revisionString = Revisions.fromPlain(oldSettings.revisions).toString();
+    let revisionString = serializer.serializeRevisions(oldSettings.revisions);
     let settings = {...oldSettings, revisionString};
     this.state = {settings};
   }
@@ -52,9 +55,9 @@ export class DictionarySettingsEditor extends Component<Props, State> {
   private handleConfirm(event: MouseEvent<HTMLElement>): void {
     if (this.props.onConfirm) {
       try {
-        let settings = this.state.settings;
         let deserializer = new Deserializer();
-        settings.revisions = deserializer.parseRevisions(settings.revisionString);
+        let settings = this.state.settings;
+        settings.revisions = deserializer.deserializeRevisions(settings.revisionString);
         this.props.onConfirm(settings, event);
       } catch (error) {
         CustomToaster.show({message: this.trans("dictionarySettingsEditor.errorRevisions"), icon: "error", intent: "danger"});

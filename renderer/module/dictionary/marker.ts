@@ -9,22 +9,13 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
     this.normalize();
   }
 
-  public static fromPlain(plain: Map<string, Array<Marker>>): Markers {
-    let markers = new Markers(plain.entries());
+  public static createEmpty(): Markers {
+    let markers = new Markers();
     return markers;
   }
 
-  public toString(): string {
-    let string = "";
-    string += "!MARKER\n";
-    for (let [uniqueName, wordMarkers] of this.entries()) {
-      string += `- ${uniqueName}: ${wordMarkers.join(", ")}\n`;
-    }
-    return string;
-  }
-
-  public static createEmpty(): Markers {
-    let markers = new Markers();
+  public static fromPlain(plain: Map<string, Array<Marker>>): Markers {
+    let markers = new Markers(plain.entries());
     return markers;
   }
 
