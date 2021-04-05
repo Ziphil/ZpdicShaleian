@@ -94,6 +94,7 @@ export class MainNavbar extends Component<Props, State> {
           label={this.handlerManager.getLabel("closeWindow")}
           onClick={this.handlerManager.getHandler("closeWindow")}
           icon="cross"
+          intent="danger"
         />
       </Menu>
     );
