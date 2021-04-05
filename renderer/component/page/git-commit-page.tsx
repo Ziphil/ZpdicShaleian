@@ -20,7 +20,7 @@ export class GitCommitPage extends Component<Props, State> {
 
   private execGitCommit(message: string): void {
     let path = this.props.path;
-    window.api.sendAsync("exec-git-commit", path, message);
+    window.api.send("exec-git-commit", path, message);
     this.closeWindow();
   }
 

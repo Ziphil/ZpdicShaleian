@@ -136,7 +136,7 @@ mainPage:
     選択している単語がありません。
   succeedGitCommit: >-
     Git リポジトリへのコミットが完了しました。
-  errorGitCommit: >-
+  failGitCommit: >-
     Git リポジトリへのコミットの実行中にエラーが発生しました。
   succeedGitPush: >-
     Git リポジトリへのプッシュが完了しました。

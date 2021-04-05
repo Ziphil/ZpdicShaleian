@@ -382,17 +382,14 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private async execGitCommit(): Promise<void> {
-    let dictionary = this.state.dictionary;
-    if (dictionary !== null) {
-      let path = dictionary.path;
-      try {
-        await window.api.sendAsync("exec-git-commit", path);
-        CustomToaster.show({message: this.trans("mainPage.succeedGitCommit"), icon: "tick", intent: "success"});
-      } catch (error) {
-        CustomToaster.show({message: this.trans("mainPage.errorGitCommit"), icon: "error", intent: "danger"});
-      }
-    }
+  @on("succeed-exec-git-commit")
+  private succeedExecGitCommit(): void {
+    CustomToaster.show({message: this.trans("mainPage.succeedGitCommit"), icon: "tick", intent: "success"});
+  }
+
+  @on("fail-exec-git-commit")
+  private failExecGitCommit(): void {
+    CustomToaster.show({message: this.trans("mainPage.failGitCommit"), icon: "error", intent: "danger"});
   }
 
   private async execGitPush(): Promise<void> {
