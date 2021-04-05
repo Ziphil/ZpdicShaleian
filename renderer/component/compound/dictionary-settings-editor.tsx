@@ -8,6 +8,9 @@ import {
   Tabs,
   Toaster
 } from "@blueprintjs/core";
+import {
+  Editor
+} from "codemirror";
 import * as react from "react";
 import {
   MouseEvent,
@@ -47,6 +50,11 @@ export class DictionarySettingsEditor extends Component<Props, State> {
     let revisionString = serializer.serializeRevisions(oldSettings.revisions);
     let settings = {...oldSettings, revisionString};
     this.state = {settings};
+  }
+
+  private contentEditorDidMount(editor: Editor): void {
+    editor.focus();
+    editor.scrollTo(0, 10000);
   }
 
   private handleCancel(event: MouseEvent<HTMLElement>): void {
@@ -102,7 +110,7 @@ export class DictionarySettingsEditor extends Component<Props, State> {
           value={settings.revisionString}
           options={{theme: "zpshcontent", mode: {name: "shcontent"}, lineWrapping: true}}
           onBeforeChange={this.setSettings((editor, data, value) => settings.revisionString = value)}
-          editorDidMount={(editor) => editor.focus()}
+          editorDidMount={this.contentEditorDidMount.bind(this)}
         />
       </div>
     );
