@@ -36,6 +36,10 @@ import {
 @component()
 export class DictionarySettingsEditor extends Component<Props, State> {
 
+  public state: State = {
+    settings: undefined as any
+  };
+
   public constructor(props: Props) {
     super(props);
     let serializer = new Serializer();
@@ -98,6 +102,7 @@ export class DictionarySettingsEditor extends Component<Props, State> {
           value={settings.revisionString}
           options={{theme: "zpshcontent", mode: {name: "shcontent"}, lineWrapping: true}}
           onBeforeChange={this.setSettings((editor, data, value) => settings.revisionString = value)}
+          editorDidMount={(editor) => editor.focus()}
         />
       </div>
     );

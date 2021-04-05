@@ -9,7 +9,9 @@ import {
 import * as react from "react";
 import {
   MouseEvent,
-  ReactNode
+  ReactNode,
+  RefObject,
+  createRef
 } from "react";
 import {
   HotKeys
@@ -33,7 +35,10 @@ export class GitCommitExecutor extends Component<Props, State> {
     status: null
   };
 
+  private messageRef: RefObject<HTMLInputElement> = createRef();
+
   public async componentDidMount(): Promise<void> {
+    this.messageRef.current?.focus();
     await Promise.all([this.loadMessage(), this.loadStatus()]);
   }
 
@@ -72,7 +77,7 @@ export class GitCommitExecutor extends Component<Props, State> {
   private renderMessage(): ReactNode {
     let node = (
       <FormGroup label={this.trans("gitCommitExecutor.message")} labelFor="message">
-        <InputGroup id="message" value={this.state.message} onChange={(event) => this.setState({message: event.target.value})}/>
+        <InputGroup id="message" value={this.state.message} inputRef={this.messageRef} onChange={(event) => this.setState({message: event.target.value})}/>
       </FormGroup>
     );
     return node;
