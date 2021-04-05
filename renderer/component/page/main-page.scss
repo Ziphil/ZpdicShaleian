@@ -1,13 +1,13 @@
 @charset "utf-8";
 
 
-.zp-main-page {
+.zpmnp-root {
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-.zp-search-form-container {
+.zpmnp-search-form-container {
   margin-top: -$zp-page-margin - 1px;
   margin-left: -$zp-page-margin;
   margin-right: -$zp-page-margin;
@@ -20,7 +20,7 @@
   z-index: $pt-z-index-content - 1;
 }
 
-.zp-word-list-container {
+.zpmnp-word-list-container {
   margin-top: 1px;
   margin-bottom: -$zp-page-margin;
   margin-left: -$zp-page-margin;
@@ -34,6 +34,6 @@
   overflow-y: scroll;
 }
 
-.zp-save-progress-bar {
+.zpmnp-save-progress-bar {
   margin-top: $pt-grid-size / 2;
 }

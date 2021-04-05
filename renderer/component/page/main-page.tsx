@@ -152,7 +152,7 @@ export class MainPage extends Component<Props, State> {
 
   @on("get-save-dictionary-progress")
   private updateSaveDictionaryProgress(progress: Progress): void {
-    let message = <EnhancedProgressBar className="zp-save-progress-bar" progress={progress} showDetail={false}/>;
+    let message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
     CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
   }
 
@@ -479,11 +479,11 @@ export class MainPage extends Component<Props, State> {
     let navbarNode = this.renderNavbar();
     let alertNode = this.renderAlert();
     let node = (
-      <div className="zp-main-page zp-root zp-navbar-root">
+      <div className="zpmnp-root zp-root zp-navbar-root">
         {navbarNode}
         {alertNode}
         <Loading loading={this.state.dictionary === null} progress={this.state.loadProgress}>
-          <div className="zp-search-form-container">
+          <div className="zpmnp-search-form-container">
             <SearchForm
               parameter={this.state.parameter}
               searchResult={this.state.searchResult}
@@ -491,7 +491,7 @@ export class MainPage extends Component<Props, State> {
               onParameterSet={this.changeParameter.bind(this)}
             />
           </div>
-          <div className="zp-word-list-container" ref={this.wordListRef}>
+          <div className="zpmnp-word-list-container" ref={this.wordListRef}>
             <WordList
               dictionary={this.state.dictionary!}
               searchResult={this.state.searchResult}
@@ -531,4 +531,4 @@ type State = {
   saveProgress: Progress
 };
 
-let CustomToaster = Toaster.create({className: "zp-main-toaster", position: "top", maxToasts: 2});
+let CustomToaster = Toaster.create({position: "top", maxToasts: 2});

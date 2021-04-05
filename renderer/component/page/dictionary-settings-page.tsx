@@ -28,7 +28,7 @@ export class DictionarySettingsPage extends Component<Props, State> {
 
   public render(): ReactNode {
     let node = (
-      <div className="zp-dictionary-settings-page zp-root">
+      <div className="zpdsp-root zp-root">
         <DictionarySettingsEditor
           settings={this.props.settings}
           onConfirm={this.changeDictionarySettings.bind(this)}

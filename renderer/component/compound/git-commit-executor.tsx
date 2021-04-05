@@ -87,9 +87,9 @@ export class GitCommitExecutor extends Component<Props, State> {
           let match = fileName.match(/^(.+)(\.\w+)$/);
           let [fileBaseName, extension] = (match !== null) ? [match[1], match[2]] : [fileName, ""];
           let itemNode = (
-            <li className={"zp-" + type} key={type + index}>
-              {fileBaseName}
-              <span className="zp-extension">{extension}</span>
+            <li className={`zpgce-${type}`} key={`${type}-${index}`}>
+              <span className="zpgce-base-name">{fileBaseName}</span>
+              <span className="zpgce-extension">{extension}</span>
             </li>
           );
           return itemNode;
@@ -104,9 +104,9 @@ export class GitCommitExecutor extends Component<Props, State> {
     let renamedNodes = createItemNodes("renamed");
     let deletedNodes = createItemNodes("deleted");
     let node = (
-      <div className="zp-git-commit-executor-status">
-        <div className="zp-git-commit-executor-status-label">{this.trans("gitCommitExecutor.change")}</div>
-        <ul className="zp-git-commit-executor-status-list">
+      <div className="zpgce-status">
+        <div className="zpgce-status-label">{this.trans("gitCommitExecutor.change")}</div>
+        <ul className="zpgce-status-list">
           {createdNodes}
           {modifiedNodes}
           {renamedNodes}
@@ -123,15 +123,15 @@ export class GitCommitExecutor extends Component<Props, State> {
     let keys = {confirm: "ctrl+enter"};
     let handlers = {confirm: this.handleConfirm.bind(this)};
     let node = (
-      <div className="zp-git-commit-executor zp-editor">
+      <div className="zpgce-editor zp-editor">
         <HotKeys keyMap={keys} handlers={handlers}>
-          <div className="zp-git-commit-executor-message-container">
+          <div className="zpgce-message-container">
             {messageNode}
           </div>
-          <div className="zp-git-commit-executor-status-container">
+          <div className="zpgce-status-container">
             {statusNode}
           </div>
-          <div className="zp-git-commit-executor-button zp-editor-button">
+          <div className="zpgce-editor-button zp-editor-button">
             <Button text={this.trans("gitCommitExecutor.cancel")} onClick={this.handleCancel.bind(this)}/>
             <Button text={this.trans("gitCommitExecutor.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
           </div>
@@ -154,4 +154,4 @@ type State = {
   status: StatusResult | null
 };
 
-let CustomToaster = Toaster.create({className: "zp-dictionary-settings-toaster", position: "top", maxToasts: 2});
+let CustomToaster = Toaster.create({position: "top", maxToasts: 2});

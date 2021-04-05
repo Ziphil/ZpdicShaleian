@@ -81,7 +81,7 @@ export class DictionarySettingsEditor extends Component<Props, State> {
   public renderBasic(): ReactElement {
     let settings = this.state.settings;
     let node = (
-      <div className="zp-dictionary-settings-editor-tab zp-editor-tab">
+      <div className="zpdse-editor-tab zp-editor-tab">
         <FormGroup label={this.trans("dictionarySettingsEditor.version")} labelFor="version">
           <InputGroup id="version" value={settings.version} onChange={this.setSettings((event) => settings.version = event.target.value)}/>
         </FormGroup>
@@ -96,9 +96,9 @@ export class DictionarySettingsEditor extends Component<Props, State> {
   public renderRevision(): ReactElement {
     let settings = this.state.settings;
     let node = (
-      <div className="zp-dictionary-settings-editor-tab zp-editor-tab">
+      <div className="zpdse-editor-tab zp-editor-tab">
         <CodeMirror
-          className="zp-dictionary-settings-editor-revision"
+          className="zpdse-revision"
           value={settings.revisionString}
           options={{theme: "zpshcontent", mode: {name: "shcontent"}, lineWrapping: true}}
           onBeforeChange={this.setSettings((editor, data, value) => settings.revisionString = value)}
@@ -114,13 +114,13 @@ export class DictionarySettingsEditor extends Component<Props, State> {
     let keys = {confirm: "ctrl+enter"};
     let handlers = {confirm: this.handleConfirm.bind(this)};
     let node = (
-      <div className="zp-dictionary-settings-editor zp-editor">
+      <div className="zpdse-editor zp-editor">
         <HotKeys keyMap={keys} handlers={handlers}>
           <Tabs defaultSelectedTabId="revision">
             <Tab id="basic" title={this.trans("dictionarySettingsEditor.basic")} panel={basicNode}/>
             <Tab id="revision" title={this.trans("dictionarySettingsEditor.revision")} panel={revisionNode}/>
           </Tabs>
-          <div className="zp-dictionary-settings-editor-button zp-editor-button">
+          <div className="zpdse-editor-button zp-editor-button">
             <Button text={this.trans("dictionarySettingsEditor.cancel")} onClick={this.handleCancel.bind(this)}/>
             <Button text={this.trans("dictionarySettingsEditor.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
           </div>
@@ -142,4 +142,4 @@ type State = {
   settings: PlainDictionarySettings & {revisionString: string}
 };
 
-let CustomToaster = Toaster.create({className: "zp-dictionary-settings-toaster", position: "top", maxToasts: 2});
+let CustomToaster = Toaster.create({position: "top", maxToasts: 2});

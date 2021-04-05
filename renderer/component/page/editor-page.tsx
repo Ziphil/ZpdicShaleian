@@ -33,7 +33,7 @@ export class EditorPage extends Component<Props, State> {
 
   public render(): ReactNode {
     let node = (
-      <div className="zp-editor-page zp-root">
+      <div className="zpedp-root zp-root">
         <WordEditor
           word={this.props.word}
           defaultWord={this.props.defaultWord}

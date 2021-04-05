@@ -37,31 +37,31 @@
   }
 }
 
-.zp-word-editor-head {
+.zpwde-head {
   margin-bottom: $pt-grid-size * 2;
   display: flex;
 }
 
-.zp-word-editor-head >* {
+.zpwde-head >* {
   margin-right: $pt-grid-size;
   &:last-child {
     margin-right: 0px;
   }
 }
 
-.zp-word-editor-date {
+.zpwde-date {
   padding-right: 1px;
   flex-basis: $pt-grid-size * 10;
   flex-grow: 0;
   flex-shrink: 0;
 }
 
-.zp-word-editor-date >* {
+.zpwde-date >* {
   flex-grow: initial;
   flex-shrink: initial;
 }
 
-.zp-word-editor-content {
+.zpwde-content {
   font-family: $pt-font-family-monospace;
   font-feature-settings: "palt" 0, "pkna" 0 !important;
   flex-grow: 1;

@@ -17,7 +17,7 @@ import {
 } from "react";
 
 
-export class Select<T> extends Component<Props<T>, State> {
+export class SimpleSelect<T> extends Component<Props<T>, State> {
 
   private renderItem(item: T, itemProps: IItemRendererProps): ReactElement | null {
     let modifiers = itemProps.modifiers;

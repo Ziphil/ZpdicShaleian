@@ -63,27 +63,27 @@ export class Pagination extends Component<Props, State> {
     let leftButtonNode = this.renderButtons(-1);
     let rightButtonNode = this.renderButtons(1);
     let node = (
-      <div className="zp-pagination">
-        <div className="zp-pagination-leftmost">
+      <div className="zppgn-root">
+        <div className="zppgn-leftmost">
           <ButtonGroup minimal={true}>
             <Button icon={<CustomIcon name="circleArrowLeftmost"/>} onClick={() => this.handleSet("first")}/>
             <Button icon="circle-arrow-left" onClick={() => this.handleSet(page - 1)}/>
           </ButtonGroup>
         </div>
-        <div className="zp-pagination-left">
+        <div className="zppgn-left">
           <ButtonGroup minimal={true}>
             {leftButtonNode}
           </ButtonGroup>
         </div>
-        <div className="zp-pagination-center">
+        <div className="zppgn-center">
           <Button text={this.transNumber(page + 1)} outlined={true} intent="primary"/>
         </div>
-        <div className="zp-pagination-right">
+        <div className="zppgn-right">
           <ButtonGroup minimal={true}>
             {rightButtonNode}
           </ButtonGroup>
         </div>
-        <div className="zp-pagination-rightmost">
+        <div className="zppgn-rightmost">
           <ButtonGroup minimal={true}>
             <Button icon="circle-arrow-right" onClick={() => this.handleSet(page + 1)}/>
             <Button icon={<CustomIcon name="circleArrowRightmost"/>} onClick={() => this.handleSet("last")}/>

@@ -104,13 +104,13 @@ export class WordEditor extends Component<Props, State> {
   public renderEditor(language: string): ReactElement {
     let word = this.state.word;
     let node = (
-      <div className="zp-word-editor-tab zp-editor-tab" key={language}>
-        <div className="zp-word-editor-head">
-          <InputGroup inputRef={this.nameRef} fill={true} value={word.uniqueName} onChange={this.setWord((event) => word.uniqueName = event.target.value)}/>
-          <NumericInput className="zp-word-editor-date" value={word.date} minorStepSize={null} onValueChange={this.setWord((date) => word.date = Math.floor(date))}/>
+      <div className="zpwde-editor-tab zp-editor-tab" key={language}>
+        <div className="zpwde-head">
+          <InputGroup className="zpwde-name" inputRef={this.nameRef} fill={true} value={word.uniqueName} onChange={this.setWord((event) => word.uniqueName = event.target.value)}/>
+          <NumericInput className="zpwde-date" value={word.date} minorStepSize={null} onValueChange={this.setWord((date) => word.date = Math.floor(date))}/>
         </div>
         <CodeMirror
-          className="zp-word-editor-content"
+          className="zpwde-content"
           value={word.contents[language] ?? ""}
           options={{theme: "zpshcontent", mode: {name: "shcontent"}, lineWrapping: true}}
           onBeforeChange={this.setWord((editor, data, value) => word.contents[language] = value)}
@@ -133,12 +133,12 @@ export class WordEditor extends Component<Props, State> {
     let keys = {confirm: "ctrl+enter"};
     let handlers = {confirm: this.handleConfirm.bind(this)};
     let node = (
-      <div className="zp-word-editor zp-editor">
+      <div className="zpwde-editor zp-editor">
         <HotKeys keyMap={keys} handlers={handlers}>
           <Tabs defaultSelectedTabId="ja" renderActiveTabPanelOnly={true}>
             {tabNodes}
           </Tabs>
-          <div className="zp-word-editor-button zp-editor-button">
+          <div className="zpwde-editor-button zp-editor-button">
             <Button text={this.trans("wordEditor.cancel")} onClick={this.handleCancel.bind(this)}/>
             <Button text={this.trans("wordEditor.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
           </div>
@@ -164,4 +164,4 @@ type State = {
   originalUniqueName: string | null
 };
 
-let CustomToaster = Toaster.create({className: "zp-word-editor-toaster", position: "top", maxToasts: 2});
+let CustomToaster = Toaster.create({position: "top", maxToasts: 2});

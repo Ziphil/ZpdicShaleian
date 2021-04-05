@@ -20,7 +20,7 @@ import {
   WordType
 } from "../../module/dictionary";
 import {
-  Select
+  SimpleSelect
 } from "../atom";
 import {
   Component
@@ -53,7 +53,7 @@ export class SearchForm extends Component<Props, State> {
       </Tag>
     );
     let node = (
-      <div className="zp-search-form">
+      <div className="zpscf-root">
         <ControlGroup fill={true}>
           <InputGroup
             value={parameter.search}
@@ -62,18 +62,18 @@ export class SearchForm extends Component<Props, State> {
             inputRef={this.props.inputRef}
             onChange={(event) => this.handleParameterSet({search: event.target.value})}
           />
-          <Select
-            className="zp-search-form-select"
-            buttonClassName="zp-search-form-button"
+          <SimpleSelect
+            className="zpscf-select"
+            buttonClassName="zpscf-button"
             items={[...WORD_MODES]}
             activeItem={parameter.mode}
             getText={(mode) => this.trans(`common.modeShort.${mode}`)}
             getMenuText={(mode) => this.trans(`common.mode.${mode}`)}
             onItemSelect={(mode) => this.handleParameterSet({mode})}
           />
-          <Select
-            className="zp-search-form-select"
-            buttonClassName="zp-search-form-button"
+          <SimpleSelect
+            className="zpscf-select"
+            buttonClassName="zpscf-button"
             items={[...WORD_TYPES]}
             activeItem={parameter.type}
             getText={(type) => this.trans(`common.typeShort.${type}`)}

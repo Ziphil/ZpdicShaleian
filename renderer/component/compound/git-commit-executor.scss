@@ -1,25 +1,25 @@
 @charset "utf-8";
 
 
-$marker-width: 5px;
-$blank-margin: $pt-grid-size / 2;
+$zpgce-marker-width: 5px;
+$zpgce-blank-margin: $pt-grid-size / 2;
 
-$status-colors: (
+$zpgce-status-colors: (
   added: $cobalt3,
   modified: $forest3,
   renamed: $violet3,
   deleted: $vermilion3
 );
 
-.zp-git-commit-executor-status-container {
+.zpgce-status-container {
   flex-grow: 1;
 }
 
-.zp-git-commit-executor-status-label {
+.zpgce-status-label {
   margin-bottom: $pt-grid-size / 2;
 }
 
-.zp-git-commit-executor-status-list {
+.zpgce-status-list {
   margin: 0px;
   padding: 0px;
   column-count: 2;
@@ -27,25 +27,25 @@ $status-colors: (
   list-style-type: none;
 }
 
-.zp-git-commit-executor-status-list >li {
-  margin-left: $marker-width + $blank-margin;
+.zpgce-status-list >li {
+  margin-left: $zpgce-marker-width + $zpgce-blank-margin;
   &::before {
-    width: $marker-width;
-    margin-right: $blank-margin;
-    margin-left: -$marker-width - $blank-margin;
+    width: $zpgce-marker-width;
+    margin-right: $zpgce-blank-margin;
+    margin-left: -$zpgce-marker-width - $zpgce-blank-margin;
     content: "•";
     display: inline-block;
   }
 }
 
-@each $type, $color in $status-colors {
-  .zp-git-commit-executor-status-list >li.zp-#{$type} {
+@each $type, $color in $zpgce-status-colors {
+  .zpgce-status-list >li.zpgce-#{$type} {
     color: $color;
   }
 }
 
-@each $type, $color in $status-colors {
-  .zp-git-commit-executor-status-list >li.zp-#{$type} .zp-extension {
+@each $type, $color in $zpgce-status-colors {
+  .zpgce-status-list >li.zpgce-#{$type} .zpgce-extension {
     color: rgba($color, 0.7);
   }
 }

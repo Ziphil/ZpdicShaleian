@@ -25,11 +25,11 @@ export class EnhancedProgressBar extends Component<Props, State> {
     let ratio = (size > 0) ? offset / size : 0;
     let percent = ratio * 100;
     let detailNode = (this.props.showDetail) && (
-      <div className="zpi-enhanced-progress-bar-detail">
-        <div className="zpi-enhanced-progress-bar-percent">
+      <div className="zpepb-detail">
+        <div className="zpepb-percent">
           {EnhancedProgressBar.intl.formatNumber(percent, {minimumFractionDigits: 2, maximumFractionDigits: 2})} %
         </div>
-        <div className="zpi-enhanced-progress-bar-offset">
+        <div className="zpepb-offset">
           {EnhancedProgressBar.intl.formatNumber(offset)} / {EnhancedProgressBar.intl.formatNumber(size)}
         </div>
       </div>
