@@ -67,7 +67,7 @@ export class MainNavbar extends Component<Props, State> {
           text={this.trans("mainNavbar.reloadDictionary")}
           label={this.handlerManager.getLabel("reloadDictionary")}
           onClick={this.handlerManager.getHandler("reloadDictionary")}
-          icon="blank"
+          icon="refresh"
         />
         <MenuDivider/>
         <MenuItem
@@ -176,42 +176,44 @@ export class MainNavbar extends Component<Props, State> {
           icon="random"
         />
         <MenuDivider/>
-        <MenuItem
-          text={this.trans("mainNavbar.moveFirstPage")}
-          label={this.handlerManager.getLabel("moveFirstPage")}
-          onClick={this.handlerManager.getHandler("moveFirstPage")}
-          icon={<CustomIcon name="circleArrowLeftmost"/>}
-        />
-        <MenuItem
-          text={this.trans("mainNavbar.movePreviousPage")}
-          label={this.handlerManager.getLabel("movePreviousPage")}
-          onClick={this.handlerManager.getHandler("movePreviousPage")}
-          icon="circle-arrow-left"
-        />
-        <MenuItem
-          text={this.trans("mainNavbar.moveNextPage")}
-          label={this.handlerManager.getLabel("moveNextPage")}
-          onClick={this.handlerManager.getHandler("moveNextPage")}
-          icon="circle-arrow-right"
-        />
-        <MenuItem
-          text={this.trans("mainNavbar.moveLastPage")}
-          label={this.handlerManager.getLabel("moveLastPage")}
-          onClick={this.handlerManager.getHandler("moveLastPage")}
-          icon={<CustomIcon name="circleArrowRightmost"/>}
-        />
+        <MenuItem text={this.trans("mainNavbar.movePage")} icon="blank">
+          <MenuItem
+            text={this.trans("mainNavbar.moveFirstPage")}
+            label={this.handlerManager.getLabel("moveFirstPage")}
+            onClick={this.handlerManager.getHandler("moveFirstPage")}
+            icon={<CustomIcon name="circleArrowLeftmost"/>}
+          />
+          <MenuItem
+            text={this.trans("mainNavbar.movePreviousPage")}
+            label={this.handlerManager.getLabel("movePreviousPage")}
+            onClick={this.handlerManager.getHandler("movePreviousPage")}
+            icon="circle-arrow-left"
+          />
+          <MenuItem
+            text={this.trans("mainNavbar.moveNextPage")}
+            label={this.handlerManager.getLabel("moveNextPage")}
+            onClick={this.handlerManager.getHandler("moveNextPage")}
+            icon="circle-arrow-right"
+          />
+          <MenuItem
+            text={this.trans("mainNavbar.moveLastPage")}
+            label={this.handlerManager.getLabel("moveLastPage")}
+            onClick={this.handlerManager.getHandler("moveLastPage")}
+            icon={<CustomIcon name="circleArrowRightmost"/>}
+          />
+        </MenuItem>
         <MenuDivider/>
         <MenuItem
           text={this.trans("mainNavbar.searchAdvanced")}
           label={this.handlerManager.getLabel("searchAdvanced")}
           onClick={this.handlerManager.getHandler("searchAdvanced")}
-          icon="blank"
+          icon="search-template"
         />
         <MenuItem
           text={this.trans("mainNavbar.searchScript")}
           label={this.handlerManager.getLabel("searchScript")}
           onClick={this.handlerManager.getHandler("searchScript")}
-          icon="blank"
+          icon={<CustomIcon name="searchScript"/>}
         />
       </Menu>
     );
@@ -225,13 +227,13 @@ export class MainNavbar extends Component<Props, State> {
           text={this.trans("mainNavbar.createWord")}
           label={this.handlerManager.getLabel("createWord")}
           onClick={this.handlerManager.getHandler("createWord")}
-          icon="blank"
+          icon="new-object"
         />
         <MenuItem
           text={this.trans("mainNavbar.inheritActiveWord")}
           label={this.handlerManager.getLabel("inheritActiveWord")}
           onClick={this.handlerManager.getHandler("inheritActiveWord")}
-          icon="blank"
+          icon={<CustomIcon name="inheritObject"/>}
         />
         <MenuItem
           text={this.trans("mainNavbar.editActiveWord")}
@@ -243,7 +245,7 @@ export class MainNavbar extends Component<Props, State> {
           text={this.trans("mainNavbar.deleteActiveWord")}
           label={this.handlerManager.getLabel("deleteActiveWord")}
           onClick={this.handlerManager.getHandler("deleteActiveWord")}
-          icon="blank"
+          icon="graph-remove"
           intent="danger"
         />
         <MenuDivider/>
