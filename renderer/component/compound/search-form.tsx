@@ -20,6 +20,9 @@ import {
   WordType
 } from "../../module/dictionary";
 import {
+  WordParameterUtil
+} from "../../util/word-parameter";
+import {
   SimpleSelect
 } from "../atom";
 import {
@@ -35,7 +38,7 @@ export class SearchForm extends Component<Props, State> {
 
   private handleParameterSet(nextParameter: {search?: string, mode?: WordMode, type?: WordType}): void {
     if (this.props.onParameterSet) {
-      let oldParameter = WordParameter.getNormal(this.props.parameter);
+      let oldParameter = WordParameterUtil.getNormal(this.props.parameter);
       let search = nextParameter.search ?? oldParameter.search;
       let mode = nextParameter.mode ?? oldParameter.mode;
       let type = nextParameter.type ?? oldParameter.type;
@@ -46,7 +49,7 @@ export class SearchForm extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let parameter = WordParameter.getNormal(this.props.parameter);
+    let parameter = WordParameterUtil.getNormal(this.props.parameter);
     let supplementNode = (
       <Tag minimal={true}>
         {this.transNumber(this.props.searchResult.words.length)}

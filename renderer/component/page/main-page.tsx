@@ -30,6 +30,9 @@ import {
   debounce
 } from "../../util/decorator";
 import {
+  WordParameterUtil
+} from "../../util/word-parameter";
+import {
   EnhancedProgressBar,
   Progress
 } from "../atom";
@@ -325,7 +328,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private changeWordMode(mode: WordMode, focus?: boolean): void {
-    let oldParameter = WordParameter.getNormal(this.state.parameter);
+    let oldParameter = WordParameterUtil.getNormal(this.state.parameter);
     let parameter = new NormalWordParameter(oldParameter.search, mode, oldParameter.type, oldParameter.language);
     this.changeParameter(parameter);
     if (focus) {
@@ -334,7 +337,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private changeWordType(type: WordType, focus?: boolean): void {
-    let oldParameter = WordParameter.getNormal(this.state.parameter);
+    let oldParameter = WordParameterUtil.getNormal(this.state.parameter);
     let parameter = new NormalWordParameter(oldParameter.search, oldParameter.mode, type, oldParameter.language);
     this.changeParameter(parameter);
     if (focus) {

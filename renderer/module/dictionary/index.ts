@@ -1,5 +1,7 @@
 //
 
+export * from "./loader/deserializer";
+export * from "./saver/serializer";
 export * from "./word-parameter/normal-word-parameter";
 export * from "./word-parameter/word-parameter";
 export * from "./dictionary";

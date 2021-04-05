@@ -21,14 +21,10 @@ import {
   HotKeys
 } from "react-hotkeys";
 import {
-  PlainDictionarySettings
-} from "../../module/dictionary";
-import {
-  Deserializer
-} from "../../module/dictionary/loader/deserializer";
-import {
+  Deserializer,
+  PlainDictionarySettings,
   Serializer
-} from "../../module/dictionary/saver/serializer";
+} from "../../module/dictionary";
 import {
   Component
 } from "../component";
