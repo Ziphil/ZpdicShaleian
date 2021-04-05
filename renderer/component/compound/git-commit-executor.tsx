@@ -4,7 +4,6 @@ import {
   Button,
   FormGroup,
   InputGroup,
-  Tag,
   Toaster
 } from "@blueprintjs/core";
 import * as react from "react";
@@ -59,12 +58,14 @@ export class GitCommitExecutor extends Component<Props, State> {
     }
   }
 
-  private handleConfirm(event?: MouseEvent<HTMLElement> | KeyboardEvent): void {
-    if (this.props.onConfirm) {
-      try {
-      } catch (error) {
-        CustomToaster.show({message: this.trans("dictionarySettingsEditor.emptyMessage"), icon: "error", intent: "danger"});
+  private async handleConfirm(event?: MouseEvent<HTMLElement> | KeyboardEvent): Promise<void> {
+    let message = this.state.message.trim();
+    if (message !== "") {
+      if (this.props.onConfirm) {
+        this.props.onConfirm(message, event);
       }
+    } else {
+      CustomToaster.show({message: this.trans("dictionarySettingsEditor.emptyMessage"), icon: "error", intent: "danger"});
     }
   }
 
@@ -79,15 +80,16 @@ export class GitCommitExecutor extends Component<Props, State> {
 
   private renderStatus(): ReactNode {
     let status = this.state.status;
-    let outerThis = this;
-    let createItemNodes = function (type: "created" | "modified" | "renamed" | "deleted"): ReactNode {
+    let createItemNodes = function (type: "added" | "modified" | "renamed" | "deleted"): ReactNode {
       if (status !== null) {
-        let data = (type === "created") ? status["not_added"] : (type === "renamed") ? status[type].map((spec) => spec.to) : status[type];
+        let data = (type === "added") ? status["not_added"] : (type === "renamed") ? status[type].map((spec) => spec.to) : status[type];
         let itemNodes = data.map((fileName, index) => {
+          let match = fileName.match(/^(.+)(\.\w+)$/);
+          let [fileBaseName, extension] = (match !== null) ? [match[1], match[2]] : [fileName, ""];
           let itemNode = (
             <li className={"zp-" + type} key={type + index}>
-              <Tag>{outerThis.trans(`gitCommitExecutor.${type}`)}</Tag>
-              {fileName}
+              {fileBaseName}
+              <span className="zp-extension">{extension}</span>
             </li>
           );
           return itemNode;
@@ -97,7 +99,7 @@ export class GitCommitExecutor extends Component<Props, State> {
         return null;
       }
     };
-    let createdNodes = createItemNodes("created");
+    let createdNodes = createItemNodes("added");
     let modifiedNodes = createItemNodes("modified");
     let renamedNodes = createItemNodes("renamed");
     let deletedNodes = createItemNodes("deleted");

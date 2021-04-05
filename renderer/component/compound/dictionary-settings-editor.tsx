@@ -56,15 +56,15 @@ export class DictionarySettingsEditor extends Component<Props, State> {
   }
 
   private handleConfirm(event?: MouseEvent<HTMLElement> | KeyboardEvent): void {
-    if (this.props.onConfirm) {
-      try {
-        let deserializer = new Deserializer();
-        let settings = this.state.settings;
-        settings.revisions = deserializer.deserializeRevisions(settings.revisionString);
+    try {
+      let deserializer = new Deserializer();
+      let settings = this.state.settings;
+      settings.revisions = deserializer.deserializeRevisions(settings.revisionString);
+      if (this.props.onConfirm) {
         this.props.onConfirm(settings, event);
-      } catch (error) {
-        CustomToaster.show({message: this.trans("dictionarySettingsEditor.errorRevisions"), icon: "error", intent: "danger"});
       }
+    } catch (error) {
+      CustomToaster.show({message: this.trans("dictionarySettingsEditor.errorRevisions"), icon: "error", intent: "danger"});
     }
   }
 

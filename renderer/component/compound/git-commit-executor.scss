@@ -4,6 +4,13 @@
 $marker-width: 5px;
 $blank-margin: $pt-grid-size / 2;
 
+$status-colors: (
+  added: $cobalt3,
+  modified: $forest3,
+  renamed: $violet3,
+  deleted: $vermilion3
+);
+
 .zp-git-commit-executor-status-container {
   flex-grow: 1;
 }
@@ -28,5 +35,17 @@ $blank-margin: $pt-grid-size / 2;
     margin-left: -$marker-width - $blank-margin;
     content: "•";
     display: inline-block;
+  }
+}
+
+@each $type, $color in $status-colors {
+  .zp-git-commit-executor-status-list >li.zp-#{$type} {
+    color: $color;
+  }
+}
+
+@each $type, $color in $status-colors {
+  .zp-git-commit-executor-status-list >li.zp-#{$type} .zp-extension {
+    color: rgba($color, 0.7);
   }
 }
