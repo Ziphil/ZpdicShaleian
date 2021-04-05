@@ -150,8 +150,9 @@ $swp-word-marker-shadow: inset 0px 0px 0px #{$pt-grid-size / 2} var(--marker-bac
 .swp-tag {
   @extend .bp3-tag;
   padding: 0px $pt-grid-size * 0.3;
-  min-width: 0px;
+  min-width: $pt-grid-size * 1.6;
   min-height: $pt-grid-size * 0.8;
+  justify-content: center;
 }
 
 .swp-section-item .swp-tag {
