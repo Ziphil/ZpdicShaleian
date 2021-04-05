@@ -70,7 +70,7 @@ type Handlers = Array<{channel: string, name: string | symbol}>;
 type HandlerClassDecorator = (clazz: new(...args: any) => Component) => void;
 type OnMethodDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<OnMethod>) => void;
 type OnAsyncMethodDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<OnAsyncMethod>) => void;
-type OnMethod = (...args: Array<any>) => void;
+type OnMethod = (...args: Array<any>) => any;
 type OnAsyncMethod = (...args: Array<any>) => Promise<any>;
 
 export function handler(): HandlerClassDecorator {

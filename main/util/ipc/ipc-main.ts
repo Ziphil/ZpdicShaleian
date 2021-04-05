@@ -41,7 +41,7 @@ export class PromisifiedIpcMain {
     return promise;
   }
 
-  public on(channel: string, listener: (event: IpcMainEvent, ...args: Array<any>) => void): void {
+  public on(channel: string, listener: (event: IpcMainEvent, ...args: Array<any>) => any): void {
     this.electronIpcMain.on(channel, listener);
   }
 
