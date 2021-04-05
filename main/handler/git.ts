@@ -23,8 +23,8 @@ import {
 @handler()
 export class GitHandler extends Handler {
 
-  @onAsync("git-status")
-  private async gitStatus(this: Main, event: IpcMainEvent, path: string): Promise<StatusResult> {
+  @onAsync("exec-git-status")
+  private async execGitStatus(this: Main, event: IpcMainEvent, path: string): Promise<StatusResult> {
     try {
       let git = simpleGit(path);
       let status = await git.status();
@@ -35,8 +35,8 @@ export class GitHandler extends Handler {
     }
   }
 
-  @onAsync("git-commit")
-  private async gitCommit(this: Main, event: IpcMainEvent, path: string, message?: string): Promise<void> {
+  @onAsync("exec-git-commit")
+  private async execGitCommit(this: Main, event: IpcMainEvent, path: string, message?: string): Promise<void> {
     try {
       let git = simpleGit(path);
       let nextMessage = message || this.settings.defaultCommitMessage;
@@ -52,8 +52,8 @@ export class GitHandler extends Handler {
     }
   }
 
-  @onAsync("git-push")
-  private async gitPush(this: Main, event: IpcMainEvent, path: string): Promise<void> {
+  @onAsync("exec-git-push")
+  private async execGitPush(this: Main, event: IpcMainEvent, path: string): Promise<void> {
     try {
       let git = simpleGit(path);
       await git.push();

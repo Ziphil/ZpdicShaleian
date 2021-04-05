@@ -45,7 +45,7 @@ export class GitCommitExecutor extends Component<Props, State> {
 
   private async loadStatus(): Promise<void> {
     try {
-      let status = await window.api.sendAsync("git-status", this.props.path);
+      let status = await window.api.sendAsync("exec-git-status", this.props.path);
       this.setState({status});
     } catch (error) {
       this.setState({status: null});

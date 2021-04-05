@@ -379,12 +379,12 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private async gitCommit(): Promise<void> {
+  private async execGitCommit(): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let path = dictionary.path;
       try {
-        await window.api.sendAsync("git-commit", path);
+        await window.api.sendAsync("exec-git-commit", path);
         CustomToaster.show({message: this.trans("mainPage.succeedGitCommit"), icon: "tick", intent: "success"});
       } catch (error) {
         CustomToaster.show({message: this.trans("mainPage.errorGitCommit"), icon: "error", intent: "danger"});
@@ -392,12 +392,12 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private async gitPush(): Promise<void> {
+  private async execGitPush(): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let path = dictionary.path;
       try {
-        await window.api.sendAsync("git-push", path);
+        await window.api.sendAsync("exec-git-push", path);
         CustomToaster.show({message: this.trans("mainPage.succeedGitPush"), icon: "tick", intent: "success"});
       } catch (error) {
         CustomToaster.show({message: this.trans("mainPage.errorGitPush"), icon: "error", intent: "danger"});
@@ -448,8 +448,8 @@ export class MainPage extends Component<Props, State> {
         editActiveWord={() => this.startEditActiveWord("active")}
         deleteActiveWord={() => this.deleteActiveWord()}
         toggleActiveWordMarker={(marker) => this.toggleActiveWordMarker(marker)}
-        gitCommit={() => this.startExecGitCommit()}
-        gitPush={() => this.gitPush()}
+        execGitCommit={() => this.startExecGitCommit()}
+        execGitPush={() => this.execGitPush()}
         openDictionarySettings={() => this.startChangeDictionarySettings()}
       />
     );

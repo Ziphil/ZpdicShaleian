@@ -339,15 +339,15 @@ export class MainNavbar extends Component<Props, State> {
     let node = (
       <Menu>
         <MenuItem
-          text={this.trans("mainNavbar.gitCommit")}
-          label={this.handlerManager.getLabel("gitCommit")}
-          onClick={this.handlerManager.getHandler("gitCommit")}
+          text={this.trans("mainNavbar.execGitCommit")}
+          label={this.handlerManager.getLabel("execGitCommit")}
+          onClick={this.handlerManager.getHandler("execGitCommit")}
           icon="git-commit"
         />
         <MenuItem
-          text={this.trans("mainNavbar.gitPush")}
-          label={this.handlerManager.getLabel("gitPush")}
-          onClick={this.handlerManager.getHandler("gitPush")}
+          text={this.trans("mainNavbar.execGitPush")}
+          label={this.handlerManager.getLabel("execGitPush")}
+          onClick={this.handlerManager.getHandler("execGitPush")}
           icon="git-push"
         />
       </Menu>
@@ -447,8 +447,8 @@ export class MainNavbar extends Component<Props, State> {
       toggleActiveWordMarkerPentagon: {key: "ctrl+8", handler: () => this.props.toggleActiveWordMarker("pentagon")},
       toggleActiveWordMarkerHexagon: {key: "ctrl+9", handler: () => this.props.toggleActiveWordMarker("hexagon")},
       toggleActiveWordMarkerTrapezoid: {key: "ctrl+0", handler: () => this.props.toggleActiveWordMarker("trapezoid")},
-      gitCommit: {key: "ctrl+alt+c", handler: () => this.props.gitCommit()},
-      gitPush: {key: "ctrl+alt+p", handler: () => this.props.gitPush()},
+      execGitCommit: {key: "ctrl+alt+c", handler: () => this.props.execGitCommit()},
+      execGitPush: {key: "ctrl+alt+p", handler: () => this.props.execGitPush()},
       openDictionarySettings: {key: "ctrl+p", handler: () => this.props.openDictionarySettings()},
       openSettings: {key: "ctrl+shift+p"},
       openDevTools: {key: "f12", handler: () => this.openDevTools()},
@@ -517,8 +517,8 @@ type Props = {
   editActiveWord: () => void,
   deleteActiveWord: () => void,
   toggleActiveWordMarker: (marker: Marker) => void,
-  gitCommit: () => void,
-  gitPush: () => void,
+  execGitCommit: () => void,
+  execGitPush: () => void,
   openDictionarySettings: () => void
 };
 type State = {
