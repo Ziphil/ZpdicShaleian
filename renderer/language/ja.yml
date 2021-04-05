@@ -54,6 +54,10 @@ dictionarySettingsEditor:
 gitCommitExecutor:
   message: "コミットメッセージ"
   change: "変更"
+  added: "A"
+  modified: "M"
+  renamed: "R"
+  deleted: "D"
   cancel: "キャンセル"
   confirm: "決定"
   emptyMessage: >-

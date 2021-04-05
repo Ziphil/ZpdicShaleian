@@ -85,6 +85,7 @@ export class GitCommitExecutor extends Component<Props, State> {
 
   private renderStatus(): ReactNode {
     let status = this.state.status;
+    let outerThis = this;
     let createItemNodes = function (type: "added" | "modified" | "renamed" | "deleted"): ReactNode {
       if (status !== null) {
         let data = (type === "added") ? status["not_added"] : (type === "renamed") ? status[type].map((spec) => spec.to) : status[type];
@@ -93,6 +94,7 @@ export class GitCommitExecutor extends Component<Props, State> {
           let [fileBaseName, extension] = (match !== null) ? [match[1], match[2]] : [fileName, ""];
           let itemNode = (
             <li className={`zpgce-${type}`} key={`${type}-${index}`}>
+              <span className="zpgce-type">{outerThis.trans(`gitCommitExecutor.${type}`)}</span>
               <span className="zpgce-base-name">{fileBaseName}</span>
               <span className="zpgce-extension">{extension}</span>
             </li>

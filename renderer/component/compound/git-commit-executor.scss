@@ -20,6 +20,7 @@ $zpgce-status-colors: (
 }
 
 .zpgce-status-list {
+  @extend .bp3-running-text;
   margin: 0px;
   padding: 0px;
   column-count: 2;
@@ -35,6 +36,21 @@ $zpgce-status-colors: (
     margin-left: -$zpgce-marker-width - $zpgce-blank-margin;
     content: "•";
     display: inline-block;
+  }
+}
+
+.zpgce-type {
+  @extend .bp3-tag;
+  margin-right: $pt-grid-size / 2;
+  padding: 0px $pt-grid-size * 0.3;
+  min-width: $pt-grid-size * 1.6;
+  min-height: $pt-grid-size * 0.8;
+  justify-content: center;
+}
+
+@each $type, $color in $zpgce-status-colors {
+  .zpgce-status-list >li.zpgce-#{$type} .zpgce-type {
+    background-color: $color;
   }
 }
 
