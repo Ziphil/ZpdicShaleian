@@ -1,0 +1,32 @@
+@charset "utf-8";
+
+
+$marker-width: 5px;
+$blank-margin: $pt-grid-size / 2;
+
+.zp-git-commit-executor-status-container {
+  flex-grow: 1;
+}
+
+.zp-git-commit-executor-status-label {
+  margin-bottom: $pt-grid-size / 2;
+}
+
+.zp-git-commit-executor-status-list {
+  margin: 0px;
+  padding: 0px;
+  column-count: 2;
+  column-gap: $pt-grid-size;
+  list-style-type: none;
+}
+
+.zp-git-commit-executor-status-list >li {
+  margin-left: $marker-width + $blank-margin;
+  &::before {
+    width: $marker-width;
+    margin-right: $blank-margin;
+    margin-left: -$marker-width - $blank-margin;
+    content: "•";
+    display: inline-block;
+  }
+}

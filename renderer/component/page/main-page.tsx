@@ -370,6 +370,15 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  private startExecGitCommit(): void {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null && dictionary.path !== null) {
+      let options = {width: 480, height: 320, minWidth: 320, minHeight: 240, type: "toolbar"};
+      let path = dictionary.path;
+      this.createWindow("git-commit", {path}, options);
+    }
+  }
+
   private async gitCommit(): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
@@ -439,7 +448,7 @@ export class MainPage extends Component<Props, State> {
         editActiveWord={() => this.startEditActiveWord("active")}
         deleteActiveWord={() => this.deleteActiveWord()}
         toggleActiveWordMarker={(marker) => this.toggleActiveWordMarker(marker)}
-        gitCommit={() => this.gitCommit()}
+        gitCommit={() => this.startExecGitCommit()}
         gitPush={() => this.gitPush()}
         openDictionarySettings={() => this.startChangeDictionarySettings()}
       />

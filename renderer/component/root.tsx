@@ -18,6 +18,7 @@ import {
 import {
   DictionarySettingsPage,
   EditorPage,
+  GitCommitPage,
   MainPage
 } from "./page";
 import {
@@ -60,6 +61,10 @@ export class Root extends Component<Props, State> {
         return <EditorPage {...props}/>;
       } else if (mode === "dictionary-settings") {
         return <DictionarySettingsPage {...props}/>;
+      } else if (mode === "git-commit") {
+        return <GitCommitPage {...props}/>;
+      } else {
+        return <div/>;
       }
     } else {
       return <div/>;

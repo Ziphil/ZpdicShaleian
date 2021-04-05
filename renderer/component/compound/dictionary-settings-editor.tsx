@@ -82,10 +82,10 @@ export class DictionarySettingsEditor extends Component<Props, State> {
     let settings = this.state.settings;
     let node = (
       <div className="zp-dictionary-settings-editor-tab zp-editor-tab">
-        <FormGroup label="バージョン" labelFor="version">
+        <FormGroup label={this.trans("dictionarySettingsEditor.version")} labelFor="version">
           <InputGroup id="version" value={settings.version} onChange={this.setSettings((event) => settings.version = event.target.value)}/>
         </FormGroup>
-        <FormGroup label="アルファベット順" labelFor="alphabet-rule">
+        <FormGroup label={this.trans("dictionarySettingsEditor.alphabetRule")} labelFor="alphabet-rule">
           <InputGroup id="alphabet-rule" value={settings.alphabetRule} onChange={this.setSettings((event) => settings.alphabetRule = event.target.value)}/>
         </FormGroup>
       </div>
@@ -121,8 +121,8 @@ export class DictionarySettingsEditor extends Component<Props, State> {
             <Tab id="revision" title={this.trans("dictionarySettingsEditor.revision")} panel={revisionNode}/>
           </Tabs>
           <div className="zp-dictionary-settings-editor-button zp-editor-button">
-            <Button text={this.trans("dictionarySettingsEditor.cancel")} icon="cross" onClick={this.handleCancel.bind(this)}/>
-            <Button text={this.trans("dictionarySettingsEditor.confirm")} intent="primary" icon="confirm" onClick={this.handleConfirm.bind(this)}/>
+            <Button text={this.trans("dictionarySettingsEditor.cancel")} onClick={this.handleCancel.bind(this)}/>
+            <Button text={this.trans("dictionarySettingsEditor.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
           </div>
         </HotKeys>
       </div>
@@ -139,7 +139,7 @@ type Props = {
   onCancel?: (event: MouseEvent<HTMLElement>) => void
 };
 type State = {
-  settings: PlainDictionarySettings & {revisionString: string};
+  settings: PlainDictionarySettings & {revisionString: string}
 };
 
 let CustomToaster = Toaster.create({className: "zp-dictionary-settings-toaster", position: "top", maxToasts: 2});

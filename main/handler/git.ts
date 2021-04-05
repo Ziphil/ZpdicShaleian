@@ -5,6 +5,9 @@ import {
 } from "electron";
 import simpleGit from "simple-git";
 import {
+  StatusResult
+} from "simple-git";
+import {
   Main
 } from "../index";
 import {
@@ -19,6 +22,18 @@ import {
 
 @handler()
 export class GitHandler extends Handler {
+
+  @onAsync("git-status")
+  private async gitStatus(this: Main, event: IpcMainEvent, path: string): Promise<StatusResult> {
+    try {
+      let git = simpleGit(path);
+      let status = await git.status();
+      return status;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 
   @onAsync("git-commit")
   private async gitCommit(this: Main, event: IpcMainEvent, path: string, message?: string): Promise<void> {

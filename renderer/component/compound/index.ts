@@ -1,6 +1,7 @@
 //
 
 export * from "./dictionary-settings-editor";
+export * from "./git-commit-executor";
 export * from "./loading";
 export * from "./main-navbar";
 export * from "./pagination";
