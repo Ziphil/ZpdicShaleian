@@ -50,16 +50,8 @@ export class WordEditor extends Component<Props, State> {
     this.state = {uid, word, originalUniqueName};
   }
 
-  public componentDidMount(): void {
-    if (this.props.word === null) {
-      this.nameRef.current?.focus();
-    }
-  }
-
   private contentEditorDidMount(editor: Editor): void {
-    if (this.props.word !== null) {
-      editor.focus();
-    }
+    editor.focus();
   }
 
   private handleCancel(event: MouseEvent<HTMLElement>): void {
