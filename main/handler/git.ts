@@ -42,7 +42,7 @@ export class GitHandler extends Handler {
       let nextMessage = message || this.settings.defaultCommitMessage;
       if (nextMessage !== undefined && nextMessage !== "") {
         await git.add(".");
-        await git.commit(nextMessage);
+        await git.commit(nextMessage, ["--allow-empty"]);
       } else {
         throw new Error("message not specified");
       }
