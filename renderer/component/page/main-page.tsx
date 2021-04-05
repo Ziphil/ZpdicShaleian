@@ -120,7 +120,7 @@ export class MainPage extends Component<Props, State> {
         this.updateWords();
       });
     } catch (error) {
-      CustomToaster.show({message: this.trans("mainPage.errorLoadDictionary"), icon: "error", intent: "danger"});
+      CustomToaster.show({message: this.trans("mainPage.failLoadDictionary"), icon: "error", intent: "danger"});
     }
   }
 
@@ -148,7 +148,7 @@ export class MainPage extends Component<Props, State> {
         this.setState({changed: false});
         CustomToaster.show({message: this.trans("mainPage.succeedSaveDictionary"), icon: "tick", intent: "success"}, "saveDictionary");
       } catch (error) {
-        CustomToaster.show({message: this.trans("mainPage.errorLoadDictionary"), icon: "error", intent: "danger"}, "saveDictionary");
+        CustomToaster.show({message: this.trans("mainPage.failLoadDictionary"), icon: "error", intent: "danger"}, "saveDictionary");
       }
     }
   }
@@ -384,12 +384,12 @@ export class MainPage extends Component<Props, State> {
 
   @on("succeed-exec-git-commit")
   private succeedExecGitCommit(): void {
-    CustomToaster.show({message: this.trans("mainPage.succeedGitCommit"), icon: "tick", intent: "success"});
+    CustomToaster.show({message: this.trans("mainPage.succeedExecGitCommit"), icon: "tick", intent: "success"});
   }
 
   @on("fail-exec-git-commit")
   private failExecGitCommit(): void {
-    CustomToaster.show({message: this.trans("mainPage.failGitCommit"), icon: "error", intent: "danger"});
+    CustomToaster.show({message: this.trans("mainPage.failExecGitCommit"), icon: "error", intent: "danger"});
   }
 
   private async execGitPush(): Promise<void> {
@@ -398,9 +398,9 @@ export class MainPage extends Component<Props, State> {
       let path = dictionary.path;
       try {
         await window.api.sendAsync("exec-git-push", path);
-        CustomToaster.show({message: this.trans("mainPage.succeedGitPush"), icon: "tick", intent: "success"});
+        CustomToaster.show({message: this.trans("mainPage.succeedExecGitPush"), icon: "tick", intent: "success"});
       } catch (error) {
-        CustomToaster.show({message: this.trans("mainPage.errorGitPush"), icon: "error", intent: "danger"});
+        CustomToaster.show({message: this.trans("mainPage.failExecGitPush"), icon: "error", intent: "danger"});
       }
     }
   }

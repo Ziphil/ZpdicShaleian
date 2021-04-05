@@ -72,7 +72,7 @@ export class DictionarySettingsEditor extends Component<Props, State> {
         this.props.onConfirm(settings, event);
       }
     } catch (error) {
-      CustomToaster.show({message: this.trans("dictionarySettingsEditor.errorRevisions"), icon: "error", intent: "danger"});
+      CustomToaster.show({message: this.trans("dictionarySettingsEditor.failDeserializeRevisions"), icon: "error", intent: "danger"});
     }
   }
 

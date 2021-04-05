@@ -49,17 +49,15 @@ dictionarySettingsEditor:
   alphabetRule: "アルファベット順"
   cancel: "キャンセル"
   confirm: "決定"
-  errorRevisions: >-
+  failDeserializeRevisions: >-
     変更履歴の記述に誤りがあります。
 gitCommitExecutor:
   message: "コミットメッセージ"
   change: "変更"
-  created: "A"
-  modified: "M"
-  renamed: "R"
-  deleted: "D"
   cancel: "キャンセル"
   confirm: "決定"
+  emptyMessage: >-
+    コミットメッセージが空です。
 mainNavbar:
   title: "シャレイア語辞典"
   file: "ファイル"
@@ -109,8 +107,8 @@ wordEditor:
     綴りのフォーマットが正しくありません。
   duplicateUniqueName: >-
     その綴りの単語はすでに登録されています。
-  error: >-
-    エラーが発生しました。
+  failValidate: >-
+    不明な原因によりこの内容で編集することはできません。
 wordPaneWrapper:
   create: "新規作成"
   inherit: "コピーして新規作成"
@@ -126,19 +124,19 @@ mainPage:
   alert: >-
     辞書データは変更されています。
     このまま続行しますか?
-  errorLoadDictionary: >-
+  failLoadDictionary: >-
     辞書データの読み込み中にエラーが発生しました。
   succeedSaveDictionary: >-
     辞書データの保存が完了しました。
-  errorSaveDictionary: >-
+  failSaveDictionary: >-
     辞書データの保存中にエラーが発生しました。
   noActiveWord: >-
     選択している単語がありません。
-  succeedGitCommit: >-
+  succeedExecGitCommit: >-
     Git リポジトリへのコミットが完了しました。
-  failGitCommit: >-
+  failExecGitCommit: >-
     Git リポジトリへのコミットの実行中にエラーが発生しました。
-  succeedGitPush: >-
+  succeedExecGitPush: >-
     Git リポジトリへのプッシュが完了しました。
-  errorGitPush: >-
+  failExecGitPush: >-
     Git リポジトリへのプッシュの実行中にエラーが発生しました。

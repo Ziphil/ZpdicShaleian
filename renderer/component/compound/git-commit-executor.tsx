@@ -70,7 +70,7 @@ export class GitCommitExecutor extends Component<Props, State> {
         this.props.onConfirm(message, event);
       }
     } else {
-      CustomToaster.show({message: this.trans("dictionarySettingsEditor.emptyMessage"), icon: "error", intent: "danger"});
+      CustomToaster.show({message: this.trans("gitCommitExecutor.emptyMessage"), icon: "error", intent: "danger"});
     }
   }
 

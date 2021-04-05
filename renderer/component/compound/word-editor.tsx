@@ -80,7 +80,7 @@ export class WordEditor extends Component<Props, State> {
       } else if (errorType === "duplicateUniqueName") {
         CustomToaster.show({message: this.trans("wordEditor.duplicateUniqueName"), icon: "error", intent: "danger"});
       } else {
-        CustomToaster.show({message: this.trans("wordEditor.error"), icon: "error", intent: "danger"});
+        CustomToaster.show({message: this.trans("wordEditor.failValidate"), icon: "error", intent: "danger"});
       }
     }
   }
