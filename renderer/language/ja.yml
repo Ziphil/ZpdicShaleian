@@ -136,6 +136,10 @@ mainPage:
     辞書データの保存が完了しました。
   failSaveDictionary: >-
     辞書データの保存中にエラーが発生しました。
+  succeedExportDictionary: >-
+    辞書データの保存が完了しました。
+  failExportDictionary: >-
+    辞書データの保存中にエラーが発生しました。
   noActiveWord: >-
     選択している単語がありません。
   succeedExecGitCommit: >-
