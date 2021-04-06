@@ -1,0 +1,63 @@
+@charset "utf-8";
+
+
+$zpgsp-marker-width: 5px;
+$zpgsp-blank-margin: $pt-grid-size / 2;
+
+$zpgsp-status-colors: (
+  added: $cobalt3,
+  modified: $forest3,
+  renamed: $violet3,
+  deleted: $vermilion3
+);
+
+.zpgsp-label {
+  margin-bottom: $pt-grid-size / 2;
+}
+
+.zpgsp-list {
+  @extend .bp3-running-text;
+  margin: 0px;
+  padding: 0px;
+  column-count: 2;
+  column-gap: $pt-grid-size;
+  list-style-type: none;
+}
+
+.zpgsp-list >li {
+  margin-left: $zpgsp-marker-width + $zpgsp-blank-margin;
+  &::before {
+    width: $zpgsp-marker-width;
+    margin-right: $zpgsp-blank-margin;
+    margin-left: -$zpgsp-marker-width - $zpgsp-blank-margin;
+    content: "•";
+    display: inline-block;
+  }
+}
+
+.zpgsp-type {
+  @extend .bp3-tag;
+  margin-right: $pt-grid-size / 2;
+  padding: 0px $pt-grid-size * 0.3;
+  min-width: $pt-grid-size * 1.6;
+  min-height: $pt-grid-size * 0.8;
+  justify-content: center;
+}
+
+@each $type, $color in $zpgsp-status-colors {
+  .zpgsp-list >li.zpgsp-#{$type} .zpgsp-type {
+    background-color: $color;
+  }
+}
+
+@each $type, $color in $zpgsp-status-colors {
+  .zpgsp-list >li.zpgsp-#{$type} {
+    color: $color;
+  }
+}
+
+@each $type, $color in $zpgsp-status-colors {
+  .zpgsp-list >li.zpgsp-#{$type} .zpgsp-extension {
+    color: rgba($color, 0.6);
+  }
+}

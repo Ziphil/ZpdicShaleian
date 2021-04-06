@@ -17,44 +17,30 @@ import {
   HotKeys
 } from "react-hotkeys";
 import {
-  StatusResult
-} from "simple-git";
-import {
   Component
 } from "../component";
 import {
   component
 } from "../decorator";
+import {
+  GitStatusPane
+} from ".";
 
 
 @component()
 export class GitCommitExecutor extends Component<Props, State> {
 
   public state: State = {
-    message: "",
-    status: null
+    message: ""
   };
 
   private messageRef: RefObject<HTMLInputElement> = createRef();
 
   public async componentDidMount(): Promise<void> {
     this.messageRef.current?.focus();
-    await Promise.all([this.loadMessage(), this.loadStatus()]);
-  }
-
-  private async loadMessage(): Promise<void> {
     let settings = await window.api.sendAsync("get-settings");
     let message = settings.defaultCommitMessage ?? "";
     this.setState({message});
-  }
-
-  private async loadStatus(): Promise<void> {
-    try {
-      let status = await window.api.sendAsync("exec-git-status", this.props.path);
-      this.setState({status});
-    } catch (error) {
-      this.setState({status: null});
-    }
   }
 
   private handleCancel(event: MouseEvent<HTMLElement>): void {
@@ -83,50 +69,8 @@ export class GitCommitExecutor extends Component<Props, State> {
     return node;
   }
 
-  private renderStatus(): ReactNode {
-    let status = this.state.status;
-    let outerThis = this;
-    let createItemNodes = function (type: "added" | "modified" | "renamed" | "deleted"): ReactNode {
-      if (status !== null) {
-        let data = (type === "added") ? status["not_added"] : (type === "renamed") ? status[type].map((spec) => spec.to) : status[type];
-        let itemNodes = data.map((fileName, index) => {
-          let match = fileName.match(/^(.+)(\.\w+)$/);
-          let [fileBaseName, extension] = (match !== null) ? [match[1], match[2]] : [fileName, ""];
-          let itemNode = (
-            <li className={`zpgce-${type}`} key={`${type}-${index}`}>
-              <span className="zpgce-type">{outerThis.trans(`gitCommitExecutor.${type}`)}</span>
-              <span className="zpgce-base-name">{fileBaseName}</span>
-              <span className="zpgce-extension">{extension}</span>
-            </li>
-          );
-          return itemNode;
-        });
-        return itemNodes;
-      } else {
-        return null;
-      }
-    };
-    let createdNodes = createItemNodes("added");
-    let modifiedNodes = createItemNodes("modified");
-    let renamedNodes = createItemNodes("renamed");
-    let deletedNodes = createItemNodes("deleted");
-    let node = (
-      <div className="zpgce-status">
-        <div className="zpgce-status-label">{this.trans("gitCommitExecutor.change")}</div>
-        <ul className="zpgce-status-list">
-          {createdNodes}
-          {modifiedNodes}
-          {renamedNodes}
-          {deletedNodes}
-        </ul>
-      </div>
-    );
-    return node;
-  }
-
   public render(): ReactNode {
     let messageNode = this.renderMessage();
-    let statusNode = this.renderStatus();
     let keys = {confirm: "ctrl+enter"};
     let handlers = {confirm: this.handleConfirm.bind(this)};
     let node = (
@@ -136,7 +80,7 @@ export class GitCommitExecutor extends Component<Props, State> {
             {messageNode}
           </div>
           <div className="zpgce-status-container">
-            {statusNode}
+            <GitStatusPane path={this.props.path}/>
           </div>
           <div className="zpgce-editor-button zp-editor-button">
             <Button text={this.trans("gitCommitExecutor.cancel")} onClick={this.handleCancel.bind(this)}/>
@@ -157,8 +101,7 @@ type Props = {
   onCancel?: (event: MouseEvent<HTMLElement>) => void
 };
 type State = {
-  message: string,
-  status: StatusResult | null
+  message: string
 };
 
 let CustomToaster = Toaster.create({position: "top", maxToasts: 2});
