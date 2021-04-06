@@ -53,15 +53,16 @@ dictionarySettingsEditor:
     変更履歴の記述に誤りがあります。
 gitCommitExecutor:
   message: "コミットメッセージ"
-  change: "変更"
-  added: "A"
-  modified: "M"
-  renamed: "R"
-  deleted: "D"
   cancel: "キャンセル"
   confirm: "決定"
   emptyMessage: >-
     コミットメッセージが空です。
+gitStatusPane:
+  change: "変更ファイル"
+  added: "A"
+  modified: "M"
+  renamed: "R"
+  deleted: "D"
 mainNavbar:
   title: "シャレイア語辞典"
   file: "ファイル"

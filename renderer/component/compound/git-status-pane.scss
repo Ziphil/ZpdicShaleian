@@ -35,6 +35,10 @@ $zpgsp-status-colors: (
   }
 }
 
+.zpgsp-list >li.bp3-skeleton {
+  margin: 0px;
+}
+
 .zpgsp-type {
   @extend .bp3-tag;
   margin-right: $pt-grid-size / 2;

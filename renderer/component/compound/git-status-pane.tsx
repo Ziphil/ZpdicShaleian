@@ -19,19 +19,20 @@ import {
 export class GitStatusPane extends Component<Props, State> {
 
   public state: State = {
-    status: null
+    status: null,
+    loading: true
   };
 
   public async componentDidMount(): Promise<void> {
     try {
       let status = await window.api.sendAsync("exec-git-status", this.props.path);
-      this.setState({status});
+      this.setState({status, loading: false});
     } catch (error) {
-      this.setState({status: null});
+      this.setState({status: null, loading: true});
     }
   }
 
-  private renderItemList(type: "added" | "modified" | "renamed" | "deleted"): ReactNode {
+  private renderItem(type: "added" | "modified" | "renamed" | "deleted"): ReactNode {
     let status = this.state.status;
     if (status !== null) {
       let data = (type === "added") ? status["not_added"] : (type === "renamed") ? status[type].map((spec) => spec.to) : status[type];
@@ -40,7 +41,7 @@ export class GitStatusPane extends Component<Props, State> {
         let [fileBaseName, extension] = (match !== null) ? [match[1], match[2]] : [fileName, ""];
         let itemNode = (
           <li className={`zpgsp-${type}`} key={`${type}-${index}`}>
-            <span className="zpgsp-type">{this.trans(`gitCommitExecutor.${type}`)}</span>
+            <span className="zpgsp-type">{this.trans(`gitStatusPane.${type}`)}</span>
             <span className="zpgsp-base-name">{fileBaseName}</span>
             <span className="zpgsp-extension">{extension}</span>
           </li>
@@ -53,20 +54,39 @@ export class GitStatusPane extends Component<Props, State> {
     }
   };
 
+  private renderItemList(): ReactNode {
+    let createdNodes = this.renderItem("added");
+    let modifiedNodes = this.renderItem("modified");
+    let renamedNodes = this.renderItem("renamed");
+    let deletedNodes = this.renderItem("deleted");
+    let node = (
+      <ul className="zpgsp-list">
+        {createdNodes}
+        {modifiedNodes}
+        {renamedNodes}
+        {deletedNodes}
+      </ul>
+    );
+    return node;
+  }
+
+  private renderDummyItemList(): ReactNode {
+    let node = (
+      <ul className="zpgsp-list">
+        <li className="bp3-skeleton">dummy</li>
+        <li className="bp3-skeleton">dummy</li>
+        <li className="bp3-skeleton">dummy</li>
+      </ul>
+    );
+    return node;
+  }
+
   public render(): ReactNode {
-    let createdNodes = this.renderItemList("added");
-    let modifiedNodes = this.renderItemList("modified");
-    let renamedNodes = this.renderItemList("renamed");
-    let deletedNodes = this.renderItemList("deleted");
+    let listNode = (this.state.loading) ? this.renderDummyItemList() : this.renderItemList();
     let node = (
       <div className="zpgsp-status">
-        <div className="zpgsp-label">{this.trans("gitCommitExecutor.change")}</div>
-        <ul className="zpgsp-list">
-          {createdNodes}
-          {modifiedNodes}
-          {renamedNodes}
-          {deletedNodes}
-        </ul>
+        <div className="zpgsp-label">{this.trans("gitStatusPane.change")}</div>
+        {listNode}
       </div>
     );
     return node;
@@ -79,5 +99,6 @@ type Props = {
   path: string
 };
 type State = {
-  status: StatusResult | null
+  status: StatusResult | null,
+  loading: boolean
 };
