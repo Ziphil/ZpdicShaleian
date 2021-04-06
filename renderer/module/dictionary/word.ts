@@ -166,29 +166,6 @@ export class Word implements PlainWord {
     }
   }
 
-  public getFileName(): string {
-    let match = this.uniqueName.match(/^(\+)?(.+?)(\+)?(~*)$/);
-    if (match) {
-      let modifier = "";
-      if (match[1]) {
-        modifier += "S";
-      }
-      if (match[3]) {
-        modifier += "P";
-      }
-      if (match[4].length > 0) {
-        modifier += (match[4].length + 1).toString();
-      }
-      if (modifier.length > 0) {
-        modifier = "_" + modifier;
-      }
-      let fileName = match[2] + modifier;
-      return fileName;
-    } else {
-      throw new Error("cannot happen");
-    }
-  }
-
   public static sortWords(words: Array<Word>): Array<Word> {
     let sortedWords = words.sort((firstWord, secondWord) => {
       let firstComparisonString = firstWord.comparisonString;

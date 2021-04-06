@@ -29,14 +29,16 @@ import {
 export class DirectorySaver extends Saver {
 
   private readonly serializer: Serializer;
+  private readonly resolver: FileNameResolver;
   private size: number = 0;
   private count: number = 0;
   private deleteSize: number = 0;
   private deleteCount: number = 0;
 
-  public constructor(dictionary: Dictionary, path?: string | null) {
+  public constructor(dictionary: Dictionary, path?: string | null, resolver?: FileNameResolver) {
     super(dictionary, path);
     this.serializer = new Serializer();
+    this.resolver = resolver ?? FileNameResolver.createDefault();
   }
 
   public start(): void {
@@ -77,7 +79,7 @@ export class DirectorySaver extends Saver {
 
   private async saveWords(words: Array<Word>): Promise<void> {
     let promises = words.map((word) => {
-      let wordPath = joinPath(this.path, word.getFileName() + ".xdnw");
+      let wordPath = joinPath(this.path, this.resolver.resolveWordBaseName(word.uniqueName) + ".xdnw");
       return this.saveWord(word, wordPath);
     });
     await Promise.all(promises);
@@ -91,14 +93,14 @@ export class DirectorySaver extends Saver {
   }
 
   private async saveSettings(settings: DictionarySettings): Promise<void> {
-    let path = joinPath(this.path, "#SETTINGS.xdns");
+    let path = joinPath(this.path, this.resolver.settingsBaseName + ".xdns");
     let string = this.serializer.serializeDictionarySettings(settings);
     await fs.writeFile(path, string, {encoding: "utf-8"});
     this.emitProgress();
   }
 
   private async saveMarkers(markers: Markers): Promise<void> {
-    let path = joinPath(this.path, "#MARKER.xdns");
+    let path = joinPath(this.path, this.resolver.markersBaseName + ".xdns");
     let string = this.serializer.serializeMarkers(markers);
     await fs.writeFile(path, string, {encoding: "utf-8"});
     this.emitProgress();
@@ -109,3 +111,50 @@ export class DirectorySaver extends Saver {
   }
 
 }
+
+
+export class FileNameResolver {
+
+  public readonly resolveWordBaseName: WordBaseNameResolver;
+  public readonly settingsBaseName: string;
+  public readonly markersBaseName: string;
+
+  public constructor(resolveWordBaseName: WordBaseNameResolver, settingsBaseName: string, markersBaseName: string) {
+    this.resolveWordBaseName = resolveWordBaseName;
+    this.settingsBaseName = settingsBaseName;
+    this.markersBaseName = markersBaseName;
+  }
+
+  public static createDefault(): FileNameResolver {
+    let resolveWordBaseName = function (uniqueName: string): string {
+      let match = uniqueName.match(/^(\+)?(.+?)(\+)?(~*)$/);
+      if (match) {
+        let modifier = "";
+        if (match[1]) {
+          modifier += "S";
+        }
+        if (match[3]) {
+          modifier += "P";
+        }
+        if (match[4].length > 0) {
+          modifier += (match[4].length + 1).toString();
+        }
+        if (modifier.length > 0) {
+          modifier = "_" + modifier;
+        }
+        let fileName = match[2] + modifier;
+        return fileName;
+      } else {
+        throw new Error("cannot happen");
+      }
+    };
+    let settingsBaseName = "#SETTINGS";
+    let markersBaseName = "#MARKER";
+    let resolver = new FileNameResolver(resolveWordBaseName, settingsBaseName, markersBaseName);
+    return resolver;
+  }
+
+}
+
+
+type WordBaseNameResolver = (uniqueName: string) => string;
