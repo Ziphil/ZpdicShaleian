@@ -131,31 +131,37 @@ export class MainNavbar extends Component<Props, State> {
             text={this.trans("common.type.exact")}
             label={this.handlerManager.getLabel("changeWordTypeToExact")}
             onClick={this.handlerManager.getHandler("changeWordTypeToExact")}
+            icon={<CustomIcon name="typeExact"/>}
           />
           <MenuItem
             text={this.trans("common.type.prefix")}
             label={this.handlerManager.getLabel("changeWordTypeToPrefix")}
             onClick={this.handlerManager.getHandler("changeWordTypeToPrefix")}
+            icon={<CustomIcon name="typePrefix"/>}
           />
           <MenuItem
             text={this.trans("common.type.suffix")}
             label={this.handlerManager.getLabel("changeWordTypeToSuffix")}
             onClick={this.handlerManager.getHandler("changeWordTypeToSuffix")}
+            icon={<CustomIcon name="typeSuffix"/>}
           />
           <MenuItem
             text={this.trans("common.type.part")}
             label={this.handlerManager.getLabel("changeWordTypeToPart")}
             onClick={this.handlerManager.getHandler("changeWordTypeToPart")}
+            icon={<CustomIcon name="typePart"/>}
           />
           <MenuItem
             text={this.trans("common.type.pair")}
             label={this.handlerManager.getLabel("changeWordTypeToPair")}
             onClick={this.handlerManager.getHandler("changeWordTypeToPair")}
+            icon="blank"
           />
           <MenuItem
             text={this.trans("common.type.regular")}
             label={this.handlerManager.getLabel("changeWordTypeToRegular")}
             onClick={this.handlerManager.getHandler("changeWordTypeToRegular")}
+            icon={<CustomIcon name="regexp"/>}
           />
         </MenuItem>
         <MenuItem text={this.trans("mainNavbar.changeLanguage")} icon="blank">
