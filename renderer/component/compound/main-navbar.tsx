@@ -336,29 +336,30 @@ export class MainNavbar extends Component<Props, State> {
     return node;
   }
 
-  private renderGitMenu(): ReactElement {
-    let node = (
-      <Menu>
-        <MenuItem
-          text={this.trans("mainNavbar.execGitCommit")}
-          label={this.handlerManager.getLabel("execGitCommit")}
-          onClick={this.handlerManager.getHandler("execGitCommit")}
-          icon="git-commit"
-        />
-        <MenuItem
-          text={this.trans("mainNavbar.execGitPush")}
-          label={this.handlerManager.getLabel("execGitPush")}
-          onClick={this.handlerManager.getHandler("execGitPush")}
-          icon="git-push"
-        />
-      </Menu>
-    );
-    return node;
-  }
-
   private renderToolMenu(): ReactElement {
     let node = (
       <Menu>
+        <MenuItem text={this.trans("mainNavbar.execGit")} icon="blank">
+          <MenuItem
+            text={this.trans("mainNavbar.execGitCommit")}
+            label={this.handlerManager.getLabel("execGitCommit")}
+            onClick={this.handlerManager.getHandler("execGitCommit")}
+            icon="git-commit"
+          />
+          <MenuItem
+            text={this.trans("mainNavbar.execGitCheckout")}
+            label={this.handlerManager.getLabel("execGitCheckout")}
+            onClick={this.handlerManager.getHandler("execGitCheckout")}
+            icon="blank"
+          />
+          <MenuItem
+            text={this.trans("mainNavbar.execGitPush")}
+            label={this.handlerManager.getLabel("execGitPush")}
+            onClick={this.handlerManager.getHandler("execGitPush")}
+            icon="git-push"
+          />
+        </MenuItem>
+        <MenuDivider/>
         <MenuItem
           text={this.trans("mainNavbar.openDictionarySettings")}
           label={this.handlerManager.getLabel("openDictionarySettings")}
@@ -479,9 +480,6 @@ export class MainNavbar extends Component<Props, State> {
             </Popover2>
             <Popover2 content={this.renderEditMenu()} position="bottom-left">
               <Button text={this.trans("mainNavbar.edit")} minimal={true}/>
-            </Popover2>
-            <Popover2 content={this.renderGitMenu()} position="bottom-left">
-              <Button text={this.trans("mainNavbar.git")} minimal={true}/>
             </Popover2>
             <Popover2 content={this.renderToolMenu()} position="bottom-left">
               <Button text={this.trans("mainNavbar.tool")} minimal={true}/>
