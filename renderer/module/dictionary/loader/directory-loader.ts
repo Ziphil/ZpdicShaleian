@@ -48,9 +48,8 @@ export class DirectoryLoader extends Loader {
 
   private async loadDictionary(): Promise<Dictionary> {
     let wordsPromise = this.loadWords();
-    let settingsPromise = this.loadSettings();
-    let markersPromise = this.loadMarkers();
-    let [words, settings, markers] = await Promise.all([wordsPromise, settingsPromise, markersPromise]);
+    let othersPromise = this.loadOthers();
+    let [words, [settings, markers]] = await Promise.all([wordsPromise, othersPromise]);
     let dictionary = new Dictionary(words, settings, markers, this.path);
     return dictionary;
   }
@@ -75,35 +74,46 @@ export class DirectoryLoader extends Loader {
     return word;
   }
 
-  private async loadSettings(): Promise<DictionarySettings> {
-    let path = joinPath(this.path, "#SETTINGS.xdns");
-    try {
+  private async loadOthers(): Promise<[DictionarySettings, Markers]> {
+    let paths = await fs.readdir(this.path);
+    let otherLocalPaths = paths.filter((path) => path.endsWith(".xdns"));
+    let settingsPath = null as string | null;
+    let markersPath = null as string | null;
+    let promises = otherLocalPaths.map(async (otherLocalPath) => {
+      let otherPath = joinPath(this.path, otherLocalPath);
+      let string = await fs.readFile(otherPath, {encoding: "utf-8"});
+      if (string.includes("!VERSION")) {
+        settingsPath = otherPath;
+      } else if (string.includes("!MARKER")) {
+        markersPath = otherPath;
+      }
+    });
+    await Promise.all(promises);
+    let settingsPromise = this.loadSettings(settingsPath);
+    let markersPromise = this.loadMarkers(markersPath);
+    let [settings, markers] = await Promise.all([settingsPromise, markersPromise]);
+    return [settings, markers];
+  }
+
+  private async loadSettings(path: string | null): Promise<DictionarySettings> {
+    if (path !== null) {
       let string = await fs.readFile(path, {encoding: "utf-8"});
       let settings = this.deserializer.deserializeDictionarySettings(string);
       this.emitProgress();
       return settings;
-    } catch (error) {
-      if (error.code === "ENOENT") {
-        return DictionarySettings.createEmpty();
-      } else {
-        throw error;
-      }
+    } else {
+      return DictionarySettings.createEmpty();
     }
   }
 
-  private async loadMarkers(): Promise<Markers> {
-    let path = joinPath(this.path, "#MARKER.xdns");
-    try {
+  private async loadMarkers(path: string | null): Promise<Markers> {
+    if (path !== null) {
       let string = await fs.readFile(path, {encoding: "utf-8"});
       let markers = this.deserializer.deserializeMarkers(string);
       this.emitProgress();
       return markers;
-    } catch (error) {
-      if (error.code === "ENOENT") {
-        return Markers.createEmpty();
-      } else {
-        throw error;
-      }
+    } else {
+      return Markers.createEmpty();
     }
   }
 
