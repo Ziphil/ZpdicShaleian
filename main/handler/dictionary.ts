@@ -13,7 +13,8 @@ import {
   DirectoryLoader
 } from "../../renderer/module/dictionary/loader";
 import {
-  DirectorySaver
+  DirectorySaver,
+  OldShaleianSaver
 } from "../../renderer/module/dictionary/saver";
 import {
   Main
@@ -51,7 +52,7 @@ export class DictionaryHandler extends Handler {
   }
 
   @onAsync("save-dictionary")
-  private async saveDictionary(this: Main, event: IpcMainEvent, plainDictionary: PlainDictionary, path: string | null): Promise<void> {
+  private saveDictionary(this: Main, event: IpcMainEvent, plainDictionary: PlainDictionary, path: string | null): Promise<void> {
     let dictionary = Dictionary.fromPlain(plainDictionary);
     let saver = new DirectorySaver(dictionary, path);
     let promise = new Promise<void>((resolve, reject) => {
@@ -68,6 +69,36 @@ export class DictionaryHandler extends Handler {
       saver.start();
     });
     return promise;
+  }
+
+  @onAsync("export-dictionary")
+  private exportDictionary(this: Main, event: IpcMainEvent, plainDictionary: PlainDictionary, path: string, type: string): Promise<void> {
+    let dictionary = Dictionary.fromPlain(plainDictionary);
+    let saver = (() => {
+      if (type === "oldShaleian") {
+        return new OldShaleianSaver(dictionary, path);
+      } else {
+        return undefined;
+      }
+    })();
+    if (saver !== undefined) {
+      let promise = new Promise<void>((resolve, reject) => {
+        saver!.on("progress", (offset, size) => {
+          this.ipcMain.send("get-export-dictionary-progress", event.sender, {offset, size});
+        });
+        saver!.on("end", () => {
+          resolve();
+        });
+        saver!.on("error", (error) => {
+          console.error(error);
+          reject(error);
+        });
+        saver!.start();
+      });
+      return promise;
+    } else {
+      throw new Error("no such saver");
+    }
   }
 
   @on("ready-edit-word")

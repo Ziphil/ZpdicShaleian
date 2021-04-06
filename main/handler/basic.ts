@@ -5,6 +5,8 @@ import {
   IpcMainEvent,
   OpenDialogOptions,
   OpenDialogReturnValue,
+  SaveDialogOptions,
+  SaveDialogReturnValue,
   dialog
 } from "electron";
 import {
@@ -96,6 +98,16 @@ export class BasicHandler extends Handler {
       return await dialog.showOpenDialog(window, options);
     } else {
       return await dialog.showOpenDialog(options);
+    }
+  }
+
+  @onAsync("show-save-dialog")
+  private async showSaveDialog(this: Main, event: IpcMainEvent, id: number, options: SaveDialogOptions): Promise<SaveDialogReturnValue> {
+    let window = this.windows.get(id);
+    if (window !== undefined) {
+      return await dialog.showSaveDialog(window, options);
+    } else {
+      return await dialog.showSaveDialog(options);
     }
   }
 

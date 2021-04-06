@@ -159,6 +159,35 @@ export class MainPage extends Component<Props, State> {
     CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
   }
 
+  private async startExportDictionary(type: string): Promise<void> {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      let result = await window.api.sendAsync("show-save-dialog", this.props.store!.id);
+      if (!result.canceled) {
+        let path = result.filePath;
+        await this.exportDictionary(path, type);
+      }
+    }
+  }
+
+  private async exportDictionary(path: string, type: string): Promise<void> {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      try {
+        await window.api.sendAsync("export-dictionary", dictionary.toPlain(), path, type);
+        CustomToaster.show({message: this.trans("mainPage.succeedExportDictionary"), icon: "tick", intent: "success"}, "exportDictionary");
+      } catch (error) {
+        CustomToaster.show({message: this.trans("mainPage.failExportDictionary"), icon: "tick", intent: "danger"}, "exportDictionary");
+      }
+    }
+  }
+
+  @on("get-export-dictionary-progress")
+  private updateExportDictionaryProgress(progress: Progress): void {
+    let message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
+    CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "exportDictionary");
+  }
+
   // 検索結果ペインを再描画します。
   // 引数の search に true を渡すと、現在の検索パラメータを用いて再検索することで表示する単語データの更新も行います。
   // 検索結果ペインのスクロール位置は変化しません。
@@ -434,6 +463,7 @@ export class MainPage extends Component<Props, State> {
         loadDictionary={() => this.startLoadDictionary()}
         reloadDictionary={() => this.reloadDictionary()}
         saveDictionary={() => this.saveDictionary(null)}
+        exportDictionary={(type) => this.startExportDictionary(type)}
         closeWindow={() => this.closeWindow()}
         changeWordMode={(mode) => this.changeWordMode(mode, true)}
         changeWordType={(type) => this.changeWordType(type, true)}
