@@ -40,6 +40,7 @@ export class Parser<S, E> {
 
   public parse(word: Word): ParsedWord<S> {
     let name = word.name;
+    let uniqueName = word.uniqueName;
     let date = word.date;
     let parts = {} as Parts<S>;
     for (let [language, content] of Object.entries(word.contents)) {
@@ -48,7 +49,7 @@ export class Parser<S, E> {
         parts[language] = part;
       }
     }
-    let parsedWord = new ParsedWord(name, date, parts);
+    let parsedWord = new ParsedWord(name, uniqueName, date, parts);
     return parsedWord;
   }
 
