@@ -367,27 +367,27 @@ export class MarkupResolvers<S, E> {
   public readonly resolveSlash: SlashResolver<E>;
   public readonly join: Joiner<S, E>;
 
-  public constructor(reduceLink: LinkResolver<E>, reduceBracket: BracketResolver<E>, reduceSlash: SlashResolver<E>, join: Joiner<S, E>) {
-    this.resolveLink = reduceLink;
-    this.resolveBracket = reduceBracket;
-    this.resolveSlash = reduceSlash;
+  public constructor(resolveLink: LinkResolver<E>, resolveBracket: BracketResolver<E>, resolveSlash: SlashResolver<E>, join: Joiner<S, E>) {
+    this.resolveLink = resolveLink;
+    this.resolveBracket = resolveBracket;
+    this.resolveSlash = resolveSlash;
     this.join = join;
   }
 
   public static createSimple(): MarkupResolvers<string, string> {
-    let reduceLink = function (name: string, children: Array<string>): string {
+    let resolveLink = function (name: string, children: Array<string>): string {
       return children.join("");
     };
-    let reduceBracket = function (children: Array<string>): string {
+    let resolveBracket = function (children: Array<string>): string {
       return children.join("");
     };
-    let reduceSlash = function (string: string): string {
+    let resolveSlash = function (string: string): string {
       return string;
     };
     let join = function (nodes: Array<string>): string {
       return nodes.join("");
     };
-    let resolvers = new MarkupResolvers(reduceLink, reduceBracket, reduceSlash, join);
+    let resolvers = new MarkupResolvers(resolveLink, resolveBracket, resolveSlash, join);
     return resolvers;
   }
 
