@@ -13,7 +13,7 @@ import {
   ParsedWord
 } from "./parsed-word";
 import {
-  MarkupResolvers,
+  MarkupResolver,
   Parser
 } from "./parser";
 
@@ -62,8 +62,8 @@ export class Word implements PlainWord {
     return {uid, uniqueName, date, contents};
   }
 
-  public toParsed<S, E>(resolvers: MarkupResolvers<S, E>): ParsedWord<S> {
-    let parser = new Parser(resolvers);
+  public toParsed<S, E>(resolver: MarkupResolver<S, E>): ParsedWord<S> {
+    let parser = new Parser(resolver);
     let parsedWord = parser.parse(this);
     return parsedWord;
   }

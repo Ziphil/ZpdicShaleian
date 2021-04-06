@@ -34,8 +34,8 @@ export class Parser<S, E> {
 
   private readonly markupParser: MarkupParser<S, E>;
 
-  public constructor(resolvers: MarkupResolvers<S, E>) {
-    this.markupParser = new MarkupParser(resolvers);
+  public constructor(resolver: MarkupResolver<S, E>) {
+    this.markupParser = new MarkupParser(resolver);
   }
 
   public parse(word: Word): ParsedWord<S> {
@@ -173,12 +173,12 @@ export class Parser<S, E> {
 
 export class MarkupParser<S, E> {
 
-  private readonly resolvers: MarkupResolvers<S, E>;
+  private readonly resolver: MarkupResolver<S, E>;
   private source: string = "";
   private pointer: number = 0;
 
-  public constructor(resolvers: MarkupResolvers<S, E>) {
-    this.resolvers = resolvers;
+  public constructor(resolver: MarkupResolver<S, E>) {
+    this.resolver = resolver;
   }
 
   public parse(source: string): S {
@@ -208,14 +208,14 @@ export class MarkupParser<S, E> {
         children.push(string);
       }
     }
-    let node = this.resolvers.join(children);
+    let node = this.resolver.join(children);
     return node;
   }
 
   private consumeBrace(): E {
     this.pointer ++;
     let children = this.consumeBraceChildren();
-    let element = this.resolvers.resolveBracket(children);
+    let element = this.resolver.resolveBrace(children);
     this.pointer ++;
     return element;
   }
@@ -223,7 +223,7 @@ export class MarkupParser<S, E> {
   private consumeBracket(): E {
     this.pointer ++;
     let children = this.consumeBracketChildren();
-    let element = this.resolvers.resolveBracket(children);
+    let element = this.resolver.resolveBracket(children);
     this.pointer ++;
     return element;
   }
@@ -231,7 +231,7 @@ export class MarkupParser<S, E> {
   private consumeSlash(): [string, E] {
     this.pointer ++;
     let string = this.consumeSlashString();
-    let element = this.resolvers.resolveSlash(string);
+    let element = this.resolver.resolveSlash(string);
     this.pointer ++;
     return [string, element];
   }
@@ -244,7 +244,7 @@ export class MarkupParser<S, E> {
       let char = this.source.charAt(this.pointer);
       if (char === " " || char === "," || char === "." || char === "!" || char === "?") {
         if (currentChildren.length > 0) {
-          children.push(this.resolvers.resolveLink(currentName, currentChildren));
+          children.push(this.resolver.resolveLink(currentName, currentChildren));
           currentChildren = [];
           currentName = "";
         }
@@ -252,7 +252,7 @@ export class MarkupParser<S, E> {
         children.push(char);
       } else if (char === "}") {
         if (currentChildren.length > 0) {
-          children.push(this.resolvers.resolveLink(currentName, currentChildren));
+          children.push(this.resolver.resolveLink(currentName, currentChildren));
           currentChildren = [];
           currentName = "";
         }
@@ -353,28 +353,39 @@ export class MarkupParser<S, E> {
 
   private consumeEsacpe(): string {
     this.pointer ++;
-    let char = this.source.charAt(this.pointer ++);
+    let char = this.resolver.resolveEscape(this.source.charAt(this.pointer ++));
     return char;
   }
 
 }
 
 
-export class MarkupResolvers<S, E> {
+export class MarkupResolver<S, E> {
 
   public readonly resolveLink: LinkResolver<E>;
   public readonly resolveBracket: BracketResolver<E>;
+  public readonly resolveBrace: BracketResolver<E>;
   public readonly resolveSlash: SlashResolver<E>;
+  public readonly resolveEscape: EscapeResolver;
   public readonly join: Joiner<S, E>;
 
-  public constructor(resolveLink: LinkResolver<E>, resolveBracket: BracketResolver<E>, resolveSlash: SlashResolver<E>, join: Joiner<S, E>) {
-    this.resolveLink = resolveLink;
-    this.resolveBracket = resolveBracket;
-    this.resolveSlash = resolveSlash;
-    this.join = join;
+  public constructor(spec: MarkupResolverSpec<S, E>) {
+    this.resolveLink = spec.resolveLink;
+    this.resolveBracket = spec.resolveBracket;
+    this.resolveBrace = spec.resolveBrace ?? spec.resolveBracket;
+    this.resolveSlash = spec.resolveSlash;
+    this.resolveEscape = spec.resolveEscape ?? MarkupResolver.createNoopEscapeResolver();
+    this.join = spec.join;
   }
 
-  public static createSimple(): MarkupResolvers<string, string> {
+  private static createNoopEscapeResolver(): EscapeResolver {
+    let resolve = function (char: string): string {
+      return char;
+    };
+    return resolve;
+  }
+
+  public static createSimple(): MarkupResolver<string, string> {
     let resolveLink = function (name: string, children: Array<string>): string {
       return children.join("");
     };
@@ -387,14 +398,24 @@ export class MarkupResolvers<S, E> {
     let join = function (nodes: Array<string>): string {
       return nodes.join("");
     };
-    let resolvers = new MarkupResolvers(resolveLink, resolveBracket, resolveSlash, join);
-    return resolvers;
+    let resolver = new MarkupResolver({resolveLink, resolveBracket, resolveSlash, join});
+    return resolver;
   }
 
 }
 
 
+type MarkupResolverSpec<S, E> = {
+  resolveLink: LinkResolver<E>,
+  resolveBracket: BracketResolver<E>,
+  resolveBrace?: BracketResolver<E>,
+  resolveSlash: SlashResolver<E>,
+  resolveEscape?: EscapeResolver,
+  join: Joiner<S, E>
+};
+
 type LinkResolver<E> = (name: string, children: Array<E | string>) => E;
 type BracketResolver<E> = (children: Array<E | string>) => E;
 type SlashResolver<E> = (string: string) => E;
+type EscapeResolver = (char: string) => string;
 type Joiner<S, E> = (nodes: Array<E | string>) => S;

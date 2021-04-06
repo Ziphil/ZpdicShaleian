@@ -14,7 +14,7 @@ import {
   Information,
   InformationKindUtil,
   Marker,
-  MarkupResolvers,
+  MarkupResolver,
   ParsedWord,
   Relation,
   Section,
@@ -27,7 +27,7 @@ import {
 
 export class WordPane extends Component<Props, State> {
 
-  private createMarkupResolvers(): MarkupResolvers<ReactNode, ReactNode> {
+  private createMarkupResolver(): MarkupResolver<ReactNode, ReactNode> {
     let outerThis = this;
     let onLinkClick = function (name: string, event: MouseEvent<HTMLSpanElement>): void {
       if (outerThis.props.onLinkClick && event.ctrlKey) {
@@ -49,8 +49,8 @@ export class WordPane extends Component<Props, State> {
     let join = function (nodes: Array<ReactNode | string>): ReactNode {
       return nodes;
     };
-    let resolvers = new MarkupResolvers(resolveLink, resolveBracket, resolveSlash, join);
-    return resolvers;
+    let resolver = new MarkupResolver({resolveLink, resolveBracket, resolveSlash, join});
+    return resolver;
   }
 
   private renderMarker(marker: Marker): ReactNode {
@@ -200,7 +200,7 @@ export class WordPane extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let markupResolvers = this.createMarkupResolvers();
+    let markupResolvers = this.createMarkupResolver();
     let word = this.props.word.toParsed(markupResolvers);
     let markers = this.props.dictionary.getMarkers(this.props.word.uniqueName);
     let node = this.renderWord(word, markers);
