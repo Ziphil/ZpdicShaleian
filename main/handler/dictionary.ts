@@ -51,7 +51,7 @@ export class DictionaryHandler extends Handler {
   }
 
   @onAsync("save-dictionary")
-  private async saveDictionary(this: Main, event: IpcMainEvent, plainDictionary: PlainDictionary, path: string): Promise<void> {
+  private async saveDictionary(this: Main, event: IpcMainEvent, plainDictionary: PlainDictionary, path: string | null): Promise<void> {
     let dictionary = Dictionary.fromPlain(plainDictionary);
     let saver = new DirectorySaver(dictionary, path);
     let promise = new Promise<void>((resolve, reject) => {
