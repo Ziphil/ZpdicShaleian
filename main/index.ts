@@ -112,7 +112,7 @@ export class Main {
     }
   }
 
-  protected createWindow(mode: string, parentId: number | null, props: object, options: BrowserWindowConstructorOptions): BrowserWindow {
+  protected createWindow(mode: string, parentId: number | null, props: object, options: BrowserWindowConstructorOptions & {query?: Record<string, string>}): BrowserWindow {
     let show = false;
     let parent = (parentId !== null) ? this.windows.get(parentId) : undefined;
     let additionalOptions = (!this.app.isPackaged) ? {} : PRODUCTION_WINDOW_OPTIONS;
@@ -122,7 +122,7 @@ export class Main {
     }
     let id = window.id;
     let idString = id.toString();
-    window.loadFile(joinPath(__dirname, "index.html"), {query: {idString, mode}});
+    window.loadFile(joinPath(__dirname, "index.html"), {query: {...options.query, mode, idString}});
     window.setMenu(null);
     window.show();
     window.once("closed", () => {

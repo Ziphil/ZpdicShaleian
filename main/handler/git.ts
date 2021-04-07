@@ -35,28 +35,20 @@ export class GitHandler extends Handler {
     }
   }
 
-  @on("exec-git-commit")
+  @onAsync("exec-git-commit")
   private async execGitCommit(this: Main, event: IpcMainEvent, path: string, message?: string): Promise<void> {
-    let window = this.mainWindow;
     try {
       let git = simpleGit(path);
       let nextMessage = message || this.settings.defaultCommitMessage;
       if (nextMessage !== undefined && nextMessage !== "") {
         await git.add(".");
         await git.commit(nextMessage, ["--allow-empty"]);
-        if (window !== undefined) {
-          this.ipcMain.send("succeed-exec-git-commit", window.webContents);
-        }
       } else {
-        if (window !== undefined) {
-          this.ipcMain.send("error-exec-git-commit", window.webContents);
-        }
+        throw new Error("empty message");
       }
     } catch (error) {
       console.error(error);
-      if (window !== undefined) {
-        this.ipcMain.send("error-exec-git-commit", window.webContents);
-      }
+      throw error;
     }
   }
 

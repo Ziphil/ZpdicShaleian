@@ -88,7 +88,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private async setupEventListener(): Promise<void> {
-    let packaged = await this.getPackaged();
+    let packaged = await window.api.sendAsync("get-packaged");
     if (packaged) {
       window.addEventListener("beforeunload", (event) => {
         this.requestCloseWindow();
@@ -270,46 +270,32 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private startEditWord(word: PlainWord | null, defaultWord?: PlainWord): void {
+  private async editWord(word: PlainWord | null, defaultWord?: PlainWord): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
-      this.createWindow("editor", {word, defaultWord}, options);
-    }
-  }
-
-  private startEditActiveWord(word: PlainWord | "active" | null, defaultWord?: PlainWord | "active"): void {
-    let activeWord = this.state.activeWord;
-    if (activeWord !== null) {
-      let nextWord = (word === "active") ? activeWord : word;
-      let nextDefaultWord = (defaultWord === "active") ? activeWord : defaultWord;
-      this.startEditWord(nextWord, nextDefaultWord);
-    } else {
-      CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
-    }
-  }
-
-  @on("edit-word")
-  private editWord(uid: string | null, word: PlainWord): void {
-    let dictionary = this.state.dictionary;
-    if (dictionary !== null) {
-      dictionary.editWord(uid, word);
+      let {uid, newWord} = await this.createWindowAsync("editor", {word, defaultWord}, options);
+      if (newWord !== null) {
+        dictionary.editWord(uid, newWord);
+      } else {
+        dictionary.deleteWord(uid);
+      }
       this.setState({changed: true});
       this.refreshWords(true);
     }
   }
 
-  @onAsync("do-validate-edit-word")
-  private async validateEditWord(uid: string | null, word: PlainWord): Promise<string | null> {
-    let dictionary = this.state.dictionary;
-    if (dictionary !== null) {
-      return dictionary.validateEditWord(uid, word);
+  private async editActiveWord(word: PlainWord | "active" | null, defaultWord?: PlainWord | "active"): Promise<void> {
+    let activeWord = this.state.activeWord;
+    if (activeWord !== null) {
+      let nextWord = (word === "active") ? activeWord : word;
+      let nextDefaultWord = (defaultWord === "active") ? activeWord : defaultWord;
+      await this.editWord(nextWord, nextDefaultWord);
     } else {
-      return "";
+      CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
     }
   }
 
-  @on("delete-word")
   private deleteWord(uid: string): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
@@ -325,6 +311,16 @@ export class MainPage extends Component<Props, State> {
       this.deleteWord(activeWord.uid);
     } else {
       CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
+    }
+  }
+
+  @onAsync("do-validate-edit-word")
+  private async validateEditWord(uid: string | null, word: PlainWord): Promise<string | null> {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      return dictionary.validateEditWord(uid, word);
+    } else {
+      return "";
     }
   }
 
@@ -384,41 +380,30 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private startChangeDictionarySettings(): void {
+  private async changeDictionarySettings(): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
       let settings = dictionary.settings;
-      this.createWindow("dictionary-settings", {settings}, options);
-    }
-  }
-
-  @on("change-dictionary-settings")
-  private changeDictionarySettings(settings: PlainDictionarySettings): void {
-    let dictionary = this.state.dictionary;
-    if (dictionary !== null) {
-      dictionary.changeSettings(settings);
+      let newSettings = await this.createWindowAsync("dictionary-settings", {settings}, options);
+      dictionary.changeSettings(newSettings);
       this.setState({changed: true});
     }
   }
 
-  private startExecGitCommit(): void {
+  private async startExecGitCommit(): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null && dictionary.path !== null) {
       let options = {width: 480, height: 320, minWidth: 320, minHeight: 240, type: "toolbar"};
       let path = dictionary.path;
-      this.createWindow("git-commit", {path}, options);
+      let message = await this.createWindowAsync("git-commit", {path}, options);
+      try {
+        await window.api.sendAsync("exec-git-commit", path, message);
+        CustomToaster.show({message: this.trans("mainPage.succeedExecGitCommit"), icon: "tick", intent: "success"});
+      } catch (error) {
+        CustomToaster.show({message: this.trans("mainPage.failExecGitCommit"), icon: "error", intent: "danger"});
+      }
     }
-  }
-
-  @on("succeed-exec-git-commit")
-  private succeedExecGitCommit(): void {
-    CustomToaster.show({message: this.trans("mainPage.succeedExecGitCommit"), icon: "tick", intent: "success"});
-  }
-
-  @on("fail-exec-git-commit")
-  private failExecGitCommit(): void {
-    CustomToaster.show({message: this.trans("mainPage.failExecGitCommit"), icon: "error", intent: "danger"});
   }
 
   private async execGitPush(): Promise<void> {
@@ -489,15 +474,15 @@ export class MainPage extends Component<Props, State> {
         movePreviousPage={() => this.movePage({difference: -1})}
         moveNextPage={() => this.movePage({difference: 1})}
         moveLastPage={() => this.movePage("last")}
-        createWord={() => this.startEditWord(null)}
-        inheritActiveWord={() => this.startEditActiveWord(null, "active")}
-        editActiveWord={() => this.startEditActiveWord("active")}
+        createWord={() => this.editWord(null)}
+        inheritActiveWord={() => this.editActiveWord(null, "active")}
+        editActiveWord={() => this.editActiveWord("active")}
         deleteActiveWord={() => this.deleteActiveWord()}
         toggleActiveWordMarker={(marker) => this.toggleActiveWordMarker(marker)}
         execGitCommit={() => this.startExecGitCommit()}
         execGitPush={() => this.execGitPush()}
         uploadDictionary={() => this.uploadDictionary()}
-        openDictionarySettings={() => this.startChangeDictionarySettings()}
+        openDictionarySettings={() => this.changeDictionarySettings()}
         fallback={() => this.showUnimplementedToaster()}
       />
     );
@@ -545,9 +530,9 @@ export class MainPage extends Component<Props, State> {
               searchResult={this.state.searchResult}
               language={this.state.language}
               page={this.state.page}
-              onCreate={() => this.startEditWord(null)}
-              onInherit={(word) => this.startEditWord(null, word)}
-              onEdit={(word) => this.startEditWord(word)}
+              onCreate={() => this.editWord(null)}
+              onInherit={(word) => this.editWord(null, word)}
+              onEdit={(word) => this.editWord(word)}
               onDelete={(word) => this.deleteWord(word.uid)}
               onMarkerToggled={(word, marker) => this.toggleWordMarker(word, marker)}
               onLinkClick={(name) => this.updateWordsByName(name)}

@@ -55,6 +55,10 @@ export class PromisifiedIpcMain {
     });
   }
 
+  public once(channel: string, listener: (event: IpcMainEvent, ...args: Array<any>) => any): void {
+    this.electronIpcMain.once(channel, listener);
+  }
+
 }
 
 

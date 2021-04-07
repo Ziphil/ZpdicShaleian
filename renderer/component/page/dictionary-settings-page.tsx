@@ -22,7 +22,7 @@ import {
 export class DictionarySettingsPage extends Component<Props, State> {
 
   private changeDictionarySettings(settings: PlainDictionarySettings): void {
-    window.api.send("ready-change-dictionary-settings", settings);
+    this.respond(settings);
     this.closeWindow();
   }
 

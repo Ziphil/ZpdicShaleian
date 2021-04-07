@@ -105,22 +105,6 @@ export class DictionaryHandler extends Handler {
     }
   }
 
-  @on("ready-edit-word")
-  private readyEditWord(this: Main, event: IpcMainEvent, uid: string, word: PlainWord): void {
-    let window = this.mainWindow;
-    if (window !== undefined) {
-      this.ipcMain.send("edit-word", window.webContents, uid, word);
-    }
-  }
-
-  @on("ready-delete-word")
-  private readyDeleteWord(this: Main, event: IpcMainEvent, uid: string): void {
-    let window = this.mainWindow;
-    if (window !== undefined) {
-      this.ipcMain.send("delete-word", window.webContents, uid);
-    }
-  }
-
   @onAsync("validate-edit-word")
   private async validateEditWord(this: Main, event: IpcMainEvent, uid: string, word: PlainWord): Promise<string | null> {
     let window = this.mainWindow;
@@ -129,14 +113,6 @@ export class DictionaryHandler extends Handler {
       return errorType;
     } else {
       return "";
-    }
-  }
-
-  @on("ready-change-dictionary-settings")
-  private readyChangeDictionarySettings(this: Main, event: IpcMainEvent, settings: PlainDictionarySettings): void {
-    let window = this.mainWindow;
-    if (window !== undefined) {
-      this.ipcMain.send("change-dictionary-settings", window.webContents, settings);
     }
   }
 

@@ -11,6 +11,9 @@ import {
   IntlShape
 } from "react-intl";
 import {
+  v4 as uuid
+} from "uuid";
+import {
   GlobalStore
 } from "./store";
 
@@ -56,9 +59,25 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
     window.api.send("create-window", mode, props, options);
   }
 
-  protected async getPackaged(): Promise<boolean> {
-    let packaged = await window.api.sendAsync("get-packaged");
-    return packaged;
+  protected createWindowAsync(mode: string, props: object, options: BrowserWindowConstructorOptions): Promise<any> {
+    let respondIdString = this.props.store!.id.toString();
+    let respondChannel = "create-window-async" + uuid();
+    let query = {respondIdString, respondChannel};
+    let promise = new Promise((resolve, reject) => {
+      window.api.once(respondChannel, (event, data) => {
+        resolve(data);
+      });
+      window.api.send("create-window", mode, props, {...options, query});
+    });
+    return promise;
+  }
+
+  protected respond(data: any): void {
+    let respondId = this.props.store!.respondId;
+    let respondChannel = this.props.store!.respondChannel;
+    if (respondId !== null && respondChannel !== null) {
+      window.api.sendTo(respondId, respondChannel, data);
+    }
   }
 
 }

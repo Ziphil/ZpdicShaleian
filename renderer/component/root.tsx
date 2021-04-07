@@ -42,12 +42,17 @@ export class Root extends Component<Props, State> {
     let mode = query.mode;
     let idString = query.idString;
     if (typeof mode === "string" && typeof idString === "string") {
-      let id = parseInt(idString, 10);
-      this.store.id = id;
+      this.store.id = parseInt(idString, 10);
       let props = await window.api.sendAsync("get-props");
       this.setState({mode, props}, () => {
         window.api.send("show-window");
       });
+    }
+    let respondIdString = query.respondIdString;
+    let respondChannel = query.respondChannel;
+    if (typeof respondIdString === "string" && typeof respondChannel === "string") {
+      this.store.respondId = parseInt(respondIdString, 10);
+      this.store.respondChannel = respondChannel;
     }
   }
 

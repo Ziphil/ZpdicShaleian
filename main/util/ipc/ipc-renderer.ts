@@ -40,6 +40,10 @@ export class PromisifiedIpcRenderer {
     return promise;
   }
 
+  public sendTo(id: number, channel: string, ...args: Array<any>): void {
+    this.electronIpcRenderer.sendTo(id, channel, ...args);
+  }
+
   public on(channel: string, listener: (event: IpcRendererEvent, ...args: Array<any>) => void): void {
     this.electronIpcRenderer.on(channel, listener);
   }
@@ -52,6 +56,10 @@ export class PromisifiedIpcRenderer {
         event.sender.send(replyChannel, 1, serializeError(error));
       });
     });
+  }
+
+  public once(channel: string, listener: (event: IpcRendererEvent, ...args: Array<any>) => void): void {
+    this.electronIpcRenderer.once(channel, listener);
   }
 
 }

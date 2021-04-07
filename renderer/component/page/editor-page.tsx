@@ -21,13 +21,13 @@ import {
 @component()
 export class EditorPage extends Component<Props, State> {
 
-  private editWord(uid: string | null, word: PlainWord): void {
-    window.api.send("ready-edit-word", uid, word);
+  private editWord(uid: string | null, newWord: PlainWord): void {
+    this.respond({uid, newWord});
     this.closeWindow();
   }
 
   private deleteWord(uid: string): void {
-    window.api.send("ready-delete-word", uid);
+    this.respond({uid, newWord: null});
     this.closeWindow();
   }
 
