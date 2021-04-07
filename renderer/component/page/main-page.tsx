@@ -262,12 +262,13 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private async editWord(word: PlainWord | null, defaultWord?: PlainWord): Promise<void> {
+  private async editWord(word: Word | null, defaultWord?: Word): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
-      let data = await this.createWindowAsync("editor", {word, defaultWord}, options);
-      console.log(data);
+      let plainWord = (word !== null) ? word.toPlain() : null;
+      let defaultPlainWord = (defaultWord !== undefined) ? defaultWord.toPlain() : undefined;
+      let data = await this.createWindowAsync("editor", {word: plainWord, defaultWord: defaultPlainWord}, options);
       if (data !== null) {
         let {uid, newWord} = data;
         dictionary.editWord(uid, newWord);
@@ -277,7 +278,7 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private async editActiveWord(word: PlainWord | "active" | null, defaultWord?: PlainWord | "active"): Promise<void> {
+  private async editActiveWord(word: Word | "active" | null, defaultWord?: Word | "active"): Promise<void> {
     let activeWord = this.state.activeWord;
     if (activeWord !== null) {
       let nextWord = (word === "active") ? activeWord : word;
