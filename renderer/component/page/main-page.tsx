@@ -68,8 +68,7 @@ export class MainPage extends Component<Props, State> {
     page: 0,
     changed: false,
     alertOpen: false,
-    loadProgress: {offset: 0, size: 0},
-    saveProgress: {offset: 0, size: 0}
+    progress: {offset: 0, size: 0}
   };
 
   public constructor(props: Props) {
@@ -120,13 +119,13 @@ export class MainPage extends Component<Props, State> {
 
   @on("get-load-dictionary-progress")
   private updateLoadDictionaryProgress(progress: Progress): void {
-    this.setState({loadProgress: progress});
+    this.setState({progress});
   }
 
   private async updateDictionary(path: string): Promise<void> {
     let dictionary = null;
-    let loadProgress = {offset: 0, size: 0};
-    this.setState({dictionary, loadProgress, activeWord: null, changed: false});
+    let progress = {offset: 0, size: 0};
+    this.setState({dictionary, progress, activeWord: null, changed: false});
     try {
       let plainDictionary = await this.sendAsync("load-dictionary", path);
       let dictionary = Dictionary.fromPlain(plainDictionary);
@@ -514,7 +513,7 @@ export class MainPage extends Component<Props, State> {
       <div className="zpmnp-root zp-root zp-navbar-root">
         {navbarNode}
         {alertNode}
-        <Loading loading={this.state.dictionary === null} progress={this.state.loadProgress}>
+        <Loading loading={this.state.dictionary === null} progress={this.state.progress}>
           <div className="zpmnp-search-form-container">
             <SearchForm
               parameter={this.state.parameter}
@@ -559,8 +558,7 @@ type State = {
   page: number,
   changed: boolean,
   alertOpen: boolean,
-  loadProgress: Progress,
-  saveProgress: Progress
+  progress: Progress
 };
 
 let CustomToaster = Toaster.create({position: "top", maxToasts: 2});
