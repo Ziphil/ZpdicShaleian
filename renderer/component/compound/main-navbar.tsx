@@ -460,7 +460,7 @@ export class MainNavbar extends Component<Props, State> {
       execGitPush: {key: "ctrl+alt+p", handler: () => this.props.execGitPush()},
       openDictionarySettings: {key: "ctrl+p", handler: () => this.props.openDictionarySettings()},
       openSettings: {key: "ctrl+shift+p"},
-      openDevTools: {key: "f12", handler: () => this.openDevTools()},
+      openDevTools: {key: "f12", handler: () => window.api.send("open-dev-tools")},
       openHelp: {key: "f1"}
     });
     return manager;

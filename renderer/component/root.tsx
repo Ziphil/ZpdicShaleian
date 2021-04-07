@@ -44,9 +44,9 @@ export class Root extends Component<Props, State> {
     if (typeof mode === "string" && typeof idString === "string") {
       let id = parseInt(idString, 10);
       this.store.id = id;
-      let props = await window.api.sendAsync("get-props", id);
+      let props = await window.api.sendAsync("get-props");
       this.setState({mode, props}, () => {
-        window.api.send("show-window", id);
+        window.api.send("show-window");
       });
     }
   }
