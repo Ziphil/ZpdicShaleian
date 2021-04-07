@@ -25,6 +25,28 @@ export abstract class Saver extends EventEmitter {
     }
   }
 
+  public toPromise(listeners: SaverEventListeners): Promise<void> {
+    let promise = new Promise<void>((resolve, reject) => {
+      if (listeners.onProgress) {
+        this.on("progress", listeners.onProgress);
+      }
+      this.on("end", () => {
+        if (listeners.onEnd) {
+          listeners.onEnd();
+        }
+        resolve();
+      });
+      this.on("error", (error) => {
+        if (listeners.onError) {
+          listeners.onError(error);
+        }
+        reject(error);
+      });
+      this.start();
+    });
+    return promise;
+  }
+
   public on<E extends keyof SaverEvent>(event: E, listener: (...args: SaverEvent[E]) => void): this;
   public on(event: string | symbol, listener: (...args: any) => void): this {
     let result = super.on(event, listener);
@@ -59,3 +81,5 @@ export type SaverEvent = {
   end: [],
   error: [error: Error]
 };
+
+export type SaverEventListeners = {[E in keyof SaverEvent as `on${Capitalize<E>}`]?: (...args: SaverEvent[E]) => void};

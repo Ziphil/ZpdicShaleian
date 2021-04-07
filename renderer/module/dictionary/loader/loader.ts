@@ -18,6 +18,28 @@ export abstract class Loader extends EventEmitter {
     this.path = path;
   }
 
+  public toPromise(listeners: LoaderEventListeners): Promise<Dictionary> {
+    let promise = new Promise<Dictionary>((resolve, reject) => {
+      if (listeners.onProgress) {
+        this.on("progress", listeners.onProgress);
+      }
+      this.on("end", (dictionary) => {
+        if (listeners.onEnd) {
+          listeners.onEnd(dictionary);
+        }
+        resolve(dictionary);
+      });
+      this.on("error", (error) => {
+        if (listeners.onError) {
+          listeners.onError(error);
+        }
+        reject(error);
+      });
+      this.start();
+    });
+    return promise;
+  }
+
   public on<E extends keyof LoaderEvent>(event: E, listener: (...args: LoaderEvent[E]) => void): this;
   public on(event: string | symbol, listener: (...args: any) => void): this {
     let result = super.on(event, listener);
@@ -52,3 +74,5 @@ export type LoaderEvent = {
   end: [dictionary: Dictionary],
   error: [error: Error]
 };
+
+export type LoaderEventListeners = {[E in keyof LoaderEvent as `on${Capitalize<E>}`]?: (...args: LoaderEvent[E]) => void};
