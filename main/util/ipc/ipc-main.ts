@@ -1,7 +1,6 @@
 //
 
 import {
-  IpcMain,
   IpcMainEvent,
   WebContents,
   ipcMain as electronIpcMain
@@ -16,12 +15,6 @@ import {
 
 export class PromisifiedIpcMain {
 
-  public readonly electronIpcMain: IpcMain;
-
-  public constructor(electronIpcMain: IpcMain) {
-    this.electronIpcMain = electronIpcMain;
-  }
-
   public send(channel: string, webContents: WebContents, ...args: Array<any>): void {
     webContents.send(channel, ...args);
   }
@@ -29,7 +22,7 @@ export class PromisifiedIpcMain {
   public sendAsync(channel: string, webContents: WebContents, ...args: Array<any>): Promise<any> {
     let replyChannel = channel + uuid();
     let promise = new Promise((resolve, reject) => {
-      this.electronIpcMain.once(replyChannel, (event, exitCode, returnedData) => {
+      electronIpcMain.once(replyChannel, (event, exitCode, returnedData) => {
         if (exitCode !== 0) {
           reject(returnedData);
         } else {
@@ -42,11 +35,11 @@ export class PromisifiedIpcMain {
   }
 
   public on(channel: string, listener: (event: IpcMainEvent, ...args: Array<any>) => any): void {
-    this.electronIpcMain.on(channel, listener);
+    electronIpcMain.on(channel, listener);
   }
 
   public onAsync(channel: string, listener: (event: IpcMainEvent, ...args: Array<any>) => Promise<any>): void {
-    this.electronIpcMain.on(channel, (event, replyChannel, ...args) => {
+    electronIpcMain.on(channel, (event, replyChannel, ...args) => {
       listener(event, ...args).then((result) => {
         event.sender.send(replyChannel, 0, result);
       }).catch((error) => {
@@ -56,10 +49,10 @@ export class PromisifiedIpcMain {
   }
 
   public once(channel: string, listener: (event: IpcMainEvent, ...args: Array<any>) => any): void {
-    this.electronIpcMain.once(channel, listener);
+    electronIpcMain.once(channel, listener);
   }
 
 }
 
 
-export let ipcMain = new PromisifiedIpcMain(electronIpcMain);
+export let ipcMain = new PromisifiedIpcMain();
