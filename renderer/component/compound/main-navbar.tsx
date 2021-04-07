@@ -76,6 +76,12 @@ export class MainNavbar extends Component<Props, State> {
           onClick={this.handlerManager.getHandler("saveDictionary")}
           icon="floppy-disk"
         />
+        <MenuItem
+          text={this.trans("mainNavbar.saveAndRenameDictionary")}
+          label={this.handlerManager.getLabel("saveAndRenameDictionary")}
+          onClick={this.handlerManager.getHandler("saveAndRenameDictionary")}
+          icon="blank"
+        />
         <MenuItem text={this.trans("mainNavbar.exportDictionary")} icon="blank">
           <MenuItem
             text={this.trans("mainNavbar.exportDictionaryAsOldShaleian")}
@@ -367,6 +373,13 @@ export class MainNavbar extends Component<Props, State> {
         </MenuItem>
         <MenuDivider/>
         <MenuItem
+          text={this.trans("mainNavbar.uploadDictionary")}
+          label={this.handlerManager.getLabel("uploadDictionary")}
+          onClick={this.handlerManager.getHandler("uploadDictionary")}
+          icon="export"
+        />
+        <MenuDivider/>
+        <MenuItem
           text={this.trans("mainNavbar.openDictionarySettings")}
           label={this.handlerManager.getLabel("openDictionarySettings")}
           onClick={this.handlerManager.getHandler("openDictionarySettings")}
@@ -421,6 +434,7 @@ export class MainNavbar extends Component<Props, State> {
       loadDictionary: {key: "ctrl+o", handler: () => this.props.loadDictionary()},
       reloadDictionary: {key: "ctrl+shift+o", handler: () => this.props.reloadDictionary()},
       saveDictionary: {key: "ctrl+s", handler: () => this.props.saveDictionary()},
+      saveAndRenameDictionary: {key: "ctrl+shift+s"},
       exportDictionaryAsOldShaleian: {handler: () => this.props.exportDictionary("oldShaleian")},
       closeWindow: {handler: () => this.props.closeWindow()},
       changeWordModeToName: {key: "ctrl+w", handler: () => this.props.changeWordMode("name")},
@@ -458,10 +472,12 @@ export class MainNavbar extends Component<Props, State> {
       toggleActiveWordMarkerTrapezoid: {key: "ctrl+0", handler: () => this.props.toggleActiveWordMarker("trapezoid")},
       execGitCommit: {key: "ctrl+alt+c", handler: () => this.props.execGitCommit()},
       execGitPush: {key: "ctrl+alt+p", handler: () => this.props.execGitPush()},
+      uploadDictionary: {key: "ctrl+alt+u"},
       openDictionarySettings: {key: "ctrl+p", handler: () => this.props.openDictionarySettings()},
       openSettings: {key: "ctrl+shift+p"},
       openDevTools: {key: "f12", handler: () => window.api.send("open-dev-tools")},
-      openHelp: {key: "f1"}
+      openHelp: {key: "f1"},
+      fallback: {handler: () => this.props.fallback()}
     });
     return manager;
   }
@@ -526,7 +542,8 @@ type Props = {
   toggleActiveWordMarker: (marker: Marker) => void,
   execGitCommit: () => void,
   execGitPush: () => void,
-  openDictionarySettings: () => void
+  openDictionarySettings: () => void,
+  fallback: () => void
 };
 type State = {
 };

@@ -22,7 +22,7 @@ export class HandlerManager {
   }
 
   public getHandler(name: string): KeyHandler | undefined {
-    let handler = this.specs[name]?.handler;
+    let handler = this.specs[name]?.handler ?? this.specs.fallback?.handler;
     return handler;
   }
 

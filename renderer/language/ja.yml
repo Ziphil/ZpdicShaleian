@@ -69,6 +69,7 @@ mainNavbar:
   loadDictionary: "開く"
   reloadDictionary: "再読み込み"
   saveDictionary: "上書き保存"
+  saveAndRenameDictionary: "名前を付けて保存"
   exportDictionary: "別形式で保存"
   exportDictionaryAsOldShaleian: "旧シャレイア語辞典形式 (.xdc)"
   exportDictionaryAsSlime: "OTM-JSON 形式 (.json)"
@@ -99,6 +100,7 @@ mainNavbar:
   execGitCommit: "Git add/commit"
   execGitCheckout: "Git checkout"
   execGitPush: "Git push"
+  uploadDictionary: "辞書をアップロード"
   openDictionarySettings: "辞書の個別設定"
   openSettings: "環境設定"
   help: "ヘルプ"
@@ -150,3 +152,5 @@ mainPage:
     Git リポジトリへのプッシュが完了しました。
   failExecGitPush: >-
     Git リポジトリへのプッシュの実行中にエラーが発生しました。
+  unimplemented: >-
+    未実装です。

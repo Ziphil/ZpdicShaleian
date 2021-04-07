@@ -434,6 +434,10 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  private showUnimplementedToaster(): void {
+    CustomToaster.show({message: this.trans("mainPage.unimplemented"), icon: "warning-sign", intent: "warning"});
+  }
+
   private async requestCloseWindow(): Promise<void> {
     let confirmed = await this.checkLeave();
     if (confirmed) {
@@ -481,6 +485,7 @@ export class MainPage extends Component<Props, State> {
         execGitCommit={() => this.startExecGitCommit()}
         execGitPush={() => this.execGitPush()}
         openDictionarySettings={() => this.startChangeDictionarySettings()}
+        fallback={() => this.showUnimplementedToaster()}
       />
     );
     return node;
