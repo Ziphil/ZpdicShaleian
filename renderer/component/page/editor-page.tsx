@@ -21,13 +21,13 @@ import {
 @component()
 export class EditorPage extends Component<Props, State> {
 
-  private editWord(uid: string | null, newWord: PlainWord): void {
+  private handleConfirm(uid: string | null, newWord: PlainWord): void {
     this.respond({uid, newWord});
     this.closeWindow();
   }
 
-  private deleteWord(uid: string): void {
-    this.respond({uid, newWord: null});
+  private handleCancel(): void {
+    this.respond();
     this.closeWindow();
   }
 
@@ -37,9 +37,8 @@ export class EditorPage extends Component<Props, State> {
         <WordEditor
           word={this.props.word}
           defaultWord={this.props.defaultWord}
-          onConfirm={this.editWord.bind(this)}
-          onDelete={this.deleteWord.bind(this)}
-          onCancel={this.closeWindow.bind(this)}
+          onConfirm={this.handleConfirm.bind(this)}
+          onCancel={this.handleCancel.bind(this)}
         />
       </div>
     );

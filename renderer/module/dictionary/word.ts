@@ -73,20 +73,20 @@ export class Word implements PlainWord {
     this.updateComparisonString();
   }
 
-  public edit(word: PlainWord, skipValidate?: boolean): void {
-    let errorType = (skipValidate) ? null : this.validateEdit(word);
+  public edit(newWord: PlainWord, skipValidate?: boolean): void {
+    let errorType = (skipValidate) ? null : this.validateEdit(newWord);
     if (errorType === null) {
-      this.uniqueName = word.uniqueName;
-      this.date = word.date;
-      this.contents = Object.fromEntries(Object.entries(word.contents).map(([language, content]) => [language, content?.trim()]));
+      this.uniqueName = newWord.uniqueName;
+      this.date = newWord.date;
+      this.contents = Object.fromEntries(Object.entries(newWord.contents).map(([language, content]) => [language, content?.trim()]));
       this.update();
     } else {
       throw new ValidationError(errorType);
     }
   }
 
-  public validateEdit(word: PlainWord): string | null {
-    if (!Word.isValidUniqueName(word.uniqueName)) {
+  public validateEdit(newWord: PlainWord): string | null {
+    if (!Word.isValidUniqueName(newWord.uniqueName)) {
       return "invalidUniqueName";
     } else {
       return null;

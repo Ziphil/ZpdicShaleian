@@ -77,12 +77,6 @@ export class WordEditor extends Component<Props, State> {
     }
   }
 
-  private handleDelete(event: MouseEvent<HTMLElement>): void {
-    if (this.props.onDelete) {
-      this.props.onDelete(this.state.uid!, event);
-    }
-  }
-
   private setWord<T extends Array<unknown>>(setter: (...args: T) => void): (...args: T) => void {
     let outerThis = this;
     let wrapper = function (...args: T): void {
@@ -147,7 +141,6 @@ type Props = {
   word: PlainWord | null,
   defaultWord?: PlainWord,
   onConfirm?: (uid: string | null, word: PlainWord, event?: MouseEvent<HTMLElement> | KeyboardEvent) => void,
-  onDelete?: (uid: string, event: MouseEvent<HTMLElement>) => void,
   onCancel?: (event: MouseEvent<HTMLElement>) => void
 };
 type State = {

@@ -83,7 +83,7 @@ export class MainPage extends Component<Props, State> {
     let settings = await window.api.sendAsync("get-settings");
     let path = settings.defaultDictionaryPath;
     if (path !== undefined) {
-      this.loadDictionary(path);
+      this.updateDictionary(path);
     }
   }
 
@@ -97,18 +97,34 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private async startLoadDictionary(): Promise<void> {
+  private async loadDictionary(): Promise<void> {
     let confirmed = await this.checkLeave();
     if (confirmed) {
       let result = await window.api.sendAsync("show-open-dialog", {properties: ["openDirectory"]});
       if (!result.canceled) {
         let path = result.filePaths[0];
-        this.loadDictionary(path);
+        this.updateDictionary(path);
       }
     }
   }
 
-  private async loadDictionary(path: string): Promise<void> {
+  private async reloadDictionary(): Promise<void> {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null && dictionary.path !== null) {
+      let confirmed = await this.checkLeave();
+      if (confirmed) {
+        let path = dictionary.path;
+        await this.updateDictionary(path);
+      }
+    }
+  }
+
+  @on("get-load-dictionary-progress")
+  private updateLoadDictionaryProgress(progress: Progress): void {
+    this.setState({loadProgress: progress});
+  }
+
+  private async updateDictionary(path: string): Promise<void> {
     let dictionary = null;
     let loadProgress = {offset: 0, size: 0};
     this.setState({dictionary, loadProgress, activeWord: null, changed: false});
@@ -122,22 +138,6 @@ export class MainPage extends Component<Props, State> {
     } catch (error) {
       CustomToaster.show({message: this.trans("mainPage.failLoadDictionary"), icon: "error", intent: "danger"});
     }
-  }
-
-  private async reloadDictionary(): Promise<void> {
-    let dictionary = this.state.dictionary;
-    if (dictionary !== null && dictionary.path !== null) {
-      let confirmed = await this.checkLeave();
-      if (confirmed) {
-        let path = dictionary.path;
-        await this.loadDictionary(path);
-      }
-    }
-  }
-
-  @on("get-load-dictionary-progress")
-  private updateLoadDictionaryProgress(progress: Progress): void {
-    this.setState({loadProgress: progress});
   }
 
   private async saveDictionary(path: string | null): Promise<void> {
@@ -159,25 +159,18 @@ export class MainPage extends Component<Props, State> {
     CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
   }
 
-  private async startExportDictionary(type: string): Promise<void> {
+  private async exportDictionary(type: string): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let result = await window.api.sendAsync("show-save-dialog", {});
       if (!result.canceled) {
         let path = result.filePath;
-        await this.exportDictionary(path, type);
-      }
-    }
-  }
-
-  private async exportDictionary(path: string, type: string): Promise<void> {
-    let dictionary = this.state.dictionary;
-    if (dictionary !== null) {
-      try {
-        await window.api.sendAsync("export-dictionary", dictionary.toPlain(), path, type);
-        CustomToaster.show({message: this.trans("mainPage.succeedExportDictionary"), icon: "tick", intent: "success"}, "exportDictionary");
-      } catch (error) {
-        CustomToaster.show({message: this.trans("mainPage.failExportDictionary"), icon: "tick", intent: "danger"}, "exportDictionary");
+        try {
+          await window.api.sendAsync("export-dictionary", dictionary.toPlain(), path, type);
+          CustomToaster.show({message: this.trans("mainPage.succeedExportDictionary"), icon: "tick", intent: "success"}, "exportDictionary");
+        } catch (error) {
+          CustomToaster.show({message: this.trans("mainPage.failExportDictionary"), icon: "tick", intent: "danger"}, "exportDictionary");
+        }
       }
     }
   }
@@ -274,14 +267,13 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
-      let {uid, newWord} = await this.createWindowAsync("editor", {word, defaultWord}, options);
-      if (newWord !== null) {
+      let data = await this.createWindowAsync("editor", {word, defaultWord}, options);
+      if (data !== null) {
+        let {uid, newWord} = data;
         dictionary.editWord(uid, newWord);
-      } else {
-        dictionary.deleteWord(uid);
+        this.setState({changed: true});
+        this.refreshWords(true);
       }
-      this.setState({changed: true});
-      this.refreshWords(true);
     }
   }
 
@@ -385,23 +377,29 @@ export class MainPage extends Component<Props, State> {
     if (dictionary !== null) {
       let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
       let settings = dictionary.settings;
-      let newSettings = await this.createWindowAsync("dictionary-settings", {settings}, options);
-      dictionary.changeSettings(newSettings);
-      this.setState({changed: true});
+      let data = await this.createWindowAsync("dictionary-settings", {settings}, options);
+      if (data !== null) {
+        let newSettings = data;
+        dictionary.changeSettings(newSettings);
+        this.setState({changed: true});
+      }
     }
   }
 
-  private async startExecGitCommit(): Promise<void> {
+  private async execGitCommit(): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null && dictionary.path !== null) {
       let options = {width: 480, height: 320, minWidth: 320, minHeight: 240, type: "toolbar"};
       let path = dictionary.path;
-      let message = await this.createWindowAsync("git-commit", {path}, options);
-      try {
-        await window.api.sendAsync("exec-git-commit", path, message);
-        CustomToaster.show({message: this.trans("mainPage.succeedExecGitCommit"), icon: "tick", intent: "success"});
-      } catch (error) {
-        CustomToaster.show({message: this.trans("mainPage.failExecGitCommit"), icon: "error", intent: "danger"});
+      let data = await this.createWindowAsync("git-commit", {path}, options);
+      if (data !== null) {
+        let message = data;
+        try {
+          await window.api.sendAsync("exec-git-commit", path, message);
+          CustomToaster.show({message: this.trans("mainPage.succeedExecGitCommit"), icon: "tick", intent: "success"});
+        } catch (error) {
+          CustomToaster.show({message: this.trans("mainPage.failExecGitCommit"), icon: "error", intent: "danger"});
+        }
       }
     }
   }
@@ -461,10 +459,10 @@ export class MainPage extends Component<Props, State> {
   private renderNavbar(): ReactNode {
     let node = (
       <MainNavbar
-        loadDictionary={() => this.startLoadDictionary()}
+        loadDictionary={() => this.loadDictionary()}
         reloadDictionary={() => this.reloadDictionary()}
         saveDictionary={() => this.saveDictionary(null)}
-        exportDictionary={(type) => this.startExportDictionary(type)}
+        exportDictionary={(type) => this.exportDictionary(type)}
         closeWindow={() => this.closeWindow()}
         changeWordMode={(mode) => this.changeWordMode(mode, true)}
         changeWordType={(type) => this.changeWordType(type, true)}
@@ -479,7 +477,7 @@ export class MainPage extends Component<Props, State> {
         editActiveWord={() => this.editActiveWord("active")}
         deleteActiveWord={() => this.deleteActiveWord()}
         toggleActiveWordMarker={(marker) => this.toggleActiveWordMarker(marker)}
-        execGitCommit={() => this.startExecGitCommit()}
+        execGitCommit={() => this.execGitCommit()}
         execGitPush={() => this.execGitPush()}
         uploadDictionary={() => this.uploadDictionary()}
         openDictionarySettings={() => this.changeDictionarySettings()}

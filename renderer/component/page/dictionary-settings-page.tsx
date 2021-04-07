@@ -21,8 +21,13 @@ import {
 @component()
 export class DictionarySettingsPage extends Component<Props, State> {
 
-  private changeDictionarySettings(settings: PlainDictionarySettings): void {
+  private handleConfirm(settings: PlainDictionarySettings): void {
     this.respond(settings);
+    this.closeWindow();
+  }
+
+  private handleCancel(): void {
+    this.respond();
     this.closeWindow();
   }
 
@@ -31,8 +36,8 @@ export class DictionarySettingsPage extends Component<Props, State> {
       <div className="zpdsp-root zp-root">
         <DictionarySettingsEditor
           settings={this.props.settings}
-          onConfirm={this.changeDictionarySettings.bind(this)}
-          onCancel={this.closeWindow.bind(this)}
+          onConfirm={this.handleConfirm.bind(this)}
+          onCancel={this.handleCancel.bind(this)}
         />
       </div>
     );

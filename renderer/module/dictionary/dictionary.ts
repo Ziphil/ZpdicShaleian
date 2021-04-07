@@ -80,38 +80,38 @@ export class Dictionary implements PlainDictionary {
     return word;
   }
 
-  public editWord(uid: string | null, word: PlainWord, skipValidate?: boolean): void {
-    let errorType = (skipValidate) ? null : this.validateEditWord(uid, word);
+  public editWord(uid: string | null, newWord: PlainWord, skipValidate?: boolean): void {
+    let errorType = (skipValidate) ? null : this.validateEditWord(uid, newWord);
     if (errorType === null) {
       if (uid !== null) {
         let oldWord = this.words.find((word) => word.uid === uid);
         if (oldWord !== undefined) {
-          oldWord.edit(word);
+          oldWord.edit(newWord);
         }
       } else {
-        let newWord = Word.fromPlain(word);
-        newWord.setDictionary(this);
-        this.words.push(newWord);
+        let newRealWord = Word.fromPlain(newWord);
+        newRealWord.setDictionary(this);
+        this.words.push(newRealWord);
       }
     } else {
       throw new ValidationError(errorType);
     }
   }
 
-  public validateEditWord(uid: string | null, word: PlainWord): string | null {
+  public validateEditWord(uid: string | null, newWord: PlainWord): string | null {
     if (uid !== null) {
       let oldWord = this.words.find((word) => word.uid === uid);
       if (oldWord !== undefined) {
-        if (this.findByUniqueName(word.uniqueName, oldWord.uniqueName) !== undefined) {
+        if (this.findByUniqueName(newWord.uniqueName, oldWord.uniqueName) !== undefined) {
           return "duplicateUniqueName";
         } else {
-          return oldWord.validateEdit(word);
+          return oldWord.validateEdit(newWord);
         }
       } else {
         return "noSuchWord";
       }
     } else {
-      if (this.findByUniqueName(word.uniqueName) !== undefined) {
+      if (this.findByUniqueName(newWord.uniqueName) !== undefined) {
         return "duplicateUniqueName";
       } else {
         return null;
@@ -135,9 +135,9 @@ export class Dictionary implements PlainDictionary {
     this.markers.toggle(uniqueName, marker);
   }
 
-  public changeSettings(settings: PlainDictionarySettings): void {
-    let nextSettings = DictionarySettings.fromPlain(settings);
-    this.settings = nextSettings;
+  public changeSettings(newSettings: PlainDictionarySettings): void {
+    let newRealSettings = DictionarySettings.fromPlain(newSettings);
+    this.settings = newRealSettings;
   }
 
 }

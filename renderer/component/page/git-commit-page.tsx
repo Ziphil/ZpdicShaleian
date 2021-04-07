@@ -18,8 +18,13 @@ import {
 @component()
 export class GitCommitPage extends Component<Props, State> {
 
-  private execGitCommit(message: string): void {
+  private handleConfirm(message: string): void {
     this.respond(message);
+    this.closeWindow();
+  }
+
+  private handleCancel(): void {
+    this.respond();
     this.closeWindow();
   }
 
@@ -28,8 +33,8 @@ export class GitCommitPage extends Component<Props, State> {
       <div className="zpgcp-root zp-root">
         <GitCommitExecutor
           path={this.props.path}
-          onConfirm={this.execGitCommit.bind(this)}
-          onCancel={this.closeWindow.bind(this)}
+          onConfirm={this.handleConfirm.bind(this)}
+          onCancel={this.handleCancel.bind(this)}
         />
       </div>
     );
