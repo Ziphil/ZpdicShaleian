@@ -22,11 +22,11 @@ export class PromisifiedIpcMain {
   public sendAsync(channel: string, webContents: WebContents, ...args: Array<any>): Promise<any> {
     let replyChannel = channel + uuid();
     let promise = new Promise((resolve, reject) => {
-      electronIpcMain.once(replyChannel, (event, exitCode, returnedData) => {
+      electronIpcMain.once(replyChannel, (event, exitCode, data) => {
         if (exitCode !== 0) {
-          reject(returnedData);
+          reject(data);
         } else {
-          resolve(returnedData);
+          resolve(data);
         }
       });
       webContents.send(channel, replyChannel, ...args);
@@ -40,8 +40,8 @@ export class PromisifiedIpcMain {
 
   public onAsync(channel: string, listener: (event: IpcMainEvent, ...args: Array<any>) => Promise<any>): void {
     electronIpcMain.on(channel, (event, replyChannel, ...args) => {
-      listener(event, ...args).then((result) => {
-        event.sender.send(replyChannel, 0, result);
+      listener(event, ...args).then((data) => {
+        event.sender.send(replyChannel, 0, data);
       }).catch((error) => {
         event.sender.send(replyChannel, 1, serializeError(error));
       });

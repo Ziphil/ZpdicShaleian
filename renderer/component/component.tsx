@@ -64,8 +64,12 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
     let respondChannel = "create-window-async" + uuid();
     let query = {respondIdString, respondChannel};
     let promise = new Promise((resolve, reject) => {
-      window.api.once(respondChannel, (event, data) => {
-        resolve(data);
+      window.api.once(respondChannel, (event, exitCode, data) => {
+        if (exitCode !== 0) {
+          reject(data);
+        } else {
+          resolve(data);
+        }
       });
       window.api.send("create-window", mode, props, {...options, query});
     });
@@ -76,7 +80,7 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
     let respondId = this.props.store!.respondId;
     let respondChannel = this.props.store!.respondChannel;
     if (respondId !== null && respondChannel !== null) {
-      window.api.sendTo(respondId, respondChannel, data ?? null);
+      window.api.sendTo(respondId, respondChannel, 0, data ?? null);
     }
   }
 
