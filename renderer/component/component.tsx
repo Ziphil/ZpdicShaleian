@@ -47,18 +47,21 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
     }
   }
 
-  protected closeWindow(): void {
-    window.api.send("close-window");
+  protected send(channel: string, ...args: Array<any>): void {
+    return window.api.send(channel, ...args);
   }
 
-  protected destroyWindow(): void {
-    window.api.send("destroy-window");
+  protected sendAsync(channel: string, ...args: Array<any>): Promise<any> {
+    return window.api.sendAsync(channel, ...args);
   }
 
   protected createWindow(mode: string, props: object, options: BrowserWindowConstructorOptions): void {
     window.api.send("create-window", mode, props, options);
   }
 
+  // 新しいウィンドウを開き、そのウィンドウが閉じられるまで待機します。
+  // 開かれたウィンドウのレンダラープロセスにおいて、closeWindow メソッドが呼ばれたときの引数が返されます。
+  // closeWindow メソッドが引数なしで呼ばれた場合か、閉じるボタンでウィンドウが閉じられた場合は、代わりに null が返されます。
   protected createWindowAsync(mode: string, props: object, options: BrowserWindowConstructorOptions): Promise<any | null> {
     let respondIdString = this.props.store!.id.toString();
     let respondChannel = "create-window-async" + uuid();
@@ -76,12 +79,16 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
     return promise;
   }
 
-  protected respond(data?: any): void {
+  // 現在のウィンドウを閉じます。
+  // 現在のウィンドウが createWindowAsync メソッドで作られたものである場合、この関数の引数にデータを渡すことで、ウィンドウを作ったプロセスにそのデータを返信することができます。
+  // 引数を省略した場合は、ウィンドウを作ったプロセスには null が返信されます。
+  protected closeWindow(data?: any): void {
     let respondId = this.props.store!.respondId;
     let respondChannel = this.props.store!.respondChannel;
     if (respondId !== null && respondChannel !== null) {
       window.api.sendTo(respondId, respondChannel, 0, data ?? null);
     }
+    window.api.send("close-window");
   }
 
 }

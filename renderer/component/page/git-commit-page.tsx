@@ -19,12 +19,10 @@ import {
 export class GitCommitPage extends Component<Props, State> {
 
   private handleConfirm(message: string): void {
-    this.respond(message);
-    this.closeWindow();
+    this.closeWindow(message);
   }
 
   private handleCancel(): void {
-    this.respond();
     this.closeWindow();
   }
 

@@ -15,7 +15,6 @@ import {
   Dictionary,
   Marker,
   NormalWordParameter,
-  PlainDictionarySettings,
   PlainWord,
   SearchResult,
   Word,
@@ -80,7 +79,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   public async componentDidMount(): Promise<void> {
-    let settings = await window.api.sendAsync("get-settings");
+    let settings = await this.sendAsync("get-settings");
     let path = settings.defaultDictionaryPath;
     if (path !== undefined) {
       this.updateDictionary(path);
@@ -88,7 +87,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private async setupEventListener(): Promise<void> {
-    let packaged = await window.api.sendAsync("get-packaged");
+    let packaged = await this.sendAsync("get-packaged");
     if (packaged) {
       window.addEventListener("beforeunload", (event) => {
         this.requestCloseWindow();
@@ -100,7 +99,7 @@ export class MainPage extends Component<Props, State> {
   private async loadDictionary(): Promise<void> {
     let confirmed = await this.checkLeave();
     if (confirmed) {
-      let result = await window.api.sendAsync("show-open-dialog", {properties: ["openDirectory"]});
+      let result = await this.sendAsync("show-open-dialog", {properties: ["openDirectory"]});
       if (!result.canceled) {
         let path = result.filePaths[0];
         this.updateDictionary(path);
@@ -129,9 +128,9 @@ export class MainPage extends Component<Props, State> {
     let loadProgress = {offset: 0, size: 0};
     this.setState({dictionary, loadProgress, activeWord: null, changed: false});
     try {
-      let plainDictionary = await window.api.sendAsync("load-dictionary", path);
+      let plainDictionary = await this.sendAsync("load-dictionary", path);
       let dictionary = Dictionary.fromPlain(plainDictionary);
-      window.api.sendAsync("change-settings", "defaultDictionaryPath", path);
+      this.sendAsync("change-settings", "defaultDictionaryPath", path);
       this.setState({dictionary}, () => {
         this.updateWords();
       });
@@ -144,7 +143,7 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       try {
-        await window.api.sendAsync("save-dictionary", dictionary.toPlain(), path);
+        await this.sendAsync("save-dictionary", dictionary.toPlain(), path);
         this.setState({changed: false});
         CustomToaster.show({message: this.trans("mainPage.succeedSaveDictionary"), icon: "tick", intent: "success"}, "saveDictionary");
       } catch (error) {
@@ -162,11 +161,11 @@ export class MainPage extends Component<Props, State> {
   private async exportDictionary(type: string): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      let result = await window.api.sendAsync("show-save-dialog", {});
+      let result = await this.sendAsync("show-save-dialog", {});
       if (!result.canceled) {
         let path = result.filePath;
         try {
-          await window.api.sendAsync("export-dictionary", dictionary.toPlain(), path, type);
+          await this.sendAsync("export-dictionary", dictionary.toPlain(), path, type);
           CustomToaster.show({message: this.trans("mainPage.succeedExportDictionary"), icon: "tick", intent: "success"}, "exportDictionary");
         } catch (error) {
           CustomToaster.show({message: this.trans("mainPage.failExportDictionary"), icon: "tick", intent: "danger"}, "exportDictionary");
@@ -268,6 +267,7 @@ export class MainPage extends Component<Props, State> {
     if (dictionary !== null) {
       let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
       let data = await this.createWindowAsync("editor", {word, defaultWord}, options);
+      console.log(data);
       if (data !== null) {
         let {uid, newWord} = data;
         dictionary.editWord(uid, newWord);
@@ -395,7 +395,7 @@ export class MainPage extends Component<Props, State> {
       if (data !== null) {
         let message = data;
         try {
-          await window.api.sendAsync("exec-git-commit", path, message);
+          await this.sendAsync("exec-git-commit", path, message);
           CustomToaster.show({message: this.trans("mainPage.succeedExecGitCommit"), icon: "tick", intent: "success"});
         } catch (error) {
           CustomToaster.show({message: this.trans("mainPage.failExecGitCommit"), icon: "error", intent: "danger"});
@@ -409,7 +409,7 @@ export class MainPage extends Component<Props, State> {
     if (dictionary !== null) {
       let path = dictionary.path;
       try {
-        await window.api.sendAsync("exec-git-push", path);
+        await this.sendAsync("exec-git-push", path);
         CustomToaster.show({message: this.trans("mainPage.succeedExecGitPush"), icon: "tick", intent: "success"});
       } catch (error) {
         CustomToaster.show({message: this.trans("mainPage.failExecGitPush"), icon: "error", intent: "danger"});
@@ -421,7 +421,7 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       try {
-        await window.api.sendAsync("upload-dictionary", dictionary.toPlain());
+        await this.sendAsync("upload-dictionary", dictionary.toPlain());
         CustomToaster.show({message: this.trans("mainPage.succeedUploadDictionary"), icon: "tick", intent: "success"});
       } catch (error) {
         CustomToaster.show({message: this.trans("mainPage.failUploadDictionary"), icon: "error", intent: "danger"});
@@ -436,7 +436,7 @@ export class MainPage extends Component<Props, State> {
   private async requestCloseWindow(): Promise<void> {
     let confirmed = await this.checkLeave();
     if (confirmed) {
-      this.destroyWindow();
+      this.send("destroy-window");
     }
   }
 

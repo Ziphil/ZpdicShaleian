@@ -22,12 +22,10 @@ import {
 export class EditorPage extends Component<Props, State> {
 
   private handleConfirm(uid: string | null, newWord: PlainWord): void {
-    this.respond({uid, newWord});
-    this.closeWindow();
+    this.closeWindow({uid, newWord});
   }
 
   private handleCancel(): void {
-    this.respond();
     this.closeWindow();
   }
 

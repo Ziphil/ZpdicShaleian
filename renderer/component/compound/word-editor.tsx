@@ -61,7 +61,7 @@ export class WordEditor extends Component<Props, State> {
   }
 
   private async handleConfirm(event?: MouseEvent<HTMLElement> | KeyboardEvent): Promise<void> {
-    let errorType = await window.api.sendAsync("validate-edit-word", this.state.uid, this.state.word);
+    let errorType = await this.sendAsync("validate-edit-word", this.state.uid, this.state.word);
     if (errorType === null) {
       if (this.props.onConfirm) {
         this.props.onConfirm(this.state.uid, this.state.word, event);

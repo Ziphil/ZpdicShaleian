@@ -22,12 +22,10 @@ import {
 export class DictionarySettingsPage extends Component<Props, State> {
 
   private handleConfirm(settings: PlainDictionarySettings): void {
-    this.respond(settings);
-    this.closeWindow();
+    this.closeWindow(settings);
   }
 
   private handleCancel(): void {
-    this.respond();
     this.closeWindow();
   }
 

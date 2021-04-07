@@ -6,12 +6,14 @@ import {
 import * as queryParser from "query-string";
 import * as react from "react";
 import {
-  Component,
   ReactNode
 } from "react";
 import {
   IntlProvider
 } from "react-intl";
+import {
+  Component
+} from "./component";
 import {
   component
 } from "./decorator";
@@ -38,6 +40,11 @@ export class Root extends Component<Props, State> {
   };
 
   public async componentDidMount(): Promise<void> {
+    this.fetchProps();
+    this.setupRespond();
+  }
+
+  private async fetchProps(): Promise<void> {
     let query = queryParser.parse(window.location.search);
     let mode = query.mode;
     let idString = query.idString;
@@ -48,11 +55,20 @@ export class Root extends Component<Props, State> {
         window.api.send("show-window");
       });
     }
+  }
+
+  private setupRespond(): void {
+    let query = queryParser.parse(window.location.search);
     let respondIdString = query.respondIdString;
     let respondChannel = query.respondChannel;
     if (typeof respondIdString === "string" && typeof respondChannel === "string") {
       this.store.respondId = parseInt(respondIdString, 10);
       this.store.respondChannel = respondChannel;
+      window.addEventListener("unload", () => {
+        let respondId = this.store.respondId!;
+        let respondChannel = this.store.respondChannel!;
+        window.api.sendTo(respondId, respondChannel, 0, null);
+      });
     }
   }
 
