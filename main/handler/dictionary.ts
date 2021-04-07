@@ -1,8 +1,12 @@
 //
 
+import axios from "axios";
 import {
   IpcMainEvent
 } from "electron";
+import {
+  promises as fs
+} from "fs";
 import {
   Dictionary,
   PlainDictionary,
@@ -133,6 +137,36 @@ export class DictionaryHandler extends Handler {
     let window = this.mainWindow;
     if (window !== undefined) {
       this.ipcMain.send("change-dictionary-settings", window.webContents, settings);
+    }
+  }
+
+  @onAsync("upload-dictionary")
+  private async uploadDictionary(this: Main, event: IpcMainEvent, plainDictionary: PlainDictionary): Promise<void> {
+    let password = this.settings.uploadDictionaryPassword;
+    if (password !== undefined) {
+      let dictionary = Dictionary.fromPlain(plainDictionary);
+      let tempPath = (this.app.isPackaged) ? "./temp.xdc" : "./dist/temp.xdc";
+      let url = "http://ziphil.com/program/interface/1.cgi";
+      let saver = new OldShaleianSaver(dictionary, tempPath);
+      let saverPromise = new Promise<void>((resolve, reject) => {
+        saver.on("end", () => {
+          resolve();
+        });
+        saver.on("error", (error) => {
+          console.error(error);
+          reject(error);
+        });
+        saver.start();
+      });
+      await saverPromise;
+      let content = await fs.readFile(tempPath, {encoding: "utf-8"});
+      let params = new URLSearchParams();
+      params.append("mode", "zpdic");
+      params.append("password", password);
+      params.append("content", content);
+      await axios.post(url, params);
+    } else {
+      throw new Error("password unspecified");
     }
   }
 

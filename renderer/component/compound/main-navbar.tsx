@@ -472,7 +472,7 @@ export class MainNavbar extends Component<Props, State> {
       toggleActiveWordMarkerTrapezoid: {key: "ctrl+0", handler: () => this.props.toggleActiveWordMarker("trapezoid")},
       execGitCommit: {key: "ctrl+alt+c", handler: () => this.props.execGitCommit()},
       execGitPush: {key: "ctrl+alt+p", handler: () => this.props.execGitPush()},
-      uploadDictionary: {key: "ctrl+alt+u"},
+      uploadDictionary: {key: "ctrl+alt+u", handler: () => this.props.uploadDictionary()},
       openDictionarySettings: {key: "ctrl+p", handler: () => this.props.openDictionarySettings()},
       openSettings: {key: "ctrl+shift+p"},
       openDevTools: {key: "f12", handler: () => window.api.send("open-dev-tools")},
@@ -542,6 +542,7 @@ type Props = {
   toggleActiveWordMarker: (marker: Marker) => void,
   execGitCommit: () => void,
   execGitPush: () => void,
+  uploadDictionary: () => void,
   openDictionarySettings: () => void,
   fallback: () => void
 };

@@ -434,6 +434,18 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  private async uploadDictionary(): Promise<void> {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      try {
+        await window.api.sendAsync("upload-dictionary", dictionary.toPlain());
+        CustomToaster.show({message: this.trans("mainPage.succeedUploadDictionary"), icon: "tick", intent: "success"});
+      } catch (error) {
+        CustomToaster.show({message: this.trans("mainPage.failUploadDictionary"), icon: "error", intent: "danger"});
+      }
+    }
+  }
+
   private showUnimplementedToaster(): void {
     CustomToaster.show({message: this.trans("mainPage.unimplemented"), icon: "warning-sign", intent: "warning"});
   }
@@ -484,6 +496,7 @@ export class MainPage extends Component<Props, State> {
         toggleActiveWordMarker={(marker) => this.toggleActiveWordMarker(marker)}
         execGitCommit={() => this.startExecGitCommit()}
         execGitPush={() => this.execGitPush()}
+        uploadDictionary={() => this.uploadDictionary()}
         openDictionarySettings={() => this.startChangeDictionarySettings()}
         fallback={() => this.showUnimplementedToaster()}
       />
