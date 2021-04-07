@@ -114,7 +114,7 @@ export class Main {
     if (parent !== undefined) {
       BrowserWindowUtil.centerToParent(parent, window);
     }
-    let id = window.id;
+    let id = window.webContents.id;
     let idString = id.toString();
     window.loadFile(joinPath(__dirname, "index.html"), {query: {...options.query, mode, idString}});
     window.setMenu(null);
