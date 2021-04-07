@@ -422,11 +422,17 @@ export class MainPage extends Component<Props, State> {
     if (dictionary !== null) {
       try {
         await this.sendAsync("upload-dictionary", dictionary.toPlain());
-        CustomToaster.show({message: this.trans("mainPage.succeedUploadDictionary"), icon: "tick", intent: "success"});
+        CustomToaster.show({message: this.trans("mainPage.succeedUploadDictionary"), icon: "tick", intent: "success"}, "uploadDictionary");
       } catch (error) {
-        CustomToaster.show({message: this.trans("mainPage.failUploadDictionary"), icon: "error", intent: "danger"});
+        CustomToaster.show({message: this.trans("mainPage.failUploadDictionary"), icon: "error", intent: "danger"}, "uploadDictionary");
       }
     }
+  }
+
+  @on("get-upload-dictionary-progress")
+  private updateUploadDictionaryProgress(progress: Progress): void {
+    let message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
+    CustomToaster.show({message, icon: "export", timeout: 0}, "uploadDictionary");
   }
 
   private showUnimplementedToaster(): void {

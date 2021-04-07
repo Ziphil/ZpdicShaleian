@@ -121,6 +121,10 @@ export class DictionaryHandler extends Handler {
       let url = "http://ziphil.com/program/interface/1.cgi";
       let saver = new OldShaleianSaver(dictionary, tempPath);
       let saverPromise = new Promise<void>((resolve, reject) => {
+        saver.on("progress", (offset, size) => {
+          let ratio = (size > 0) ? (offset / size) / 2 : 0;
+          this.send("get-upload-dictionary-progress", event.sender, {offset: ratio, size: 1});
+        });
         saver.on("end", () => {
           resolve();
         });
@@ -136,7 +140,9 @@ export class DictionaryHandler extends Handler {
       params.append("mode", "zpdic");
       params.append("password", password);
       params.append("content", content);
+      this.send("get-upload-dictionary-progress", event.sender, {offset: 0.5, size: 1});
       await axios.post(url, params);
+      await fs.unlink(tempPath);
     } else {
       throw new Error("password unspecified");
     }
