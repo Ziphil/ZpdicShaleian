@@ -10,7 +10,6 @@ import {
 import {
   Dictionary,
   PlainDictionary,
-  PlainDictionarySettings,
   PlainWord
 } from "../../renderer/module/dictionary";
 import {
@@ -20,9 +19,6 @@ import {
   DirectorySaver,
   OldShaleianSaver
 } from "../../renderer/module/dictionary/saver";
-import {
-  Main
-} from "../index";
 import {
   handler,
   on,
@@ -37,11 +33,11 @@ import {
 export class DictionaryHandler extends Handler {
 
   @onAsync("load-dictionary")
-  private async loadDictionary(this: Main, event: IpcMainEvent, path: string): Promise<PlainDictionary> {
+  private async loadDictionary(event: IpcMainEvent, path: string): Promise<PlainDictionary> {
     let loader = new DirectoryLoader(path);
     let promise = new Promise<PlainDictionary>((resolve, reject) => {
       loader.on("progress", (offset, size) => {
-        this.ipcMain.send("get-load-dictionary-progress", event.sender, {offset, size});
+        this.send("get-load-dictionary-progress", event.sender, {offset, size});
       });
       loader.on("end", (dictionary) => {
         resolve(dictionary.toPlain());
@@ -56,12 +52,12 @@ export class DictionaryHandler extends Handler {
   }
 
   @onAsync("save-dictionary")
-  private saveDictionary(this: Main, event: IpcMainEvent, plainDictionary: PlainDictionary, path: string | null): Promise<void> {
+  private saveDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, path: string | null): Promise<void> {
     let dictionary = Dictionary.fromPlain(plainDictionary);
     let saver = new DirectorySaver(dictionary, path);
     let promise = new Promise<void>((resolve, reject) => {
       saver.on("progress", (offset, size) => {
-        this.ipcMain.send("get-save-dictionary-progress", event.sender, {offset, size});
+        this.send("get-save-dictionary-progress", event.sender, {offset, size});
       });
       saver.on("end", () => {
         resolve();
@@ -76,7 +72,7 @@ export class DictionaryHandler extends Handler {
   }
 
   @onAsync("export-dictionary")
-  private exportDictionary(this: Main, event: IpcMainEvent, plainDictionary: PlainDictionary, path: string, type: string): Promise<void> {
+  private exportDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, path: string, type: string): Promise<void> {
     let dictionary = Dictionary.fromPlain(plainDictionary);
     let saver = (() => {
       if (type === "oldShaleian") {
@@ -88,7 +84,7 @@ export class DictionaryHandler extends Handler {
     if (saver !== undefined) {
       let promise = new Promise<void>((resolve, reject) => {
         saver!.on("progress", (offset, size) => {
-          this.ipcMain.send("get-export-dictionary-progress", event.sender, {offset, size});
+          this.send("get-export-dictionary-progress", event.sender, {offset, size});
         });
         saver!.on("end", () => {
           resolve();
@@ -106,10 +102,10 @@ export class DictionaryHandler extends Handler {
   }
 
   @onAsync("validate-edit-word")
-  private async validateEditWord(this: Main, event: IpcMainEvent, uid: string, word: PlainWord): Promise<string | null> {
-    let window = this.mainWindow;
+  private async validateEditWord(event: IpcMainEvent, uid: string, word: PlainWord): Promise<string | null> {
+    let window = this.main.mainWindow;
     if (window !== undefined) {
-      let errorType = await this.ipcMain.sendAsync("do-validate-edit-word", window.webContents, uid, word);
+      let errorType = await this.sendAsync("do-validate-edit-word", window.webContents, uid, word);
       return errorType;
     } else {
       return "";
@@ -117,11 +113,11 @@ export class DictionaryHandler extends Handler {
   }
 
   @onAsync("upload-dictionary")
-  private async uploadDictionary(this: Main, event: IpcMainEvent, plainDictionary: PlainDictionary): Promise<void> {
-    let password = this.settings.uploadDictionaryPassword;
+  private async uploadDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary): Promise<void> {
+    let password = this.main.settings.uploadDictionaryPassword;
     if (password !== undefined) {
       let dictionary = Dictionary.fromPlain(plainDictionary);
-      let tempPath = (this.app.isPackaged) ? "./temp.xdc" : "./dist/temp.xdc";
+      let tempPath = (this.main.app.isPackaged) ? "./temp.xdc" : "./dist/temp.xdc";
       let url = "http://ziphil.com/program/interface/1.cgi";
       let saver = new OldShaleianSaver(dictionary, tempPath);
       let saverPromise = new Promise<void>((resolve, reject) => {

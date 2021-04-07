@@ -1,14 +1,9 @@
 //
 
-import {
-  App
-} from "electron";
 import "reflect-metadata";
 import {
-  Main
-} from "../index";
-import {
-  PromisifiedIpcMain
+  PromisifiedIpcMain,
+  ipcMain
 } from "../util/ipc/ipc-main";
 import {
   Handler
@@ -23,20 +18,19 @@ type Handlers = Array<{channel: string, name: string | symbol}>;
 type HandlerClassDecorator = (clazz: new(...args: any) => Handler) => void;
 type OnMethodDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<OnMethod>) => void;
 type OnAsyncMethodDecorator = (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<OnAsyncMethod>) => void;
-type OnMethod = Parameters<PromisifiedIpcMain["on"]>[1] & ThisType<Main>;
-type OnAsyncMethod = Parameters<PromisifiedIpcMain["onAsync"]>[1] & ThisType<Main>;
+type OnMethod = Parameters<PromisifiedIpcMain["on"]>[1];
+type OnAsyncMethod = Parameters<PromisifiedIpcMain["onAsync"]>[1];
 
 export function handler(): HandlerClassDecorator {
   let decorator = function (clazz: new(...args: any) => Handler): void {
     let metadata = Reflect.getMetadata(KEY, clazz.prototype) as Metadata;
-    clazz.prototype.setup = function (this: Handler, app: App): void {
+    clazz.prototype.setup = function (this: Handler): void {
       let anyThis = this as any;
-      let anyApp = app as any;
       for (let {channel, name} of metadata.sync) {
-        anyApp.ipcMain.on(channel, anyThis[name].bind(app));
+        ipcMain.on(channel, anyThis[name].bind(this));
       }
       for (let {channel, name} of metadata.async) {
-        anyApp.ipcMain.onAsync(channel, anyThis[name].bind(app));
+        ipcMain.onAsync(channel, anyThis[name].bind(this));
       }
     };
   };

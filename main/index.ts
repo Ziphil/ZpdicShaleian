@@ -26,10 +26,6 @@ import {
 import {
   BrowserWindowUtil
 } from "./util/browser-window";
-import {
-  PromisifiedIpcMain,
-  ipcMain
-} from "./util/ipc/ipc-main";
 
 
 const COMMON_WINDOW_OPTIONS = {
@@ -49,16 +45,14 @@ const PRODUCTION_WINDOW_OPTIONS = {
 
 export class Main {
 
-  protected app: App;
-  protected ipcMain: PromisifiedIpcMain;
-  protected settings!: Settings;
-  protected windows: Map<number, BrowserWindow>;
-  protected mainWindow: BrowserWindow | undefined;
-  protected props: Map<number, object>;
+  public app: App;
+  public settings!: Settings;
+  public windows: Map<number, BrowserWindow>;
+  public mainWindow: BrowserWindow | undefined;
+  public props: Map<number, object>;
 
   public constructor(app: App) {
     this.app = app;
-    this.ipcMain = ipcMain;
     this.windows = new Map();
     this.mainWindow = undefined;
     this.props = new Map();
@@ -112,7 +106,7 @@ export class Main {
     }
   }
 
-  protected createWindow(mode: string, parentId: number | null, props: object, options: BrowserWindowConstructorOptions & {query?: Record<string, string>}): BrowserWindow {
+  public createWindow(mode: string, parentId: number | null, props: object, options: BrowserWindowConstructorOptions & {query?: Record<string, string>}): BrowserWindow {
     let show = false;
     let parent = (parentId !== null) ? this.windows.get(parentId) : undefined;
     let additionalOptions = (!this.app.isPackaged) ? {} : PRODUCTION_WINDOW_OPTIONS;

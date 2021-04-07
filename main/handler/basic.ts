@@ -13,9 +13,6 @@ import {
   Settings
 } from "../../renderer/module/settings";
 import {
-  Main
-} from "../index";
-import {
   handler,
   on,
   onAsync
@@ -29,11 +26,11 @@ import {
 export class BasicHandler extends Handler {
 
   @onAsync("get-props")
-  private async getProps(this: Main, event: IpcMainEvent): Promise<object> {
+  private async getProps(event: IpcMainEvent): Promise<object> {
     let id = event.sender.id;
-    let props = this.props.get(id);
+    let props = this.main.props.get(id);
     if (props !== undefined) {
-      this.props.delete(id);
+      this.main.props.delete(id);
       return props;
     } else {
       return {};
@@ -41,12 +38,12 @@ export class BasicHandler extends Handler {
   }
 
   @on("show-window")
-  private showWindow(this: Main, event: IpcMainEvent): void {
+  private showWindow(event: IpcMainEvent): void {
     let id = event.sender.id;
-    let window = this.windows.get(id);
+    let window = this.main.windows.get(id);
     if (window !== undefined) {
       window.show();
-      let mainWindow = this.mainWindow;
+      let mainWindow = this.main.mainWindow;
       if (mainWindow !== undefined) {
         mainWindow.focus();
         window.focus();
@@ -55,52 +52,52 @@ export class BasicHandler extends Handler {
   }
 
   @on("close-window")
-  private closeWindow(this: Main, event: IpcMainEvent): void {
+  private closeWindow(event: IpcMainEvent): void {
     let id = event.sender.id;
-    let window = this.windows.get(id);
+    let window = this.main.windows.get(id);
     if (window !== undefined) {
       window.close();
     }
   }
 
   @on("destroy-window")
-  private destroyWindow(this: Main, event: IpcMainEvent): void {
+  private destroyWindow(event: IpcMainEvent): void {
     let id = event.sender.id;
-    let window = this.windows.get(id);
+    let window = this.main.windows.get(id);
     if (window !== undefined) {
       window.destroy();
     }
   }
 
   @on("create-window")
-  private createWindow(this: Main, event: IpcMainEvent, mode: string, props: object, options: BrowserWindowConstructorOptions): void {
+  private createWindow(event: IpcMainEvent, mode: string, props: object, options: BrowserWindowConstructorOptions): void {
     let parentId = event.sender.id;
-    this.createWindow(mode, parentId, props, options);
+    this.main.createWindow(mode, parentId, props, options);
   }
 
   @onAsync("get-settings")
-  private async getSettings(this: Main, event: IpcMainEvent): Promise<Settings> {
-    return this.settings;
+  private async getSettings(event: IpcMainEvent): Promise<Settings> {
+    return this.main.settings;
   }
 
   @onAsync("change-settings")
-  private async changeSettings<K extends keyof Settings>(this: Main, event: IpcMainEvent, key: K, value: Settings[K]): Promise<void> {
-    this.settings[key] = value;
+  private async changeSettings<K extends keyof Settings>(event: IpcMainEvent, key: K, value: Settings[K]): Promise<void> {
+    this.main.settings[key] = value;
   }
 
   @on("open-dev-tools")
-  private openDevTools(this: Main, event: IpcMainEvent): void {
+  private openDevTools(event: IpcMainEvent): void {
     let id = event.sender.id;
-    let window = this.windows.get(id);
+    let window = this.main.windows.get(id);
     if (window !== undefined) {
       window.webContents.openDevTools();
     }
   }
 
   @onAsync("show-open-dialog")
-  private async showOpenDialog(this: Main, event: IpcMainEvent, options: OpenDialogOptions): Promise<OpenDialogReturnValue> {
+  private async showOpenDialog(event: IpcMainEvent, options: OpenDialogOptions): Promise<OpenDialogReturnValue> {
     let id = event.sender.id;
-    let window = this.windows.get(id);
+    let window = this.main.windows.get(id);
     if (window !== undefined) {
       return await dialog.showOpenDialog(window, options);
     } else {
@@ -109,9 +106,9 @@ export class BasicHandler extends Handler {
   }
 
   @onAsync("show-save-dialog")
-  private async showSaveDialog(this: Main, event: IpcMainEvent, options: SaveDialogOptions): Promise<SaveDialogReturnValue> {
+  private async showSaveDialog(event: IpcMainEvent, options: SaveDialogOptions): Promise<SaveDialogReturnValue> {
     let id = event.sender.id;
-    let window = this.windows.get(id);
+    let window = this.main.windows.get(id);
     if (window !== undefined) {
       return await dialog.showSaveDialog(window, options);
     } else {
@@ -120,8 +117,8 @@ export class BasicHandler extends Handler {
   }
 
   @onAsync("get-packaged")
-  private async getPackaged(this: Main, event: IpcMainEvent): Promise<boolean> {
-    return this.app.isPackaged;
+  private async getPackaged(event: IpcMainEvent): Promise<boolean> {
+    return this.main.app.isPackaged;
   }
 
 }
