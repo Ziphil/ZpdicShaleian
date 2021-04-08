@@ -34,6 +34,7 @@ const COMMON_WINDOW_OPTIONS = {
   autoHideMenuBar: true,
   acceptFirstMouse: true,
   useContentSize: true,
+  spellcheck: false,
   title: "ZpDIC for Shaleian",
   backgroundColor: "#F5F8FA",
   webPreferences: {preload: joinPath(__dirname, "preload.js"), devTools: true}
