@@ -18,7 +18,7 @@ export abstract class Loader extends EventEmitter {
     this.path = path;
   }
 
-  public toPromise(listeners: LoaderEventListeners): Promise<Dictionary> {
+  public asPromise(listeners: LoaderEventListeners): Promise<Dictionary> {
     let promise = new Promise<Dictionary>((resolve, reject) => {
       if (listeners.onProgress) {
         this.on("progress", listeners.onProgress);

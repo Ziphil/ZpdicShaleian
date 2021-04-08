@@ -25,7 +25,7 @@ export abstract class Saver extends EventEmitter {
     }
   }
 
-  public toPromise(listeners: SaverEventListeners): Promise<void> {
+  public asPromise(listeners: SaverEventListeners): Promise<void> {
     let promise = new Promise<void>((resolve, reject) => {
       if (listeners.onProgress) {
         this.on("progress", listeners.onProgress);
