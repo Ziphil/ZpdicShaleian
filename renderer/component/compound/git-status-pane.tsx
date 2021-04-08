@@ -25,7 +25,7 @@ export class GitStatusPane extends Component<Props, State> {
 
   public async componentDidMount(): Promise<void> {
     try {
-      let status = await this.sendAsync("exec-git-status", this.props.path);
+      let status = await this.sendAsync("execGitStatus", this.props.path);
       this.setState({status, loading: false});
     } catch (error) {
       this.setState({status: null, loading: true});

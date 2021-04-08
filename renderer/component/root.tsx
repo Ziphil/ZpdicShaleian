@@ -50,9 +50,9 @@ export class Root extends Component<Props, State> {
     let idString = query.idString;
     if (typeof mode === "string" && typeof idString === "string") {
       this.store.id = parseInt(idString, 10);
-      let props = await window.api.sendAsync("get-props");
+      let props = await window.api.sendAsync("getProps");
       this.setState({mode, props}, () => {
-        window.api.send("show-window");
+        window.api.send("showWindow");
       });
     }
   }
@@ -80,9 +80,9 @@ export class Root extends Component<Props, State> {
         return <MainPage {...props}/>;
       } else if (mode === "editor") {
         return <EditorPage {...props}/>;
-      } else if (mode === "dictionary-settings") {
+      } else if (mode === "dictionarySettings") {
         return <DictionarySettingsPage {...props}/>;
-      } else if (mode === "git-commit") {
+      } else if (mode === "gitCommit") {
         return <GitCommitPage {...props}/>;
       } else {
         return <div/>;

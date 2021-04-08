@@ -475,7 +475,7 @@ export class MainNavbar extends Component<Props, State> {
       uploadDictionary: {key: "ctrl+alt+u", handler: () => this.props.uploadDictionary()},
       openDictionarySettings: {key: "ctrl+p", handler: () => this.props.openDictionarySettings()},
       openSettings: {key: "ctrl+shift+p"},
-      openDevTools: {key: "f12", handler: () => this.send("open-dev-tools")},
+      openDevTools: {key: "f12", handler: () => this.send("openDevTools")},
       openHelp: {key: "f1"},
       fallback: {handler: () => this.props.fallback()}
     });

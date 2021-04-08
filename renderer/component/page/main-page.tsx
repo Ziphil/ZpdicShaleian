@@ -78,7 +78,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   public async componentDidMount(): Promise<void> {
-    let settings = await this.sendAsync("get-settings");
+    let settings = await this.sendAsync("getSettings");
     let path = settings.defaultDictionaryPath;
     if (path !== undefined) {
       this.updateDictionary(path);
@@ -86,7 +86,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private async setupEventListener(): Promise<void> {
-    let packaged = await this.sendAsync("get-packaged");
+    let packaged = await this.sendAsync("getPackaged");
     if (packaged) {
       window.addEventListener("beforeunload", (event) => {
         this.requestCloseWindow();
@@ -98,7 +98,7 @@ export class MainPage extends Component<Props, State> {
   private async loadDictionary(): Promise<void> {
     let confirmed = await this.checkLeave();
     if (confirmed) {
-      let result = await this.sendAsync("show-open-dialog", {properties: ["openDirectory"]});
+      let result = await this.sendAsync("showOpenDialog", {properties: ["openDirectory"]});
       if (!result.canceled) {
         let path = result.filePaths[0];
         this.updateDictionary(path);
@@ -117,7 +117,7 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  @on("get-load-dictionary-progress")
+  @on("getLoadDictionaryProgress")
   private updateLoadDictionaryProgress(progress: Progress): void {
     this.setState({progress});
   }
@@ -127,9 +127,9 @@ export class MainPage extends Component<Props, State> {
     let progress = {offset: 0, size: 0};
     this.setState({dictionary, progress, activeWord: null, changed: false});
     try {
-      let plainDictionary = await this.sendAsync("load-dictionary", path);
+      let plainDictionary = await this.sendAsync("loadDictionary", path);
       let dictionary = Dictionary.fromPlain(plainDictionary);
-      this.sendAsync("change-settings", "defaultDictionaryPath", path);
+      this.sendAsync("changeSettings", "defaultDictionaryPath", path);
       this.setState({dictionary}, () => {
         this.updateWords();
       });
@@ -142,7 +142,7 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       try {
-        await this.sendAsync("save-dictionary", dictionary.toPlain(), path);
+        await this.sendAsync("saveDictionary", dictionary.toPlain(), path);
         this.setState({changed: false});
         CustomToaster.show({message: this.trans("mainPage.succeedSaveDictionary"), icon: "tick", intent: "success"}, "saveDictionary");
       } catch (error) {
@@ -151,7 +151,7 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  @on("get-save-dictionary-progress")
+  @on("getSaveDictionaryProgress")
   private updateSaveDictionaryProgress(progress: Progress): void {
     let message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
     CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
@@ -160,11 +160,11 @@ export class MainPage extends Component<Props, State> {
   private async exportDictionary(type: string): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      let result = await this.sendAsync("show-save-dialog", {});
+      let result = await this.sendAsync("showSaveDialog", {});
       if (!result.canceled) {
         let path = result.filePath;
         try {
-          await this.sendAsync("export-dictionary", dictionary.toPlain(), path, type);
+          await this.sendAsync("exportDictionary", dictionary.toPlain(), path, type);
           CustomToaster.show({message: this.trans("mainPage.succeedExportDictionary"), icon: "tick", intent: "success"}, "exportDictionary");
         } catch (error) {
           CustomToaster.show({message: this.trans("mainPage.failExportDictionary"), icon: "tick", intent: "danger"}, "exportDictionary");
@@ -173,7 +173,7 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  @on("get-export-dictionary-progress")
+  @on("getExportDictionaryProgress")
   private updateExportDictionaryProgress(progress: Progress): void {
     let message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
     CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "exportDictionary");
@@ -306,7 +306,7 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  @onAsync("do-validate-edit-word")
+  @onAsync("doValidateEditWord")
   private async validateEditWord(uid: string | null, word: PlainWord): Promise<string | null> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
@@ -377,7 +377,7 @@ export class MainPage extends Component<Props, State> {
     if (dictionary !== null) {
       let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
       let settings = dictionary.settings;
-      let data = await this.createWindowAsync("dictionary-settings", {settings}, options);
+      let data = await this.createWindowAsync("dictionarySettings", {settings}, options);
       if (data !== null) {
         let newSettings = data;
         dictionary.changeSettings(newSettings);
@@ -391,11 +391,11 @@ export class MainPage extends Component<Props, State> {
     if (dictionary !== null && dictionary.path !== null) {
       let options = {width: 480, height: 320, minWidth: 320, minHeight: 240, type: "toolbar"};
       let path = dictionary.path;
-      let data = await this.createWindowAsync("git-commit", {path}, options);
+      let data = await this.createWindowAsync("gitCommit", {path}, options);
       if (data !== null) {
         let message = data;
         try {
-          await this.sendAsync("exec-git-commit", path, message);
+          await this.sendAsync("execGitCommit", path, message);
           CustomToaster.show({message: this.trans("mainPage.succeedExecGitCommit"), icon: "tick", intent: "success"});
         } catch (error) {
           CustomToaster.show({message: this.trans("mainPage.failExecGitCommit"), icon: "error", intent: "danger"});
@@ -409,7 +409,7 @@ export class MainPage extends Component<Props, State> {
     if (dictionary !== null) {
       let path = dictionary.path;
       try {
-        await this.sendAsync("exec-git-push", path);
+        await this.sendAsync("execGitPush", path);
         CustomToaster.show({message: this.trans("mainPage.succeedExecGitPush"), icon: "tick", intent: "success"});
       } catch (error) {
         CustomToaster.show({message: this.trans("mainPage.failExecGitPush"), icon: "error", intent: "danger"});
@@ -421,7 +421,7 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       try {
-        await this.sendAsync("upload-dictionary", dictionary.toPlain());
+        await this.sendAsync("uploadDictionary", dictionary.toPlain());
         CustomToaster.show({message: this.trans("mainPage.succeedUploadDictionary"), icon: "tick", intent: "success"}, "uploadDictionary");
       } catch (error) {
         CustomToaster.show({message: this.trans("mainPage.failUploadDictionary"), icon: "error", intent: "danger"}, "uploadDictionary");
@@ -429,7 +429,7 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  @on("get-upload-dictionary-progress")
+  @on("getUploadDictionaryProgress")
   private updateUploadDictionaryProgress(progress: Progress): void {
     let message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
     CustomToaster.show({message, icon: "export", timeout: 0}, "uploadDictionary");
@@ -442,7 +442,7 @@ export class MainPage extends Component<Props, State> {
   private async requestCloseWindow(): Promise<void> {
     let confirmed = await this.checkLeave();
     if (confirmed) {
-      this.send("destroy-window");
+      this.send("destroyWindow");
     }
   }
 

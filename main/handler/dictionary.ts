@@ -32,12 +32,12 @@ import {
 @handler()
 export class DictionaryHandler extends Handler {
 
-  @onAsync("load-dictionary")
+  @onAsync("loadDictionary")
   private async loadDictionary(event: IpcMainEvent, path: string): Promise<PlainDictionary> {
     let loader = new DirectoryLoader(path);
     let promise = new Promise<PlainDictionary>((resolve, reject) => {
       loader.on("progress", (offset, size) => {
-        this.send("get-load-dictionary-progress", event.sender, {offset, size});
+        this.send("getLoadDictionaryProgress", event.sender, {offset, size});
       });
       loader.on("end", (dictionary) => {
         resolve(dictionary.toPlain());
@@ -51,13 +51,13 @@ export class DictionaryHandler extends Handler {
     return promise;
   }
 
-  @onAsync("save-dictionary")
+  @onAsync("saveDictionary")
   private saveDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, path: string | null): Promise<void> {
     let dictionary = Dictionary.fromPlain(plainDictionary);
     let saver = new DirectorySaver(dictionary, path);
     let promise = new Promise<void>((resolve, reject) => {
       saver.on("progress", (offset, size) => {
-        this.send("get-save-dictionary-progress", event.sender, {offset, size});
+        this.send("getSaveDictionaryProgress", event.sender, {offset, size});
       });
       saver.on("end", () => {
         resolve();
@@ -71,7 +71,7 @@ export class DictionaryHandler extends Handler {
     return promise;
   }
 
-  @onAsync("export-dictionary")
+  @onAsync("exportDictionary")
   private exportDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, path: string, type: string): Promise<void> {
     let dictionary = Dictionary.fromPlain(plainDictionary);
     let saver = (() => {
@@ -84,7 +84,7 @@ export class DictionaryHandler extends Handler {
     if (saver !== undefined) {
       let promise = new Promise<void>((resolve, reject) => {
         saver!.on("progress", (offset, size) => {
-          this.send("get-export-dictionary-progress", event.sender, {offset, size});
+          this.send("getExportDictionaryProgress", event.sender, {offset, size});
         });
         saver!.on("end", () => {
           resolve();
@@ -101,18 +101,18 @@ export class DictionaryHandler extends Handler {
     }
   }
 
-  @onAsync("validate-edit-word")
+  @onAsync("validateEditWord")
   private async validateEditWord(event: IpcMainEvent, uid: string, word: PlainWord): Promise<string | null> {
     let window = this.main.mainWindow;
     if (window !== undefined) {
-      let errorType = await this.sendAsync("do-validate-edit-word", window.webContents, uid, word);
+      let errorType = await this.sendAsync("doValidateEditWord", window.webContents, uid, word);
       return errorType;
     } else {
       return "";
     }
   }
 
-  @onAsync("upload-dictionary")
+  @onAsync("uploadDictionary")
   private async uploadDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary): Promise<void> {
     let password = this.main.settings.uploadDictionaryPassword;
     if (password !== undefined) {
@@ -123,7 +123,7 @@ export class DictionaryHandler extends Handler {
       let saverPromise = new Promise<void>((resolve, reject) => {
         saver.on("progress", (offset, size) => {
           let ratio = (size > 0) ? (offset / size) / 2 : 0;
-          this.send("get-upload-dictionary-progress", event.sender, {offset: ratio, size: 1});
+          this.send("getUploadDictionaryProgress", event.sender, {offset: ratio, size: 1});
         });
         saver.on("end", () => {
           resolve();
@@ -140,7 +140,7 @@ export class DictionaryHandler extends Handler {
       params.append("mode", "zpdic");
       params.append("password", password);
       params.append("content", content);
-      this.send("get-upload-dictionary-progress", event.sender, {offset: 0.5, size: 1});
+      this.send("getUploadDictionaryProgress", event.sender, {offset: 0.5, size: 1});
       await axios.post(url, params);
       await fs.unlink(tempPath);
     } else {

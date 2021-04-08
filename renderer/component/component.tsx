@@ -60,7 +60,7 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
   }
 
   protected createWindow(mode: string, props: object, options: BrowserWindowConstructorOptions): void {
-    window.api.send("create-window", mode, props, options);
+    window.api.send("createWindow", mode, props, options);
   }
 
   // 新しいウィンドウを非同期で開き、そのウィンドウが閉じられるまで待機します。
@@ -78,7 +78,7 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
           resolve(data);
         }
       });
-      window.api.send("create-window", mode, props, {...options, query});
+      window.api.send("createWindow", mode, props, {...options, query});
     });
     return promise;
   }
@@ -92,7 +92,7 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
     if (respondId !== null && respondChannel !== null) {
       window.api.sendTo(respondId, respondChannel, 0, data ?? null);
     }
-    window.api.send("close-window");
+    window.api.send("closeWindow");
   }
 
 }
