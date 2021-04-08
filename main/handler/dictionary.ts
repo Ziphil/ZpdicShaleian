@@ -114,11 +114,11 @@ export class DictionaryHandler extends Handler {
 
   @onAsync("uploadDictionary")
   private async uploadDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary): Promise<void> {
+    let url = this.main.settings.uploadDictionaryUrl;
     let password = this.main.settings.uploadDictionaryPassword;
-    if (password !== undefined) {
+    if (url !== undefined && password !== undefined) {
       let dictionary = Dictionary.fromPlain(plainDictionary);
       let tempPath = (this.main.app.isPackaged) ? "./temp.xdc" : "./dist/temp.xdc";
-      let url = "http://ziphil.com/program/interface/1.cgi";
       let saver = new OldShaleianSaver(dictionary, tempPath);
       let saverPromise = new Promise<void>((resolve, reject) => {
         saver.on("progress", (offset, size) => {

@@ -5,6 +5,7 @@ export class Settings {
 
   public defaultDictionaryPath?: string;
   public defaultCommitMessage?: string;
+  public uploadDictionaryUrl?: string;
   public uploadDictionaryPassword?: string;
 
   public constructor(object: any) {
