@@ -84,6 +84,11 @@ export class MainNavbar extends Component<Props, State> {
         />
         <MenuItem text={this.trans("mainNavbar.exportDictionary")} icon="blank">
           <MenuItem
+            text={this.trans("mainNavbar.exportDictionaryAsSingle")}
+            label={this.handlerManager.getLabel("exportDictionaryAsSingle")}
+            onClick={this.handlerManager.getHandler("exportDictionaryAsSingle")}
+          />
+          <MenuItem
             text={this.trans("mainNavbar.exportDictionaryAsOldShaleian")}
             label={this.handlerManager.getLabel("exportDictionaryAsOldShaleian")}
             onClick={this.handlerManager.getHandler("exportDictionaryAsOldShaleian")}
