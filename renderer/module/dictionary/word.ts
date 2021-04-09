@@ -73,6 +73,14 @@ export class Word implements PlainWord {
     this.updateComparisonString();
   }
 
+  public copy(): Word {
+    let word = new Word(this.uniqueName, this.date, this.contents);
+    if (this.dictionary !== null) {
+      word.setDictionary(this.dictionary);
+    }
+    return word;
+  }
+
   public edit(newWord: PlainWord, skipValidate?: boolean): void {
     let errorType = (skipValidate) ? null : this.validateEdit(newWord);
     if (errorType === null) {
