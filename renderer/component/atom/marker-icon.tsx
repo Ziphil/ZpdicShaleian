@@ -27,7 +27,7 @@ export class MarkerIcon extends Component<Props, State> {
     } else if (marker === "cross") {
       return <path d="M 3 0 L 3 3 L 0 3 L 0 8 L 3 8 L 3 11 L 8 11 L 8 8 L 11 8 L 11 3 L 8 3 L 8 0 Z"/>;
     } else if (marker === "heart") {
-      return <path d="M 0 3 C 0 5, 5.5 11, 5.5 11 C 5.5 11, 11 5, 11 3 C 11 1.75, 9.5 0, 8.25 0 C 7 0, 5.5 2, 5.5 3 C 5.5 2, 4 0, 2.75 0 C 1.5 0, 0 1.75, 0 3 Z"/>;
+      return <path d="M 0 3 C 0 5 5.5 11 5.5 11 C 5.5 11 11 5 11 3 C 11 1.75 9.5 0 8.25 0 C 7 0 5.5 2 5.5 3 C 5.5 2 4 0 2.75 0 C 1.5 0 0 1.75 0 3 Z"/>;
     } else if (marker === "pentagon") {
       return <path d="M 5.5 0 L 0 4 L 2 11 L 9 11 L 11 4 Z"/>;
     } else if (marker === "hexagon") {
