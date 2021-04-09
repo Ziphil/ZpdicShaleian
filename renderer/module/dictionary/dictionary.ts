@@ -12,6 +12,9 @@ import {
   Markers
 } from "./marker";
 import {
+  SearchResult
+} from "./search-result";
+import {
   PlainWord,
   Word
 } from "./word";
@@ -55,13 +58,13 @@ export class Dictionary implements PlainDictionary {
   }
 
   public search(parameter: WordParameter): SearchResult {
-    let beforeDate = new Date();
-    let words = this.words.filter((word) => parameter.match(word));
-    let suggestions = new Array<never>();
-    Word.sortWords(words);
-    let afterDate = new Date();
-    let elapsedTime = afterDate.getTime() - beforeDate.getTime();
-    return {words, suggestions, elapsedTime};
+    let result = SearchResult.measure(() => {
+      let words = this.words.filter((word) => parameter.match(word));
+      let suggestions = new Array<never>();
+      Word.sortWords(words);
+      return [words, suggestions];
+    });
+    return result;
   }
 
   public findByUid(uid: string): Word | undefined {
@@ -151,6 +154,3 @@ export interface PlainDictionary {
   path: string | null;
 
 }
-
-
-export type SearchResult = {words: Array<Word>, suggestions: Array<never>, elapsedTime: number};

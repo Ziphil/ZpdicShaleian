@@ -36,8 +36,9 @@ export class WordList extends Component<Props, State> {
 
   public render(): ReactNode {
     let page = this.props.page;
-    let maxPage = Math.max(Math.ceil(this.props.searchResult.words.length / 30) - 1, 0);
-    let displayedWords = this.props.searchResult.words.slice(page * 30, page * 30 + 30);
+    let minPage = this.props.searchResult.minPage;
+    let maxPage = this.props.searchResult.maxPage;
+    let displayedWords = this.props.searchResult.sliceWords(page);
     let wordPanes = displayedWords.map((word) => {
       let wordPane = (
         <WordPaneWrapper
@@ -62,7 +63,7 @@ export class WordList extends Component<Props, State> {
           {wordPanes}
         </div>
         <div className="zpwdl-pagination-container">
-          <Pagination page={this.props.page} minPage={0} maxPage={maxPage} onSet={this.handlePageSet.bind(this)}/>
+          <Pagination page={this.props.page} minPage={minPage} maxPage={maxPage} onSet={this.handlePageSet.bind(this)}/>
         </div>
       </div>
     );

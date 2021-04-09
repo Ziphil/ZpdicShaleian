@@ -64,7 +64,7 @@ export class MainPage extends Component<Props, State> {
     activeWord: null,
     language: "ja",
     parameter: NormalWordParameter.createEmpty("ja"),
-    searchResult: {words: [], suggestions: [], elapsedTime: 0},
+    searchResult: SearchResult.createEmpty(),
     page: 0,
     changed: false,
     alertOpen: false,
@@ -185,7 +185,7 @@ export class MainPage extends Component<Props, State> {
   private refreshWords(search?: boolean): void {
     let dictionary = this.state.dictionary;
     if (!search || dictionary === null) {
-      let searchResult = {...this.state.searchResult};
+      let searchResult = this.state.searchResult.copy();
       this.setState({searchResult});
     } else {
       let searchResult = dictionary.search(this.state.parameter);
@@ -196,9 +196,10 @@ export class MainPage extends Component<Props, State> {
   // 検索結果の単語リストをシャッフルします。
   // 検索結果ペインのスクロール位置はリセットされます。
   private shuffleWords(): void {
+    let oldSearchResult = this.state.searchResult;
     let oldWords = this.state.searchResult.words;
-    let words = [...ArrayUtil.shuffle(oldWords)];
-    let searchResult = {...this.state.searchResult, words};
+    let words = ArrayUtil.shuffle([...oldWords]);
+    let searchResult = new SearchResult(words, oldSearchResult.suggestions, oldSearchResult.elapsedTime);
     this.setState({searchResult, page: 0, activeWord: null});
     this.scrollWordList();
   }
@@ -242,10 +243,11 @@ export class MainPage extends Component<Props, State> {
 
   private movePage(spec: {page: number} | {difference: number} | "first" | "last"): void {
     let currentPage = this.state.page;
-    let maxPage = Math.max(Math.ceil(this.state.searchResult.words.length / 30) - 1, 0);
+    let minPage = this.state.searchResult.minPage;
+    let maxPage = this.state.searchResult.maxPage;
     let page = (() => {
       if (spec === "first") {
-        return 0;
+        return minPage;
       } else if (spec === "last") {
         return maxPage;
       } else if ("page" in spec) {
