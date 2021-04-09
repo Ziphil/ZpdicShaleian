@@ -94,10 +94,7 @@ export class DictionaryHandler extends Handler {
       }});
       this.send("getUploadDictionaryProgress", event.sender, {offset: 0.5, size: 1});
       let content = await fs.readFile(tempPath, {encoding: "utf-8"});
-      let params = new URLSearchParams();
-      params.append("mode", "zpdic");
-      params.append("password", password);
-      params.append("content", content);
+      let params = new URLSearchParams({mode: "zpdic", password, content});
       await axios.post(url, params, {onUploadProgress: (event) => {
         if (event.total) {
           let ratio = (event.total > 0) ? (event.loaded / event.total) / 2 + 0.5 : 0.5;
