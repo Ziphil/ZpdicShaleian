@@ -19,7 +19,8 @@ export class Serializer {
 
   public serializeWord(word: Word): string {
     let string = "";
-    string += `* ${word.uniqueName} @${word.date}\n\n`;
+    string += `* @${word.date} ${word.uniqueName}\n`;
+    string += "\n";
     let first = true;
     for (let [language, content] of Object.entries(word.contents)) {
       if (content !== undefined && content.trim() !== "") {
@@ -37,6 +38,8 @@ export class Serializer {
 
   public serializeDictionarySettings(settings: DictionarySettings): string {
     let string = "";
+    string += "**\n";
+    string += "\n";
     string += "!VERSION\n";
     string += `- ${settings.version}\n`;
     string += "\n";
@@ -68,6 +71,8 @@ export class Serializer {
 
   public serializeMarkers(markers: Markers): string {
     let string = "";
+    string += "**\n";
+    string += "\n";
     string += "!MARKER\n";
     for (let [uniqueName, wordMarkers] of markers.entries()) {
       string += `- ${uniqueName}: ${wordMarkers.join(", ")}\n`;
