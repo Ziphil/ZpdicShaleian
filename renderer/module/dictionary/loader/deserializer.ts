@@ -25,10 +25,10 @@ export class Deserializer {
 
   public deserializeWord(string: string): Word {
     let lines = string.trim().split(/\r\n|\r|\n/);
-    let match = lines[0]?.match(/^\*\s*(.+?)\s*@(\d+)/);
+    let match = lines[0]?.match(/^\*\s*@(\d+)\s*(.+)/);
     if (match) {
-      let uniqueName = match[1];
-      let date = parseInt(match[2], 10);
+      let uniqueName = match[2];
+      let date = parseInt(match[1], 10);
       let contents = {} as Contents;
       let before = true;
       let currentLanguage = "";
@@ -59,49 +59,55 @@ export class Deserializer {
 
   public deserializeDictionarySettings(string: string): DictionarySettings {
     let lines = string.trim().split(/\r\n|\r|\n/);
-    let version;
-    let alphabetRule;
-    let revisions;
-    let before = true;
-    let currentMode = "";
-    let currentString = "";
-    let outerThis = this;
-    let setProperty = function (mode: string, string: string) {
-      if (mode === "VERSION") {
-        let match = string.match(/^\-\s*(.*)$/m);
-        if (match) {
-          version = match[1];
+    let match = lines[0]?.match(/^\*\*/);
+    if (match) {
+      let version;
+      let alphabetRule;
+      let revisions;
+      let before = true;
+      let currentMode = "";
+      let currentString = "";
+      let outerThis = this;
+      let setProperty = function (mode: string, string: string) {
+        if (mode === "VERSION") {
+          let match = string.match(/^\-\s*(.*)$/m);
+          if (match) {
+            version = match[1];
+          }
+        } else if (mode === "ALPHABET") {
+          let match = string.match(/^\-\s*(.*)$/m);
+          if (match) {
+            alphabetRule = match[1];
+          }
+        } else if (mode === "REVISION") {
+          revisions = outerThis.deserializeRevisions(string);
         }
-      } else if (mode === "ALPHABET") {
-        let match = string.match(/^\-\s*(.*)$/m);
-        if (match) {
-          alphabetRule = match[1];
+      };
+      for (let i = 1 ; i < lines.length ; i ++) {
+        let line = lines[i];
+        let headerMatch = line.match(/^!(\w+)/);
+        if (headerMatch) {
+          if (!before) {
+            setProperty(currentMode, currentString);
+          }
+          before = false;
+          currentMode = headerMatch[1];
+          currentString = "";
+        } else {
+          currentString += line + "\n";
         }
-      } else if (mode === "REVISION") {
-        revisions = outerThis.deserializeRevisions(string);
       }
-    };
-    for (let line of lines) {
-      let headerMatch = line.match(/^!(\w+)/);
-      if (headerMatch) {
-        if (!before) {
-          setProperty(currentMode, currentString);
-        }
-        before = false;
-        currentMode = headerMatch[1];
-        currentString = "";
+      if (!before) {
+        setProperty(currentMode, currentString);
+      }
+      if (version !== undefined && alphabetRule !== undefined && revisions !== undefined) {
+        let settings = new DictionarySettings(version, alphabetRule, revisions);
+        return settings;
       } else {
-        currentString += line + "\n";
+        throw new ParseError("insufficientDictionarySettings", "there are not enough sections in the dictionary settings");
       }
-    }
-    if (!before) {
-      setProperty(currentMode, currentString);
-    }
-    if (version !== undefined && alphabetRule !== undefined && revisions !== undefined) {
-      let settings = new DictionarySettings(version, alphabetRule, revisions);
-      return settings;
     } else {
-      throw new ParseError("insufficientDictionarySettings", "there are not enough sections in the dictionary settings");
+      throw new ParseError("noDictionarySettingsHeader", "no header");
     }
   }
 
@@ -132,17 +138,23 @@ export class Deserializer {
 
   public deserializeMarkers(string: string): Markers {
     let lines = string.trim().split(/\r\n|\r|\n/);
-    let rawMarkers = new Map<string, Array<Marker>>();
-    for (let line of lines) {
-      if (line.trim() !== "" && line.trim() !== "!MARKER") {
-        let [uniqueName, wordMarkers] = this.deserializeWordMarker(line.trim());
-        if (wordMarkers.length > 0) {
-          rawMarkers.set(uniqueName, wordMarkers);
+    let match = lines[0]?.match(/^\*\*/);
+    if (match) {
+      let rawMarkers = new Map<string, Array<Marker>>();
+      for (let i = 1 ; i < lines.length ; i ++) {
+        let line = lines[i];
+        if (line.trim() !== "" && line.trim() !== "!MARKER") {
+          let [uniqueName, wordMarkers] = this.deserializeWordMarker(line.trim());
+          if (wordMarkers.length > 0) {
+            rawMarkers.set(uniqueName, wordMarkers);
+          }
         }
       }
+      let markers = new Markers(rawMarkers.entries());
+      return markers;
+    } else {
+      throw new ParseError("noMarkersHeader", "no header");
     }
-    let markers = new Markers(rawMarkers.entries());
-    return markers;
   }
 
   public deserializeWordMarker(string: string): [string, Array<Marker>] {

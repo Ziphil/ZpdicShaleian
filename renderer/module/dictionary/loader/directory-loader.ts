@@ -82,10 +82,12 @@ export class DirectoryLoader extends Loader {
     let promises = otherLocalPaths.map(async (otherLocalPath) => {
       let otherPath = joinPath(this.path, otherLocalPath);
       let string = await fs.readFile(otherPath, {encoding: "utf-8"});
-      if (string.includes("!VERSION")) {
-        settingsPath = otherPath;
-      } else if (string.includes("!MARKER")) {
-        markersPath = otherPath;
+      if (string.match(/^\*\*/m)) {
+        if (string.match(/^!VERSION/m)) {
+          settingsPath = otherPath;
+        } else if (string.match(/^!MARKER/m)) {
+          markersPath = otherPath;
+        }
       }
     });
     await Promise.all(promises);
