@@ -35,44 +35,23 @@ export class DictionaryHandler extends Handler {
   @onAsync("loadDictionary")
   private async loadDictionary(event: IpcMainEvent, path: string): Promise<PlainDictionary> {
     let loader = new DirectoryLoader(path);
-    let promise = new Promise<PlainDictionary>((resolve, reject) => {
-      loader.on("progress", (offset, size) => {
-        this.send("getLoadDictionaryProgress", event.sender, {offset, size});
-      });
-      loader.on("end", (dictionary) => {
-        resolve(dictionary.toPlain());
-      });
-      loader.on("error", (error) => {
-        console.error(error);
-        reject(error);
-      });
-      loader.start();
-    });
-    return promise;
+    let dictionary = await loader.asPromise({onProgress: (offset, size) => {
+      this.send("getLoadDictionaryProgress", event.sender, {offset, size});
+    }});
+    return dictionary.toPlain();
   }
 
   @onAsync("saveDictionary")
-  private saveDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, path: string | null): Promise<void> {
+  private async saveDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, path: string | null): Promise<void> {
     let dictionary = Dictionary.fromPlain(plainDictionary);
     let saver = new DirectorySaver(dictionary, path);
-    let promise = new Promise<void>((resolve, reject) => {
-      saver.on("progress", (offset, size) => {
-        this.send("getSaveDictionaryProgress", event.sender, {offset, size});
-      });
-      saver.on("end", () => {
-        resolve();
-      });
-      saver.on("error", (error) => {
-        console.error(error);
-        reject(error);
-      });
-      saver.start();
-    });
-    return promise;
+    await saver.asPromise({onProgress: (offset, size) => {
+      this.send("getSaveDictionaryProgress", event.sender, {offset, size});
+    }});
   }
 
   @onAsync("exportDictionary")
-  private exportDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, path: string, type: string): Promise<void> {
+  private async exportDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, path: string, type: string): Promise<void> {
     let dictionary = Dictionary.fromPlain(plainDictionary);
     let saver = (() => {
       if (type === "oldShaleian") {
@@ -82,20 +61,9 @@ export class DictionaryHandler extends Handler {
       }
     })();
     if (saver !== undefined) {
-      let promise = new Promise<void>((resolve, reject) => {
-        saver!.on("progress", (offset, size) => {
-          this.send("getExportDictionaryProgress", event.sender, {offset, size});
-        });
-        saver!.on("end", () => {
-          resolve();
-        });
-        saver!.on("error", (error) => {
-          console.error(error);
-          reject(error);
-        });
-        saver!.start();
-      });
-      return promise;
+      await saver.asPromise({onProgress: (offset, size) => {
+        this.send("getExportDictionaryProgress", event.sender, {offset, size});
+      }});
     } else {
       throw new Error("no such saver");
     }
@@ -120,28 +88,22 @@ export class DictionaryHandler extends Handler {
       let dictionary = Dictionary.fromPlain(plainDictionary);
       let tempPath = (this.main.app.isPackaged) ? "./temp.xdc" : "./dist/temp.xdc";
       let saver = new OldShaleianSaver(dictionary, tempPath);
-      let saverPromise = new Promise<void>((resolve, reject) => {
-        saver.on("progress", (offset, size) => {
-          let ratio = (size > 0) ? (offset / size) / 2 : 0;
-          this.send("getUploadDictionaryProgress", event.sender, {offset: ratio, size: 1});
-        });
-        saver.on("end", () => {
-          resolve();
-        });
-        saver.on("error", (error) => {
-          console.error(error);
-          reject(error);
-        });
-        saver.start();
-      });
-      await saverPromise;
+      await saver.asPromise({onProgress: (offset, size) => {
+        let ratio = (size > 0) ? (offset / size) / 2 : 0;
+        this.send("getUploadDictionaryProgress", event.sender, {offset: ratio, size: 1});
+      }});
+      this.send("getUploadDictionaryProgress", event.sender, {offset: 0.5, size: 1});
       let content = await fs.readFile(tempPath, {encoding: "utf-8"});
       let params = new URLSearchParams();
       params.append("mode", "zpdic");
       params.append("password", password);
       params.append("content", content);
-      this.send("getUploadDictionaryProgress", event.sender, {offset: 0.5, size: 1});
-      await axios.post(url, params);
+      await axios.post(url, params, {onUploadProgress: (event) => {
+        if (event.total) {
+          let ratio = (event.total > 0) ? (event.loaded / event.total) / 2 + 0.5 : 0.5;
+          this.send("getUploadDictionaryProgress", event.sender, {offset: ratio, size: 1});
+        }
+      }});
       await fs.unlink(tempPath);
     } else {
       throw new Error("password unspecified");
