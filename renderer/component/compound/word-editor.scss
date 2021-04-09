@@ -77,11 +77,17 @@
 }
 
 .cm-s-zpshcontent .cm-date {
-  color: $cobalt3;
+  color: $violet3;
 }
 
-.cm-s-zpshcontent .cm-markup {
-  color: $pt-text-color-disabled;
+.cm-s-zpshcontent .cm-frame,
+.cm-s-zpshcontent .cm-frame-markup {
+  color: $indigo3;
+}
+
+.cm-s-zpshcontent .cm-markup,
+.cm-s-zpshcontent .cm-frame-markup {
+  opacity: 0.5;
 }
 
 .cm-s-zpshcontent .cm-escape {

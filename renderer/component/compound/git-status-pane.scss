@@ -62,6 +62,6 @@ $zpgsp-status-colors: (
 
 @each $type, $color in $zpgsp-status-colors {
   .zpgsp-list >li.zpgsp-#{$type} .zpgsp-extension {
-    color: rgba($color, 0.6);
+    color: rgba($color, 0.5);
   }
 }

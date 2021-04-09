@@ -108,7 +108,7 @@ export class DictionarySettingsEditor extends Component<Props, State> {
         <CodeMirror
           className="zpdse-revision"
           value={settings.revisionString}
-          options={{theme: "zpshcontent", mode: {name: "shcontent"}, lineWrapping: true}}
+          options={{theme: "zpshcontent", mode: {name: "shrevision"}, lineWrapping: true}}
           onBeforeChange={this.setSettings((editor, data, value) => settings.revisionString = value)}
           editorDidMount={this.contentEditorDidMount.bind(this)}
         />
