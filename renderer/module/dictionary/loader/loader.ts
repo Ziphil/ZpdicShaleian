@@ -51,7 +51,7 @@ export abstract class Loader extends EventEmitter {
     if (event === "progress") {
       let date = new Date();
       let lastDate = this.lastProgressDate;
-      if (lastDate === null || date.getTime() - lastDate.getTime() >= 200) {
+      if (lastDate === null || date.getTime() - lastDate.getTime() >= 100) {
         let result = super.emit(event, ...args);
         this.lastProgressDate = date;
         return result;
