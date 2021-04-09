@@ -28,12 +28,6 @@ import {
 @component()
 export class WordList extends Component<Props, State> {
 
-  // public componentDidUpdate(previousProps: any): void {
-  //   if (this.props.words !== previousProps.words || this.props.page !== previousProps.page) {
-  //     document.getElementById("word-list-container")!.scrollTop = 0;
-  //   }
-  // }
-
   private handlePageSet(page: number) {
     if (this.props.onPageSet) {
       this.props.onPageSet(page);
