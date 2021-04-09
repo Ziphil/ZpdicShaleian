@@ -149,7 +149,7 @@ export class FileNameResolver {
       }
     };
     let settingsBaseName = "#SETTINGS";
-    let markersBaseName = "#MARKER";
+    let markersBaseName = "#MARKERS";
     let resolver = new FileNameResolver(resolveWordBaseName, settingsBaseName, markersBaseName);
     return resolver;
   }
