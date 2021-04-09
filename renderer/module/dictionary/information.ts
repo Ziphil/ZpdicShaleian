@@ -31,7 +31,7 @@ export class PhraseInformation<S> {
   public readonly date: number | null;
   public readonly hidden: boolean;
 
-  public constructor(expression: S, equivalents: Array<S>, text: S | null, date: number | null, hidden: boolean) {
+  public constructor(expression: S, equivalents: ReadonlyArray<S>, text: S | null, date: number | null, hidden: boolean) {
     this.kind = "phrase";
     this.expression = expression;
     this.equivalents = equivalents;

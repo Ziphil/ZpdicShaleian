@@ -12,7 +12,7 @@ export class ParsedWord<S> {
   public readonly date: number;
   public readonly parts: Readonly<Parts<S>>;
 
-  public constructor(name: string, uniqueName: string, date: number, parts: Parts<S>) {
+  public constructor(name: string, uniqueName: string, date: number, parts: Readonly<Parts<S>>) {
     this.name = name;
     this.uniqueName = uniqueName;
     this.date = date;

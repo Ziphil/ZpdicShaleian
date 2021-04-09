@@ -18,7 +18,7 @@ export class Section<S> {
   public readonly informations: ReadonlyArray<Information<S>>;
   public readonly relations: ReadonlyArray<Relation<S>>;
 
-  public constructor(lexicalCategory: string | null, equivalents: Array<Equivalent<S>>, informations: Array<Information<S>>, relations: Array<Relation<S>>) {
+  public constructor(lexicalCategory: string | null, equivalents: ReadonlyArray<Equivalent<S>>, informations: ReadonlyArray<Information<S>>, relations: ReadonlyArray<Relation<S>>) {
     this.lexicalCategory = lexicalCategory;
     this.equivalents = equivalents;
     this.informations = informations;

@@ -9,7 +9,7 @@ export class Part<S> {
 
   public readonly sections: ReadonlyArray<Section<S>>;
 
-  public constructor(sections: Array<Section<S>>) {
+  public constructor(sections: ReadonlyArray<Section<S>>) {
     this.sections = sections;
   }
 
