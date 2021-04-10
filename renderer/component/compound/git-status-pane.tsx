@@ -40,12 +40,16 @@ export class GitStatusPane extends Component<Props, State> {
     let itemNodes = entries.map((file, index) => {
       let match = file.names.to.match(/^(.+)(\.\w+)$/);
       let [fileBaseName, extension] = (match !== null) ? [match[1], match[2]] : [file.names.to, ""];
-      if (file.insertions !== undefined && file.deletions !== undefined) {
+      let insertions = file.insertions;
+      let deletions = file.deletions;
+      if (insertions !== undefined && deletions !== undefined) {
+        let insertionString = (insertions > 99) ? "+∞" : "+" + insertions;
+        let deletionString = (deletions > 99) ? "−∞" : "−" + deletions;
         let itemNode = (
           <li className={`zpgsp-list-item zpgsp-${file.type}`} key={index}>
             <span className="zpgsp-type">{this.trans(`gitStatusPane.${file.type}`)}</span>
             <span className="zpgsp-diff">
-              <span className="zpgsp-insertion">+{file.insertions}</span><span className="zpgsp-deletion">−{file.deletions}</span>
+              <span className="zpgsp-insertion">{insertionString}</span><span className="zpgsp-deletion">{deletionString}</span>
             </span>
             <Divider/>
             <span className="zpgsp-base-name">{fileBaseName}</span>
