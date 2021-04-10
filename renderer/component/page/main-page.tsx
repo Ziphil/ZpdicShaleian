@@ -412,13 +412,17 @@ export class MainPage extends Component<Props, State> {
   private async execGitPush(): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
+      let options = {width: 480, height: 320, minWidth: 320, minHeight: 240, type: "toolbar"};
       let path = dictionary.path;
-      try {
-        await this.sendAsync("execGitPush", path);
-        CustomToaster.show({message: this.trans("mainPage.succeedExecGitPush"), icon: "tick", intent: "success"});
-      } catch (error) {
-        console.error(error);
-        CustomToaster.show({message: this.trans("mainPage.failExecGitPush"), icon: "error", intent: "danger"});
+      let data = await this.createWindowAsync("gitPush", {path}, options);
+      if (data !== null) {
+        try {
+          await this.sendAsync("execGitPush", path);
+          CustomToaster.show({message: this.trans("mainPage.succeedExecGitPush"), icon: "tick", intent: "success"});
+        } catch (error) {
+          console.error(error);
+          CustomToaster.show({message: this.trans("mainPage.failExecGitPush"), icon: "error", intent: "danger"});
+        }
       }
     }
   }
@@ -426,12 +430,16 @@ export class MainPage extends Component<Props, State> {
   private async uploadDictionary(): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      try {
-        await this.sendAsync("uploadDictionary", dictionary.toPlain());
-        CustomToaster.show({message: this.trans("mainPage.succeedUploadDictionary"), icon: "tick", intent: "success"}, "uploadDictionary");
-      } catch (error) {
-        console.error(error);
-        CustomToaster.show({message: this.trans("mainPage.failUploadDictionary"), icon: "error", intent: "danger"}, "uploadDictionary");
+      let options = {width: 480, height: 320, minWidth: 320, minHeight: 240, type: "toolbar"};
+      let data = await this.createWindowAsync("uploadDictionary", {}, options);
+      if (data !== null) {
+        try {
+          await this.sendAsync("uploadDictionary", dictionary.toPlain());
+          CustomToaster.show({message: this.trans("mainPage.succeedUploadDictionary"), icon: "tick", intent: "success"}, "uploadDictionary");
+        } catch (error) {
+          console.error(error);
+          CustomToaster.show({message: this.trans("mainPage.failUploadDictionary"), icon: "error", intent: "danger"}, "uploadDictionary");
+        }
       }
     }
   }

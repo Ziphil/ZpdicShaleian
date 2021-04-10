@@ -130,8 +130,8 @@ export class DictionarySettingsEditor extends Component<Props, State> {
             <Tab id="revision" title={this.trans("dictionarySettingsEditor.revision")} panel={revisionNode}/>
           </Tabs>
           <div className="zpdse-editor-button zp-editor-button">
-            <Button text={this.trans("dictionarySettingsEditor.cancel")} onClick={this.handleCancel.bind(this)}/>
-            <Button text={this.trans("dictionarySettingsEditor.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
+            <Button text={this.trans("common.cancel")} onClick={this.handleCancel.bind(this)}/>
+            <Button text={this.trans("common.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
           </div>
         </HotKeys>
       </div>

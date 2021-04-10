@@ -83,8 +83,8 @@ export class GitCommitExecutor extends Component<Props, State> {
             <GitStatusPane path={this.props.path}/>
           </div>
           <div className="zpgce-editor-button zp-editor-button">
-            <Button text={this.trans("gitCommitExecutor.cancel")} onClick={this.handleCancel.bind(this)}/>
-            <Button text={this.trans("gitCommitExecutor.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
+            <Button text={this.trans("common.cancel")} onClick={this.handleCancel.bind(this)}/>
+            <Button text={this.trans("common.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
           </div>
         </HotKeys>
       </div>

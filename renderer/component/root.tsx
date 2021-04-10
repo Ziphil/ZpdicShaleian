@@ -21,7 +21,9 @@ import {
   DictionarySettingsPage,
   EditorPage,
   GitCommitPage,
-  MainPage
+  GitPushPage,
+  MainPage,
+  UploadDictionaryPage
 } from "./page";
 import {
   GlobalStore
@@ -84,6 +86,10 @@ export class Root extends Component<Props, State> {
         return <DictionarySettingsPage {...props}/>;
       } else if (mode === "gitCommit") {
         return <GitCommitPage {...props}/>;
+      } else if (mode === "gitPush") {
+        return <GitPushPage {...props}/>;
+      } else if (mode === "uploadDictionary") {
+        return <UploadDictionaryPage {...props}/>;
       } else {
         return <div/>;
       }

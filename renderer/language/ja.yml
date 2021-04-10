@@ -41,20 +41,18 @@ common:
   languageShort:
     ja: "JA"
     en: "EN"
+  cancel: "キャンセル"
+  confirm: "決定"
 
 dictionarySettingsEditor:
   basic: "基本"
   revision: "変更履歴"
   version: "バージョン"
   alphabetRule: "アルファベット順"
-  cancel: "キャンセル"
-  confirm: "決定"
   failDeserializeRevisions: >-
     変更履歴の記述に誤りがあります。
 gitCommitExecutor:
   message: "コミットメッセージ"
-  cancel: "キャンセル"
-  confirm: "決定"
   emptyMessage: >-
     コミットメッセージが空です。
 gitStatusPane:

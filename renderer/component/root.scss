@@ -28,10 +28,7 @@ body {
 .zp-root {
   height: 100vh;
   padding: $zp-page-margin;
-}
-
-.zp-scroll-root {
-  height: auto;
+  padding-bottom: 0px;
 }
 
 .zp-navbar-root {
