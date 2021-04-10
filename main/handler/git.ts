@@ -32,8 +32,19 @@ export class GitHandler extends Handler {
     }
   }
 
+  @onAsync("execGitReset")
+  private async execGitReset(event: IpcMainEvent, path: string): Promise<void> {
+    try {
+      let git = simpleGit(path);
+      await git.reset();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   @onAsync("execGitCommit")
-  private async execGitCommit(event: IpcMainEvent, path: string, message?: string): Promise<void> {
+  private async execGitCommit(event: IpcMainEvent, path: string, message: string | null): Promise<void> {
     try {
       let git = simpleGit(path);
       let nextMessage = message || this.main.settings.defaultCommitMessage;

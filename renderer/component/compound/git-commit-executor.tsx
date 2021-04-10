@@ -37,10 +37,10 @@ export class GitCommitExecutor extends Component<Props, State> {
   private messageRef: RefObject<HTMLInputElement> = createRef();
 
   public async componentDidMount(): Promise<void> {
-    this.messageRef.current?.focus();
     let settings = await this.sendAsync("getSettings");
     let message = settings.defaultCommitMessage ?? "";
     this.setState({message});
+    this.messageRef.current?.focus();
   }
 
   private handleCancel(event: MouseEvent<HTMLElement>): void {
