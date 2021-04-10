@@ -5,7 +5,8 @@ $zpgsp-marker-width: 5px;
 $zpgsp-blank-margin: $pt-grid-size / 2;
 
 $zpgsp-status-colors: (
-  added: $cobalt3,
+  untracked: $cobalt3,
+  created: $cobalt3,
   modified: $forest3,
   renamed: $violet3,
   deleted: $vermilion3

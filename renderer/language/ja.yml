@@ -59,7 +59,8 @@ gitCommitExecutor:
     コミットメッセージが空です。
 gitStatusPane:
   change: "変更ファイル"
-  added: "A"
+  untracked: "U"
+  created: "A"
   modified: "M"
   renamed: "R"
   deleted: "D"

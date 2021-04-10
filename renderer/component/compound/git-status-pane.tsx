@@ -32,10 +32,10 @@ export class GitStatusPane extends Component<Props, State> {
     }
   }
 
-  private renderItem(type: "added" | "modified" | "renamed" | "deleted"): ReactNode {
+  private renderItem(type: "untracked" | "created" | "modified" | "renamed" | "deleted"): ReactNode {
     let status = this.state.status;
     if (status !== null) {
-      let data = (type === "added") ? status["not_added"] : (type === "renamed") ? status[type].map((spec) => spec.to) : status[type];
+      let data = (type === "untracked") ? status["not_added"] : (type === "renamed") ? status[type].map((spec) => spec.to) : status[type];
       let itemNodes = data.map((fileName, index) => {
         let match = fileName.match(/^(.+)(\.\w+)$/);
         let [fileBaseName, extension] = (match !== null) ? [match[1], match[2]] : [fileName, ""];
@@ -55,15 +55,13 @@ export class GitStatusPane extends Component<Props, State> {
   };
 
   private renderItemList(): ReactNode {
-    let createdNodes = this.renderItem("added");
+    let untrackedNodes = this.renderItem("untracked");
     let modifiedNodes = this.renderItem("modified");
-    let renamedNodes = this.renderItem("renamed");
     let deletedNodes = this.renderItem("deleted");
     let node = (
       <ul className="zpgsp-list">
-        {createdNodes}
+        {untrackedNodes}
         {modifiedNodes}
-        {renamedNodes}
         {deletedNodes}
       </ul>
     );
