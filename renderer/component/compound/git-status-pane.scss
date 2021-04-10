@@ -49,6 +49,7 @@ $zpgsp-diff-colors: (
   margin-right: $pt-grid-size / 2;
   padding: 0px $pt-grid-size * 0.3;
   min-width: $pt-grid-size * 1.6;
+  max-width: $pt-grid-size * 1.6;
   min-height: $pt-grid-size * 0.8;
   justify-content: center;
 }
