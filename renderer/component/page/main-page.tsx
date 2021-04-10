@@ -134,6 +134,7 @@ export class MainPage extends Component<Props, State> {
         this.updateWords();
       });
     } catch (error) {
+      console.error(error);
       CustomToaster.show({message: this.trans("mainPage.failLoadDictionary"), icon: "error", intent: "danger"});
     }
   }
@@ -146,6 +147,7 @@ export class MainPage extends Component<Props, State> {
         this.setState({changed: false});
         CustomToaster.show({message: this.trans("mainPage.succeedSaveDictionary"), icon: "tick", intent: "success"}, "saveDictionary");
       } catch (error) {
+        console.error(error);
         CustomToaster.show({message: this.trans("mainPage.failLoadDictionary"), icon: "error", intent: "danger"}, "saveDictionary");
       }
     }
@@ -167,6 +169,7 @@ export class MainPage extends Component<Props, State> {
           await this.sendAsync("exportDictionary", dictionary.toPlain(), path, type);
           CustomToaster.show({message: this.trans("mainPage.succeedExportDictionary"), icon: "tick", intent: "success"}, "exportDictionary");
         } catch (error) {
+          console.error(error);
           CustomToaster.show({message: this.trans("mainPage.failExportDictionary"), icon: "tick", intent: "danger"}, "exportDictionary");
         }
       }
@@ -400,6 +403,7 @@ export class MainPage extends Component<Props, State> {
           await this.sendAsync("execGitCommit", path, message);
           CustomToaster.show({message: this.trans("mainPage.succeedExecGitCommit"), icon: "tick", intent: "success"});
         } catch (error) {
+          console.error(error);
           CustomToaster.show({message: this.trans("mainPage.failExecGitCommit"), icon: "error", intent: "danger"});
         }
       }
@@ -414,6 +418,7 @@ export class MainPage extends Component<Props, State> {
         await this.sendAsync("execGitPush", path);
         CustomToaster.show({message: this.trans("mainPage.succeedExecGitPush"), icon: "tick", intent: "success"});
       } catch (error) {
+        console.error(error);
         CustomToaster.show({message: this.trans("mainPage.failExecGitPush"), icon: "error", intent: "danger"});
       }
     }
@@ -426,6 +431,7 @@ export class MainPage extends Component<Props, State> {
         await this.sendAsync("uploadDictionary", dictionary.toPlain());
         CustomToaster.show({message: this.trans("mainPage.succeedUploadDictionary"), icon: "tick", intent: "success"}, "uploadDictionary");
       } catch (error) {
+        console.error(error);
         CustomToaster.show({message: this.trans("mainPage.failUploadDictionary"), icon: "error", intent: "danger"}, "uploadDictionary");
       }
     }
