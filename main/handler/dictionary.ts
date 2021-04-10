@@ -38,6 +38,9 @@ export class DictionaryHandler extends Handler {
     let dictionary = await loader.asPromise({onProgress: (offset, size) => {
       this.send("getLoadDictionaryProgress", event.sender, {offset, size});
     }});
+    if (dictionary.path !== null) {
+      this.main.settings.defaultDictionaryPath = dictionary.path;
+    }
     return dictionary.toPlain();
   }
 

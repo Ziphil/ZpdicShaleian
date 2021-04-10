@@ -129,7 +129,6 @@ export class MainPage extends Component<Props, State> {
     try {
       let plainDictionary = await this.sendAsync("loadDictionary", path);
       let dictionary = Dictionary.fromPlain(plainDictionary);
-      this.sendAsync("changeSettings", "defaultDictionaryPath", path);
       this.setState({dictionary}, () => {
         this.updateWords();
       });
