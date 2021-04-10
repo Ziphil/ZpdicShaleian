@@ -26,9 +26,10 @@ body {
 }
 
 .zp-root {
-  height: 100vh;
+  min-height: 100vh;
   padding: $zp-page-margin;
-  padding-bottom: 0px;
+  display: flex;
+  flex-direction: column;
 }
 
 .zp-navbar-root {

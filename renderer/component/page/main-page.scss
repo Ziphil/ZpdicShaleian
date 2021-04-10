@@ -4,7 +4,6 @@
 .zpmnp-root {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 .zpmnp-search-form-container {
@@ -29,9 +28,12 @@
   padding-bottom: $zp-page-margin;
   padding-left: $zp-page-margin;
   padding-right: $zp-page-margin;
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
   flex-basis: 0;
   overflow-y: scroll;
+  position: relative;
 }
 
 .zpmnp-save-progress-bar {

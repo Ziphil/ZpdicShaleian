@@ -11,13 +11,14 @@
   margin-top: -$pt-grid-size;
 }
 
+.zp-editor,
 .zp-editor >div,
 .zp-editor >div >.bp3-tabs,
 .zp-editor .bp3-tab-panel,
 .zp-editor .bp3-tab-panel >* {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .zp-editor .bp3-tab-panel[aria-hidden="true"] {
@@ -26,7 +27,6 @@
 
 .zp-editor-button {
   margin-top: $pt-grid-size * 2;
-  margin-bottom: $pt-grid-size * 2;
   display: flex;
   justify-content: flex-end;
 }
