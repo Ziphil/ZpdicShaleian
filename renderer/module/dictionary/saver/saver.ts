@@ -14,7 +14,7 @@ export abstract class Saver extends EventEmitter {
   protected readonly path: string;
   private lastProgressDate: Date | null = null;
 
-  public constructor(dictionary: Dictionary, path?: string | null) {
+  public constructor(dictionary: Dictionary, path: string | null) {
     super();
     let nextPath = path ?? dictionary.path;
     if (nextPath !== null && nextPath !== undefined) {

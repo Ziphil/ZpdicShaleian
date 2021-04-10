@@ -35,7 +35,7 @@ export class DirectorySaver extends Saver {
   private deleteSize: number = 0;
   private deleteCount: number = 0;
 
-  public constructor(dictionary: Dictionary, path?: string | null, resolver?: FileNameResolver) {
+  public constructor(dictionary: Dictionary, path: string | null, resolver?: FileNameResolver) {
     super(dictionary, path);
     this.serializer = new Serializer();
     this.resolver = resolver ?? FileNameResolver.createDefault();
