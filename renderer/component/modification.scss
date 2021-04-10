@@ -1,12 +1,6 @@
 @charset "utf-8";
 
 
-body {
-  background-color: $pt-app-background-color;
-  font-feature-settings: "palt" 1, "pkna" 1, "ss01" 1 !important;
-  user-select: none;
-}
-
 .bp3-popover2-backdrop {
   background-color: rgba(255, 255, 255, 0);
   background: rgba(255, 255, 255, 0);

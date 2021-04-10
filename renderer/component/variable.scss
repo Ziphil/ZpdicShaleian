@@ -1,9 +1,23 @@
 @charset "utf-8";
 
 
-$pt-font-family: "Linux Libertine G", "Times New Roman", "Source Han Serif", "IPA P明朝", "IPAex明朝", "BIZ UDPMincho", "YuMincho", "Yu Mincho", serif;
-$pt-font-family-sans: "FreeSans", "Arial", "Source Hans Sans", "IPA Pゴシック", "IPAexゴシック", "BIZ UDPGothic", "YuGothic", "Yu Gothic", sans-serif;
-$pt-font-family-monospace: "Iosevka Slab", "Source Han Sans Regular", monospace;
+$pt-font-family: "Segoe UI", "Yu Gothic UI", "Meiryo UI", sans-serif;
+$pt-font-family-sans: "Segoe UI", "Yu Gothic UI", "Meiryo UI", sans-serif;
+$pt-font-family-monospace: "Mgen+ 1m", monospace;
+$zp-font-feature-settings: "palt" 0, "pkna" 0;
+
+@if false {
+  $pt-font-family: "Linux Libertine G", "Times New Roman", "Source Han Serif", "IPA P明朝", "IPAex明朝", serif;
+  $pt-font-family-sans: "FreeSans", "Arial", "Source Hans Sans", "IPA Pゴシック", "IPAexゴシック", sans-serif;
+  $pt-font-family-monospace: "Iosevka Slab", "Source Han Sans Regular", monospace;
+  $zp-font-feature-settings: "palt" 1, "pkna" 1, "ss01" 1;
+}
+@if true {
+  $pt-font-family: "Times New Roman", "IPAex明朝", serif;
+  $pt-font-family-sans: "Arial", "IPAexゴシック", sans-serif;
+  $pt-font-family-monospace: "Consolas", "IPAexゴシック", monospace;
+  $zp-font-feature-settings: "palt" 1, "pkna" 1;
+}
 
 $pt-grid-size: 10px;
 

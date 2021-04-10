@@ -19,6 +19,12 @@
 @import "./page/main-page.scss";
 
 
+body {
+  background-color: $pt-app-background-color;
+  font-feature-settings: $zp-font-feature-settings !important;
+  user-select: none;
+}
+
 .zp-root {
   height: 100vh;
   padding: $zp-page-margin;
