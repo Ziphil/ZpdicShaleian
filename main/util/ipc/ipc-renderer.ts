@@ -5,6 +5,7 @@ import {
   ipcRenderer as electronIpcRenderer
 } from "electron";
 import {
+  deserializeError,
   serializeError
 } from "serialize-error";
 import {
@@ -23,7 +24,7 @@ export class PromisifiedIpcRenderer {
     let promise = new Promise((resolve, reject) => {
       electronIpcRenderer.once(replyChannel, (event, exitCode, data) => {
         if (exitCode !== 0) {
-          reject(data);
+          reject(deserializeError(data));
         } else {
           resolve(data);
         }

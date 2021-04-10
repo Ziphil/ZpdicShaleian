@@ -6,6 +6,7 @@ import {
   ipcMain as electronIpcMain
 } from "electron";
 import {
+  deserializeError,
   serializeError
 } from "serialize-error";
 import {
@@ -24,7 +25,7 @@ export class PromisifiedIpcMain {
     let promise = new Promise((resolve, reject) => {
       electronIpcMain.once(replyChannel, (event, exitCode, data) => {
         if (exitCode !== 0) {
-          reject(data);
+          reject(deserializeError(data));
         } else {
           resolve(data);
         }
