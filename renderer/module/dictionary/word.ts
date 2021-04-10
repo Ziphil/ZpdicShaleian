@@ -10,6 +10,10 @@ import {
   ValidationError
 } from "./error";
 import {
+  Marker,
+  Markers
+} from "./marker";
+import {
   ParsedWord
 } from "./parsed-word";
 import {
@@ -20,7 +24,7 @@ import {
 
 export class Word implements PlainWord {
 
-  private dictionary: Dictionary | null = null;
+  public dictionary?: Dictionary;
   public uid: string;
   public name!: string;
   public uniqueName: string;
@@ -34,7 +38,7 @@ export class Word implements PlainWord {
     this.uniqueName = uniqueName;
     this.date = date;
     this.contents = contents;
-    this.update();
+    this.update(false);
   }
 
   public static createEmpty(): Word {
@@ -62,22 +66,17 @@ export class Word implements PlainWord {
     return {uid, uniqueName, date, contents};
   }
 
-  public toParsed<S, E>(resolver: MarkupResolver<S, E>): ParsedWord<S> {
-    let parser = new Parser(resolver);
-    let parsedWord = parser.parse(this);
-    return parsedWord;
-  }
-
+  // この単語オブジェクトが属する辞書オブジェクトを設定します。
+  // ローダーなどを通さずに手動で単語オブジェクトを生成した際は、必ずこのメソッドを使って辞書オブジェクトを設定してください。
   public setDictionary(dictionary: Dictionary): void {
     this.dictionary = dictionary;
     this.updateComparisonString();
   }
 
   public copy(): Word {
+    this.ensureDictionary();
     let word = new Word(this.uniqueName, this.date, this.contents);
-    if (this.dictionary !== null) {
-      word.setDictionary(this.dictionary);
-    }
+    word.setDictionary(this.dictionary);
     return word;
   }
 
@@ -87,7 +86,7 @@ export class Word implements PlainWord {
       this.uniqueName = newWord.uniqueName;
       this.date = newWord.date;
       this.contents = Object.fromEntries(Object.entries(newWord.contents).map(([language, content]) => [language, content?.trim()]));
-      this.update();
+      this.update(true);
     } else {
       throw new ValidationError(errorType);
     }
@@ -101,10 +100,23 @@ export class Word implements PlainWord {
     }
   }
 
-  public update(): void {
+  public get markers(): Array<Marker> {
+    this.ensureDictionary();
+    let markers = this.dictionary.markers.get(this.uniqueName);
+    return markers;
+  }
+
+  public toggleMarker(marker: Marker): void {
+    this.ensureDictionary();
+    this.dictionary.markers.toggle(this.uniqueName, marker);
+  }
+
+  private update(full: boolean): void {
     this.updateName();
     this.updateEquivalentNames();
-    this.updateComparisonString();
+    if (full) {
+      this.updateComparisonString();
+    }
   }
 
   private updateName(): void {
@@ -133,44 +145,47 @@ export class Word implements PlainWord {
   }
 
   private updateComparisonString(): void {
+    this.ensureDictionary();
     let comparisonString = "";
-    let alphabetRule = this.dictionary?.settings.alphabetRule;
-    if (alphabetRule !== undefined) {
-      let apostrophe = alphabetRule.includes("'");
-      for (let i = 0 ; i < this.uniqueName.length ; i ++) {
-        let char = this.uniqueName.charAt(i);
-        if ((apostrophe || char !== "'") && char !== "-" && char !== "+" && char !== "~") {
-          let position = alphabetRule.indexOf(char);
-          if (position >= 0) {
-            comparisonString += String.fromCodePoint(position + 200);
-          } else {
-            comparisonString += String.fromCodePoint(1000);
-          }
+    let alphabetRule = this.dictionary.settings.alphabetRule;
+    let apostrophe = alphabetRule.includes("'");
+    for (let i = 0 ; i < this.uniqueName.length ; i ++) {
+      let char = this.uniqueName.charAt(i);
+      if ((apostrophe || char !== "'") && char !== "-" && char !== "+" && char !== "~") {
+        let position = alphabetRule.indexOf(char);
+        if (position >= 0) {
+          comparisonString += String.fromCodePoint(position + 200);
+        } else {
+          comparisonString += String.fromCodePoint(1000);
         }
       }
-      let match = this.uniqueName.match(/^(\+)?(')?(.+?)(')?(\+)?(~*)$/);
-      if (match) {
-        if (match[2]) {
-          comparisonString += String.fromCodePoint(150);
-        }
-        if (match[4]) {
-          comparisonString += String.fromCodePoint(151);
-        }
-        if (match[1]) {
-          comparisonString += String.fromCodePoint(160);
-        }
-        if (match[5]) {
-          comparisonString += String.fromCodePoint(161);
-        }
-        if (match[6].length > 0) {
-          comparisonString += String.fromCodePoint(match[6].length + 100);
-        }
-      } else {
-        throw new Error("cannot happen");
+    }
+    let match = this.uniqueName.match(/^(\+)?(')?(.+?)(')?(\+)?(~*)$/);
+    if (match) {
+      if (match[2]) {
+        comparisonString += String.fromCodePoint(150);
       }
-      this.comparisonString = comparisonString;
+      if (match[4]) {
+        comparisonString += String.fromCodePoint(151);
+      }
+      if (match[1]) {
+        comparisonString += String.fromCodePoint(160);
+      }
+      if (match[5]) {
+        comparisonString += String.fromCodePoint(161);
+      }
+      if (match[6].length > 0) {
+        comparisonString += String.fromCodePoint(match[6].length + 100);
+      }
     } else {
-      this.comparisonString = "";
+      throw new Error("cannot happen");
+    }
+    this.comparisonString = comparisonString;
+  }
+
+  private ensureDictionary(): asserts this is Word & {dictionary: Dictionary} {
+    if (!this.dictionary) {
+      throw new Error("no dictionary set");
     }
   }
 

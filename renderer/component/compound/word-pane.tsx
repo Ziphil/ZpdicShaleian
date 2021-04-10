@@ -16,6 +16,7 @@ import {
   Marker,
   MarkupResolver,
   ParsedWord,
+  Parser,
   Relation,
   Section,
   Word
@@ -200,9 +201,9 @@ export class WordPane extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let markupResolvers = this.createMarkupResolver();
-    let word = this.props.word.toParsed(markupResolvers);
-    let markers = this.props.dictionary.getMarkers(this.props.word.uniqueName);
+    let parser = new Parser(this.createMarkupResolver());
+    let word = parser.parse(this.props.word);
+    let markers = this.props.word.markers;
     let node = this.renderWord(word, markers);
     return node;
   }

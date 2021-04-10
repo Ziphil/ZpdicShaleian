@@ -83,6 +83,17 @@ export class Dictionary implements PlainDictionary {
     return word;
   }
 
+  public addWord(newWord: PlainWord, skipValidate?: boolean): void {
+    let errorType = (skipValidate) ? null : this.validateEditWord(null, newWord);
+    if (errorType === null) {
+      let newRealWord = Word.fromPlain(newWord);
+      newRealWord.setDictionary(this);
+      this.words.push(newRealWord);
+    } else {
+      throw new ValidationError(errorType);
+    }
+  }
+
   public editWord(uid: string | null, newWord: PlainWord, skipValidate?: boolean): void {
     let errorType = (skipValidate) ? null : this.validateEditWord(uid, newWord);
     if (errorType === null) {
@@ -98,6 +109,13 @@ export class Dictionary implements PlainDictionary {
       }
     } else {
       throw new ValidationError(errorType);
+    }
+  }
+
+  public deleteWord(uid: string): void {
+    let oldWordIndex = this.words.findIndex((word) => word.uid === uid);
+    if (oldWordIndex >= 0) {
+      this.words.splice(oldWordIndex, 1);
     }
   }
 
@@ -120,22 +138,6 @@ export class Dictionary implements PlainDictionary {
         return null;
       }
     }
-  }
-
-  public deleteWord(uid: string): void {
-    let oldWordIndex = this.words.findIndex((word) => word.uid === uid);
-    if (oldWordIndex >= 0) {
-      this.words.splice(oldWordIndex, 1);
-    }
-  }
-
-  public getMarkers(uniqueName: string): Array<Marker> {
-    let markers = this.markers.get(uniqueName);
-    return markers;
-  }
-
-  public toggleMarker(uniqueName: string, marker: Marker): void {
-    this.markers.toggle(uniqueName, marker);
   }
 
   public changeSettings(newSettings: PlainDictionarySettings): void {

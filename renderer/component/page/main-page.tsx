@@ -321,7 +321,7 @@ export class MainPage extends Component<Props, State> {
   private toggleWordMarker(word: Word, marker: Marker): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      dictionary.toggleMarker(word.uniqueName, marker);
+      word.toggleMarker(marker);
       this.setState({changed: true});
       this.refreshWords();
     }
