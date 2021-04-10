@@ -5,9 +5,6 @@ import {
 } from "electron";
 import simpleGit from "simple-git";
 import {
-  StatusResult
-} from "simple-git";
-import {
   handler,
   on,
   onAsync
@@ -20,12 +17,56 @@ import {
 @handler()
 export class GitHandler extends Handler {
 
-  @onAsync("execGitStatus")
-  private async execGitStatus(event: IpcMainEvent, path: string): Promise<StatusResult> {
+  @onAsync("execGitDiff")
+  private async execGitDiff(event: IpcMainEvent, path: string): Promise<Array<GitDiffEntry>> {
     try {
       let git = simpleGit(path);
-      let status = await git.status();
-      return status;
+      await git.add(".");
+      let statusResult = await git.status();
+      let result = await git.diffSummary(["--staged"]);
+      await git.reset();
+      let files = result.files;
+      let findType = function (names: {from: string | null, to: string}) {
+        if (statusResult.created.includes(names.to)) {
+          return "created";
+        } else if (statusResult.modified.includes(names.to)) {
+          return "modified";
+        } else if (statusResult.deleted.includes(names.to)) {
+          return "deleted";
+        } else if (statusResult.renamed.findIndex((renamedNames) => renamedNames.to === names.to) >= 0) {
+          return "renamed";
+        } else {
+          return "unknown";
+        }
+      };
+      let parseNameDescription = function (nameDescription: string): {from: string | null, to: string} {
+        let match;
+        if (match = nameDescription.match(/^(.*)\{(.+?)\s*=>\s*(.+?)\}$/)) {
+          let from = match[1] + "/" + match[2];
+          let to = match[1] + "/" + match[3];
+          return {from, to};
+        } else if (match = nameDescription.match(/^(.+?)\s*=>\s*(.+?)$/)) {
+          let from = match[1];
+          let to = match[2];
+          return {from, to};
+        } else {
+          let from = null;
+          let to = nameDescription;
+          return {from, to};
+        }
+      };
+      let entries = files.map((file) => {
+        let names = parseNameDescription(file.file);
+        if ("insertions" in file) {
+          let {changes, insertions, deletions} = file;
+          let type = findType(names);
+          return {type, names, changes, insertions, deletions};
+        } else {
+          let type = "binary";
+          return {type, names};
+        }
+      });
+      return entries;
     } catch (error) {
       console.error(error);
       throw error;
@@ -37,6 +78,18 @@ export class GitHandler extends Handler {
     try {
       let git = simpleGit(path);
       await git.reset();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  @onAsync("execGitAddIntent")
+  private async execGitAddIntent(event: IpcMainEvent, path: string): Promise<void> {
+    try {
+      let git = simpleGit(path);
+      let status = await git.status();
+      await git.raw("add", "--intent-to-add", ...status["not_added"]);
     } catch (error) {
       console.error(error);
       throw error;
@@ -72,3 +125,12 @@ export class GitHandler extends Handler {
   }
 
 }
+
+
+export type GitDiffEntry = {
+  type: string,
+  names: {from: string | null, to: string},
+  changes?: number,
+  insertions?: number,
+  deletions?: number
+};

@@ -1,12 +1,15 @@
 //
 
+import {
+  Divider
+} from "@blueprintjs/core";
 import * as react from "react";
 import {
   ReactNode
 } from "react";
 import {
-  StatusResult
-} from "simple-git";
+  GitDiffEntry
+} from "../../../main/handler/git";
 import {
   Component
 } from "../component";
@@ -19,50 +22,51 @@ import {
 export class GitStatusPane extends Component<Props, State> {
 
   public state: State = {
-    status: null,
+    entries: null,
     loading: true
   };
 
   public async componentDidMount(): Promise<void> {
     try {
-      let status = await this.sendAsync("execGitStatus", this.props.path);
-      this.setState({status, loading: false});
+      let entries = await this.sendAsync("execGitDiff", this.props.path);
+      this.setState({entries, loading: false});
     } catch (error) {
-      this.setState({status: null, loading: true});
+      this.setState({entries: null, loading: true});
     }
   }
 
-  private renderItem(type: "untracked" | "created" | "modified" | "renamed" | "deleted"): ReactNode {
-    let status = this.state.status;
-    if (status !== null) {
-      let data = (type === "untracked") ? status["not_added"] : (type === "renamed") ? status[type].map((spec) => spec.to) : status[type];
-      let itemNodes = data.map((fileName, index) => {
-        let match = fileName.match(/^(.+)(\.\w+)$/);
-        let [fileBaseName, extension] = (match !== null) ? [match[1], match[2]] : [fileName, ""];
+  private renderItemList(): ReactNode {
+    let entries = this.state.entries ?? [];
+    let itemNodes = entries.map((file, index) => {
+      let match = file.names.to.match(/^(.+)(\.\w+)$/);
+      let [fileBaseName, extension] = (match !== null) ? [match[1], match[2]] : [file.names.to, ""];
+      if (file.insertions !== undefined && file.deletions !== undefined) {
         let itemNode = (
-          <li className={`zpgsp-${type}`} key={`${type}-${index}`}>
-            <span className="zpgsp-type">{this.trans(`gitStatusPane.${type}`)}</span>
+          <li className={`zpgsp-list-item zpgsp-${file.type}`} key={index}>
+            <span className="zpgsp-type">{this.trans(`gitStatusPane.${file.type}`)}</span>
+            <span className="zpgsp-diff">
+              <span className="zpgsp-insertion">+{file.insertions}</span><span className="zpgsp-deletion">−{file.deletions}</span>
+            </span>
+            <Divider/>
             <span className="zpgsp-base-name">{fileBaseName}</span>
             <span className="zpgsp-extension">{extension}</span>
           </li>
         );
         return itemNode;
-      });
-      return itemNodes;
-    } else {
-      return null;
-    }
-  };
-
-  private renderItemList(): ReactNode {
-    let untrackedNodes = this.renderItem("untracked");
-    let modifiedNodes = this.renderItem("modified");
-    let deletedNodes = this.renderItem("deleted");
+      } else {
+        let itemNode = (
+          <li className="zpgsp-binary" key={index}>
+            <span className="zpgsp-type">{this.trans("gitStatusPane.binary")}</span>
+            <span className="zpgsp-base-name">{fileBaseName}</span>
+            <span className="zpgsp-extension">{extension}</span>
+          </li>
+        );
+        return itemNode;
+      }
+    });
     let node = (
       <ul className="zpgsp-list">
-        {untrackedNodes}
-        {modifiedNodes}
-        {deletedNodes}
+        {itemNodes}
       </ul>
     );
     return node;
@@ -70,10 +74,10 @@ export class GitStatusPane extends Component<Props, State> {
 
   private renderDummyItemList(): ReactNode {
     let node = (
-      <ul className="zpgsp-list">
-        <li className="bp3-skeleton">dummy</li>
-        <li className="bp3-skeleton">dummy</li>
-        <li className="bp3-skeleton">dummy</li>
+      <ul className="zpgsp-list bp3-skeleton">
+        <li className="zpgsp-list-item">dummy</li>
+        <li className="zpgsp-list-item">dummy</li>
+        <li className="zpgsp-list-item">dummy</li>
       </ul>
     );
     return node;
@@ -97,6 +101,6 @@ type Props = {
   path: string
 };
 type State = {
-  status: StatusResult | null,
+  entries: Array<GitDiffEntry> | null,
   loading: boolean
 };

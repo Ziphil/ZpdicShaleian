@@ -8,8 +8,12 @@ $zpgsp-status-colors: (
   untracked: $cobalt3,
   created: $cobalt3,
   modified: $forest3,
-  renamed: $violet3,
-  deleted: $vermilion3
+  deleted: $vermilion3,
+  renamed: $violet3
+);
+$zpgsp-diff-colors: (
+  insertion: $cobalt3,
+  deletion: $vermilion3
 );
 
 .zpgsp-label {
@@ -20,13 +24,13 @@ $zpgsp-status-colors: (
   @extend .bp3-running-text;
   margin: 0px;
   padding: 0px;
-  column-count: 2;
-  column-gap: $pt-grid-size;
   list-style-type: none;
 }
 
-.zpgsp-list >li {
+.zpgsp-list-item {
   margin-left: $zpgsp-marker-width + $zpgsp-blank-margin;
+  display: flex;
+  align-items: baseline;
   &::before {
     width: $zpgsp-marker-width;
     margin-right: $zpgsp-blank-margin;
@@ -36,8 +40,8 @@ $zpgsp-status-colors: (
   }
 }
 
-.zpgsp-list >li.bp3-skeleton {
-  margin: 0px;
+.zpgsp-list-item .bp3-divider {
+  align-self: normal;
 }
 
 .zpgsp-type {
@@ -50,19 +54,26 @@ $zpgsp-status-colors: (
 }
 
 @each $type, $color in $zpgsp-status-colors {
-  .zpgsp-list >li.zpgsp-#{$type} .zpgsp-type {
+  .zpgsp-list-item.zpgsp-#{$type} .zpgsp-type {
     background-color: $color;
   }
 }
 
-@each $type, $color in $zpgsp-status-colors {
-  .zpgsp-list >li.zpgsp-#{$type} {
-    color: $color;
-  }
+.zpgsp-insertion,
+.zpgsp-deletion {
+  width: $pt-grid-size * 2.5;
+  display: inline-block;
+  text-align: right;
 }
 
-@each $type, $color in $zpgsp-status-colors {
-  .zpgsp-list >li.zpgsp-#{$type} .zpgsp-extension {
-    color: rgba($color, 0.5);
-  }
+.zpgsp-insertion {
+  color: map-get($zpgsp-diff-colors, insertion);
+}
+
+.zpgsp-deletion {
+  color: map-get($zpgsp-diff-colors, deletion);
+}
+
+.zpgsp-extension {
+  opacity: 0.5;
 }

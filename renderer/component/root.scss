@@ -24,6 +24,10 @@
   padding: $zp-page-margin;
 }
 
+.zp-scroll-root {
+  height: auto;
+}
+
 .zp-navbar-root {
   padding-top: $pt-navbar-height + $zp-page-margin + 1px;
 }

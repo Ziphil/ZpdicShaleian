@@ -28,7 +28,7 @@ export class GitCommitPage extends Component<Props, State> {
 
   public render(): ReactNode {
     let node = (
-      <div className="zpgcp-root zp-root">
+      <div className="zpgcp-root zp-scroll-root zp-root">
         <GitCommitExecutor
           path={this.props.path}
           onConfirm={this.handleConfirm.bind(this)}
