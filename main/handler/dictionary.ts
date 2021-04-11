@@ -84,10 +84,8 @@ export class DictionaryHandler extends Handler {
   }
 
   @onAsync("uploadDictionary")
-  private async uploadDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary): Promise<void> {
-    let url = this.main.settings.uploadDictionaryUrl;
-    let password = this.main.settings.uploadDictionaryPassword;
-    if (url !== undefined && password !== undefined) {
+  private async uploadDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, url: string, password: string): Promise<void> {
+    if (url !== "" && password !== "") {
       let dictionary = Dictionary.fromPlain(plainDictionary);
       let tempPath = (this.main.app.isPackaged) ? "./temp.xdc" : "./dist/temp.xdc";
       let saver = new OldShaleianSaver(dictionary, tempPath);

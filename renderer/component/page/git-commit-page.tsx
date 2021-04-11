@@ -8,7 +8,7 @@ import {
   Component
 } from "../component";
 import {
-  GitCommitExecutor
+  GitCommitChooser
 } from "../compound";
 import {
   component
@@ -29,7 +29,7 @@ export class GitCommitPage extends Component<Props, State> {
   public render(): ReactNode {
     let node = (
       <div className="zpgcp-root zp-root">
-        <GitCommitExecutor
+        <GitCommitChooser
           path={this.props.path}
           onConfirm={this.handleConfirm.bind(this)}
           onCancel={this.handleCancel.bind(this)}

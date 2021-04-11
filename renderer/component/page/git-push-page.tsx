@@ -19,7 +19,7 @@ import {
 export class GitPushPage extends Component<Props, State> {
 
   private handleConfirm(): void {
-    this.closeWindow();
+    this.closeWindow(true);
   }
 
   private handleCancel(): void {

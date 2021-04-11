@@ -51,7 +51,7 @@ dictionarySettingsEditor:
   alphabetRule: "アルファベット順"
   failDeserializeRevisions: >-
     変更履歴の記述に誤りがあります。
-gitCommitExecutor:
+gitCommitChooser:
   message: "コミットメッセージ"
   emptyMessage: >-
     コミットメッセージが空です。
@@ -107,6 +107,13 @@ mainNavbar:
   openDevTools: "デベロッパーツールを開く"
   openHelp: "ヘルプ"
   aboutApplication: "このアプリについて"
+uploadDictionaryChooser:
+  url: "アップロード先 URL"
+  password: "API キー"
+  emptyUrl: >-
+    アップロード先 URL が空です。
+  emptyPassword: >-
+    API キーが空です。
 wordEditor:
   cancel: "キャンセル"
   delete: "削除"

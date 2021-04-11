@@ -1,8 +1,5 @@
 //
 
-import {
-  Button
-} from "@blueprintjs/core";
 import * as react from "react";
 import {
   ReactNode
@@ -11,6 +8,9 @@ import {
   Component
 } from "../component";
 import {
+  UploadDictionaryChooser
+} from "../compound/upload-dictionary-chooser";
+import {
   component
 } from "../decorator";
 
@@ -18,8 +18,8 @@ import {
 @component()
 export class UploadDictionaryPage extends Component<Props, State> {
 
-  private handleConfirm(): void {
-    this.closeWindow();
+  private handleConfirm(url: string, password: string): void {
+    this.closeWindow({url, password});
   }
 
   private handleCancel(): void {
@@ -29,15 +29,10 @@ export class UploadDictionaryPage extends Component<Props, State> {
   public render(): ReactNode {
     let node = (
       <div className="zpgpp-root zp-root">
-        <div className="zp-editor">
-          <div>
-            <div style={{flexGrow: 1}}/>
-            <div className="zp-editor-button">
-              <Button text={this.trans("common.cancel")} onClick={this.handleCancel.bind(this)}/>
-              <Button text={this.trans("common.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
-            </div>
-          </div>
-        </div>
+        <UploadDictionaryChooser
+          onConfirm={this.handleConfirm.bind(this)}
+          onCancel={this.handleCancel.bind(this)}
+        />
       </div>
     );
     return node;

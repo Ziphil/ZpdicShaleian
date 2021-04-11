@@ -1,7 +1,7 @@
 //
 
 export * from "./dictionary-settings-editor";
-export * from "./git-commit-executor";
+export * from "./git-commit-chooser";
 export * from "./git-status-pane";
 export * from "./loading";
 export * from "./main-navbar";

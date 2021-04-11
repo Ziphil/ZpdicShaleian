@@ -433,8 +433,9 @@ export class MainPage extends Component<Props, State> {
       let options = {width: 480, height: 320, minWidth: 320, minHeight: 240, type: "toolbar"};
       let data = await this.createWindowAsync("uploadDictionary", {}, options);
       if (data !== null) {
+        let {url, password} = data;
         try {
-          await this.sendAsync("uploadDictionary", dictionary.toPlain());
+          await this.sendAsync("uploadDictionary", dictionary.toPlain(), url, password);
           CustomToaster.show({message: this.trans("mainPage.succeedUploadDictionary"), icon: "tick", intent: "success"}, "uploadDictionary");
         } catch (error) {
           console.error(error);

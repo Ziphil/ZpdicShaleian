@@ -28,7 +28,7 @@ import {
 
 
 @component()
-export class GitCommitExecutor extends Component<Props, State> {
+export class GitCommitChooser extends Component<Props, State> {
 
   public state: State = {
     message: ""
@@ -56,13 +56,13 @@ export class GitCommitExecutor extends Component<Props, State> {
         this.props.onConfirm(message, event);
       }
     } else {
-      CustomToaster.show({message: this.trans("gitCommitExecutor.emptyMessage"), icon: "error", intent: "danger"});
+      CustomToaster.show({message: this.trans("gitCommitChooser.emptyMessage"), icon: "error", intent: "danger"});
     }
   }
 
   private renderMessage(): ReactNode {
     let node = (
-      <FormGroup label={this.trans("gitCommitExecutor.message")} labelFor="message">
+      <FormGroup label={this.trans("gitCommitChooser.message")} labelFor="message">
         <InputGroup id="message" value={this.state.message} inputRef={this.messageRef} onChange={(event) => this.setState({message: event.target.value})}/>
       </FormGroup>
     );
