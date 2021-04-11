@@ -21,11 +21,11 @@ export class GitHandler extends Handler {
   private async execGitDiff(event: IpcMainEvent, path: string): Promise<Array<GitDiffEntry>> {
     try {
       let git = simpleGit(path);
-      await git.add(".");
+      await git.raw("add", "--all");
       let statusResult = await git.status();
-      let result = await git.diffSummary(["--staged"]);
+      let diffResult = await git.diffSummary(["--staged"]);
       await git.reset();
-      let files = result.files;
+      let files = diffResult.files;
       let findType = function (names: {from: string | null, to: string}) {
         if (statusResult.created.includes(names.to)) {
           return "created";
@@ -88,8 +88,8 @@ export class GitHandler extends Handler {
   private async execGitAddIntent(event: IpcMainEvent, path: string): Promise<void> {
     try {
       let git = simpleGit(path);
-      let status = await git.status();
-      await git.raw("add", "--intent-to-add", ...status["not_added"]);
+      let statusResult = await git.status();
+      await git.raw("add", "--intent-to-add", ...statusResult["not_added"]);
     } catch (error) {
       console.error(error);
       throw error;
@@ -102,7 +102,7 @@ export class GitHandler extends Handler {
       let git = simpleGit(path);
       let nextMessage = message || this.main.settings.defaultCommitMessage;
       if (nextMessage !== undefined && nextMessage !== "") {
-        await git.add(".");
+        await git.raw("add", "--all");
         await git.commit(nextMessage, ["--allow-empty"]);
       } else {
         throw new Error("empty message");
