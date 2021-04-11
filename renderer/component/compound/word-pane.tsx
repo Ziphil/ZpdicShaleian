@@ -105,8 +105,8 @@ export class WordPane extends Component<Props, State> {
     let exampleInformations = section.informations.filter((information) => information.kind === "example") as Array<ExampleInformation<ReactNode>>;
     let equivalentNodes = section.equivalents.filter((equivalent) => !equivalent.hidden).map((equivalent, index) => this.renderEquivalent(equivalent, index));
     let normalInformationNodes = normalInformations.map((information, index) => this.renderNormalInformation(information, index));
-    let phraseInformationNodes = this.renderPhraseInformations(phraseInformations);
-    let exampleInformationNodes = this.renderExampleInformations(exampleInformations);
+    let phraseInformationNodes = (phraseInformations.length > 0) && this.renderPhraseInformations(phraseInformations);
+    let exampleInformationNodes = (exampleInformations.length > 0) && this.renderExampleInformations(exampleInformations);
     let relationNodes = section.relations.map((relation, index) => this.renderRelation(relation, index));
     let equivalentNode = (section.equivalents.length > 0) && (
       <ul className="swp-equivalents swp-section-item swp-list">
@@ -167,28 +167,68 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderPhraseInformations(informations: Array<PhraseInformation<ReactNode>>): ReactNode {
+    let innerNodes = informations.map((information, index) => {
+      let expressionNode = (
+        <dt className="swp-phrase-expression">
+          {information.expression}
+          <span className="swp-phrease-divider">—</span>
+          {information.equivalents.join(", ")}
+        </dt>
+      );
+      let textNode = (information.text !== null) && (
+        <dd className="swp-phrase-inner-text">
+          {information.text}
+        </dd>
+      );
+      let innerNode = (
+        <Fragment key={`phrase-${index}`}>
+          {expressionNode}
+          {textNode}
+        </Fragment>
+      );
+      return innerNode;
+    });
     let node = (
       <div className="swp-information swp-section-item" key="information-phrase">
         <div className="swp-information-kind swp-small-head">
           <span className="swp-information-kind-inner swp-small-head-inner">{InformationKindUtil.getName("phrase", this.props.language)}</span>
         </div>
-        <div className="swp-information-text swp-text">
-          ?
-        </div>
+        <dl className="swp-phrase-text swp-information-text swp-text">
+          {innerNodes}
+        </dl>
       </div>
     );
     return node;
   }
 
   private renderExampleInformations(informations: Array<ExampleInformation<ReactNode>>): ReactNode {
+    let innerNodes = informations.map((information, index) => {
+      let sentenceNode = (
+        <dt className="swp-example-sentence">
+          {information.sentence}
+        </dt>
+      );
+      let translationNode = (
+        <dd className="swp-example-translation">
+          {information.translation}
+        </dd>
+      );
+      let innerNode = (
+        <Fragment key={`example-${index}`}>
+          {sentenceNode}
+          {translationNode}
+        </Fragment>
+      );
+      return innerNode;
+    });
     let node = (
       <div className="swp-information swp-section-item" key="information-example">
         <div className="swp-information-kind swp-small-head">
           <span className="swp-information-kind-inner swp-small-head-inner">{InformationKindUtil.getName("example", this.props.language)}</span>
         </div>
-        <div className="swp-information-text swp-text">
-          ?
-        </div>
+        <dl className="swp-example-text swp-information-text swp-text">
+          {innerNodes}
+        </dl>
       </div>
     );
     return node;

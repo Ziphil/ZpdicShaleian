@@ -1,6 +1,11 @@
 @charset "utf-8";
 
 
+$swp-marker-width: $pt-grid-size / 2;
+$swp-blank-margin: $pt-grid-size / 2;
+$swp-example-marker-width: $pt-grid-size * 2;
+$swp-blank-margin: $pt-grid-size / 2;
+
 $swp-marker-colors: (
   circle: $vermilion3,
   square: $cobalt3,
@@ -141,6 +146,48 @@ $swp-word-marker-shadow: inset 0px 0px 0px #{$pt-grid-size / 2} var(--marker-bac
 .swp-small-head-inner {
   padding-right: $pt-grid-size;
   border-bottom: 1px $pt-divider-black solid;
+}
+
+.swp-phrase-text,
+.swp-example-text {
+  margin: 0px;
+}
+
+.swp-phrase-expression,
+.swp-example-sentence {
+  margin-left: $swp-marker-width + $swp-blank-margin;
+  &::before {
+    width: $swp-marker-width;
+    margin-right: $swp-blank-margin;
+    margin-left: -$swp-marker-width - $swp-blank-margin;
+    color: $pt-icon-color;
+    content: "•";
+    display: inline-block;
+  }
+}
+
+.swp-phrease-divider {
+  margin: 0px $pt-grid-size / 2;
+  color: $pt-icon-color;
+}
+
+.swp-phrase-inner-text {
+  margin: 0px;
+  margin-left: $pt-grid-size;
+}
+
+.swp-example-translation {
+  margin: 0px;
+  margin-left: $swp-example-marker-width + $swp-blank-margin;
+  &::before {
+    width: $swp-example-marker-width;
+    margin-right: $swp-blank-margin;
+    margin-left: -$swp-example-marker-width - $swp-blank-margin;
+    color: $pt-icon-color;
+    text-align: right;
+    content: "└";
+    display: inline-block;
+  }
 }
 
 .swp-text {
