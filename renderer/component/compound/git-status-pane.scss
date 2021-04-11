@@ -1,9 +1,6 @@
 @charset "utf-8";
 
 
-$zpgsp-marker-width: $pt-grid-size / 2;
-$zpgsp-blank-margin: $pt-grid-size / 2;
-
 $zpgsp-status-colors: (
   untracked: $cobalt3,
   created: $cobalt3,
@@ -16,6 +13,14 @@ $zpgsp-diff-colors: (
   deletion: $vermilion3
 );
 
+.zpgsp-status .bp3-form-group {
+  margin-bottom: 0px;
+}
+
+.zpgsp-status .bp3-form-content >*:first-child {
+  margin-top: $pt-grid-size * 0.3;
+}
+
 .zpgsp-label {
   margin-bottom: $pt-grid-size / 2;
 }
@@ -27,22 +32,9 @@ $zpgsp-diff-colors: (
   list-style-type: none;
 }
 
-.zpgsp-list-item {
-  margin-left: $zpgsp-marker-width + $zpgsp-blank-margin;
-  display: flex;
-  align-items: baseline;
-  &::before {
-    width: $zpgsp-marker-width;
-    margin-right: $zpgsp-blank-margin;
-    margin-left: -$zpgsp-marker-width - $zpgsp-blank-margin;
-    color: $pt-icon-color;
-    content: "•";
-    display: inline-block;
-  }
-}
-
-.zpgsp-list-item .bp3-divider {
-  align-self: normal;
+.zpgsp-list-item .zpgsp-divider {
+  margin: $pt-grid-size / 2;
+  display: inline;
 }
 
 .zpgsp-type {
@@ -53,11 +45,15 @@ $zpgsp-diff-colors: (
   max-width: $pt-grid-size * 1.6;
   min-height: $pt-grid-size * 0.8;
   justify-content: center;
+  position: relative;
+  bottom: 1px;
 }
 
 @each $type, $color in $zpgsp-status-colors {
   .zpgsp-list-item.zpgsp-#{$type} .zpgsp-type {
-    background-color: $color;
+    color: $color;
+    box-shadow: inset border-shadow(1, $color);
+    background: none;
   }
 }
 

@@ -393,7 +393,7 @@ export class MainPage extends Component<Props, State> {
   private async execGitCommit(): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null && dictionary.path !== null) {
-      let options = {width: 480, height: 320, minWidth: 320, minHeight: 240, type: "toolbar"};
+      let options = {width: 480, height: 400, minWidth: 320, minHeight: 240, type: "toolbar"};
       let path = dictionary.path;
       let data = await this.createWindowAsync("gitCommit", {path}, options);
       if (data !== null) {

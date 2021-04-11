@@ -1,10 +1,12 @@
 //
 
 import {
-  Divider
+  Checkbox,
+  FormGroup
 } from "@blueprintjs/core";
 import * as react from "react";
 import {
+  Fragment,
   ReactNode
 } from "react";
 import {
@@ -35,7 +37,7 @@ export class GitStatusPane extends Component<Props, State> {
     }
   }
 
-  private renderItemList(): ReactNode {
+  private renderItems(): ReactNode {
     let entries = this.state.entries ?? [];
     let itemNodes = entries.map((file, index) => {
       let match = file.names.to.match(/^(.+)(\.\w+)$/);
@@ -46,53 +48,52 @@ export class GitStatusPane extends Component<Props, State> {
         let insertionString = (insertions > 99) ? "+∞" : "+" + insertions;
         let deletionString = (deletions > 99) ? "−∞" : "−" + deletions;
         let itemNode = (
-          <li className={`zpgsp-list-item zpgsp-${file.type}`} key={index}>
-            <span className="zpgsp-type">{this.trans(`gitStatusPane.${file.type}`)}</span>
-            <span className="zpgsp-diff">
-              <span className="zpgsp-insertion">{insertionString}</span><span className="zpgsp-deletion">{deletionString}</span>
+          <Checkbox key={index} checked={true}>
+            <span className={`zpgsp-list-item zpgsp-${file.type}`}>
+              <span className="zpgsp-type">{this.trans(`gitStatusPane.${file.type}`)}</span>
+              <span className="zpgsp-diff">
+                <span className="zpgsp-insertion">{insertionString}</span><span className="zpgsp-deletion">{deletionString}</span>
+              </span>
+              <span className="zpgsp-divider"/>
+              <span className="zpgsp-base-name">{fileBaseName}</span>
+              <span className="zpgsp-extension">{extension}</span>
             </span>
-            <Divider/>
-            <span className="zpgsp-base-name">{fileBaseName}</span>
-            <span className="zpgsp-extension">{extension}</span>
-          </li>
+          </Checkbox>
         );
         return itemNode;
       } else {
         let itemNode = (
-          <li className="zpgsp-binary" key={index}>
-            <span className="zpgsp-type">{this.trans("gitStatusPane.binary")}</span>
-            <span className="zpgsp-base-name">{fileBaseName}</span>
-            <span className="zpgsp-extension">{extension}</span>
-          </li>
+          <Checkbox key={index}  checked={true}>
+            <span className="zpgsp-binary">
+              <span className="zpgsp-type">{this.trans("gitStatusPane.binary")}</span>
+              <span className="zpgsp-base-name">{fileBaseName}</span>
+              <span className="zpgsp-extension">{extension}</span>
+            </span>
+          </Checkbox>
         );
         return itemNode;
       }
     });
-    let node = (
-      <ul className="zpgsp-list">
-        {itemNodes}
-      </ul>
-    );
-    return node;
+    return itemNodes;
   }
 
-  private renderDummyItemList(): ReactNode {
+  private renderDummyItems(): ReactNode {
     let node = (
-      <ul className="zpgsp-list bp3-skeleton">
-        <li className="zpgsp-list-item">dummy</li>
-        <li className="zpgsp-list-item">dummy</li>
-        <li className="zpgsp-list-item">dummy</li>
-      </ul>
+      <Fragment>
+        <Checkbox className="bp3-skeleton"/>
+        <Checkbox className="bp3-skeleton"/>
+      </Fragment>
     );
     return node;
   }
 
   public render(): ReactNode {
-    let listNode = (this.state.loading) ? this.renderDummyItemList() : this.renderItemList();
+    let itemNode = (this.state.loading) ? this.renderDummyItems() : this.renderItems();
     let node = (
       <div className="zpgsp-status">
-        <div className="zpgsp-label">{this.trans("gitStatusPane.change")}</div>
-        {listNode}
+        <FormGroup label={this.trans("gitStatusPane.change")}>
+          {itemNode}
+        </FormGroup>
       </div>
     );
     return node;
