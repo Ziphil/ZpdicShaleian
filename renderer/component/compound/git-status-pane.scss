@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 
-$zpgsp-marker-width: 5px;
+$zpgsp-marker-width: $pt-grid-size / 2;
 $zpgsp-blank-margin: $pt-grid-size / 2;
 
 $zpgsp-status-colors: (
@@ -35,6 +35,7 @@ $zpgsp-diff-colors: (
     width: $zpgsp-marker-width;
     margin-right: $zpgsp-blank-margin;
     margin-left: -$zpgsp-marker-width - $zpgsp-blank-margin;
+    color: $pt-icon-color;
     content: "•";
     display: inline-block;
   }
