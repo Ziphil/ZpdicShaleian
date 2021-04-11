@@ -11,12 +11,14 @@ import {
 import {
   Dictionary,
   Equivalent,
-  Information,
+  ExampleInformation,
   InformationKindUtil,
   Marker,
   MarkupResolver,
+  NormalInformation,
   ParsedWord,
   Parser,
+  PhraseInformation,
   Relation,
   Section,
   Word
@@ -98,8 +100,13 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderSection(section: Section<ReactNode>, index: number): ReactNode {
+    let normalInformations = section.informations.filter((information) => information.kind !== "phrase" && information.kind !== "example") as Array<NormalInformation<ReactNode>>;
+    let phraseInformations = section.informations.filter((information) => information.kind === "phrase") as Array<PhraseInformation<ReactNode>>;
+    let exampleInformations = section.informations.filter((information) => information.kind === "example") as Array<ExampleInformation<ReactNode>>;
     let equivalentNodes = section.equivalents.filter((equivalent) => !equivalent.hidden).map((equivalent, index) => this.renderEquivalent(equivalent, index));
-    let informationNodes = section.informations.map((information, index) => this.renderInformation(information, index));
+    let normalInformationNodes = normalInformations.map((information, index) => this.renderNormalInformation(information, index));
+    let phraseInformationNodes = this.renderPhraseInformations(phraseInformations);
+    let exampleInformationNodes = this.renderExampleInformations(exampleInformations);
     let relationNodes = section.relations.map((relation, index) => this.renderRelation(relation, index));
     let equivalentNode = (section.equivalents.length > 0) && (
       <ul className="swp-equivalents swp-section-item swp-list">
@@ -108,7 +115,9 @@ export class WordPane extends Component<Props, State> {
     );
     let informationNode = (section.informations.length > 0) && (
       <Fragment>
-        {informationNodes}
+        {normalInformationNodes}
+        {phraseInformationNodes}
+        {exampleInformationNodes}
       </Fragment>
     );
     let relationNode = (section.relations.length > 0) && (
@@ -143,26 +152,42 @@ export class WordPane extends Component<Props, State> {
     return node;
   }
 
-  private renderInformation(information: Information<ReactNode>, index: number): ReactNode {
-    let textNode = (() => {
-      if (information.kind === "phrase") {
-        let textNode = <Fragment>{information.expression}{" → "}{WordPane.intersperse(information.equivalents, ", ")}</Fragment>;
-        return textNode;
-      } else if (information.kind === "example") {
-        let textNode = <Fragment>{information.sentence}{" → "}{information.translation}</Fragment>;
-        return textNode;
-      } else {
-        let textNode = information.text;
-        return textNode;
-      }
-    })();
+  private renderNormalInformation(information: NormalInformation<ReactNode>, index: number): ReactNode {
     let node = (
       <div className="swp-information swp-section-item" key={`information-${index}`}>
         <div className="swp-information-kind swp-small-head">
           <span className="swp-information-kind-inner swp-small-head-inner">{InformationKindUtil.getName(information.kind, this.props.language)}</span>
         </div>
         <div className="swp-information-text swp-text">
-          {textNode}
+          {information.text}
+        </div>
+      </div>
+    );
+    return node;
+  }
+
+  private renderPhraseInformations(informations: Array<PhraseInformation<ReactNode>>): ReactNode {
+    let node = (
+      <div className="swp-information swp-section-item" key="information-phrase">
+        <div className="swp-information-kind swp-small-head">
+          <span className="swp-information-kind-inner swp-small-head-inner">{InformationKindUtil.getName("phrase", this.props.language)}</span>
+        </div>
+        <div className="swp-information-text swp-text">
+          ?
+        </div>
+      </div>
+    );
+    return node;
+  }
+
+  private renderExampleInformations(informations: Array<ExampleInformation<ReactNode>>): ReactNode {
+    let node = (
+      <div className="swp-information swp-section-item" key="information-example">
+        <div className="swp-information-kind swp-small-head">
+          <span className="swp-information-kind-inner swp-small-head-inner">{InformationKindUtil.getName("example", this.props.language)}</span>
+        </div>
+        <div className="swp-information-text swp-text">
+          ?
         </div>
       </div>
     );
