@@ -236,10 +236,20 @@ export class WordPane extends Component<Props, State> {
     let titleNode = (relation.title !== null) && (
       <span className="swp-relation-title swp-tag swp-right-margin">{relation.title}</span>
     );
+    let entryNodes = relation.entries.map((entry) => {
+      let referNode = entry.refer && <span className="swp-refer">*</span>;
+      let entryNode = (
+        <Fragment>
+          {entry.name}
+          {referNode}
+        </Fragment>
+      );
+      return entryNode;
+    });
     let node = (
       <li className="swp-relation swp-text swp-list-item" key={`relation-${index}`}>
         {titleNode}
-        {WordPane.intersperse(relation.names, ", ")}
+        {WordPane.intersperse(entryNodes, ", ")}
       </li>
     );
     return node;

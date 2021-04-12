@@ -164,8 +164,16 @@ export class Parser<S, E> {
     let match = line.match(/^\-\s*(?:<(.*?)>\s*)?(.*)$/);
     if (match) {
       let title = (match[1] !== undefined && match[1] !== "") ? match[1] : null;
-      let names = match[2].split(/\s*,\s*/).map((rawName) => this.markupParser.parse(rawName));
-      let relation = new Relation(title, names);
+      let entries = match[2].split(/\s*,\s*/).map((rawName) => {
+        if (rawName.endsWith("*")) {
+          let name = this.markupParser.parse(rawName.substring(0, rawName.length - 1));
+          return {name, refer: true};
+        } else {
+          let name = this.markupParser.parse(rawName);
+          return {name, refer: false};
+        }
+      });
+      let relation = new Relation(title, entries);
       return relation;
     } else {
       return null;

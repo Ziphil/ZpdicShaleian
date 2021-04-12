@@ -113,7 +113,7 @@ export class OldShaleianSaver extends Saver {
       for (let relation of section.relations) {
         this.stream.write("-");
         this.stream.write(`〈${relation.title}〉 `);
-        this.stream.write(relation.names.join(", "));
+        this.stream.write(relation.entries.map((entry) => entry.name + ((entry.refer) ? "*" : "")).join(", "));
         this.stream.write("\n");
       }
       this.stream.write("\n");

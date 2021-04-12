@@ -190,6 +190,10 @@ $swp-word-marker-shadow: inset 0px 0px 0px #{$pt-grid-size / 2} var(--marker-bac
   }
 }
 
+.swp-refer {
+  color: $pt-icon-color;
+}
+
 .swp-text {
   @extend .bp3-running-text;
 }
