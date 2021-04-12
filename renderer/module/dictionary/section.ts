@@ -25,4 +25,28 @@ export class Section<S> {
     this.relations = relations;
   }
 
+  public get fields(): ReadonlyArray<Field<S>> {
+    return [...this.equivalents, ...this.informations, ...this.relations];
+  }
+
 }
+
+
+export class FieldUtil {
+
+  public static isEquivalent<S>(field: Field<S>): field is Equivalent<S> {
+    return field instanceof Equivalent;
+  }
+
+  public static isInformation<S>(field: Field<S>): field is Information<S> {
+    return !(field instanceof Equivalent) && !(field instanceof Relation);
+  }
+
+  public static isRelation<S>(field: Field<S>): field is Relation<S> {
+    return field instanceof Relation;
+  }
+
+}
+
+
+export type Field<S> = Equivalent<S> | Information<S> | Relation<S>;

@@ -26,15 +26,15 @@ export class PhraseInformation<S> {
 
   public readonly kind: "phrase";
   public readonly expression: S;
-  public readonly equivalents: ReadonlyArray<S>;
+  public readonly equivalentNames: ReadonlyArray<S>;
   public readonly text: S | null;
   public readonly date: number | null;
   public readonly hidden: boolean;
 
-  public constructor(expression: S, equivalents: ReadonlyArray<S>, text: S | null, date: number | null, hidden: boolean) {
+  public constructor(expression: S, equivalentNames: ReadonlyArray<S>, text: S | null, date: number | null, hidden: boolean) {
     this.kind = "phrase";
     this.expression = expression;
-    this.equivalents = equivalents;
+    this.equivalentNames = equivalentNames;
     this.text = text;
     this.date = date;
     this.hidden = hidden;

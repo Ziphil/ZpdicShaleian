@@ -170,7 +170,7 @@ export class WordPane extends Component<Props, State> {
         <dt className="swp-phrase-expression">
           {information.expression}
           <span className="swp-phrease-divider">—</span>
-          {information.equivalents.join(", ")}
+          {information.equivalentNames.join(", ")}
         </dt>
       );
       let textNode = (information.text !== null) && (

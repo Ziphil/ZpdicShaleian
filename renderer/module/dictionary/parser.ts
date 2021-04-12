@@ -23,6 +23,7 @@ import {
   Relation
 } from "./relation";
 import {
+  FieldUtil,
   Section
 } from "./section";
 import {
@@ -74,13 +75,15 @@ export class Parser<S, E> {
         currentInformations = [];
         currentRelations = [];
       }
-      let lineData = this.parseLineData(line);
-      if (lineData instanceof Equivalent) {
-        currentEquivalents.push(lineData);
-      } else if (lineData instanceof Relation) {
-        currentRelations.push(lineData);
-      } else if (lineData !== null) {
-        currentInformations.push(lineData);
+      let field = this.parseField(line);
+      if (field !== null) {
+        if (FieldUtil.isEquivalent(field)) {
+          currentEquivalents.push(field);
+        } else if (FieldUtil.isInformation(field)) {
+          currentInformations.push(field);
+        } else {
+          currentRelations.push(field);
+        }
       }
     }
     if (!before) {
@@ -91,7 +94,7 @@ export class Parser<S, E> {
     return part;
   }
 
-  private parseLineData(line: string): Equivalent<S> | Information<S> | Relation<S> | null {
+  private parseField(line: string): Equivalent<S> | Information<S> | Relation<S> | null {
     if (line.match(/^=/)) {
       return this.parseEquivalent(line);
     } else if (line.match(/^\w:/)) {

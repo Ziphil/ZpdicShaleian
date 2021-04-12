@@ -95,7 +95,7 @@ export class OldShaleianSaver extends Saver {
         if (information.kind === "phrase") {
           this.stream.write(information.expression);
           this.stream.write(" … ");
-          this.stream.write(information.equivalents.join(", "));
+          this.stream.write(information.equivalentNames.join(", "));
           this.stream.write("。");
           this.stream.write(information.text ?? "");
         } else if (information.kind === "example") {
