@@ -62,4 +62,21 @@ export class ExampleInformation<S> {
 }
 
 
+export class InformationUtil {
+
+  public static isNormal<S>(information: Information<S>): information is NormalInformation<S> {
+    return information.kind !== "phrase" && information.kind !== "example";
+  }
+
+  public static isPhrase<S>(information: Information<S>): information is PhraseInformation<S> {
+    return information.kind === "phrase";
+  }
+
+  public static isExample<S>(information: Information<S>): information is ExampleInformation<S> {
+    return information.kind === "example";
+  }
+
+}
+
+
 export type Information<S> = NormalInformation<S> | PhraseInformation<S> | ExampleInformation<S>;
