@@ -77,7 +77,23 @@ export let commonRenderer = {
         }
       },
       {
-        test: /\.scss$/,
+        test: /(?<!root)\.scss$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: "css-loader",
+            options: {modules: {localIdentName: "[name]_[local]_[hash:base64:5]"}, url: false}
+          },
+          {
+            loader: "sass-loader"
+          }
+        ]
+      },
+      {
+        test: /root\.scss$/,
         exclude: /node_modules/,
         use: [
           {
@@ -93,7 +109,7 @@ export let commonRenderer = {
         ]
       },
       {
-        test: /\.css/,
+        test: /\.css$/,
         use: [
           {
             loader: "style-loader"

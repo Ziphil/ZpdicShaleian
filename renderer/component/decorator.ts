@@ -7,6 +7,7 @@ import {
 import {
   ComponentClass
 } from "react";
+import css from "react-css-modules";
 import {
   IntlShape,
   injectIntl
@@ -31,9 +32,12 @@ const DEFAULT_DECORATOR_OPTIONS = {
   observer: false
 };
 
-export function component(options: DecoratorOptions = {}): ClassDecorator {
+export function component(style?: any, options: DecoratorOptions = {}): ClassDecorator {
   let nextOptions = Object.assign({}, DEFAULT_DECORATOR_OPTIONS, options);
   let decorator = function <P, C extends ComponentClass<P>>(component: ComponentClass<P> & C): ComponentClass<P> & C {
+    if (style !== null && style !== undefined) {
+      component = css(style, {allowMultiple: true, handleNotFoundStyleName: "ignore"})(component);
+    }
     if (nextOptions.observer) {
       component = wrappedObserver(component);
     }

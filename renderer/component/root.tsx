@@ -30,7 +30,7 @@ import {
 } from "./store";
 
 
-@component({inject: false, injectIntl: false, observer: true})
+@component(null, {inject: false, injectIntl: false, observer: true})
 export class Root extends Component<Props, State> {
 
   private store: GlobalStore = new GlobalStore();

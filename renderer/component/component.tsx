@@ -99,6 +99,7 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
 
 
 type AdditionalProps = {
+  styles: StylesRecord,
   intl: IntlShape,
   store: GlobalStore
 };
@@ -106,4 +107,5 @@ type AdditionalProps = {
 type Props<P> = Partial<AdditionalProps> & P;
 
 type Primitive = string | number | boolean | bigint | symbol | undefined | null;
+type StylesRecord = {[key: string]: string | undefined};
 type FormatFunction<T, R> = (parts: Array<string | T>) => R;
