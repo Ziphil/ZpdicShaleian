@@ -39,15 +39,15 @@ export class WordPane extends Component<Props, State> {
       }
     };
     let resolveLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
-      let node = <span className="swp-link" onClick={partial(onLinkClick, name)}>{children}</span>;
+      let node = <span className="swp-link" key={Math.random()} onClick={partial(onLinkClick, name)}>{children}</span>;
       return node;
     };
     let resolveBracket = function (children: Array<ReactNode | string>): ReactNode {
-      let node = <span className="swp-sans">{children}</span>;
+      let node = <span className="swp-sans" key={Math.random()}>{children}</span>;
       return node;
     };
     let resolveSlash = function (string: string): ReactNode {
-      let node = <span className="swp-italic">{string}</span>;
+      let node = <span className="swp-italic" key={Math.random()}>{string}</span>;
       return node;
     };
     let join = function (nodes: Array<ReactNode | string>): ReactNode {
@@ -59,7 +59,7 @@ export class WordPane extends Component<Props, State> {
 
   private renderMarker(marker: Marker): ReactNode {
     let node = (
-      <div key={marker} className={`swp-head-marker swp-marker swp-marker-${marker}`}>
+      <div className={`swp-head-marker swp-marker swp-marker-${marker}`} key={marker}>
         <MarkerIcon marker={marker}/>
       </div>
     );
@@ -140,11 +140,19 @@ export class WordPane extends Component<Props, State> {
     let frameNode = (equivalent.frame !== null) && (
       <span className="swp-equivalent-frame swp-small swp-right-margin">({equivalent.frame})</span>
     );
+    let nameNodes = equivalent.names.map((name, index) => {
+      let nameNode = (
+        <Fragment key={`equivalent-inner-${index}`}>
+          {name}
+        </Fragment>
+      );
+      return nameNode;
+    });
     let node = (
       <li className="swp-equivalent swp-text swp-list-item" key={`equivalent-${index}`}>
         {categoryNode}
         {frameNode}
-        {WordPane.intersperse(equivalent.names, ", ")}
+        {WordPane.intersperse(nameNodes, ", ")}
       </li>
     );
     return node;
@@ -179,7 +187,7 @@ export class WordPane extends Component<Props, State> {
         </dd>
       );
       let innerNode = (
-        <Fragment key={`phrase-${index}`}>
+        <Fragment key={`phrase-inner-${index}`}>
           {expressionNode}
           {textNode}
         </Fragment>
@@ -212,7 +220,7 @@ export class WordPane extends Component<Props, State> {
         </dd>
       );
       let innerNode = (
-        <Fragment key={`example-${index}`}>
+        <Fragment key={`example-inner-${index}`}>
           {sentenceNode}
           {translationNode}
         </Fragment>
@@ -236,10 +244,10 @@ export class WordPane extends Component<Props, State> {
     let titleNode = (relation.title !== null) && (
       <span className="swp-relation-title swp-tag swp-right-margin">{relation.title}</span>
     );
-    let entryNodes = relation.entries.map((entry) => {
+    let entryNodes = relation.entries.map((entry, index) => {
       let referNode = entry.refer && <span className="swp-refer">*</span>;
       let entryNode = (
-        <Fragment>
+        <Fragment key={`relation-inner-${index}`}>
           {entry.name}
           {referNode}
         </Fragment>
