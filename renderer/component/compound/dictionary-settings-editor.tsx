@@ -21,13 +21,13 @@ import {
   Controlled as CodeMirror
 } from "react-codemirror2";
 import {
-  HotKeys
-} from "react-hotkeys";
-import {
   Deserializer,
   PlainDictionarySettings,
   Serializer
 } from "../../module/dictionary";
+import {
+  EditorHotKeys
+} from "../atom";
 import {
   Component
 } from "../component";
@@ -57,7 +57,7 @@ export class DictionarySettingsEditor extends Component<Props, State> {
     editor.scrollTo(0, 10000);
   }
 
-  private handleCancel(event: MouseEvent<HTMLElement>): void {
+  private handleCancel(event: MouseEvent<HTMLElement> | KeyboardEvent): void {
     if (this.props.onCancel) {
       this.props.onCancel(event);
     }
@@ -120,11 +120,9 @@ export class DictionarySettingsEditor extends Component<Props, State> {
   public render(): ReactNode {
     let basicNode = this.renderBasic();
     let revisionNode = this.renderRevision();
-    let keys = {confirm: "ctrl+enter"};
-    let handlers = {confirm: this.handleConfirm.bind(this)};
     let node = (
       <div className="zpdse-editor zp-editor">
-        <HotKeys keyMap={keys} handlers={handlers}>
+        <EditorHotKeys onConfirm={this.handleConfirm.bind(this)} onCancel={this.handleCancel.bind(this)}>
           <Tabs defaultSelectedTabId="revision">
             <Tab id="basic" title={this.trans("dictionarySettingsEditor.basic")} panel={basicNode}/>
             <Tab id="revision" title={this.trans("dictionarySettingsEditor.revision")} panel={revisionNode}/>
@@ -133,7 +131,7 @@ export class DictionarySettingsEditor extends Component<Props, State> {
             <Button text={this.trans("common.cancel")} onClick={this.handleCancel.bind(this)}/>
             <Button text={this.trans("common.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
           </div>
-        </HotKeys>
+        </EditorHotKeys>
       </div>
     );
     return node;
@@ -145,7 +143,7 @@ export class DictionarySettingsEditor extends Component<Props, State> {
 type Props = {
   settings: PlainDictionarySettings,
   onConfirm?: (settings: PlainDictionarySettings, event?: MouseEvent<HTMLElement> | KeyboardEvent) => void,
-  onCancel?: (event: MouseEvent<HTMLElement>) => void
+  onCancel?: (event: MouseEvent<HTMLElement> | KeyboardEvent) => void
 };
 type State = {
   settings: PlainDictionarySettings & {revisionString: string}

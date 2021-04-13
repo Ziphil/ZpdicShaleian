@@ -14,8 +14,8 @@ import {
   createRef
 } from "react";
 import {
-  HotKeys
-} from "react-hotkeys";
+  EditorHotKeys
+} from "../atom";
 import {
   Component
 } from "../component";
@@ -43,7 +43,7 @@ export class UploadDictionaryChooser extends Component<Props, State> {
     this.urlRef.current?.focus();
   }
 
-  private handleCancel(event: MouseEvent<HTMLElement>): void {
+  private handleCancel(event: MouseEvent<HTMLElement> | KeyboardEvent): void {
     if (this.props.onCancel) {
       this.props.onCancel(event);
     }
@@ -66,11 +66,9 @@ export class UploadDictionaryChooser extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let keys = {confirm: "ctrl+enter"};
-    let handlers = {confirm: this.handleConfirm.bind(this)};
     let node = (
       <div className="zpudc-editor zp-editor">
-        <HotKeys keyMap={keys} handlers={handlers}>
+        <EditorHotKeys onConfirm={this.handleConfirm.bind(this)} onCancel={this.handleCancel.bind(this)}>
           <div className="zpudc-form-container">
             <FormGroup label={this.trans("uploadDictionaryChooser.url")} labelFor="url">
               <InputGroup id="url" value={this.state.url} inputRef={this.urlRef} onChange={(event) => this.setState({url: event.target.value})}/>
@@ -83,7 +81,7 @@ export class UploadDictionaryChooser extends Component<Props, State> {
             <Button text={this.trans("common.cancel")} onClick={this.handleCancel.bind(this)}/>
             <Button text={this.trans("common.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
           </div>
-        </HotKeys>
+        </EditorHotKeys>
       </div>
     );
     return node;
@@ -94,7 +92,7 @@ export class UploadDictionaryChooser extends Component<Props, State> {
 
 type Props = {
   onConfirm?: (url: string, password: string, event?: MouseEvent<HTMLElement> | KeyboardEvent) => void,
-  onCancel?: (event: MouseEvent<HTMLElement>) => void
+  onCancel?: (event: MouseEvent<HTMLElement> | KeyboardEvent) => void
 };
 type State = {
   url: string,

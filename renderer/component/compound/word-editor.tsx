@@ -23,12 +23,12 @@ import {
   Controlled as CodeMirror
 } from "react-codemirror2";
 import {
-  HotKeys
-} from "react-hotkeys";
-import {
   PlainWord,
   Word
 } from "../../module/dictionary";
+import {
+  EditorHotKeys
+} from "../atom";
 import {
   Component
 } from "../component";
@@ -54,7 +54,7 @@ export class WordEditor extends Component<Props, State> {
     editor.focus();
   }
 
-  private handleCancel(event: MouseEvent<HTMLElement>): void {
+  private handleCancel(event: MouseEvent<HTMLElement> | KeyboardEvent): void {
     if (this.props.onCancel) {
       this.props.onCancel(event);
     }
@@ -116,11 +116,9 @@ export class WordEditor extends Component<Props, State> {
       );
       return tabNode;
     });
-    let keys = {confirm: "ctrl+enter"};
-    let handlers = {confirm: this.handleConfirm.bind(this)};
     let node = (
       <div className="zpwde-editor zp-editor">
-        <HotKeys keyMap={keys} handlers={handlers}>
+        <EditorHotKeys onConfirm={this.handleConfirm.bind(this)} onCancel={this.handleCancel.bind(this)}>
           <Tabs defaultSelectedTabId="ja" renderActiveTabPanelOnly={true}>
             {tabNodes}
           </Tabs>
@@ -128,7 +126,7 @@ export class WordEditor extends Component<Props, State> {
             <Button text={this.trans("wordEditor.cancel")} onClick={this.handleCancel.bind(this)}/>
             <Button text={this.trans("wordEditor.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
           </div>
-        </HotKeys>
+        </EditorHotKeys>
       </div>
     );
     return node;
@@ -141,7 +139,7 @@ type Props = {
   word: PlainWord | null,
   defaultWord?: PlainWord,
   onConfirm?: (uid: string | null, word: PlainWord, event?: MouseEvent<HTMLElement> | KeyboardEvent) => void,
-  onCancel?: (event: MouseEvent<HTMLElement>) => void
+  onCancel?: (event: MouseEvent<HTMLElement> | KeyboardEvent) => void
 };
 type State = {
   uid: string | null,

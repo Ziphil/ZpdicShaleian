@@ -14,8 +14,8 @@ import {
   createRef
 } from "react";
 import {
-  HotKeys
-} from "react-hotkeys";
+  EditorHotKeys
+} from "../atom";
 import {
   Component
 } from "../component";
@@ -43,7 +43,7 @@ export class GitCommitChooser extends Component<Props, State> {
     this.messageRef.current?.focus();
   }
 
-  private handleCancel(event: MouseEvent<HTMLElement>): void {
+  private handleCancel(event: MouseEvent<HTMLElement> | KeyboardEvent): void {
     if (this.props.onCancel) {
       this.props.onCancel(event);
     }
@@ -71,11 +71,9 @@ export class GitCommitChooser extends Component<Props, State> {
 
   public render(): ReactNode {
     let messageNode = this.renderMessage();
-    let keys = {confirm: "ctrl+enter"};
-    let handlers = {confirm: this.handleConfirm.bind(this)};
     let node = (
       <div className="zpgce-editor zp-editor">
-        <HotKeys keyMap={keys} handlers={handlers}>
+        <EditorHotKeys onConfirm={this.handleConfirm.bind(this)} onCancel={this.handleCancel.bind(this)}>
           <div className="zpgce-message-container">
             {messageNode}
           </div>
@@ -86,7 +84,7 @@ export class GitCommitChooser extends Component<Props, State> {
             <Button text={this.trans("common.cancel")} onClick={this.handleCancel.bind(this)}/>
             <Button text={this.trans("common.confirm")} intent="primary" onClick={this.handleConfirm.bind(this)}/>
           </div>
-        </HotKeys>
+        </EditorHotKeys>
       </div>
     );
     return node;
@@ -98,7 +96,7 @@ export class GitCommitChooser extends Component<Props, State> {
 type Props = {
   path: string,
   onConfirm?: (message: string, event?: MouseEvent<HTMLElement> | KeyboardEvent) => void,
-  onCancel?: (event: MouseEvent<HTMLElement>) => void
+  onCancel?: (event: MouseEvent<HTMLElement> | KeyboardEvent) => void
 };
 type State = {
   message: string

@@ -28,7 +28,7 @@ class Main {
   }
 
   private setupHotkeys(): void {
-    configureHotkeys({ignoreTags: ["select"]});
+    configureHotkeys({ignoreTags: ["select"], ignoreEventsCondition: () => false});
   }
 
   private render(): void {
