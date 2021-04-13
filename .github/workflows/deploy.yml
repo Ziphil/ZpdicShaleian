@@ -1,4 +1,4 @@
-on: 
+on:
   - push
   - pull_request
 
@@ -58,8 +58,10 @@ jobs:
         run: npm run build
       - name: Pack for Linux
         run: npm run pack:linux
+      - name: Tar files
+        run: tar -cvf "ZpDIC for Shaleian (Linux).tar" product/*.AppImage
       - name: Upload for Linux
         uses: actions/upload-artifact@v2
         with:
-          name: ZpDIC for Shaleian (Linux)
-          path: product/*.AppImage
+          name: "ZpDIC for Shaleian (Linux).tar"
+          path: "ZpDIC for Shaleian (Linux).tar"
