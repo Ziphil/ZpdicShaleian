@@ -21,7 +21,7 @@ jobs:
       - name: Upload for Windows
         uses: actions/upload-artifact@v2
         with:
-          name: ZpDIC for Shaleian (Windows)
+          name: zpdic-shaleian-windows
           path: product/*.exe
   build-mac:
     runs-on: macos-latest
@@ -41,7 +41,7 @@ jobs:
       - name: Upload for Mac
         uses: actions/upload-artifact@v2
         with:
-          name: ZpDIC for Shaleian (Mac)
+          name: zpdic-shaleian-mac
           path: product/*.dmg
   build-linux:
     runs-on: ubuntu-latest
@@ -59,9 +59,9 @@ jobs:
       - name: Pack for Linux
         run: npm run pack:linux
       - name: Tar files
-        run: tar -cvf "ZpDIC for Shaleian (Linux).tar" product/*.AppImage
+        run: tar -cvf zpdic-shaleian-linux.tar product/*.AppImage
       - name: Upload for Linux
         uses: actions/upload-artifact@v2
         with:
-          name: "ZpDIC for Shaleian (Linux).tar"
-          path: "ZpDIC for Shaleian (Linux).tar"
+          name: zpdic-shaleian-linux
+          path: zpdic-shaleian-linux.tar

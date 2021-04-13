@@ -21,6 +21,7 @@
   "build": {
     "appId": "com.ziphil.zpdic-shaleian",
     "productName": "ZpDIC for Shaleian",
+    "artifactName": "zpdic-shaleian-setup.${ext}",
     "files": [
       "dist/**/*"
     ],
