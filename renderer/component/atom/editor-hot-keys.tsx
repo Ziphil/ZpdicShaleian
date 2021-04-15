@@ -6,7 +6,7 @@ import {
   ReactNode
 } from "react";
 import {
-  HotKeys
+  GlobalHotKeys
 } from "react-hotkeys";
 
 
@@ -16,9 +16,11 @@ export class EditorHotKeys extends Component<Props, State> {
     let keys = {confirm: ["ctrl+enter"], cancel: ["escape"]};
     let handlers = {confirm: this.props.onConfirm, cancel: this.props.onCancel} as any;
     let node = (
-      <HotKeys keyMap={keys} handlers={handlers}>
-        {this.props.children}
-      </HotKeys>
+      <GlobalHotKeys keyMap={keys} handlers={handlers}>
+        <div>
+          {this.props.children}
+        </div>
+      </GlobalHotKeys>
     );
     return node;
   }
