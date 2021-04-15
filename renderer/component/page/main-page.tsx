@@ -303,7 +303,7 @@ export class MainPage extends Component<Props, State> {
       let nextDefaultWord = (defaultWord === "active") ? activeWord : defaultWord;
       await this.editWord(nextWord, nextDefaultWord);
     } else {
-      CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
+      this.showNoActiveWordToaster();
     }
   }
 
@@ -323,7 +323,7 @@ export class MainPage extends Component<Props, State> {
     if (activeWord !== null) {
       this.deleteWord(activeWord.uid);
     } else {
-      CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
+      this.showNoActiveWordToaster();
     }
   }
 
@@ -353,7 +353,7 @@ export class MainPage extends Component<Props, State> {
     if (activeWord !== null) {
       this.toggleWordMarker(activeWord, marker);
     } else {
-      CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
+      this.showNoActiveWordToaster();
     }
   }
 
@@ -481,6 +481,10 @@ export class MainPage extends Component<Props, State> {
   private updateUploadDictionaryProgress(progress: Progress): void {
     let message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
     CustomToaster.show({message, icon: "export", timeout: 0}, "uploadDictionary");
+  }
+
+  private showNoActiveWordToaster(): void {
+    CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
   }
 
   private showNoDictionaryToaster(): void {
