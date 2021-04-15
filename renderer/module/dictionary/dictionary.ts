@@ -8,8 +8,8 @@ import {
   ValidationError
 } from "./error";
 import {
-  Marker,
-  Markers
+  Markers,
+  PlainMarkers
 } from "./marker";
 import {
   SearchResult
@@ -51,8 +51,8 @@ export class Dictionary implements PlainDictionary {
 
   public toPlain(): PlainDictionary {
     let words = this.words.map((word) => word.toPlain());
-    let settings = this.settings;
-    let markers = this.markers;
+    let settings = this.settings.toPlain();
+    let markers = this.markers.toPlain();
     let path = this.path;
     return {words, settings, markers, path};
   }
@@ -159,7 +159,7 @@ export interface PlainDictionary {
 
   words: Array<PlainWord>;
   settings: PlainDictionarySettings;
-  markers: Map<string, Array<Marker>>;
+  markers: PlainMarkers;
   path: string | null;
 
 }

@@ -1,23 +1,23 @@
 //
 
 import {
-  DictionarySettings
+  PlainDictionarySettings
 } from "../dictionary-settings";
 import {
-  Markers
+  PlainMarkers
 } from "../marker";
 import {
-  Revision,
-  Revisions
+  PlainRevision,
+  PlainRevisions
 } from "../revision";
 import {
-  Word
+  PlainWord
 } from "../word";
 
 
 export class Serializer {
 
-  public serializeWord(word: Word): string {
+  public serializeWord(word: PlainWord): string {
     let string = "";
     string += `* @${word.date} ${word.uniqueName}\n`;
     string += "\n";
@@ -36,7 +36,7 @@ export class Serializer {
     return string;
   }
 
-  public serializeDictionarySettings(settings: DictionarySettings): string {
+  public serializeDictionarySettings(settings: PlainDictionarySettings): string {
     let string = "";
     string += "**\n";
     string += "\n";
@@ -51,7 +51,7 @@ export class Serializer {
     return string;
   }
 
-  public serializeRevisions(revisions: Revisions): string {
+  public serializeRevisions(revisions: PlainRevisions): string {
     let string = "";
     for (let revision of revisions) {
       string += this.serializeRevision(revision);
@@ -59,7 +59,7 @@ export class Serializer {
     return string;
   }
 
-  public serializeRevision(revision: Revision): string {
+  public serializeRevision(revision: PlainRevision): string {
     let string = "";
     string += "- ";
     if (revision.date !== null) {
@@ -69,7 +69,7 @@ export class Serializer {
     return string;
   }
 
-  public serializeMarkers(markers: Markers): string {
+  public serializeMarkers(markers: PlainMarkers): string {
     let string = "";
     string += "**\n";
     string += "\n";

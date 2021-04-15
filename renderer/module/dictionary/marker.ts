@@ -1,7 +1,7 @@
 //
 
 
-export class Markers extends Map<string, Array<Marker>> implements Map<string, Array<Marker>> {
+export class Markers extends Map<string, Array<Marker>> implements PlainMarkers {
 
   public constructor(...args: any) {
     super(...args);
@@ -14,9 +14,13 @@ export class Markers extends Map<string, Array<Marker>> implements Map<string, A
     return markers;
   }
 
-  public static fromPlain(plain: Map<string, Array<Marker>>): Markers {
+  public static fromPlain(plain: PlainMarkers): Markers {
     let markers = new Markers(plain.entries());
     return markers;
+  }
+
+  public toPlain(): PlainMarkers {
+    return this;
   }
 
   private normalize(): void {
@@ -78,6 +82,11 @@ export class MarkerUtil {
   public static getIndex(marker: Marker): number {
     return MARKERS.indexOf(marker);
   }
+
+}
+
+
+export interface PlainMarkers extends Map<string, Array<Marker>> {
 
 }
 

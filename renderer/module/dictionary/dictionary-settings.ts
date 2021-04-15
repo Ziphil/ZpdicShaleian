@@ -1,7 +1,7 @@
 //
 
 import {
-  PlainRevision,
+  PlainRevisions,
   Revisions
 } from "./revision";
 
@@ -34,6 +34,13 @@ export class DictionarySettings implements PlainDictionarySettings {
     return settings;
   }
 
+  public toPlain(): PlainDictionarySettings {
+    let version = this.version;
+    let alphabetRule = this.alphabetRule;
+    let revisions = this.revisions.toPlain();
+    return {version, alphabetRule, revisions};
+  }
+
 }
 
 
@@ -41,6 +48,6 @@ export interface PlainDictionarySettings {
 
   version: string;
   alphabetRule: string;
-  revisions: Array<PlainRevision>;
+  revisions: PlainRevisions;
 
 }
