@@ -13,7 +13,6 @@ import {
   Equivalent,
   ExampleInformation,
   InformationKindUtil,
-  InformationUtil,
   Marker,
   MarkupResolver,
   NormalInformation,
