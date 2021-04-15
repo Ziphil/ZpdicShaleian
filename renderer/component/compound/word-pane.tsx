@@ -31,32 +31,6 @@ import {
 
 export class WordPane extends Component<Props, State> {
 
-  private createMarkupResolver(): MarkupResolver<ReactNode, ReactNode> {
-    let outerThis = this;
-    let onLinkClick = function (name: string, event: MouseEvent<HTMLSpanElement>): void {
-      if (outerThis.props.onLinkClick && event.ctrlKey) {
-        outerThis.props.onLinkClick(name, event);
-      }
-    };
-    let resolveLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
-      let node = <span className="swp-link" key={Math.random()} onClick={partial(onLinkClick, name)}>{children}</span>;
-      return node;
-    };
-    let resolveBracket = function (children: Array<ReactNode | string>): ReactNode {
-      let node = <span className="swp-sans" key={Math.random()}>{children}</span>;
-      return node;
-    };
-    let resolveSlash = function (string: string): ReactNode {
-      let node = <span className="swp-italic" key={Math.random()}>{string}</span>;
-      return node;
-    };
-    let join = function (nodes: Array<ReactNode | string>): ReactNode {
-      return nodes;
-    };
-    let resolver = new MarkupResolver({resolveLink, resolveBracket, resolveSlash, join});
-    return resolver;
-  }
-
   private renderMarker(marker: Marker): ReactNode {
     let node = (
       <div className={`swp-head-marker swp-marker swp-marker-${marker}`} key={marker}>
@@ -282,11 +256,37 @@ export class WordPane extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let parser = new Parser(this.createMarkupResolver());
+    let resolver = WordPane.createMarkupResolver(this.props.onLinkClick);
+    let parser = new Parser(resolver);
     let word = parser.parse(this.props.word);
     let markers = this.props.word.markers;
     let node = this.renderWord(word, markers);
     return node;
+  }
+
+  public static createMarkupResolver(onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void): MarkupResolver<ReactNode, ReactNode> {
+    let onLinkCtrlClick = function (name: string, event: MouseEvent<HTMLSpanElement>): void {
+      if (onLinkClick && event.ctrlKey) {
+        onLinkClick(name, event);
+      }
+    };
+    let resolveLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
+      let node = <span className="swp-link" key={Math.random()} onClick={partial(onLinkCtrlClick, name)}>{children}</span>;
+      return node;
+    };
+    let resolveBracket = function (children: Array<ReactNode | string>): ReactNode {
+      let node = <span className="swp-sans" key={Math.random()}>{children}</span>;
+      return node;
+    };
+    let resolveSlash = function (string: string): ReactNode {
+      let node = <span className="swp-italic" key={Math.random()}>{string}</span>;
+      return node;
+    };
+    let join = function (nodes: Array<ReactNode | string>): ReactNode {
+      return nodes;
+    };
+    let resolver = new MarkupResolver({resolveLink, resolveBracket, resolveSlash, join});
+    return resolver;
   }
 
   private static intersperse(nodes: ReadonlyArray<ReactNode>, separator: ReactNode): Array<ReactNode> {
