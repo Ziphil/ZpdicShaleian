@@ -75,10 +75,10 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderSection(section: Section<ReactNode>, index: number): ReactNode {
-    let equivalents = section.equivalents.filter((equivalent) => !equivalent.hidden);
-    let normalInformations = section.informations.filter(InformationUtil.isNormal).filter((information) => !information.hidden);
-    let phraseInformations = section.informations.filter(InformationUtil.isPhrase).filter((information) => !information.hidden);
-    let exampleInformations = section.informations.filter(InformationUtil.isExample).filter((information) => !information.hidden);
+    let equivalents = section.getEquivalents(true);
+    let normalInformations = section.getNormalInformations(true);
+    let phraseInformations = section.getPhraseInformations(true);
+    let exampleInformations = section.getExampleInformations(true);
     let relations = section.relations;
     let equivalentNodes = equivalents.map((equivalent, index) => this.renderEquivalent(equivalent, index));
     let normalInformationNodes = normalInformations.map((information, index) => this.renderNormalInformation(information, index));
@@ -146,7 +146,7 @@ export class WordPane extends Component<Props, State> {
     return node;
   }
 
-  private renderPhraseInformations(informations: Array<PhraseInformation<ReactNode>>): ReactNode {
+  private renderPhraseInformations(informations: ReadonlyArray<PhraseInformation<ReactNode>>): ReactNode {
     let innerNodes = informations.map((information, index) => {
       let expressionNode = (
         <dt className="swp-phrase-expression">
@@ -181,7 +181,7 @@ export class WordPane extends Component<Props, State> {
     return node;
   }
 
-  private renderExampleInformations(informations: Array<ExampleInformation<ReactNode>>): ReactNode {
+  private renderExampleInformations(informations: ReadonlyArray<ExampleInformation<ReactNode>>): ReactNode {
     let innerNodes = informations.map((information, index) => {
       let sentenceNode = (
         <dt className="swp-example-sentence">

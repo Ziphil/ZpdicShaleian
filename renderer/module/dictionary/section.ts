@@ -4,7 +4,11 @@ import {
   Equivalent
 } from "./equivalent";
 import {
-  Information
+  ExampleInformation,
+  Information,
+  InformationUtil,
+  NormalInformation,
+  PhraseInformation
 } from "./information";
 import {
   Relation
@@ -25,8 +29,52 @@ export class Section<S> {
     this.relations = relations;
   }
 
-  public get fields(): ReadonlyArray<Field<S>> {
-    return [...this.equivalents, ...this.informations, ...this.relations];
+  public getEquivalents(onlyVisible?: boolean): ReadonlyArray<Equivalent<S>> {
+    let equivalents = this.equivalents;
+    if (onlyVisible) {
+      equivalents = equivalents.filter((equivalent) => !equivalent.hidden);
+    }
+    return equivalents;
+  }
+
+  public getInformations(onlyVisible?: boolean): ReadonlyArray<Information<S>> {
+    let informations = this.informations;
+    if (onlyVisible) {
+      informations = informations.filter((information) => !information.hidden);
+    }
+    return informations;
+  }
+
+  public getNormalInformations(onlyVisible?: boolean): ReadonlyArray<NormalInformation<S>> {
+    let informations = this.informations.filter(InformationUtil.isNormal);
+    if (onlyVisible) {
+      informations = informations.filter((information) => !information.hidden);
+    }
+    return informations;
+  }
+
+  public getPhraseInformations(onlyVisible?: boolean): ReadonlyArray<PhraseInformation<S>> {
+    let informations = this.informations.filter(InformationUtil.isPhrase);
+    if (onlyVisible) {
+      informations = informations.filter((information) => !information.hidden);
+    }
+    return informations;
+  }
+
+  public getExampleInformations(onlyVisible?: boolean): ReadonlyArray<ExampleInformation<S>> {
+    let informations = this.informations.filter(InformationUtil.isExample);
+    if (onlyVisible) {
+      informations = informations.filter((information) => !information.hidden);
+    }
+    return informations;
+  }
+
+  public getFields(onlyVisible?: boolean): ReadonlyArray<Field<S>> {
+    let equivalents = this.getEquivalents(onlyVisible);
+    let informations = this.getInformations(onlyVisible);
+    let relations = this.relations;
+    let fields = [...equivalents, ...informations, ...relations];
+    return fields;
   }
 
 }

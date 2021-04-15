@@ -11,7 +11,7 @@ import {
 } from "./information";
 import {
   InformationKindUtil
-} from "./information-kind";
+} from "./information";
 import {
   ParsedWord,
   Parts

@@ -11,8 +11,9 @@ import {
   DictionarySettings
 } from "../dictionary-settings";
 import {
-  InformationKindUtil
-} from "../information-kind";
+  InformationKindUtil,
+  InformationUtil
+} from "../information";
 import {
   ParsedWord
 } from "../parsed-word";
@@ -92,17 +93,17 @@ export class OldShaleianSaver extends Saver {
         } else {
           this.stream.write("> ");
         }
-        if (information.kind === "phrase") {
+        if (InformationUtil.isPhrase(information)) {
           this.stream.write(information.expression);
           this.stream.write(" … ");
           this.stream.write(information.equivalentNames.join(", "));
           this.stream.write("。");
           this.stream.write(information.text ?? "");
-        } else if (information.kind === "example") {
+        } else if (InformationUtil.isExample(information)) {
           this.stream.write(information.sentence);
           this.stream.write(" → ");
           this.stream.write(information.translation);
-        } else {
+        } else if (InformationUtil.isNormal(information)) {
           if (information.kind === "history" && information.date !== null) {
             this.stream.write(`${information.date}: `);
           }
