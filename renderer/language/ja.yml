@@ -163,5 +163,7 @@ mainPage:
     辞書データのアップロードが完了しました。
   failUploadDictionary: >-
     辞書データのアップロード中にエラーが発生しました。
+  noDictionary: >-
+    辞書が開かれていません。
   unimplemented: >-
     未実装です。

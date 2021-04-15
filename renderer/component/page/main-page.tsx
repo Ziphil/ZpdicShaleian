@@ -114,6 +114,8 @@ export class MainPage extends Component<Props, State> {
         let path = dictionary.path;
         await this.updateDictionary(path);
       }
+    } else {
+      this.showNoDictionaryToaster();
     }
   }
 
@@ -149,6 +151,8 @@ export class MainPage extends Component<Props, State> {
         console.error(error);
         CustomToaster.show({message: this.trans("mainPage.failLoadDictionary"), icon: "error", intent: "danger"}, "saveDictionary");
       }
+    } else {
+      this.showNoDictionaryToaster();
     }
   }
 
@@ -172,6 +176,8 @@ export class MainPage extends Component<Props, State> {
           CustomToaster.show({message: this.trans("mainPage.failExportDictionary"), icon: "tick", intent: "danger"}, "exportDictionary");
         }
       }
+    } else {
+      this.showNoDictionaryToaster();
     }
   }
 
@@ -186,24 +192,31 @@ export class MainPage extends Component<Props, State> {
   // 検索結果ペインのスクロール位置は変化しません。
   private refreshWords(search?: boolean): void {
     let dictionary = this.state.dictionary;
-    if (!search || dictionary === null) {
-      let searchResult = this.state.searchResult.copy();
-      this.setState({searchResult});
-    } else {
-      let searchResult = dictionary.search(this.state.parameter);
-      this.setState({searchResult});
+    if (dictionary !== null) {
+      if (!search) {
+        let searchResult = this.state.searchResult.copy();
+        this.setState({searchResult});
+      } else {
+        let searchResult = dictionary.search(this.state.parameter);
+        this.setState({searchResult});
+      }
     }
   }
 
   // 検索結果の単語リストをシャッフルします。
   // 検索結果ペインのスクロール位置はリセットされます。
   private shuffleWords(): void {
-    let oldSearchResult = this.state.searchResult;
-    let oldWords = this.state.searchResult.words;
-    let words = ArrayUtil.shuffle([...oldWords]);
-    let searchResult = new SearchResult(words, oldSearchResult.suggestions, oldSearchResult.elapsedTime);
-    this.setState({searchResult, page: 0, activeWord: null});
-    this.scrollWordList();
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      let oldSearchResult = this.state.searchResult;
+      let oldWords = this.state.searchResult.words;
+      let words = ArrayUtil.shuffle([...oldWords]);
+      let searchResult = new SearchResult(words, oldSearchResult.suggestions, oldSearchResult.elapsedTime);
+      this.setState({searchResult, page: 0, activeWord: null});
+      this.scrollWordList();
+    } else {
+      this.showNoDictionaryToaster();
+    }
   }
 
   // 現在の検索パラメータを用いて検索結果ペインを更新します。
@@ -278,6 +291,8 @@ export class MainPage extends Component<Props, State> {
         this.setState({changed: true});
         this.refreshWords(true);
       }
+    } else {
+      this.showNoDictionaryToaster();
     }
   }
 
@@ -298,6 +313,8 @@ export class MainPage extends Component<Props, State> {
       dictionary.deleteWord(uid);
       this.setState({changed: true});
       this.refreshWords(true);
+    } else {
+      this.showNoDictionaryToaster();
     }
   }
 
@@ -326,6 +343,8 @@ export class MainPage extends Component<Props, State> {
       word.toggleMarker(marker);
       this.setState({changed: true});
       this.refreshWords();
+    } else {
+      this.showNoDictionaryToaster();
     }
   }
 
@@ -339,13 +358,18 @@ export class MainPage extends Component<Props, State> {
   }
 
   private changeParameter(parameter: WordParameter, immediate?: boolean): void {
-    this.setState({parameter}, () => {
-      if (immediate) {
-        this.updateWords();
-      } else {
-        this.updateWordsDebounced();
-      }
-    });
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      this.setState({parameter}, () => {
+        if (immediate) {
+          this.updateWords();
+        } else {
+          this.updateWordsDebounced();
+        }
+      });
+    } else {
+      this.showNoDictionaryToaster();
+    }
   }
 
   private changeWordMode(mode: WordMode, focus?: boolean): void {
@@ -387,6 +411,8 @@ export class MainPage extends Component<Props, State> {
         dictionary.changeSettings(newSettings);
         this.setState({changed: true});
       }
+    } else {
+      this.showNoDictionaryToaster();
     }
   }
 
@@ -406,6 +432,8 @@ export class MainPage extends Component<Props, State> {
           CustomToaster.show({message: this.trans("mainPage.failExecGitCommit"), icon: "error", intent: "danger"});
         }
       }
+    } else {
+      this.showNoDictionaryToaster();
     }
   }
 
@@ -424,6 +452,8 @@ export class MainPage extends Component<Props, State> {
           CustomToaster.show({message: this.trans("mainPage.failExecGitPush"), icon: "error", intent: "danger"});
         }
       }
+    } else {
+      this.showNoDictionaryToaster();
     }
   }
 
@@ -442,6 +472,8 @@ export class MainPage extends Component<Props, State> {
           CustomToaster.show({message: this.trans("mainPage.failUploadDictionary"), icon: "error", intent: "danger"}, "uploadDictionary");
         }
       }
+    } else {
+      this.showNoDictionaryToaster();
     }
   }
 
@@ -449,6 +481,10 @@ export class MainPage extends Component<Props, State> {
   private updateUploadDictionaryProgress(progress: Progress): void {
     let message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
     CustomToaster.show({message, icon: "export", timeout: 0}, "uploadDictionary");
+  }
+
+  private showNoDictionaryToaster(): void {
+    CustomToaster.show({message: this.trans("mainPage.noDictionary"), icon: "warning-sign", intent: "warning"});
   }
 
   private showUnimplementedToaster(): void {
