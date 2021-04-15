@@ -8,11 +8,11 @@ import {
 export class Suggestion {
 
   public readonly kind: SuggestionKind;
-  public readonly words: ReadonlyArray<Word>;
+  public readonly names: ReadonlyArray<string>;
 
-  public constructor(kind: SuggestionKind, words: ReadonlyArray<Word>) {
+  public constructor(kind: SuggestionKind, names: ReadonlyArray<string>) {
     this.kind = kind;
-    this.words = words;
+    this.names = names;
   }
 
 }

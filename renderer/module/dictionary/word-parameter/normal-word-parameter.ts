@@ -40,7 +40,16 @@ export class NormalWordParameter extends WordParameter {
   }
 
   public presuggest(dictionary: Dictionary): Array<Suggestion> {
-    return [];
+    let mode = this.mode;
+    let type = this.type;
+    if ((mode === "name" || mode === "both") && (type === "exact" || type === "prefix")) {
+      let revisions = dictionary.settings.revisions;
+      let names = revisions.resolve(this.search);
+      let suggestions = names.map((name) => new Suggestion("revision", [name]));
+      return suggestions;
+    } else {
+      return [];
+    }
   }
 
   public match(word: Word): boolean {
