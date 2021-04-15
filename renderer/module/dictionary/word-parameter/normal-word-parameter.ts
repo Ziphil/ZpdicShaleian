@@ -1,6 +1,12 @@
 //
 
 import {
+  Dictionary
+} from "../dictionary";
+import {
+  Suggestion
+} from "../suggestion";
+import {
   Word
 } from "../word";
 import {
@@ -33,12 +39,8 @@ export class NormalWordParameter extends WordParameter {
     return parameter;
   }
 
-  private static getDefaultIgnoreOptions(mode: WordMode, type: WordType): IgnoreOptions {
-    if ((mode === "name" || mode === "both") && (type !== "pair" && type !== "regular")) {
-      return {case: false, diacritic: true};
-    } else {
-      return {case: false, diacritic: false};
-    }
+  public presuggest(dictionary: Dictionary): Array<Suggestion> {
+    return [];
   }
 
   public match(word: Word): boolean {
@@ -50,6 +52,18 @@ export class NormalWordParameter extends WordParameter {
       return matcher(normalizedSearch, normalizedCandidate);
     });
     return predicate;
+  }
+
+  public suggest(word: Word, dictionary: Dictionary): Array<Suggestion> {
+    return [];
+  }
+
+  private static getDefaultIgnoreOptions(mode: WordMode, type: WordType): IgnoreOptions {
+    if ((mode === "name" || mode === "both") && (type !== "pair" && type !== "regular")) {
+      return {case: false, diacritic: true};
+    } else {
+      return {case: false, diacritic: false};
+    }
   }
 
 }

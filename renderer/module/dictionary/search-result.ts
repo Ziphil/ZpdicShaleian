@@ -1,6 +1,9 @@
 //
 
 import {
+  Suggestion
+} from "./suggestion";
+import {
   Word
 } from "./word";
 
@@ -8,10 +11,10 @@ import {
 export class SearchResult {
 
   public readonly words: ReadonlyArray<Word>;
-  public readonly suggestions: ReadonlyArray<never>;
+  public readonly suggestions: ReadonlyArray<Suggestion>;
   public readonly elapsedTime: number;
 
-  public constructor(words: ReadonlyArray<Word>, suggestions: ReadonlyArray<never>, elapsedTime: number) {
+  public constructor(words: ReadonlyArray<Word>, suggestions: ReadonlyArray<Suggestion>, elapsedTime: number) {
     this.words = words;
     this.suggestions = suggestions;
     this.elapsedTime = elapsedTime;
@@ -25,7 +28,7 @@ export class SearchResult {
     return result;
   }
 
-  public static measure(search: () => [ReadonlyArray<Word>, ReadonlyArray<never>]): SearchResult {
+  public static measure(search: () => [ReadonlyArray<Word>, ReadonlyArray<Suggestion>]): SearchResult {
     let beforeDate = new Date();
     let [words, suggestions] = search();
     let afterDate = new Date();

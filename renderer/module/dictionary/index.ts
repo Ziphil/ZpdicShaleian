@@ -17,4 +17,5 @@ export * from "./relation";
 export * from "./revision";
 export * from "./section";
 export * from "./search-result";
+export * from "./suggestion";
 export * from "./word";
