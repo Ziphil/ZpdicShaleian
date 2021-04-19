@@ -72,4 +72,4 @@ export class RevisionSuggestion extends Suggestion<"revision"> {
 }
 
 
-export const REVISION_SUGGESTION_NAMES = {ja: "綴り改定", en: "Spelling revision"} as const;
+export const REVISION_SUGGESTION_NAMES = {ja: "綴り改定", en: "Spelling revision"};
