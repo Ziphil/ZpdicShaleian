@@ -1,5 +1,10 @@
 //
 
+import {
+  IgnoreOptions,
+  StringNormalizer
+} from "../../util/string-normalizer";
+
 
 export class Revisions extends Array<Revision> implements PlainRevisions {
 
@@ -24,10 +29,14 @@ export class Revisions extends Array<Revision> implements PlainRevisions {
     return this;
   }
 
-  public resolve(name: string): Array<string> {
+  public resolve(name: string, ignoreOptions?: IgnoreOptions): Array<string> {
     let outerThis = this;
     let resolveRec = function (currentName: string, beforeNames: Array<string>): Array<string> {
-      let revisions = outerThis.filter((revision) => revision.beforeName === currentName);
+      let normalizedCurrentName = StringNormalizer.normalize(currentName, ignoreOptions);
+      let revisions = outerThis.filter((revision) => {
+        let normalizedBeforeName = StringNormalizer.normalize(revision.beforeName, ignoreOptions);
+        return normalizedBeforeName === normalizedCurrentName;
+      });
       let resultNames = [];
       for (let revision of revisions) {
         if (beforeNames.includes(revision.afterName)) {

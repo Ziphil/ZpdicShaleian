@@ -4,8 +4,7 @@ import {
   ObjectUtil
 } from "../../../util/object";
 import {
-  IgnoreOptions,
-  StringNormalizer
+  IgnoreOptions
 } from "../../../util/string-normalizer";
 import {
   Dictionary
@@ -24,13 +23,11 @@ import {
 export class RevisionSuggester extends Suggester {
 
   private search: string;
-  private normalizedSearch: string;
   private ignoreOptions: IgnoreOptions;
 
   public constructor(search: string, ignoreOptions: IgnoreOptions) {
     super();
     this.search = search;
-    this.normalizedSearch = StringNormalizer.normalize(search, ignoreOptions);
     this.ignoreOptions = ignoreOptions;
   }
 
@@ -39,7 +36,7 @@ export class RevisionSuggester extends Suggester {
 
   public presuggest(dictionary: Dictionary): Array<Suggestion> {
     let revisions = dictionary.settings.revisions;
-    let names = revisions.resolve(this.search);
+    let names = revisions.resolve(this.search, this.ignoreOptions);
     if (names.length > 0) {
       let suggestion = new RevisionSuggestion(names);
       return [suggestion];
