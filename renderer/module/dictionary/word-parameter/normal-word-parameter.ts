@@ -4,12 +4,12 @@ import {
   Dictionary
 } from "../dictionary";
 import {
-  InflectionSuggester
-} from "../inflection-suggester/stable-inflection-suggester";
+  RevisionSuggester,
+  Suggester
+} from "../suggester";
 import {
-  RevisionSuggestion,
-  Suggestion
-} from "../suggestion";
+  InflectionSuggester
+} from "../suggester/stable-suggester";
 import {
   Word
 } from "../word";
@@ -28,7 +28,6 @@ export class NormalWordParameter extends WordParameter {
   public type: WordType;
   public language: string;
   public ignoreOptions: IgnoreOptions;
-  private suggester: InflectionSuggester;
 
   public constructor(search: string, mode: WordMode, type: WordType, language: string, ignoreOptions?: IgnoreOptions) {
     super();
@@ -36,31 +35,12 @@ export class NormalWordParameter extends WordParameter {
     this.mode = mode;
     this.type = type;
     this.language = language;
-    this.ignoreOptions = ignoreOptions ?? NormalWordParameter.getDefaultIgnoreOptions(mode, type);
-    this.suggester = new InflectionSuggester(this.search, this.ignoreOptions);
+    this.ignoreOptions = ignoreOptions ?? this.getDefaultIgnoreOptions();
   }
 
   public static createEmpty(language: string): NormalWordParameter {
     let parameter = new NormalWordParameter("", "both", "prefix", language);
     return parameter;
-  }
-
-  public presuggest(dictionary: Dictionary): Array<Suggestion> {
-    let mode = this.mode;
-    let type = this.type;
-    this.suggester.prepare();
-    if ((mode === "name" || mode === "both") && (type === "exact" || type === "prefix")) {
-      let revisions = dictionary.settings.revisions;
-      let names = revisions.resolve(this.search);
-      if (names.length > 0) {
-        let suggestion = new RevisionSuggestion(names);
-        return [suggestion];
-      } else {
-        return [];
-      }
-    } else {
-      return [];
-    }
   }
 
   public match(word: Word): boolean {
@@ -74,16 +54,27 @@ export class NormalWordParameter extends WordParameter {
     return predicate;
   }
 
-  public suggest(word: Word, dictionary: Dictionary): Array<Suggestion> {
-    return this.suggester.suggest(word, dictionary);
-  }
-
-  private static getDefaultIgnoreOptions(mode: WordMode, type: WordType): IgnoreOptions {
+  private getDefaultIgnoreOptions(): IgnoreOptions {
+    let mode = this.mode;
+    let type = this.type;
     if ((mode === "name" || mode === "both") && (type !== "pair" && type !== "regular")) {
       return {case: false, diacritic: true};
     } else {
       return {case: false, diacritic: false};
     }
+  }
+
+  protected createSuggesters(dictionary: Dictionary): Array<Suggester> {
+    let mode = this.mode;
+    let type = this.type;
+    let suggesters = [];
+    if ((mode === "name" || mode === "both") && (type === "exact" || type === "prefix")) {
+      suggesters.push(new RevisionSuggester(this.search, this.ignoreOptions));
+      if (dictionary.settings.version === "S") {
+        suggesters.push(new InflectionSuggester(this.search, this.ignoreOptions));
+      }
+    }
+    return suggesters;
   }
 
 }

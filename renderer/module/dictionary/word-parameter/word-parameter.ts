@@ -4,6 +4,9 @@ import {
   Dictionary
 } from "../dictionary";
 import {
+  Suggester
+} from "../suggester";
+import {
   Suggestion
 } from "../suggestion";
 import {
@@ -14,12 +17,38 @@ import {
 export abstract class WordParameter {
 
   public abstract language: string;
+  private suggesters?: Array<Suggester>;
 
-  public abstract presuggest(dictionary: Dictionary): Array<Suggestion>;
+  protected abstract createSuggesters(dictionary: Dictionary): Array<Suggester>;
+
+  public prepare(dictionary: Dictionary): void {
+    this.suggesters = this.createSuggesters(dictionary);
+    for (let suggester of this.suggesters) {
+      suggester.prepare();
+    }
+  }
+
+  public presuggest(dictionary: Dictionary): Array<Suggestion> {
+    let suggestions = [];
+    if (this.suggesters !== undefined) {
+      for (let suggester of this.suggesters) {
+        suggestions.push(...suggester.presuggest(dictionary));
+      }
+    }
+    return suggestions;
+  }
 
   public abstract match(word: Word): boolean;
 
-  public abstract suggest(word: Word, dictionary: Dictionary): Array<Suggestion>;
+  public suggest(word: Word, dictionary: Dictionary): Array<Suggestion> {
+    let suggestions = [];
+    if (this.suggesters !== undefined) {
+      for (let suggester of this.suggesters) {
+        suggestions.push(...suggester.suggest(word, dictionary));
+      }
+    }
+    return suggestions;
+  }
 
   protected static createCandidates(word: Word, mode: WordMode, language: string): Array<string> {
     if (mode === "name") {

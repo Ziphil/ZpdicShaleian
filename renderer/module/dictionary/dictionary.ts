@@ -61,6 +61,7 @@ export class Dictionary implements PlainDictionary {
     let result = SearchResult.measure(() => {
       let words = [];
       let suggestions = [];
+      parameter.prepare(this);
       suggestions.push(...parameter.presuggest(this));
       for (let word of this.words) {
         if (parameter.match(word)) {

@@ -30,9 +30,12 @@ import {
   IgnoreOptions,
   WordParameter
 } from "../word-parameter/word-parameter";
+import {
+  Suggester
+} from "./suggester";
 
 
-export class InflectionSuggester {
+export class InflectionSuggester extends Suggester {
 
   private search: string;
   private normalizedSearch: string;
@@ -40,6 +43,7 @@ export class InflectionSuggester {
   private candidates: Candidates;
 
   public constructor(search: string, ignoreOptions: IgnoreOptions) {
+    super();
     this.search = search;
     this.normalizedSearch = WordParameter.normalize(search, ignoreOptions);
     this.ignoreOptions = ignoreOptions;
@@ -121,6 +125,10 @@ export class InflectionSuggester {
       let name = search.replaceAll(regexp, "");
       this.candidates.particle.push([name]);
     }
+  }
+
+  public presuggest(dictionary: Dictionary): Array<Suggestion> {
+    return [];
   }
 
   public suggest(word: Word, dictionary: Dictionary): Array<Suggestion> {
