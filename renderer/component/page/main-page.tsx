@@ -237,7 +237,8 @@ export class MainPage extends Component<Props, State> {
   }
 
   private updateWordsByName(name: string): void {
-    let parameter = new NormalWordParameter(name, "name", "exact", this.state.language);
+    let language = this.state.language;
+    let parameter = new NormalWordParameter(name, "name", "exact", language, {case: false, diacritic: false});
     this.updateWords(parameter);
   }
 
