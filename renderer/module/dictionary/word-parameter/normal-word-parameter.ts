@@ -4,6 +4,7 @@ import {
   Dictionary
 } from "../dictionary";
 import {
+  RevisionSuggestion,
   Suggestion
 } from "../suggestion";
 import {
@@ -45,8 +46,12 @@ export class NormalWordParameter extends WordParameter {
     if ((mode === "name" || mode === "both") && (type === "exact" || type === "prefix")) {
       let revisions = dictionary.settings.revisions;
       let names = revisions.resolve(this.search);
-      let suggestions = names.map((name) => new Suggestion("revision", [name]));
-      return suggestions;
+      if (names.length > 0) {
+        let suggestion = new RevisionSuggestion(names);
+        return [suggestion];
+      } else {
+        return [];
+      }
     } else {
       return [];
     }
