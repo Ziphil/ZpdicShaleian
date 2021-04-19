@@ -1,0 +1,34 @@
+@charset "utf-8";
+
+
+$ssp-marker-width: $pt-grid-size / 2;
+$ssp-blank-margin: $pt-grid-size / 2;
+
+.ssp-suggestion {
+  margin: 0px;
+  margin-left: $ssp-marker-width + $ssp-blank-margin;
+  &::before {
+    width: $ssp-marker-width;
+    margin-right: $ssp-blank-margin;
+    margin-left: -$ssp-marker-width - $ssp-blank-margin;
+    color: $pt-icon-color;
+    text-align: right;
+    content: "•";
+    display: inline-block;
+  }
+}
+
+.ssp-keyword {
+  margin-left: $pt-grid-size / 2;
+}
+
+.ssp-divider {
+  margin: 0px $pt-grid-size / 2;
+  color: $pt-icon-color;
+}
+
+.ssp-sans {
+  font-family: $pt-font-family-sans;
+  font-size: 96%;
+  line-height: 96%;
+}

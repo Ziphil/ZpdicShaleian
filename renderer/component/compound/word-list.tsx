@@ -18,6 +18,7 @@ import {
 } from "../component";
 import {
   Pagination,
+  SuggestionPane,
   WordPaneWrapper
 } from "../compound";
 import {
@@ -34,12 +35,32 @@ export class WordList extends Component<Props, State> {
     }
   }
 
-  public render(): ReactNode {
+  public renderSuggestions(): ReactNode {
+    let suggestions = this.props.searchResult.suggestions;
+    let suggestionPanes = suggestions.map((suggestion, index) => {
+      let suggestionPane = (
+        <SuggestionPane
+          key={index}
+          dictionary={this.props.dictionary}
+          suggestion={suggestion}
+          language={this.props.language}
+          onLinkClick={this.props.onLinkClick}
+        />
+      );
+      return suggestionPane;
+    });
+    let node = (suggestions.length > 0) && (
+      <ul className="zpwdl-suggestion">
+        {suggestionPanes}
+      </ul>
+    );
+    return node;
+  }
+
+  public renderWords(): ReactNode {
     let page = this.props.page;
-    let minPage = this.props.searchResult.minPage;
-    let maxPage = this.props.searchResult.maxPage;
-    let displayedWords = this.props.searchResult.sliceWords(page);
-    let wordPanes = displayedWords.map((word) => {
+    let words = this.props.searchResult.sliceWords(page);
+    let wordPanes = words.map((word) => {
       let wordPane = (
         <WordPaneWrapper
           key={word.uid}
@@ -58,12 +79,24 @@ export class WordList extends Component<Props, State> {
       return wordPane;
     });
     let node = (
+      <div className="zpwdl-word">
+        {wordPanes}
+      </div>
+    );
+    return node;
+  }
+
+  public render(): ReactNode {
+    let page = this.props.page;
+    let searchResult = this.props.searchResult;
+    let suggestionNode = this.renderSuggestions();
+    let wordNode = this.renderWords();
+    let node = (
       <div className="zpwdl-list-wrapper">
-        <div className="zpwdl-list">
-          {wordPanes}
-        </div>
+        {suggestionNode}
+        {wordNode}
         <div className="zpwdl-pagination-container">
-          <Pagination page={this.props.page} minPage={minPage} maxPage={maxPage} onSet={this.handlePageSet.bind(this)}/>
+          <Pagination page={page} minPage={searchResult.minPage} maxPage={searchResult.maxPage} onSet={this.handlePageSet.bind(this)}/>
         </div>
       </div>
     );
