@@ -64,7 +64,7 @@ export abstract class WordParameter {
     }
   }
 
-  protected static createMatcher(type: string): (search: string, candidate: string) => boolean {
+  protected static createMatcher(type: string): Matcher {
     if (type === "exact") {
       let matcher = function (search: string, candidate: string): boolean {
         return candidate === search;
@@ -143,3 +143,4 @@ export const WORD_TYPES = ["exact", "prefix", "suffix", "part", "pair", "regular
 export type WordType = (typeof WORD_TYPES)[number];
 
 export type IgnoreOptions = {case: boolean, diacritic: boolean};
+export type Matcher = (search: string, candidate: string) => boolean;
