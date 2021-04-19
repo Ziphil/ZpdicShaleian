@@ -4,8 +4,13 @@ import {
   ObjectUtil
 } from "../../../util/object";
 import {
+  ADVERBIAL_INFLECTION_CATEGORY_DATA,
   ASPECT_DATA,
+  AdverbialInflectionCategory,
+  CATEGORY_DATA,
   NEGATIVE_DATA,
+  PARTICLE_INFLECTION_TYPE_DATA,
+  ParticleInflectionType,
   TENSE_DATA,
   TRANSITIVITY_DATA,
   VERBAL_INFLECTION_CATEGORY_DATA,
@@ -32,18 +37,24 @@ export class InflectionSuggester {
   private search: string;
   private normalizedSearch: string;
   private ignoreOptions: IgnoreOptions;
-  private verbalCandidates: Array<{name: string, category: VerbalInflectionCategory, feature: VerbFeature | null, negative: boolean}>;
+  private candidates: Candidates;
 
   public constructor(search: string, ignoreOptions: IgnoreOptions) {
     this.search = search;
-    this.ignoreOptions = ignoreOptions;
-    this.verbalCandidates = [];
     this.normalizedSearch = WordParameter.normalize(search, ignoreOptions);
+    this.ignoreOptions = ignoreOptions;
+    this.candidates = {verbal: [], nominal: [], adverbial: [], particle: []};
   }
 
   public prepare(): void {
+    this.prepareVerbal();
+    this.prepareNominal();
+    this.prepareAdverbial();
+    this.prepareParticle();
+  }
+
+  private prepareVerbal(): void {
     let search = this.search;
-    let candidates = [];
     {
       let category = "verb" as const;
       for (let [tense, tenseData] of ObjectUtil.entries(TENSE_DATA)) {
@@ -56,7 +67,7 @@ export class InflectionSuggester {
                 let regexp = new RegExp(`^${prefix}|${suffix}$`, "g");
                 let name = search.replaceAll(regexp, "");
                 let feature = {tense, aspect, transitivity};
-                candidates.push({category, feature, negative, name});
+                this.candidates.verbal.push([name, category, feature, negative]);
               }
             }
           }
@@ -72,19 +83,66 @@ export class InflectionSuggester {
           let regexp = new RegExp(`^${prefix}`, "g");
           let name = search.replaceAll(regexp, "");
           let feature = null;
-          candidates.push({name, category, feature, negative});
+          this.candidates.verbal.push([name, category, feature, negative]);
         }
       }
     }
-    this.verbalCandidates = candidates;
+  }
+
+  private prepareNominal(): void {
+    let search = this.search;
+    let prefix = NEGATIVE_DATA.prefix;
+    if (search.startsWith(prefix)) {
+      let regexp = new RegExp(`^${prefix}`, "g");
+      let name = search.replaceAll(regexp, "");
+      this.candidates.nominal.push([name]);
+    }
+  }
+
+  private prepareAdverbial(): void {
+    let search = this.search;
+    for (let negative of [true, false]) {
+      let categoryPrefix = ADVERBIAL_INFLECTION_CATEGORY_DATA.adverb.prefix;
+      let negativePrefix = (negative) ? NEGATIVE_DATA.prefix : "";
+      let prefix = categoryPrefix + negativePrefix;
+      if (search.startsWith(prefix)) {
+        let regexp = new RegExp(`^${prefix}`, "g");
+        let name = search.replaceAll(regexp, "");
+        this.candidates.adverbial.push([name, negative]);
+      }
+    }
+  }
+
+  private prepareParticle(): void {
+    let search = this.search;
+    let prefix = PARTICLE_INFLECTION_TYPE_DATA.nonverb.prefix;
+    if (search.startsWith(prefix)) {
+      let regexp = new RegExp(`^${prefix}`, "g");
+      let name = search.replaceAll(regexp, "");
+      this.candidates.particle.push([name]);
+    }
   }
 
   public suggest(word: Word, dictionary: Dictionary): Array<Suggestion> {
     let suggestions = [];
-    for (let candidate of this.verbalCandidates) {
-      if (candidate.name === word.name) {
-        let suggestion = new VerbalInflectionSuggestion(word.name, candidate.category, candidate.feature, candidate.negative);
-        suggestions.push(suggestion);
+    for (let [kind, candidates] of ObjectUtil.entries(this.candidates)) {
+      for (let candidate of candidates) {
+        let anyCandidate = candidate as any;
+        if (candidate[0] === word.name) {
+          if (kind === "verbal") {
+            let suggestion = new VerbalInflectionSuggestion(anyCandidate[0], anyCandidate[1], anyCandidate[2], anyCandidate[3]);
+            suggestions.push(suggestion);
+          } else if (kind === "nominal") {
+            let suggestion = new NominalInflectionSuggestion(anyCandidate[0]);
+            suggestions.push(suggestion);
+          } else if (kind === "adverbial") {
+            let suggestion = new AdverbialInflectionSuggestion(anyCandidate[0], anyCandidate[1]);
+            suggestions.push(suggestion);
+          } else if (kind === "particle") {
+            let suggestion = new ParticleInflectionSuggestion(anyCandidate[0]);
+            suggestions.push(suggestion);
+          }
+        }
       }
     }
     return suggestions;
@@ -93,7 +151,16 @@ export class InflectionSuggester {
 }
 
 
-export class VerbalInflectionSuggestion extends Suggestion<"verbalInflection"> {
+export abstract class InflectionSuggestion<K extends InflectionSuggestionKind> extends Suggestion<K> {
+
+  public getKindName(language: string): string | undefined {
+    return ObjectUtil.get(INFLECTION_SUGGESTION_KIND_DATA[this.kind].names, language);
+  }
+
+}
+
+
+export class VerbalInflectionSuggestion extends InflectionSuggestion<"verbalInflection"> {
 
   public readonly category: VerbalInflectionCategory;
   public readonly feature: VerbFeature | null;
@@ -106,32 +173,99 @@ export class VerbalInflectionSuggestion extends Suggestion<"verbalInflection"> {
     this.negative = negative;
   }
 
-  public getKindName(language: string): string | undefined {
-    return ObjectUtil.get(SUGGESTION_KIND_DATA.verbalInflection.names, language);
-  }
-
-  public getKeywords(language: string): Array<string> {
-    let rawKeywords = [];
-    rawKeywords.push(ObjectUtil.get(VERBAL_INFLECTION_CATEGORY_DATA[this.category].names, language));
+  public getKeywords(language: string): Array<string | undefined> {
+    let keywords = [];
+    keywords.push(ObjectUtil.get(VERBAL_INFLECTION_CATEGORY_DATA[this.category].names, language));
     if (this.feature !== null) {
-      rawKeywords.push(ObjectUtil.get(TENSE_DATA[this.feature.tense].names, language));
-      rawKeywords.push(ObjectUtil.get(ASPECT_DATA[this.feature.aspect].names, language));
-      rawKeywords.push(ObjectUtil.get(TRANSITIVITY_DATA[this.feature.transitivity].names, language));
+      keywords.push(ObjectUtil.get(TENSE_DATA[this.feature.tense].names, language));
+      keywords.push(ObjectUtil.get(ASPECT_DATA[this.feature.aspect].names, language));
+      keywords.push(ObjectUtil.get(TRANSITIVITY_DATA[this.feature.transitivity].names, language));
     }
     if (this.negative) {
-      rawKeywords.push(ObjectUtil.get(NEGATIVE_DATA.names, language));
+      keywords.push(ObjectUtil.get(NEGATIVE_DATA.names, language));
     }
-    let keywords = rawKeywords.filter((keyword) => keyword) as any;
     return keywords;
   }
 
 }
 
 
-export const SUGGESTION_KIND_DATA = {
+export class NominalInflectionSuggestion extends InflectionSuggestion<"nominalInflection"> {
+
+  public readonly category: "noun";
+  public readonly negative: true;
+
+  public constructor(name: string) {
+    super("nominalInflection", [name]);
+    this.category = "noun";
+    this.negative = true;
+  }
+
+  public getKeywords(language: string): Array<string | undefined> {
+    let keywords = [];
+    keywords.push(ObjectUtil.get(CATEGORY_DATA[this.category].names, language));
+    if (this.negative) {
+      keywords.push(ObjectUtil.get(NEGATIVE_DATA.names, language));
+    }
+    return keywords;
+  }
+
+}
+
+
+export class AdverbialInflectionSuggestion extends InflectionSuggestion<"adverbialInflection"> {
+
+  public readonly category: AdverbialInflectionCategory;
+  public readonly negative: boolean;
+
+  public constructor(name: string, negative: boolean) {
+    super("adverbialInflection", [name]);
+    this.category = "adverb";
+    this.negative = negative;
+  }
+
+  public getKeywords(language: string): Array<string | undefined> {
+    let keywords = [];
+    keywords.push(ObjectUtil.get(CATEGORY_DATA[this.category].names, language));
+    if (this.negative) {
+      keywords.push(ObjectUtil.get(NEGATIVE_DATA.names, language));
+    }
+    return keywords;
+  }
+
+}
+
+
+export class ParticleInflectionSuggestion extends InflectionSuggestion<"particleInflection"> {
+
+  public readonly type: ParticleInflectionType;
+
+  public constructor(name: string) {
+    super("particleInflection", [name]);
+    this.type = "nonverb";
+  }
+
+  public getKeywords(language: string): Array<string | undefined> {
+    let keywords = [];
+    keywords.push(ObjectUtil.get(PARTICLE_INFLECTION_TYPE_DATA[this.type].names, language));
+    return keywords;
+  }
+
+}
+
+
+export const INFLECTION_SUGGESTION_KIND_DATA = {
   verbalInflection: {names: {ja: "動辞の語形変化", en: "Inflection of verbal"}},
   nominalInflection: {names: {ja: "名辞の語形変化", en: "Inflection of nominal"}},
   adverbialInflection: {names: {ja: "副辞の語形変化", en: "Inflection of adverbial"}},
-  particleInflection: {names: {ja: "助接辞の語形変化", en: "Inflection of particle"}},
-  revision: {names: {ja: "綴り改定", en: "Spelling revision"}}
+  particleInflection: {names: {ja: "助接辞の語形変化", en: "Inflection of particle"}}
 } as const;
+
+export type InflectionSuggestionKind = keyof typeof INFLECTION_SUGGESTION_KIND_DATA;
+
+type Candidates = {
+  verbal: Array<Readonly<ConstructorParameters<typeof VerbalInflectionSuggestion>>>,
+  nominal: Array<Readonly<ConstructorParameters<typeof NominalInflectionSuggestion>>>,
+  adverbial: Array<Readonly<ConstructorParameters<typeof AdverbialInflectionSuggestion>>>,
+  particle: Array<Readonly<ConstructorParameters<typeof ParticleInflectionSuggestion>>>
+};

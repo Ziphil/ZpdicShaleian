@@ -13,7 +13,7 @@ export abstract class Suggestion<K extends string = string> {
 
   public abstract getKindName(language: string): string | undefined;
 
-  public abstract getKeywords(language: string): Array<string>;
+  public abstract getKeywords(language: string): Array<string | undefined>;
 
 }
 
@@ -30,7 +30,7 @@ export class RevisionSuggestion extends Suggestion<"revision"> {
     return name;
   }
 
-  public getKeywords(language: string): Array<string> {
+  public getKeywords(language: string): Array<string | undefined> {
     return [];
   }
 
