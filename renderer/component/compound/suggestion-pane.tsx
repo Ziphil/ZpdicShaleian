@@ -24,7 +24,7 @@ export class SuggestionPane extends Component<Props, State> {
     let onLinkCtrlClick = WordPane.requireCtrl(this.props.onLinkClick);
     let keywordNode = (suggestion.getKeywords(language).length > 0) && (
       <span className="ssp-keyword">
-        ({suggestion.getKeywords(language).join(", ")})
+        ({suggestion.getKeywords(language).join(", ").toLowerCase()})
       </span>
     );
     let nameNodes = suggestion.names.map((name) => {
@@ -34,7 +34,7 @@ export class SuggestionPane extends Component<Props, State> {
     let nameNode = WordPane.intersperse(nameNodes, ", ");
     let node = (
       <li className="ssp-suggestion">
-        {suggestion.getKindName(language)}
+        {suggestion.getKindName(language)?.toLowerCase()}
         {keywordNode}
         <span className="ssp-divider">—</span>
         {nameNode}
