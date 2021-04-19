@@ -9,7 +9,7 @@ import {
 } from "../suggester";
 import {
   InflectionSuggester
-} from "../suggester/stable-suggester";
+} from "../suggester/stable-inflection-suggester";
 import {
   Word
 } from "../word";
