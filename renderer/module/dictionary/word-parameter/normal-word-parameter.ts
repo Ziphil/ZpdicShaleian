@@ -4,6 +4,9 @@ import {
   Dictionary
 } from "../dictionary";
 import {
+  InflectionSuggester
+} from "../inflection-suggester/stable-inflection-suggester";
+import {
   RevisionSuggestion,
   Suggestion
 } from "../suggestion";
@@ -25,6 +28,7 @@ export class NormalWordParameter extends WordParameter {
   public type: WordType;
   public language: string;
   public ignoreOptions: IgnoreOptions;
+  private suggester: InflectionSuggester;
 
   public constructor(search: string, mode: WordMode, type: WordType, language: string, ignoreOptions?: IgnoreOptions) {
     super();
@@ -33,6 +37,7 @@ export class NormalWordParameter extends WordParameter {
     this.type = type;
     this.language = language;
     this.ignoreOptions = ignoreOptions ?? NormalWordParameter.getDefaultIgnoreOptions(mode, type);
+    this.suggester = new InflectionSuggester(this.search, this.ignoreOptions);
   }
 
   public static createEmpty(language: string): NormalWordParameter {
@@ -43,6 +48,7 @@ export class NormalWordParameter extends WordParameter {
   public presuggest(dictionary: Dictionary): Array<Suggestion> {
     let mode = this.mode;
     let type = this.type;
+    this.suggester.prepare();
     if ((mode === "name" || mode === "both") && (type === "exact" || type === "prefix")) {
       let revisions = dictionary.settings.revisions;
       let names = revisions.resolve(this.search);
@@ -69,7 +75,7 @@ export class NormalWordParameter extends WordParameter {
   }
 
   public suggest(word: Word, dictionary: Dictionary): Array<Suggestion> {
-    return [];
+    return this.suggester.suggest(word, dictionary);
   }
 
   private static getDefaultIgnoreOptions(mode: WordMode, type: WordType): IgnoreOptions {

@@ -94,7 +94,7 @@ export abstract class WordParameter {
     }
   }
 
-  protected static normalize(string: string, ignoreOptions: IgnoreOptions): string {
+  public static normalize(string: string, ignoreOptions: IgnoreOptions): string {
     if (ignoreOptions.case) {
       string = string.toLowerCase();
     }
