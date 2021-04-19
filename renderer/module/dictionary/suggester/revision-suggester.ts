@@ -4,6 +4,10 @@ import {
   ObjectUtil
 } from "../../../util/object";
 import {
+  IgnoreOptions,
+  StringNormalizer
+} from "../../../util/string-normalizer";
+import {
   Dictionary
 } from "../dictionary";
 import {
@@ -12,10 +16,6 @@ import {
 import {
   Word
 } from "../word";
-import {
-  IgnoreOptions,
-  WordParameter
-} from "../word-parameter/word-parameter";
 import {
   Suggester
 } from "./suggester";
@@ -30,7 +30,7 @@ export class RevisionSuggester extends Suggester {
   public constructor(search: string, ignoreOptions: IgnoreOptions) {
     super();
     this.search = search;
-    this.normalizedSearch = WordParameter.normalize(search, ignoreOptions);
+    this.normalizedSearch = StringNormalizer.normalize(search, ignoreOptions);
     this.ignoreOptions = ignoreOptions;
   }
 

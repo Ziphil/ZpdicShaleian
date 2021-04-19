@@ -1,6 +1,10 @@
 //
 
 import {
+  IgnoreOptions,
+  StringNormalizer
+} from "../../../util/string-normalizer";
+import {
   Dictionary
 } from "../dictionary";
 import {
@@ -14,7 +18,6 @@ import {
   Word
 } from "../word";
 import {
-  IgnoreOptions,
   WordMode,
   WordParameter,
   WordType
@@ -46,9 +49,9 @@ export class NormalWordParameter extends WordParameter {
   public match(word: Word): boolean {
     let candidates = WordParameter.createCandidates(word, this.mode, this.language);
     let matcher = WordParameter.createMatcher(this.type);
-    let normalizedSearch = WordParameter.normalize(this.search, this.ignoreOptions);
+    let normalizedSearch = StringNormalizer.normalize(this.search, this.ignoreOptions);
     let predicate = candidates.some((candidate) => {
-      let normalizedCandidate = WordParameter.normalize(candidate, this.ignoreOptions);
+      let normalizedCandidate = StringNormalizer.normalize(candidate, this.ignoreOptions);
       return matcher(normalizedSearch, normalizedCandidate);
     });
     return predicate;

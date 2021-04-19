@@ -4,6 +4,10 @@ import {
   ObjectUtil
 } from "../../../util/object";
 import {
+  IgnoreOptions,
+  StringNormalizer
+} from "../../../util/string-normalizer";
+import {
   ADVERBIAL_INFLECTION_CATEGORY_DATA,
   ASPECT_DATA,
   AdverbialInflectionCategory,
@@ -27,10 +31,6 @@ import {
   Word
 } from "../word";
 import {
-  IgnoreOptions,
-  WordParameter
-} from "../word-parameter/word-parameter";
-import {
   Suggester
 } from "./suggester";
 
@@ -45,7 +45,7 @@ export class InflectionSuggester extends Suggester {
   public constructor(search: string, ignoreOptions: IgnoreOptions) {
     super();
     this.search = search;
-    this.normalizedSearch = WordParameter.normalize(search, ignoreOptions);
+    this.normalizedSearch = StringNormalizer.normalize(search, ignoreOptions);
     this.ignoreOptions = ignoreOptions;
     this.candidates = {verbal: [], nominal: [], adverbial: [], particle: []};
   }
@@ -133,7 +133,7 @@ export class InflectionSuggester extends Suggester {
 
   public suggest(word: Word, dictionary: Dictionary): Array<Suggestion> {
     let suggestions = [];
-    let normalizedName = WordParameter.normalize(word.name, this.ignoreOptions);
+    let normalizedName = StringNormalizer.normalize(word.name, this.ignoreOptions);
     for (let [kind, candidates] of ObjectUtil.entries(this.candidates)) {
       for (let candidate of candidates) {
         let anyCandidate = candidate as any;

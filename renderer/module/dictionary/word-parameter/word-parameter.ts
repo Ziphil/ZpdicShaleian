@@ -123,16 +123,6 @@ export abstract class WordParameter {
     }
   }
 
-  public static normalize(string: string, ignoreOptions: IgnoreOptions): string {
-    if (ignoreOptions.case) {
-      string = string.toLowerCase();
-    }
-    if (ignoreOptions.diacritic) {
-      string = string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    }
-    return string;
-  }
-
 }
 
 
@@ -142,5 +132,4 @@ export type WordMode = (typeof WORD_MODES)[number];
 export const WORD_TYPES = ["exact", "prefix", "suffix", "part", "pair", "regular"] as const;
 export type WordType = (typeof WORD_TYPES)[number];
 
-export type IgnoreOptions = {case: boolean, diacritic: boolean};
 export type Matcher = (search: string, candidate: string) => boolean;
