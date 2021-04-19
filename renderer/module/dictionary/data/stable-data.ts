@@ -3,25 +3,32 @@
 
 export const LEXICAL_CATEGORY_DATA = {
   verbal: {
-    names: {ja: "動辞", en: "Verbal"}
+    names: {ja: "動辞", en: "Verbal"},
+    abbreviations: {ja: "動", en: "V"}
   },
   nominal: {
-    names: {ja: "名辞", en: "Nominal"}
+    names: {ja: "名辞", en: "Nominal"},
+    abbreviations: {ja: "名", en: "N"}
   },
   adverbial: {
-    names: {ja: "副辞", en: "Adverbial"}
+    names: {ja: "副辞", en: "Adverbial"},
+    abbreviations: {ja: "副", en: "B"}
   },
   functional: {
-    names: {ja: "機能辞", en: "Functional"}
+    names: {ja: "機能辞", en: "Functional"},
+    abbreviations: {ja: "機", en: "F"}
   },
   particle: {
-    names: {ja: "助接辞", en: "Particle"}
+    names: {ja: "助接辞", en: "Particle"},
+    abbreviations: {ja: "助", en: "P"}
   },
   connective: {
-    names: {ja: "連結辞", en: "Connective"}
+    names: {ja: "連結辞", en: "Connective"},
+    abbreviations: {ja: "連", en: "C"}
   },
   interjection: {
-    names: {ja: "間投辞", en: "Interjection"}
+    names: {ja: "間投辞", en: "Interjection"},
+    abbreviations: {ja: "間", en: "I"}
   }
 } as const;
 export const CATEGORY_DATA = {

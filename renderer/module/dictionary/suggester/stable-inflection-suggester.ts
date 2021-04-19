@@ -12,6 +12,7 @@ import {
   ASPECT_DATA,
   AdverbialInflectionCategory,
   CATEGORY_DATA,
+  LEXICAL_CATEGORY_DATA,
   NEGATIVE_DATA,
   PARTICLE_INFLECTION_TYPE_DATA,
   ParticleInflectionType,
@@ -134,20 +135,22 @@ export class InflectionSuggester extends Suggester {
   public suggest(word: Word, dictionary: Dictionary): Array<Suggestion> {
     let suggestions = [];
     let normalizedName = StringNormalizer.normalize(word.name, this.ignoreOptions);
-    for (let [kind, candidates] of ObjectUtil.entries(this.candidates)) {
+    for (let [lexicalCategory, candidates] of ObjectUtil.entries(this.candidates)) {
       for (let candidate of candidates) {
         let anyCandidate = candidate as any;
-        if (candidate[0] === normalizedName) {
-          if (kind === "verbal") {
+        let abbreciation = LEXICAL_CATEGORY_DATA[lexicalCategory].abbreviations.ja;
+        let regexp = new RegExp(`^\\+\\s*<${abbreciation}.*>`);
+        if (candidate[0] === normalizedName && word.contents.ja?.match(regexp)) {
+          if (lexicalCategory === "verbal") {
             let suggestion = new VerbalInflectionSuggestion(word.name, anyCandidate[1], anyCandidate[2], anyCandidate[3]);
             suggestions.push(suggestion);
-          } else if (kind === "nominal") {
+          } else if (lexicalCategory === "nominal") {
             let suggestion = new NominalInflectionSuggestion(word.name);
             suggestions.push(suggestion);
-          } else if (kind === "adverbial") {
+          } else if (lexicalCategory === "adverbial") {
             let suggestion = new AdverbialInflectionSuggestion(word.name, anyCandidate[1]);
             suggestions.push(suggestion);
-          } else if (kind === "particle") {
+          } else if (lexicalCategory === "particle") {
             let suggestion = new ParticleInflectionSuggestion(word.name);
             suggestions.push(suggestion);
           }
