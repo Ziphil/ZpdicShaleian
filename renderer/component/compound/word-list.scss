@@ -9,6 +9,7 @@
 }
 
 .zpwdl-suggestion {
+  @extend .bp3-running-text;
   margin: 0px 0px $pt-grid-size * 1.5 $pt-grid-size * 0.2;
   padding: 0px;
   list-style: none;
