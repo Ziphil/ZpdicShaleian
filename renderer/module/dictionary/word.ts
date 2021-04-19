@@ -10,16 +10,8 @@ import {
   ValidationError
 } from "./error";
 import {
-  Marker,
-  Markers
+  Marker
 } from "./marker";
-import {
-  ParsedWord
-} from "./parsed-word";
-import {
-  MarkupResolver,
-  Parser
-} from "./parser";
 
 
 export class Word implements PlainWord {
