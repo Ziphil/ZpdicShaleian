@@ -1,5 +1,9 @@
 //
 
+import {
+  ObjectUtil
+} from "../../util/object";
+
 
 export class Information<S, K extends InformationKind = InformationKind> {
 
@@ -65,7 +69,7 @@ export class ExampleInformation<S> extends Information<S, "example"> {
 export class InformationKindUtil {
 
   public static fromTag(tag: string): InformationKind | undefined {
-    let entry = Object.entries(INFORMATION_KIND_DATA).find(([kind, data]) => data.tag === tag);
+    let entry = ObjectUtil.entries(INFORMATION_KIND_DATA).find(([kind, data]) => data.tag === tag);
     if (entry !== undefined) {
       return entry[0] as any;
     } else {
@@ -79,8 +83,7 @@ export class InformationKindUtil {
   }
 
   public static getName(kind: InformationKind, language: string): string | undefined {
-    let names = INFORMATION_KIND_DATA[kind].names as any;
-    let name = names[language];
+    let name = ObjectUtil.get(INFORMATION_KIND_DATA[kind].names, language);
     return name;
   }
 
