@@ -26,6 +26,9 @@ import {
   Dictionary
 } from "../dictionary";
 import {
+  Parser
+} from "../parser";
+import {
   Suggestion
 } from "../suggestion";
 import {
@@ -138,9 +141,9 @@ export class InflectionSuggester extends Suggester {
     for (let [lexicalCategory, candidates] of ObjectUtil.entries(this.candidates)) {
       for (let candidate of candidates) {
         let anyCandidate = candidate as any;
-        let abbreciation = LEXICAL_CATEGORY_DATA[lexicalCategory].abbreviations.ja;
-        let regexp = new RegExp(`^\\+\\s*<${abbreciation}.*>`);
-        if (candidate[0] === normalizedName && word.contents.ja?.match(regexp)) {
+        let wordLexicalCategory = Parser.createKeep().lookupLexicalCategory(word, "ja");
+        let desiredLexicalCategory = LEXICAL_CATEGORY_DATA[lexicalCategory].abbreviations["ja"];
+        if (candidate[0] === normalizedName && wordLexicalCategory?.startsWith(desiredLexicalCategory)) {
           if (lexicalCategory === "verbal") {
             let suggestion = new VerbalInflectionSuggestion(word.name, anyCandidate[1], anyCandidate[2], anyCandidate[3]);
             suggestions.push(suggestion);

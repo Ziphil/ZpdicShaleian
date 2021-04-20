@@ -51,6 +51,8 @@ export class Parser<S> {
     return parser;
   }
 
+  // 与えられた単語データをパースして、ParsedWord オブジェクトとして返します。
+  // パースした全てのデータではなく一部の項目の内容のみが必要な場合は、lookup から始まるメソッドを使用した方が軽量です。
   public parse(word: Word): ParsedWord<S> {
     let name = word.name;
     let uniqueName = word.uniqueName;
@@ -189,6 +191,20 @@ export class Parser<S> {
       return relation;
     } else {
       return null;
+    }
+  }
+
+  public lookupLexicalCategory(word: Word, language: string): string | null | undefined {
+    let content = word.contents[language];
+    if (content !== undefined) {
+      let match = content.match(/^\+\s*(?:<(.*?)>)/m);
+      if (match) {
+        return match[1];
+      } else {
+        return null;
+      }
+    } else {
+      return undefined;
     }
   }
 
