@@ -8,12 +8,14 @@ import {
   Dictionary
 } from "../dictionary";
 import {
-  RevisionSuggester,
-  Suggester
-} from "../suggester";
+  RevisionSuggester
+} from "../suggester/revision-suggester";
 import {
   InflectionSuggester
 } from "../suggester/stable-inflection-suggester";
+import {
+  Suggester
+} from "../suggester/suggester";
 import {
   Word
 } from "../word";

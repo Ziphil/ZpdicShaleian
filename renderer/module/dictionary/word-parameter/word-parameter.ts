@@ -5,7 +5,7 @@ import {
 } from "../dictionary";
 import {
   Suggester
-} from "../suggester";
+} from "../suggester/suggester";
 import {
   Suggestion
 } from "../suggestion";
