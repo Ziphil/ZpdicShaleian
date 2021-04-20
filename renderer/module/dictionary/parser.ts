@@ -23,7 +23,6 @@ import {
   Relation
 } from "./relation";
 import {
-  FieldUtil,
   Section
 } from "./section";
 import {
@@ -91,11 +90,11 @@ export class Parser<S> {
       }
       let field = this.parseField(line);
       if (field !== null) {
-        if (FieldUtil.isEquivalent(field)) {
+        if (field instanceof Equivalent) {
           currentEquivalents.push(field);
-        } else if (FieldUtil.isInformation(field)) {
+        } else if (field instanceof Information) {
           currentInformations.push(field);
-        } else {
+        } else if (field instanceof Relation) {
           currentRelations.push(field);
         }
       }

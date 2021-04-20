@@ -6,7 +6,6 @@ import {
 import {
   ExampleInformation,
   Information,
-  InformationUtil,
   NormalInformation,
   PhraseInformation
 } from "./information";
@@ -46,7 +45,7 @@ export class Section<S> {
   }
 
   public getNormalInformations(onlyVisible?: boolean): ReadonlyArray<NormalInformation<S>> {
-    let informations = this.informations.filter(InformationUtil.isNormal);
+    let informations = this.informations.filter((information) => information instanceof NormalInformation) as Array<NormalInformation<S>>;
     if (onlyVisible) {
       informations = informations.filter((information) => !information.hidden);
     }
@@ -54,7 +53,7 @@ export class Section<S> {
   }
 
   public getPhraseInformations(onlyVisible?: boolean): ReadonlyArray<PhraseInformation<S>> {
-    let informations = this.informations.filter(InformationUtil.isPhrase);
+    let informations = this.informations.filter((information) => information instanceof PhraseInformation) as Array<PhraseInformation<S>>;
     if (onlyVisible) {
       informations = informations.filter((information) => !information.hidden);
     }
@@ -62,7 +61,7 @@ export class Section<S> {
   }
 
   public getExampleInformations(onlyVisible?: boolean): ReadonlyArray<ExampleInformation<S>> {
-    let informations = this.informations.filter(InformationUtil.isExample);
+    let informations = this.informations.filter((information) => information instanceof ExampleInformation) as Array<ExampleInformation<S>>;
     if (onlyVisible) {
       informations = informations.filter((information) => !information.hidden);
     }
@@ -75,23 +74,6 @@ export class Section<S> {
     let relations = this.relations;
     let fields = [...equivalents, ...informations, ...relations];
     return fields;
-  }
-
-}
-
-
-export class FieldUtil {
-
-  public static isEquivalent<S>(field: Field<S>): field is Equivalent<S> {
-    return field instanceof Equivalent;
-  }
-
-  public static isInformation<S>(field: Field<S>): field is Information<S> {
-    return !(field instanceof Equivalent) && !(field instanceof Relation);
-  }
-
-  public static isRelation<S>(field: Field<S>): field is Relation<S> {
-    return field instanceof Relation;
   }
 
 }

@@ -11,8 +11,10 @@ import {
   DictionarySettings
 } from "../dictionary-settings";
 import {
+  ExampleInformation,
   InformationKindUtil,
-  InformationUtil
+  NormalInformation,
+  PhraseInformation
 } from "../information";
 import {
   ParsedWord
@@ -94,17 +96,17 @@ export class OldShaleianSaver extends Saver {
         } else {
           this.stream.write("> ");
         }
-        if (InformationUtil.isPhrase(information)) {
+        if (information instanceof PhraseInformation) {
           this.stream.write(information.expression);
           this.stream.write(" … ");
           this.stream.write(information.equivalentNames.join(", "));
           this.stream.write("。");
           this.stream.write(information.text ?? "");
-        } else if (InformationUtil.isExample(information)) {
+        } else if (information instanceof ExampleInformation) {
           this.stream.write(information.sentence);
           this.stream.write(" → ");
           this.stream.write(information.translation);
-        } else if (InformationUtil.isNormal(information)) {
+        } else if (information instanceof NormalInformation) {
           if (information.kind === "history" && information.date !== null) {
             this.stream.write(`${information.date}: `);
           }
