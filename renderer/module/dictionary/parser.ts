@@ -136,7 +136,7 @@ export class Parser<S> {
   private parseInformation(line: string): Information<S> | null {
     let match = line.match(/^(\w)(\?)?:\s*(?:@(\d+)\s*)?(.*)$/);
     if (match) {
-      let kind = InformationKindUtil.fromCode(match[1]);
+      let kind = InformationKindUtil.fromTag(match[1]);
       let hidden = match[2] !== undefined;
       let date = (match[3] !== undefined) ? parseInt(match[3], 10) : null;
       let rawText = match[4];

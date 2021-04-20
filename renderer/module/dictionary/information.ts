@@ -64,8 +64,8 @@ export class ExampleInformation<S> extends Information<S, "example"> {
 
 export class InformationKindUtil {
 
-  public static fromCode(code: string): InformationKind | undefined {
-    let entry = Object.entries(INFORMATION_KIND_DATA).find(([kind, data]) => data.code === code);
+  public static fromTag(tag: string): InformationKind | undefined {
+    let entry = Object.entries(INFORMATION_KIND_DATA).find(([kind, data]) => data.tag === tag);
     if (entry !== undefined) {
       return entry[0] as any;
     } else {
@@ -73,9 +73,9 @@ export class InformationKindUtil {
     }
   }
 
-  public static getCode(kind: InformationKind): string {
-    let code = INFORMATION_KIND_DATA[kind].code;
-    return code;
+  public static getTag(kind: InformationKind): string {
+    let tag = INFORMATION_KIND_DATA[kind].tag;
+    return tag;
   }
 
   public static getName(kind: InformationKind, language: string): string | undefined {
@@ -88,14 +88,14 @@ export class InformationKindUtil {
 
 
 export const INFORMATION_KIND_DATA = {
-  meaning: {code: "M", names: {ja: "語義", en: "Meaning"}},
-  etymology: {code: "E", names: {ja: "語源", en: "Etymology"}},
-  usage: {code: "U", names: {ja: "語法", en: "Usage"}},
-  note: {code: "N", names: {ja: "備考", en: "Note"}},
-  task: {code: "O", names: {ja: "タスク", en: "Task"}},
-  history: {code: "H", names: {ja: "履歴", en: "History"}},
-  phrase: {code: "P", names: {ja: "成句", en: "Phrase"}},
-  example: {code: "S", names: {ja: "例文", en: "Example"}}
+  meaning: {tag: "M", names: {ja: "語義", en: "Meaning"}},
+  etymology: {tag: "E", names: {ja: "語源", en: "Etymology"}},
+  usage: {tag: "U", names: {ja: "語法", en: "Usage"}},
+  note: {tag: "N", names: {ja: "備考", en: "Note"}},
+  task: {tag: "O", names: {ja: "タスク", en: "Task"}},
+  history: {tag: "H", names: {ja: "履歴", en: "History"}},
+  phrase: {tag: "P", names: {ja: "成句", en: "Phrase"}},
+  example: {tag: "S", names: {ja: "例文", en: "Example"}}
 } as const;
 
 export type InformationKind = keyof typeof INFORMATION_KIND_DATA;

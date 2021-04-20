@@ -89,8 +89,8 @@ export class OldShaleianSaver extends Saver {
         this.stream.write("\n");
       }
       for (let information of section.informations) {
-        let code = InformationKindUtil.getCode(information.kind);
-        this.stream.write(code);
+        let tag = InformationKindUtil.getTag(information.kind);
+        this.stream.write(tag);
         if (information.kind === "history") {
           this.stream.write("~ ");
         } else {
