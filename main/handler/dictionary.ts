@@ -13,12 +13,10 @@ import {
   PlainWord
 } from "../../renderer/module/dictionary";
 import {
-  DirectoryLoader
-} from "../../renderer/module/dictionary/loader";
-import {
+  DirectoryLoader,
   DirectorySaver,
   OldShaleianSaver
-} from "../../renderer/module/dictionary/saver";
+} from "../../renderer/module/dictionary/io";
 import {
   handler,
   on,
