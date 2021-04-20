@@ -239,7 +239,7 @@ export class MarkupParser<S, E> {
         let element = this.consumeBracket();
         children.push(element);
       } else if (char === "/") {
-        let element = this.consumeSlash()[1];
+        let [, element] = this.consumeSlash();
         children.push(element);
       } else if (char === "") {
         break;
