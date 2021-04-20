@@ -38,8 +38,9 @@ export class OldShaleianSaver extends Saver {
 
   public constructor(dictionary: Dictionary, path: string | null) {
     super(dictionary, path);
+    let resolver = OldShaleianSaver.createMarkupResolver();
     this.stream = fs.createWriteStream(this.path, {encoding: "utf-8"});
-    this.parser = new Parser(OldShaleianSaver.createMarkupResolver());
+    this.parser = new Parser(resolver);
   }
 
   public start(): void {
