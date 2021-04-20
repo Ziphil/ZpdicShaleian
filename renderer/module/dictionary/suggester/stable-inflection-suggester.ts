@@ -55,33 +55,36 @@ export class InflectionSuggester extends Suggester {
   }
 
   public prepare(): void {
-    this.prepareVerbal();
+    this.prepareVerbalVerb();
+    this.prepareVerbalOthers();
     this.prepareNominal();
     this.prepareAdverbial();
     this.prepareParticle();
   }
 
-  private prepareVerbal(): void {
+  private prepareVerbalVerb(): void {
     let normalizedSearch = this.normalizedSearch;
-    {
-      let category = "verb" as const;
-      for (let [tense, tenseData] of ObjectUtil.entries(TENSE_DATA)) {
-        for (let [aspect, aspectData] of ObjectUtil.entries(ASPECT_DATA)) {
-          for (let [transitivity, transitivityData] of ObjectUtil.entries(TRANSITIVITY_DATA)) {
-            for (let negative of [true, false]) {
-              let suffix = tenseData.suffix + aspectData.suffix[transitivity];
-              let prefix = (negative) ? NEGATIVE_DATA.prefix : "";
-              if (normalizedSearch.startsWith(prefix) && normalizedSearch.endsWith(suffix)) {
-                let regexp = new RegExp(`^${prefix}|${suffix}$`, "g");
-                let name = normalizedSearch.replaceAll(regexp, "");
-                let feature = {tense, aspect, transitivity};
-                this.candidates.verbal.push([name, category, feature, negative]);
-              }
+    let category = "verb" as const;
+    for (let [tense, tenseData] of ObjectUtil.entries(TENSE_DATA)) {
+      for (let [aspect, aspectData] of ObjectUtil.entries(ASPECT_DATA)) {
+        for (let [transitivity, transitivityData] of ObjectUtil.entries(TRANSITIVITY_DATA)) {
+          for (let negative of [true, false]) {
+            let suffix = tenseData.suffix + aspectData.suffix[transitivity];
+            let prefix = (negative) ? NEGATIVE_DATA.prefix : "";
+            if (normalizedSearch.startsWith(prefix) && normalizedSearch.endsWith(suffix)) {
+              let regexp = new RegExp(`^${prefix}|${suffix}$`, "g");
+              let name = normalizedSearch.replaceAll(regexp, "");
+              let feature = {tense, aspect, transitivity};
+              this.candidates.verbal.push([name, category, feature, negative]);
             }
           }
         }
       }
     }
+  }
+
+  private prepareVerbalOthers(): void {
+    let normalizedSearch = this.normalizedSearch;
     for (let category of ["adjective", "adverb", "nounAdverb"] as const) {
       for (let negative of [true, false]) {
         let categoryPrefix = VERBAL_INFLECTION_CATEGORY_DATA[category].prefix;
@@ -168,6 +171,10 @@ export class InflectionSuggester extends Suggester {
 
 export abstract class InflectionSuggestion<K extends InflectionSuggestionKind> extends Suggestion<K> {
 
+  public constructor(kind: K, name: string) {
+    super(kind, [name]);
+  }
+
   public getKindName(language: string): string | undefined {
     return ObjectUtil.get(INFLECTION_SUGGESTION_KIND_DATA[this.kind].names, language);
   }
@@ -182,7 +189,7 @@ export class VerbalInflectionSuggestion extends InflectionSuggestion<"verbalInfl
   public readonly negative: boolean;
 
   public constructor(name: string, category: VerbalInflectionCategory, feature: VerbFeature | null, negative: boolean) {
-    super("verbalInflection", [name]);
+    super("verbalInflection", name);
     this.category = category;
     this.feature = feature;
     this.negative = negative;
@@ -211,7 +218,7 @@ export class NominalInflectionSuggestion extends InflectionSuggestion<"nominalIn
   public readonly negative: true;
 
   public constructor(name: string) {
-    super("nominalInflection", [name]);
+    super("nominalInflection", name);
     this.category = "noun";
     this.negative = true;
   }
@@ -234,7 +241,7 @@ export class AdverbialInflectionSuggestion extends InflectionSuggestion<"adverbi
   public readonly negative: boolean;
 
   public constructor(name: string, negative: boolean) {
-    super("adverbialInflection", [name]);
+    super("adverbialInflection", name);
     this.category = "adverb";
     this.negative = negative;
   }
@@ -256,7 +263,7 @@ export class ParticleInflectionSuggestion extends InflectionSuggestion<"particle
   public readonly type: ParticleInflectionType;
 
   public constructor(name: string) {
-    super("particleInflection", [name]);
+    super("particleInflection", name);
     this.type = "nonverb";
   }
 
