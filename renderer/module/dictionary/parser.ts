@@ -39,6 +39,18 @@ export class Parser<S, E> {
     this.markupParser = new MarkupParser(resolver);
   }
 
+  public static createSimple(): Parser<string, string> {
+    let resolver = MarkupResolver.createSimple();
+    let parser = new Parser(resolver);
+    return parser;
+  }
+
+  public static createKeep(): Parser<string, string> {
+    let resolver = MarkupResolver.createKeep();
+    let parser = new Parser(resolver);
+    return parser;
+  }
+
   public parse(word: Word): ParsedWord<S> {
     let name = word.name;
     let uniqueName = word.uniqueName;
@@ -397,6 +409,7 @@ export class MarkupResolver<S, E> {
     return resolve;
   }
 
+  // マークアップを全て取り除いてプレーンテキストにするリゾルバを作成します。
   public static createSimple(): MarkupResolver<string, string> {
     let resolveLink = function (name: string, children: Array<string>): string {
       return children.join("");
@@ -411,6 +424,30 @@ export class MarkupResolver<S, E> {
       return nodes.join("");
     };
     let resolver = new MarkupResolver({resolveLink, resolveBracket, resolveSlash, join});
+    return resolver;
+  }
+
+  // マークアップの特殊文字などをそのまま残すリゾルバを作成します。
+  public static createKeep(): MarkupResolver<string, string> {
+    let resolveLink = function (name: string, children: Array<string>): string {
+      return children.join("");
+    };
+    let resolveBracket = function (children: Array<string>): string {
+      return "[" + children.join("") + "]";
+    };
+    let resolveBrace = function (children: Array<string>): string {
+      return "{" + children.join("") + "}";
+    };
+    let resolveSlash = function (string: string): string {
+      return "/" + string + "/";
+    };
+    let resolveEscape = function (char: string): string {
+      return "`" + char;
+    };
+    let join = function (nodes: Array<string>): string {
+      return nodes.join("");
+    };
+    let resolver = new MarkupResolver({resolveLink, resolveBracket, resolveBrace, resolveSlash, resolveEscape, join});
     return resolver;
   }
 
