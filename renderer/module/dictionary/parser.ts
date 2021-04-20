@@ -31,21 +31,21 @@ import {
 } from "./word";
 
 
-export class Parser<S, E> {
+export class Parser<S> {
 
-  private readonly markupParser: MarkupParser<S, E>;
+  private readonly markupParser: MarkupParser<S, unknown>;
 
-  public constructor(resolver: MarkupResolver<S, E>) {
+  public constructor(resolver: MarkupResolver<S, any>) {
     this.markupParser = new MarkupParser(resolver);
   }
 
-  public static createSimple(): Parser<string, string> {
+  public static createSimple(): Parser<string> {
     let resolver = MarkupResolver.createSimple();
     let parser = new Parser(resolver);
     return parser;
   }
 
-  public static createKeep(): Parser<string, string> {
+  public static createKeep(): Parser<string> {
     let resolver = MarkupResolver.createKeep();
     let parser = new Parser(resolver);
     return parser;

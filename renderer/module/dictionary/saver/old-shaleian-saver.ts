@@ -32,7 +32,7 @@ import {
 export class OldShaleianSaver extends Saver {
 
   private readonly stream: WriteStream;
-  private readonly parser: Parser<string, string>;
+  private readonly parser: Parser<string>;
   private size: number = 0;
   private count: number = 0;
 
