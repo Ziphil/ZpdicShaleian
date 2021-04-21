@@ -10,9 +10,9 @@ export class ParsedWord<S> {
   public readonly name: string;
   public readonly uniqueName: string;
   public readonly date: number;
-  public readonly parts: Readonly<Parts<S>>;
+  public readonly parts: Parts<S>;
 
-  public constructor(name: string, uniqueName: string, date: number, parts: Readonly<Parts<S>>) {
+  public constructor(name: string, uniqueName: string, date: number, parts: Parts<S>) {
     this.name = name;
     this.uniqueName = uniqueName;
     this.date = date;
@@ -22,4 +22,4 @@ export class ParsedWord<S> {
 }
 
 
-export type Parts<S> = {[language: string]: Part<S> | undefined};
+export type Parts<S> = {readonly [language: string]: Part<S> | undefined};

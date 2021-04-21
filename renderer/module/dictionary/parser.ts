@@ -1,6 +1,9 @@
 //
 
 import {
+  Writable
+} from "ts-essentials";
+import {
   Equivalent
 } from "./equivalent";
 import {
@@ -56,7 +59,7 @@ export class Parser<S> {
     let name = word.name;
     let uniqueName = word.uniqueName;
     let date = word.date;
-    let parts = {} as Parts<S>;
+    let parts = {} as Writable<Parts<S>>;
     for (let [language, content] of Object.entries(word.contents)) {
       if (content !== undefined) {
         let part = this.parsePart(content);
