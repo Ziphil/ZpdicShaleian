@@ -56,6 +56,7 @@
     "reflect-metadata": "^0.1.13",
     "serialize-error": "^8.1.0",
     "simple-git": "^2.38.0",
+    "soxsot": "^0.0.0",
     "ts-essentials": "^7.0.1",
     "uuid": "^8.3.2"
   },
