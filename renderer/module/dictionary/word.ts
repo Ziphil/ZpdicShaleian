@@ -12,6 +12,9 @@ import {
 import {
   Marker
 } from "./marker";
+import {
+  Parser
+} from "./parser";
 
 
 export class Word implements PlainWord {
@@ -118,20 +121,9 @@ export class Word implements PlainWord {
 
   private updateEquivalentNames(): void {
     let equivalentNames = {} as EquivalentNames;
-    for (let [language, content] of Object.entries(this.contents)) {
-      let eachEquivalentNames = [];
-      if (content !== undefined) {
-        let equivalentRegexp = /^=(\?)?\s*(?:<(.*?)>\s*)?(?:\((.*?)\)\s*)?(.*)$/mg;
-        let phraseRegexp = /^(P)(\?)?:\s*(?:@(\d+)\s*)?(.*?)\s*→\s*(.*?)(?:\s*\|\s*(.*))?$/mg;
-        let match;
-        while (match = equivalentRegexp.exec(content)) {
-          eachEquivalentNames.push(...match[4].split(/\s*,\s*/));
-        }
-        while (match = phraseRegexp.exec(content)) {
-          eachEquivalentNames.push(...match[5].split(/\s*,\s*/));
-        }
-        equivalentNames[language] = eachEquivalentNames;
-      }
+    let parser = Parser.createSimple();
+    for (let [language] of Object.entries(this.contents)) {
+      equivalentNames[language] = [...(parser.lookupEquivalentNames(this, language) ?? []), ...(parser.lookupPhraseEquivalentNames(this, language) ?? [])];
     }
     this.equivalentNames = equivalentNames;
   }

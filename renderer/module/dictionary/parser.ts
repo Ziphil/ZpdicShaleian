@@ -207,6 +207,36 @@ export class Parser<S> {
     }
   }
 
+  public lookupEquivalentNames(word: Word, language: string): Array<S> | undefined {
+    let content = word.contents[language];
+    if (content !== undefined) {
+      let names = [];
+      let regexp = /^=(\?)?\s*(?:<(.*?)>\s*)?(?:\((.*?)\)\s*)?(.*)$/mg;
+      let match;
+      while (match = regexp.exec(content)) {
+        names.push(...match[4].split(/\s*,\s*/).map((rawName) => this.markupParser.parse(rawName)));
+      }
+      return names;
+    } else {
+      return undefined;
+    }
+  }
+
+  public lookupPhraseEquivalentNames(word: Word, language: string): Array<S> | undefined {
+    let content = word.contents[language];
+    if (content !== undefined) {
+      let names = [];
+      let regexp = /^(P)(\?)?:\s*(?:@(\d+)\s*)?(.*?)\s*→\s*(.*?)(?:\s*\|\s*(.*))?$/mg;
+      let match;
+      while (match = regexp.exec(content)) {
+        names.push(...match[5].split(/\s*,\s*/).map((rawName) => this.markupParser.parse(rawName)));
+      }
+      return names;
+    } else {
+      return undefined;
+    }
+  }
+
 }
 
 
