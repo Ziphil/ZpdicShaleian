@@ -10,7 +10,7 @@ import {
 import {
   Dictionary,
   Suggestion
-} from "../../module/dictionary";
+} from "soxsot";
 import {
   WordPane
 } from "./word-pane";

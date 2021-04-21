@@ -12,7 +12,7 @@ import {
   Marker,
   SearchResult,
   Word
-} from "../../module/dictionary";
+} from "soxsot";
 import {
   Component
 } from "../component";

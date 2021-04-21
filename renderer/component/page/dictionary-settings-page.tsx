@@ -6,7 +6,7 @@ import {
 } from "react";
 import {
   PlainDictionarySettings
-} from "../../module/dictionary";
+} from "soxsot";
 import {
   Component
 } from "../component";

@@ -24,7 +24,7 @@ import {
   Deserializer,
   PlainDictionarySettings,
   Serializer
-} from "../../module/dictionary";
+} from "soxsot";
 import {
   EditorHotKeys
 } from "../atom";

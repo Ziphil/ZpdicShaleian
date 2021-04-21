@@ -25,7 +25,7 @@ import {
 import {
   PlainWord,
   Word
-} from "../../module/dictionary";
+} from "soxsot";
 import {
   EditorHotKeys
 } from "../atom";

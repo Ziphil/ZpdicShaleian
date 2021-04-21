@@ -3,7 +3,7 @@
 import {
   NormalWordParameter,
   WordParameter
-} from "../module/dictionary";
+} from "soxsot";
 
 
 export class WordParameterUtil {

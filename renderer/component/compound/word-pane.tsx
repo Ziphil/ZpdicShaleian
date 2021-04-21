@@ -22,7 +22,7 @@ import {
   Relation,
   Section,
   Word
-} from "../../module/dictionary";
+} from "soxsot";
 import {
   MarkerIcon
 } from "../atom/marker-icon";

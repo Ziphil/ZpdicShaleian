@@ -18,7 +18,7 @@ import {
   WordMode,
   WordParameter,
   WordType
-} from "../../module/dictionary";
+} from "soxsot";
 import {
   WordParameterUtil
 } from "../../util/word-parameter";

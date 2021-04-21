@@ -7,7 +7,7 @@ import {
 } from "react";
 import {
   Marker
-} from "../../module/dictionary";
+} from "soxsot";
 
 
 export class MarkerIcon extends Component<Props, State> {

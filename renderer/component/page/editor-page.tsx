@@ -6,7 +6,7 @@ import {
 } from "react";
 import {
   PlainWord
-} from "../../module/dictionary";
+} from "soxsot";
 import {
   Component
 } from "../component";

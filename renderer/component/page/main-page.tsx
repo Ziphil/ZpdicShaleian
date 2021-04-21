@@ -21,7 +21,7 @@ import {
   WordMode,
   WordParameter,
   WordType
-} from "../../module/dictionary";
+} from "soxsot";
 import {
   ArrayUtil
 } from "../../util/array";

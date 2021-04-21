@@ -11,12 +11,12 @@ import {
   Dictionary,
   PlainDictionary,
   PlainWord
-} from "../../renderer/module/dictionary";
+} from "soxsot";
 import {
   DirectoryLoader,
   DirectorySaver,
   OldShaleianSaver
-} from "../../renderer/module/dictionary/io";
+} from "soxsot/dist/io";
 import {
   handler,
   on,

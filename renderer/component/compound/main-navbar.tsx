@@ -25,7 +25,7 @@ import {
   Marker,
   WordMode,
   WordType
-} from "../../module/dictionary";
+} from "soxsot";
 import {
   HairianUtil
 } from "../../util/hairian";
