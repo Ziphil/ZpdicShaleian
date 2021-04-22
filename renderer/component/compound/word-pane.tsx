@@ -40,10 +40,10 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderHead(word: ParsedWord<ReactNode>, markers: Array<Marker>): ReactNode {
-    let lexicalCategory = word.parts[this.props.language]?.lexicalCategory ?? null;
+    let sort = word.parts[this.props.language]?.sort ?? null;
     let markerNodes = markers.map((marker) => this.renderMarker(marker));
-    let categoryNode = (lexicalCategory !== null) && (
-      <span className="swp-head-category swp-tag swp-right-margin">{lexicalCategory}</span>
+    let categoryNode = (sort !== null) && (
+      <span className="swp-head-sort swp-tag swp-right-margin">{sort}</span>
     );
     let nameNode = (
       <span className="swp-head-name swp-right-margin">
