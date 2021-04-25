@@ -7,7 +7,8 @@ import {
   OpenDialogReturnValue,
   SaveDialogOptions,
   SaveDialogReturnValue,
-  dialog
+  dialog,
+  shell
 } from "electron";
 import {
   Settings
@@ -114,6 +115,16 @@ export class BasicHandler extends Handler {
     } else {
       return await dialog.showSaveDialog(options);
     }
+  }
+
+  @on("showItemInFolder")
+  private showItemInFolder(event: IpcMainEvent, path: string): void {
+    shell.showItemInFolder(path);
+  }
+
+  @on("showItem")
+  private showItem(event: IpcMainEvent, path: string): void {
+    shell.openPath(path);
   }
 
   @onAsync("getPackaged")

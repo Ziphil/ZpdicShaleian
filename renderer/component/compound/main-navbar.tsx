@@ -71,6 +71,13 @@ export class MainNavbar extends Component<Props, State> {
         />
         <MenuDivider/>
         <MenuItem
+          text={this.trans("mainNavbar.showDictionaryDirectory")}
+          label={this.handlerManager.getLabel("showDictionaryDirectory")}
+          onClick={this.handlerManager.getHandler("showDictionaryDirectory")}
+          icon="folder-open"
+        />
+        <MenuDivider/>
+        <MenuItem
           text={this.trans("mainNavbar.saveDictionary")}
           label={this.handlerManager.getLabel("saveDictionary")}
           onClick={this.handlerManager.getHandler("saveDictionary")}
@@ -438,6 +445,7 @@ export class MainNavbar extends Component<Props, State> {
     let manager = new HandlerManager({
       loadDictionary: {key: "ctrl+o", handler: () => this.props.loadDictionary()},
       reloadDictionary: {key: "ctrl+shift+o", handler: () => this.props.reloadDictionary()},
+      showDictionaryDirectory: {handler: () => this.props.showDictionaryDirectory()},
       saveDictionary: {key: "ctrl+s", handler: () => this.props.saveDictionary()},
       saveAndRenameDictionary: {key: "ctrl+shift+s"},
       exportDictionaryAsOldShaleian: {handler: () => this.props.exportDictionary("oldShaleian")},
@@ -529,6 +537,7 @@ export class MainNavbar extends Component<Props, State> {
 type Props = {
   loadDictionary: () => void,
   reloadDictionary: () => void,
+  showDictionaryDirectory: () => void,
   saveDictionary: () => void,
   exportDictionary: (type: string) => void,
   closeWindow: () => void,

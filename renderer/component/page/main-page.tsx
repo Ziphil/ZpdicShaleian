@@ -484,6 +484,15 @@ export class MainPage extends Component<Props, State> {
     CustomToaster.show({message, icon: "export", timeout: 0}, "uploadDictionary");
   }
 
+  private showDictionaryDirectory(): void {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      this.send("showItem", dictionary.path);
+    } else {
+      this.showNoDictionaryToaster();
+    }
+  }
+
   private showNoActiveWordToaster(): void {
     CustomToaster.show({message: this.trans("mainPage.noActiveWord"), icon: "warning-sign", intent: "warning"});
   }
@@ -524,6 +533,7 @@ export class MainPage extends Component<Props, State> {
       <MainNavbar
         loadDictionary={() => this.loadDictionary()}
         reloadDictionary={() => this.reloadDictionary()}
+        showDictionaryDirectory={() => this.showDictionaryDirectory()}
         saveDictionary={() => this.saveDictionary(null)}
         exportDictionary={(type) => this.exportDictionary(type)}
         closeWindow={() => this.closeWindow()}
