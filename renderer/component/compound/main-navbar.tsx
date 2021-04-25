@@ -448,6 +448,7 @@ export class MainNavbar extends Component<Props, State> {
       showDictionaryDirectory: {handler: () => this.props.showDictionaryDirectory()},
       saveDictionary: {key: "ctrl+s", handler: () => this.props.saveDictionary()},
       saveAndRenameDictionary: {key: "ctrl+shift+s"},
+      exportDictionaryAsSingle: {handler: () => this.props.exportDictionary("single")},
       exportDictionaryAsOldShaleian: {handler: () => this.props.exportDictionary("oldShaleian")},
       closeWindow: {handler: () => this.props.closeWindow()},
       changeWordModeToName: {key: "ctrl+w", handler: () => this.props.changeWordMode("name")},
