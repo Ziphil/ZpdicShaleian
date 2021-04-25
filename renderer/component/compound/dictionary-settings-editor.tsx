@@ -47,7 +47,7 @@ export class DictionarySettingsEditor extends Component<Props, State> {
     super(props);
     let serializer = new Serializer();
     let oldSettings = props.settings;
-    let revisionString = serializer.serializeRevisions(oldSettings.revisions);
+    let revisionString = serializer.serializeRevisions(oldSettings.revisions, {part: true});
     let settings = {...oldSettings, revisionString};
     this.state = {settings};
   }
@@ -67,7 +67,7 @@ export class DictionarySettingsEditor extends Component<Props, State> {
     try {
       let deserializer = new Deserializer();
       let settings = this.state.settings;
-      settings.revisions = deserializer.deserializeRevisions(settings.revisionString);
+      settings.revisions = deserializer.deserializeRevisions(settings.revisionString, {part: true});
       if (this.props.onConfirm) {
         this.props.onConfirm(settings, event);
       }

@@ -11,17 +11,17 @@ import {
   ReactNode
 } from "react";
 import {
-  NormalWordParameter,
+  NormalParameter,
+  Parameter,
   SearchResult,
   WORD_MODES,
   WORD_TYPES,
   WordMode,
-  WordParameter,
   WordType
 } from "soxsot";
 import {
-  WordParameterUtil
-} from "../../util/word-parameter";
+  ParameterUtil
+} from "../../util/parameter";
 import {
   SimpleSelect
 } from "../atom";
@@ -38,18 +38,18 @@ export class SearchForm extends Component<Props, State> {
 
   private handleParameterSet(nextParameter: {search?: string, mode?: WordMode, type?: WordType}): void {
     if (this.props.onParameterSet) {
-      let oldParameter = WordParameterUtil.getNormal(this.props.parameter);
+      let oldParameter = ParameterUtil.getNormal(this.props.parameter);
       let search = nextParameter.search ?? oldParameter.search;
       let mode = nextParameter.mode ?? oldParameter.mode;
       let type = nextParameter.type ?? oldParameter.type;
       let language = oldParameter.language;
-      let parameter = new NormalWordParameter(search, mode, type, language);
+      let parameter = new NormalParameter(search, mode, type, language);
       this.props.onParameterSet(parameter);
     }
   }
 
   public render(): ReactNode {
-    let parameter = WordParameterUtil.getNormal(this.props.parameter);
+    let parameter = ParameterUtil.getNormal(this.props.parameter);
     let supplementNode = (
       <Tag minimal={true}>
         {this.transNumber(this.props.searchResult.words.length)}
@@ -93,9 +93,9 @@ export class SearchForm extends Component<Props, State> {
 
 
 type Props = {
-  parameter: WordParameter,
+  parameter: Parameter,
   searchResult: SearchResult,
-  onParameterSet?: (parameter: WordParameter) => void,
+  onParameterSet?: (parameter: Parameter) => void,
   inputRef?: IRef<HTMLInputElement>
 };
 type State = {
