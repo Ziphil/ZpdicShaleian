@@ -484,12 +484,30 @@ export class MainPage extends Component<Props, State> {
     CustomToaster.show({message, icon: "export", timeout: 0}, "uploadDictionary");
   }
 
-  private showDictionaryDirectory(): void {
+  private revealDictionaryDirectory(): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       this.send("showItem", dictionary.path);
     } else {
       this.showNoDictionaryToaster();
+    }
+  }
+
+  private revealWord(word: Word): void {
+    let dictionary = this.state.dictionary;
+    if (dictionary !== null) {
+      this.send("showItem", dictionary.path + "/" + word.uniqueName + ".xdnw");
+    } else {
+      this.showNoDictionaryToaster();
+    }
+  }
+
+  private revealActiveWord(): void {
+    let activeWord = this.state.activeWord;
+    if (activeWord !== null) {
+      this.revealWord(activeWord);
+    } else {
+      this.showNoActiveWordToaster();
     }
   }
 
@@ -533,7 +551,8 @@ export class MainPage extends Component<Props, State> {
       <MainNavbar
         loadDictionary={() => this.loadDictionary()}
         reloadDictionary={() => this.reloadDictionary()}
-        showDictionaryDirectory={() => this.showDictionaryDirectory()}
+        revealDictionaryDirectory={() => this.revealDictionaryDirectory()}
+        revealActiveWord={() => this.revealActiveWord()}
         saveDictionary={() => this.saveDictionary(null)}
         exportDictionary={(type) => this.exportDictionary(type)}
         closeWindow={() => this.closeWindow()}

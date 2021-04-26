@@ -71,10 +71,16 @@ export class MainNavbar extends Component<Props, State> {
         />
         <MenuDivider/>
         <MenuItem
-          text={this.trans("mainNavbar.showDictionaryDirectory")}
-          label={this.handlerManager.getLabel("showDictionaryDirectory")}
-          onClick={this.handlerManager.getHandler("showDictionaryDirectory")}
+          text={this.trans("mainNavbar.revealDictionaryDirectory")}
+          label={this.handlerManager.getLabel("revealDictionaryDirectory")}
+          onClick={this.handlerManager.getHandler("revealDictionaryDirectory")}
           icon="folder-open"
+        />
+        <MenuItem
+          text={this.trans("mainNavbar.revealActiveWord")}
+          label={this.handlerManager.getLabel("revealActiveWord")}
+          onClick={this.handlerManager.getHandler("revealActiveWord")}
+          icon="blank"
         />
         <MenuDivider/>
         <MenuItem
@@ -445,7 +451,8 @@ export class MainNavbar extends Component<Props, State> {
     let manager = new HandlerManager({
       loadDictionary: {key: "ctrl+o", handler: () => this.props.loadDictionary()},
       reloadDictionary: {key: "ctrl+shift+o", handler: () => this.props.reloadDictionary()},
-      showDictionaryDirectory: {handler: () => this.props.showDictionaryDirectory()},
+      revealDictionaryDirectory: {handler: () => this.props.revealDictionaryDirectory()},
+      revealActiveWord: {handler: () => this.props.revealActiveWord()},
       saveDictionary: {key: "ctrl+s", handler: () => this.props.saveDictionary()},
       saveAndRenameDictionary: {key: "ctrl+shift+s"},
       exportDictionaryAsSingle: {handler: () => this.props.exportDictionary("single")},
@@ -538,7 +545,8 @@ export class MainNavbar extends Component<Props, State> {
 type Props = {
   loadDictionary: () => void,
   reloadDictionary: () => void,
-  showDictionaryDirectory: () => void,
+  revealDictionaryDirectory: () => void,
+  revealActiveWord: () => void,
   saveDictionary: () => void,
   exportDictionary: (type: string) => void,
   closeWindow: () => void,
