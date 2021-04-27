@@ -13,6 +13,7 @@ import {
 } from "react";
 import {
   Dictionary,
+  FileNameResolver,
   Marker,
   NormalParameter,
   Parameter,
@@ -496,7 +497,9 @@ export class MainPage extends Component<Props, State> {
   private revealWord(word: Word): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      this.send("showItem", dictionary.path + "/" + word.uniqueName + ".xdnw");
+      let resolver = FileNameResolver.createDefault();
+      let baseName = resolver.resolveWordBaseName(word.uniqueName);
+      this.send("showItem", `${dictionary.path}/${baseName}.xdnw`);
     } else {
       this.showNoDictionaryToaster();
     }
