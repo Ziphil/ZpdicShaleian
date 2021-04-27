@@ -16,7 +16,8 @@ import {
   DirectoryLoader,
   DirectorySaver,
   OldShaleianSaver,
-  SingleSaver
+  SaverCreator,
+  SaverKind
 } from "soxsot/dist/io";
 import {
   handler,
@@ -53,17 +54,9 @@ export class DictionaryHandler extends Handler {
   }
 
   @onAsync("exportDictionary")
-  private async exportDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, path: string, type: string): Promise<void> {
+  private async exportDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, path: string, kind: SaverKind): Promise<void> {
     let dictionary = Dictionary.fromPlain(plainDictionary);
-    let saver = (() => {
-      if (type === "single") {
-        return new SingleSaver(dictionary, path);
-      } else if (type === "oldShaleian") {
-        return new OldShaleianSaver(dictionary, path);
-      } else {
-        return undefined;
-      }
-    })();
+    let saver = SaverCreator.createByKind(kind, dictionary, path);
     if (saver !== undefined) {
       await saver.asPromise({onProgress: (offset, size) => {
         this.send("getExportDictionaryProgress", event.sender, {offset, size});

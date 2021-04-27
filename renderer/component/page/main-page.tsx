@@ -162,14 +162,14 @@ export class MainPage extends Component<Props, State> {
     CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
   }
 
-  private async exportDictionary(type: string): Promise<void> {
+  private async exportDictionary(kind: string): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let result = await this.sendAsync("showSaveDialog", {});
       if (!result.canceled) {
         let path = result.filePath;
         try {
-          await this.sendAsync("exportDictionary", dictionary.toPlain(), path, type);
+          await this.sendAsync("exportDictionary", dictionary.toPlain(), path, kind);
           CustomToaster.show({message: this.trans("mainPage.succeedExportDictionary"), icon: "tick", intent: "success"}, "exportDictionary");
         } catch (error) {
           console.error(error);
