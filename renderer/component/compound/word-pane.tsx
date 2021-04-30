@@ -50,6 +50,11 @@ export class WordPane extends Component<Props, State> {
         <span className="swp-sans">{word.name}</span>
       </span>
     );
+    let pronunciationNode = (word.pronunciation !== null) && (
+      <span className="swp-head-pronunciation swp-right-margin">
+        /{word.pronunciation}/
+      </span>
+    );
     let dateNode = (
       <span className="swp-head-date">{word.date}</span>
     );
@@ -63,6 +68,7 @@ export class WordPane extends Component<Props, State> {
         <div className="swp-head-left">
           {categoryNode}
           {nameNode}
+          {pronunciationNode}
           {dateNode}
         </div>
         <div className="swp-head-right">
