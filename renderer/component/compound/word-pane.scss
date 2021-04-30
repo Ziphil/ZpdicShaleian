@@ -90,6 +90,7 @@ $swp-word-marker-shadow: inset 0px 0px 0px #{$pt-grid-size / 2} var(--marker-bac
 .swp-head-pronunciation,
 .swp-head-date {
   @extend .bp3-text-small;
+  color: $pt-text-color-muted;
 }
 
 .swp-head .swp-tag {
