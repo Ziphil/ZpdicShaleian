@@ -23,6 +23,7 @@ import {
 import {
   Deserializer,
   PlainDictionarySettings,
+  Revisions,
   Serializer
 } from "soxsot";
 import {
@@ -47,7 +48,7 @@ export class DictionarySettingsEditor extends Component<Props, State> {
     super(props);
     let serializer = new Serializer();
     let oldSettings = props.settings;
-    let revisionString = serializer.serializeRevisions(oldSettings.revisions, {part: true});
+    let revisionString = serializer.serializeRevisions(Revisions.fromPlain(oldSettings.revisions), {part: true});
     let settings = {...oldSettings, revisionString};
     this.state = {settings};
   }
