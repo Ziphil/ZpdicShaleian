@@ -21,10 +21,11 @@ export class SuggestionPane extends Component<Props, State> {
   public render(): ReactNode {
     let suggestion = this.props.suggestion;
     let language = this.props.language;
+    let descriptionNames = suggestion.getDescriptionNames(language).filter((name) => name !== undefined);
     let onLinkCtrlClick = WordPane.requireCtrl(this.props.onLinkClick);
-    let keywordNode = (suggestion.getKeywords(language).length > 0) && (
+    let keywordNode = (descriptionNames.length > 0) && (
       <span className="ssp-keyword">
-        ({suggestion.getKeywords(language).join(", ").toLowerCase()})
+        ({descriptionNames.join(", ").toLowerCase()})
       </span>
     );
     let nameNodes = suggestion.names.map((name) => {

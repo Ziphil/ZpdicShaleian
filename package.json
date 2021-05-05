@@ -56,13 +56,13 @@
     "reflect-metadata": "^0.1.13",
     "serialize-error": "^8.1.0",
     "simple-git": "^2.38.0",
-    "soxsot": "^0.3.0",
+    "soxsot": "0.3.1",
     "ts-essentials": "^7.0.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",
-    "@types/codemirror": "0.0.108",
+    "@types/codemirror": "^0.0.108",
     "@types/lodash-es": "^4.17.4",
     "@types/react": "^17.0.3",
     "@types/react-css-modules": "^4.6.2",
