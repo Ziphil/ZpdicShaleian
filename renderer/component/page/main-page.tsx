@@ -382,7 +382,7 @@ export class MainPage extends Component<Props, State> {
 
   private changeWordMode(mode: WordMode, focus?: boolean): void {
     let oldParameter = ParameterUtil.getNormal(this.state.displayedParameter);
-    let parameter = new NormalParameter(oldParameter.search, mode, oldParameter.type, oldParameter.language);
+    let parameter = new NormalParameter(oldParameter.search, mode, oldParameter.type, this.state.language);
     this.changeParameter(parameter);
     if (focus) {
       this.focusSearchForm();
@@ -391,7 +391,7 @@ export class MainPage extends Component<Props, State> {
 
   private changeWordType(type: WordType, focus?: boolean): void {
     let oldParameter = ParameterUtil.getNormal(this.state.displayedParameter);
-    let parameter = new NormalParameter(oldParameter.search, oldParameter.mode, type, oldParameter.language);
+    let parameter = new NormalParameter(oldParameter.search, oldParameter.mode, type, this.state.language);
     this.changeParameter(parameter);
     if (focus) {
       this.focusSearchForm();
