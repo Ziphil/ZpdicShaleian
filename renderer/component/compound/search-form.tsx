@@ -42,7 +42,7 @@ export class SearchForm extends Component<Props, State> {
       let search = nextParameter.search ?? oldParameter.search;
       let mode = nextParameter.mode ?? oldParameter.mode;
       let type = nextParameter.type ?? oldParameter.type;
-      let language = oldParameter.language;
+      let language = this.props.language;
       let parameter = new NormalParameter(search, mode, type, language);
       this.props.onParameterSet(parameter);
     }
@@ -94,6 +94,7 @@ export class SearchForm extends Component<Props, State> {
 
 type Props = {
   parameter: Parameter,
+  language: string,
   searchResult: SearchResult,
   onParameterSet?: (parameter: Parameter) => void,
   inputRef?: IRef<HTMLInputElement>

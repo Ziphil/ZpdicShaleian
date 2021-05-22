@@ -399,10 +399,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private changeLanguage(language: string, focus?: boolean): void {
-    let parameter = this.state.parameter;
-    parameter.language = language;
     this.setState({language});
-    this.updateWords(parameter, true);
     if (focus) {
       this.focusSearchForm();
     }
@@ -567,7 +564,7 @@ export class MainPage extends Component<Props, State> {
         closeWindow={() => this.closeWindow()}
         changeWordMode={(mode) => this.changeWordMode(mode, true)}
         changeWordType={(type) => this.changeWordType(type, true)}
-        changeLanguage={(language) => this.changeLanguage(language, true)}
+        changeLanguage={(language) => this.changeLanguage(language)}
         shuffleWords={() => this.shuffleWords()}
         moveFirstPage={() => this.movePage("first")}
         movePreviousPage={() => this.movePage({difference: -1})}
@@ -618,6 +615,7 @@ export class MainPage extends Component<Props, State> {
           <div className="zpmnp-search-form-container">
             <SearchForm
               parameter={this.state.displayedParameter}
+              language={this.state.language}
               searchResult={this.state.searchResult}
               inputRef={this.searchInputRef}
               onParameterSet={this.changeParameter.bind(this)}
