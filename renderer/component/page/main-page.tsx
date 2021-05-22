@@ -295,7 +295,8 @@ export class MainPage extends Component<Props, State> {
       let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
       let plainWord = (word !== null) ? word.toPlain() : null;
       let defaultPlainWord = (defaultWord !== undefined) ? defaultWord.toPlain() : undefined;
-      let data = await this.createWindowAsync("editor", {word: plainWord, defaultWord: defaultPlainWord}, options);
+      let language = this.state.language;
+      let data = await this.createWindowAsync("editor", {word: plainWord, defaultWord: defaultPlainWord, language}, options);
       if (data !== null) {
         let {uid, newWord} = data;
         dictionary.editWord(uid, newWord);

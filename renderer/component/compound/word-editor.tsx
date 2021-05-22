@@ -119,7 +119,7 @@ export class WordEditor extends Component<Props, State> {
     let node = (
       <div className="zpwde-editor zp-editor">
         <EditorHotKeys onConfirm={this.handleConfirm.bind(this)} onCancel={this.handleCancel.bind(this)}>
-          <Tabs defaultSelectedTabId="ja" renderActiveTabPanelOnly={true}>
+          <Tabs defaultSelectedTabId={this.props.language} renderActiveTabPanelOnly={true}>
             {tabNodes}
           </Tabs>
           <div className="zpwde-editor-button zp-editor-button">
@@ -138,6 +138,7 @@ export class WordEditor extends Component<Props, State> {
 type Props = {
   word: PlainWord | null,
   defaultWord?: PlainWord,
+  language: string,
   onConfirm?: (uid: string | null, word: PlainWord, event?: MouseEvent<HTMLElement> | KeyboardEvent) => void,
   onCancel?: (event: MouseEvent<HTMLElement> | KeyboardEvent) => void
 };

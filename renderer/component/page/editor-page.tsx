@@ -35,6 +35,7 @@ export class EditorPage extends Component<Props, State> {
         <WordEditor
           word={this.props.word}
           defaultWord={this.props.defaultWord}
+          language={this.props.language}
           onConfirm={this.handleConfirm.bind(this)}
           onCancel={this.handleCancel.bind(this)}
         />
@@ -48,7 +49,8 @@ export class EditorPage extends Component<Props, State> {
 
 type Props = {
   word: PlainWord | null,
-  defaultWord?: PlainWord
+  defaultWord?: PlainWord,
+  language: string
 };
 type State = {
 };
