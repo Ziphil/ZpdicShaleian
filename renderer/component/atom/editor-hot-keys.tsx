@@ -13,7 +13,7 @@ import {
 export class EditorHotKeys extends Component<Props, State> {
 
   public render(): ReactNode {
-    let keys = {confirm: ["ctrl+enter"], cancel: ["escape"]};
+    let keys = {confirm: ["alt+enter"], cancel: ["escape"]};
     let handlers = {confirm: this.props.onConfirm, cancel: this.props.onCancel} as any;
     let node = (
       <GlobalHotKeys keyMap={keys} handlers={handlers}>
