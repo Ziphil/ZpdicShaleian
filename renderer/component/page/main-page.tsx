@@ -65,6 +65,7 @@ export class MainPage extends Component<Props, State> {
     activeWord: null,
     language: "ja",
     parameter: NormalParameter.createEmpty("ja"),
+    displayedParameter: NormalParameter.createEmpty("ja"),
     searchResult: SearchResult.createEmpty(),
     page: 0,
     changed: false,
@@ -132,8 +133,9 @@ export class MainPage extends Component<Props, State> {
     try {
       let plainDictionary = await this.sendAsync("loadDictionary", path);
       let dictionary = Dictionary.fromPlain(plainDictionary);
+      let parameter = NormalParameter.createEmpty(this.state.language);
       this.setState({dictionary}, () => {
-        this.updateWords();
+        this.updateWords(parameter, true);
       });
     } catch (error) {
       console.error(error);
@@ -220,27 +222,34 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  // 現在の検索パラメータを用いて検索結果ペインを更新します。
-  // 引数の parameter に検索パラメータを渡すと、その引数の方を用いて (ステートに保持されている現在の検索パラメータを無視して) 検索結果ペインが更新されます。
-  // 検索結果ペインのスクロール位置はリセットされます。
-  private updateWords(parameter?: Parameter): void {
+  private updateWordsDirect(parameter: Parameter): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      let searchResult = dictionary.search(parameter ?? this.state.parameter);
-      this.setState({searchResult, page: 0, activeWord: null});
+      let searchResult = dictionary.search(parameter);
+      this.setState({parameter, searchResult, page: 0, activeWord: null});
       this.scrollWordList();
     }
   }
 
   @debounce(200)
-  private updateWordsDebounced(): void {
-    this.updateWords();
+  private updateWordsDirectDebounced(parameter: Parameter): void {
+    this.updateWordsDirect(parameter);
+  }
+
+  // 引数に与えられた検索パラメータを用いて検索結果ペインを更新します。
+  // 検索結果ペインのスクロール位置はリセットされます。
+  private updateWords(parameter: Parameter, immediate?: boolean): void {
+    if (immediate) {
+      this.updateWordsDirect(parameter);
+    } else {
+      this.updateWordsDirectDebounced(parameter);
+    }
   }
 
   private updateWordsByName(name: string): void {
     let language = this.state.language;
     let parameter = new NormalParameter(name, "name", "exact", language, {case: false, diacritic: false});
-    this.updateWords(parameter);
+    this.updateWords(parameter, true);
   }
 
   private focusSearchForm(): void {
@@ -362,20 +371,16 @@ export class MainPage extends Component<Props, State> {
   private changeParameter(parameter: Parameter, immediate?: boolean): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      this.setState({parameter}, () => {
-        if (immediate) {
-          this.updateWords();
-        } else {
-          this.updateWordsDebounced();
-        }
-      });
+      let displayedParameter = parameter;
+      this.setState({displayedParameter});
+      this.updateWords(parameter, immediate);
     } else {
       this.showNoDictionaryToaster();
     }
   }
 
   private changeWordMode(mode: WordMode, focus?: boolean): void {
-    let oldParameter = ParameterUtil.getNormal(this.state.parameter);
+    let oldParameter = ParameterUtil.getNormal(this.state.displayedParameter);
     let parameter = new NormalParameter(oldParameter.search, mode, oldParameter.type, oldParameter.language);
     this.changeParameter(parameter);
     if (focus) {
@@ -384,7 +389,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private changeWordType(type: WordType, focus?: boolean): void {
-    let oldParameter = ParameterUtil.getNormal(this.state.parameter);
+    let oldParameter = ParameterUtil.getNormal(this.state.displayedParameter);
     let parameter = new NormalParameter(oldParameter.search, oldParameter.mode, type, oldParameter.language);
     this.changeParameter(parameter);
     if (focus) {
@@ -396,7 +401,7 @@ export class MainPage extends Component<Props, State> {
     let parameter = this.state.parameter;
     parameter.language = language;
     this.setState({language});
-    this.changeParameter(parameter);
+    this.updateWords(parameter, true);
     if (focus) {
       this.focusSearchForm();
     }
@@ -611,7 +616,7 @@ export class MainPage extends Component<Props, State> {
         <Loading loading={this.state.dictionary === null} progress={this.state.progress}>
           <div className="zpmnp-search-form-container">
             <SearchForm
-              parameter={this.state.parameter}
+              parameter={this.state.displayedParameter}
               searchResult={this.state.searchResult}
               inputRef={this.searchInputRef}
               onParameterSet={this.changeParameter.bind(this)}
@@ -649,6 +654,7 @@ type State = {
   language: string,
   activeWord: Word | null,
   parameter: Parameter,
+  displayedParameter: Parameter,
   searchResult: SearchResult,
   page: number,
   changed: boolean,
