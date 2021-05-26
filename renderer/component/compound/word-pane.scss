@@ -1,8 +1,9 @@
 @charset "utf-8";
 
 
-$swp-marker-width: $pt-grid-size / 2;
+$swp-marker-width: $pt-grid-size * 0.5;
 $swp-example-marker-width: $pt-grid-size * 2;
+$swp-relation-marker-width: $pt-grid-size * 0.6;
 $swp-blank-margin: $pt-grid-size / 2;
 
 $swp-marker-colors: (
@@ -187,6 +188,18 @@ $swp-word-marker-shadow: inset 0px 0px 0px #{$pt-grid-size / 2} var(--marker-bac
     color: $pt-icon-color;
     text-align: right;
     content: "└";
+    display: inline-block;
+  }
+}
+
+.swp-relation {
+  margin-left: $swp-relation-marker-width + $swp-blank-margin;
+  &::before {
+    width: $swp-relation-marker-width;
+    margin-right: $swp-blank-margin;
+    margin-left: -$swp-relation-marker-width - $swp-blank-margin;
+    color: $pt-icon-color;
+    content: "🞂";
     display: inline-block;
   }
 }
