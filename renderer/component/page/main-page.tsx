@@ -3,6 +3,8 @@
 import {
   Alert,
   IRefObject,
+  IconName,
+  MaybeElement,
   Toaster
 } from "@blueprintjs/core";
 import * as react from "react";
@@ -430,11 +432,12 @@ export class MainPage extends Component<Props, State> {
       if (data !== null) {
         let message = data;
         try {
+          this.showLoadingToaster("git-commit", "execGitCommit");
           await this.sendAsync("execGitCommit", path, message);
-          CustomToaster.show({message: this.trans("mainPage.succeedExecGitCommit"), icon: "tick", intent: "success"});
+          CustomToaster.show({message: this.trans("mainPage.succeedExecGitCommit"), icon: "tick", intent: "success"}, "execGitCommit");
         } catch (error) {
           console.error(error);
-          CustomToaster.show({message: this.trans("mainPage.failExecGitCommit"), icon: "error", intent: "danger"});
+          CustomToaster.show({message: this.trans("mainPage.failExecGitCommit"), icon: "error", intent: "danger"}, "execGitCommit");
         }
       }
     } else {
@@ -450,11 +453,12 @@ export class MainPage extends Component<Props, State> {
       let data = await this.createWindowAsync("gitPush", {path}, options);
       if (data !== null) {
         try {
+          this.showLoadingToaster("git-push", "execGitPush");
           await this.sendAsync("execGitPush", path);
-          CustomToaster.show({message: this.trans("mainPage.succeedExecGitPush"), icon: "tick", intent: "success"});
+          CustomToaster.show({message: this.trans("mainPage.succeedExecGitPush"), icon: "tick", intent: "success"}, "execGitPush");
         } catch (error) {
           console.error(error);
-          CustomToaster.show({message: this.trans("mainPage.failExecGitPush"), icon: "error", intent: "danger"});
+          CustomToaster.show({message: this.trans("mainPage.failExecGitPush"), icon: "error", intent: "danger"}, "execGitPush");
         }
       }
     } else {
@@ -515,6 +519,12 @@ export class MainPage extends Component<Props, State> {
     } else {
       this.showNoActiveWordToaster();
     }
+  }
+
+  private showLoadingToaster(icon: IconName | MaybeElement, key?: string): void {
+    let progress = {offset: 0, size: 1};
+    let message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
+    CustomToaster.show({message, icon, timeout: 0}, key);
   }
 
   private showNoActiveWordToaster(): void {
