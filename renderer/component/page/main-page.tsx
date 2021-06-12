@@ -32,6 +32,9 @@ import {
   debounce
 } from "../../util/decorator";
 import {
+  History
+} from "../../util/history";
+import {
   ParameterUtil
 } from "../../util/parameter";
 import {
@@ -60,6 +63,7 @@ export class MainPage extends Component<Props, State> {
 
   private searchInputRef: IRefObject<HTMLInputElement> = createRef();
   private wordListRef: RefObject<HTMLDivElement> = createRef();
+  private history: History<[Parameter, Parameter]>;
   private handleAlertClose!: (confirmed: boolean) => void;
 
   public state: State = {
@@ -77,6 +81,7 @@ export class MainPage extends Component<Props, State> {
 
   public constructor(props: Props) {
     super(props);
+    this.history = new History([NormalParameter.createEmpty("ja"), NormalParameter.createEmpty("ja")]);
     this.setupIpc();
     this.setupEventListener();
   }
@@ -137,7 +142,7 @@ export class MainPage extends Component<Props, State> {
       let dictionary = Dictionary.fromPlain(plainDictionary);
       let parameter = NormalParameter.createEmpty(this.state.language);
       this.setState({dictionary}, () => {
-        this.updateWords(parameter, true);
+        this.updateWords(parameter, null, true);
       });
     } catch (error) {
       console.error(error);
@@ -224,34 +229,40 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private updateWordsDirect(parameter: Parameter): void {
+  private updateWordsDirect(parameter: Parameter, displayedParameter: Parameter | null, fromHistory?: boolean): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let searchResult = dictionary.search(parameter);
+      if (!fromHistory) {
+        this.history.add([parameter, displayedParameter ?? this.state.displayedParameter]);
+      }
       this.setState({parameter, searchResult, page: 0, activeWord: null});
       this.scrollWordList();
     }
   }
 
   @debounce(200)
-  private updateWordsDirectDebounced(parameter: Parameter): void {
-    this.updateWordsDirect(parameter);
+  private updateWordsDirectDebounced(parameter: Parameter, displayedParameter: Parameter | null, fromHistory?: boolean): void {
+    this.updateWordsDirect(parameter, displayedParameter, fromHistory);
   }
 
   // 引数に与えられた検索パラメータを用いて検索結果ペインを更新します。
   // 検索結果ペインのスクロール位置はリセットされます。
-  private updateWords(parameter: Parameter, immediate?: boolean): void {
+  private updateWords(parameter: Parameter, displayedParameter: Parameter | null, immediate?: boolean, fromHistory?: boolean): void {
+    if (displayedParameter) {
+      this.setState({displayedParameter});
+    }
     if (immediate) {
-      this.updateWordsDirect(parameter);
+      this.updateWordsDirect(parameter, displayedParameter, fromHistory);
     } else {
-      this.updateWordsDirectDebounced(parameter);
+      this.updateWordsDirectDebounced(parameter, displayedParameter, fromHistory);
     }
   }
 
   private updateWordsByName(name: string): void {
     let language = this.state.language;
     let parameter = new NormalParameter(name, "name", "exact", language, {case: false, diacritic: false});
-    this.updateWords(parameter, true);
+    this.updateWords(parameter, null, true);
   }
 
   private focusSearchForm(): void {
@@ -288,6 +299,22 @@ export class MainPage extends Component<Props, State> {
     if (clampedPage !== currentPage) {
       this.setState({page: clampedPage});
       this.scrollWordList();
+    }
+  }
+
+  private searchUndo(): void {
+    let elements = this.history.undo();
+    if (elements !== undefined) {
+      let [parameter, displayedParameter] = elements;
+      this.updateWords(parameter, displayedParameter, true, true);
+    }
+  }
+
+  private searchRedo(): void {
+    let elements = this.history.redo();
+    if (elements !== undefined) {
+      let [parameter, displayedParameter] = elements;
+      this.updateWords(parameter, displayedParameter, true, true);
     }
   }
 
@@ -374,9 +401,7 @@ export class MainPage extends Component<Props, State> {
   private changeParameter(parameter: Parameter, immediate?: boolean): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      let displayedParameter = parameter;
-      this.setState({displayedParameter});
-      this.updateWords(parameter, immediate);
+      this.updateWords(parameter, parameter, immediate);
     } else {
       this.showNoDictionaryToaster();
     }
@@ -580,8 +605,8 @@ export class MainPage extends Component<Props, State> {
         movePreviousPage={() => this.movePage({difference: -1})}
         moveNextPage={() => this.movePage({difference: 1})}
         moveLastPage={() => this.movePage("last")}
-        searchUndo={() => console.log("undo")}
-        searchRedo={() => console.log("redo")}
+        searchUndo={() => this.searchUndo()}
+        searchRedo={() => this.searchRedo()}
         createWord={() => this.editWord(null)}
         inheritActiveWord={() => this.editActiveWord(null, "active")}
         editActiveWord={() => this.editActiveWord("active")}
