@@ -4,20 +4,29 @@
 export class History<T> {
 
   private elements: Array<T> = [];
-  private pointer: number = 0;
+  private pointer: number;
+  private maxLength: number;
 
-  public constructor(element: T) {
+  public constructor(element: T, maxLength?: number) {
     this.elements.push(element);
+    this.pointer = 0;
+    this.maxLength = maxLength ?? 100;
   }
 
   public add(element: T): void {
-    this.elements.splice(++ this.pointer);
+    this.pointer ++;
+    this.elements.splice(this.pointer);
     this.elements.push(element);
+    if (this.pointer >= this.maxLength) {
+      this.elements.shift();
+      this.pointer --;
+    }
   }
 
   public undo(): T | undefined {
     if (this.pointer > 0) {
-      let element = this.elements[-- this.pointer];
+      this.pointer --;
+      let element = this.elements[this.pointer];
       return element;
     } else {
       return undefined;
@@ -26,7 +35,8 @@ export class History<T> {
 
   public redo(): T | undefined {
     if (this.pointer < this.elements.length - 1) {
-      let element = this.elements[++ this.pointer];
+      this.pointer ++;
+      let element = this.elements[this.pointer];
       return element;
     } else {
       return undefined;
