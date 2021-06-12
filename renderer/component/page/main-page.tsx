@@ -319,6 +319,11 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
+  private toggleFont(): void {
+    let useCustomFont = !this.state.useCustomFont;
+    this.setState({useCustomFont});
+  }
+
   private async editWord(word: Word | null, defaultWord?: Word): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
@@ -608,6 +613,7 @@ export class MainPage extends Component<Props, State> {
         moveLastPage={() => this.movePage("last")}
         searchUndo={() => this.searchUndo()}
         searchRedo={() => this.searchRedo()}
+        toggleFont={() => this.toggleFont()}
         createWord={() => this.editWord(null)}
         inheritActiveWord={() => this.editActiveWord(null, "active")}
         editActiveWord={() => this.editActiveWord("active")}

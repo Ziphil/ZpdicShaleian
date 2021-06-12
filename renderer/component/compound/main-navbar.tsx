@@ -200,13 +200,6 @@ export class MainNavbar extends Component<Props, State> {
             onClick={this.handlerManager.getHandler("changeLanguageToEn")}
           />
         </MenuItem>
-        <MenuItem
-          text={this.trans("mainNavbar.shuffleWords")}
-          label={this.handlerManager.getLabel("shuffleWords")}
-          onClick={this.handlerManager.getHandler("shuffleWords")}
-          icon="random"
-        />
-        <MenuDivider/>
         <MenuItem text={this.trans("mainNavbar.movePage")} icon="blank">
           <MenuItem
             text={this.trans("mainNavbar.moveFirstPage")}
@@ -233,6 +226,12 @@ export class MainNavbar extends Component<Props, State> {
             icon={<CustomIcon name="circleArrowRightmost"/>}
           />
         </MenuItem>
+        <MenuItem
+          text={this.trans("mainNavbar.shuffleWords")}
+          label={this.handlerManager.getLabel("shuffleWords")}
+          onClick={this.handlerManager.getHandler("shuffleWords")}
+          icon="random"
+        />
         <MenuDivider/>
         <MenuItem text={this.trans("mainNavbar.searchHistory")} icon="history">
           <MenuItem
@@ -265,6 +264,13 @@ export class MainNavbar extends Component<Props, State> {
           label={this.handlerManager.getLabel("searchScript")}
           onClick={this.handlerManager.getHandler("searchScript")}
           icon={<CustomIcon name="searchScript"/>}
+        />
+        <MenuDivider/>
+        <MenuItem
+          text={this.trans("mainNavbar.toggleFont")}
+          label={this.handlerManager.getLabel("toggleFont")}
+          onClick={this.handlerManager.getHandler("toggleFont")}
+          icon="blank"
         />
       </Menu>
     );
@@ -499,6 +505,7 @@ export class MainNavbar extends Component<Props, State> {
       searchRedo: {key: ["ctrl+shift+z", "ctrl+y"], handler: (event) => (this.props.searchRedo(), event?.preventDefault())},
       searchAdvanced: {key: "ctrl+f"},
       searchScript: {key: "ctrl+shift+f"},
+      toggleFont: {key: "ctrl+@", handler: () => this.props.toggleFont()},
       createWord: {key: "ctrl+n", handler: () => this.props.createWord()},
       inheritActiveWord: {key: "ctrl+i", handler: () => this.props.inheritActiveWord()},
       editActiveWord: {key: "ctrl+m", handler: () => this.props.editActiveWord()},
@@ -580,6 +587,7 @@ type Props = {
   movePreviousPage: () => void,
   moveNextPage: () => void,
   moveLastPage: () => void,
+  toggleFont: () => void,
   searchUndo: () => void,
   searchRedo: () => void,
   createWord: () => void,
