@@ -71,7 +71,7 @@ export class MainPage extends Component<Props, State> {
     activeWord: null,
     language: "ja",
     parameter: NormalParameter.createEmpty("ja"),
-    displayedParameter: NormalParameter.createEmpty("ja"),
+    shownParameter: NormalParameter.createEmpty("ja"),
     searchResult: SearchResult.createEmpty(),
     page: 0,
     changed: false,
@@ -229,12 +229,12 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private updateWordsDirect(parameter: Parameter, displayedParameter: Parameter | null, fromHistory?: boolean): void {
+  private updateWordsDirect(parameter: Parameter, shownParameter: Parameter | null, fromHistory?: boolean): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       let searchResult = dictionary.search(parameter);
       if (!fromHistory) {
-        this.history.add([parameter, displayedParameter ?? this.state.displayedParameter]);
+        this.history.add([parameter, shownParameter ?? this.state.shownParameter]);
       }
       this.setState({parameter, searchResult, page: 0, activeWord: null});
       this.scrollWordList();
@@ -242,20 +242,20 @@ export class MainPage extends Component<Props, State> {
   }
 
   @debounce(200)
-  private updateWordsDirectDebounced(parameter: Parameter, displayedParameter: Parameter | null, fromHistory?: boolean): void {
-    this.updateWordsDirect(parameter, displayedParameter, fromHistory);
+  private updateWordsDirectDebounced(parameter: Parameter, shownParameter: Parameter | null, fromHistory?: boolean): void {
+    this.updateWordsDirect(parameter, shownParameter, fromHistory);
   }
 
   // 引数に与えられた検索パラメータを用いて検索結果ペインを更新します。
   // 検索結果ペインのスクロール位置はリセットされます。
-  private updateWords(parameter: Parameter, displayedParameter: Parameter | null, immediate?: boolean, fromHistory?: boolean): void {
-    if (displayedParameter) {
-      this.setState({displayedParameter});
+  private updateWords(parameter: Parameter, shownParameter: Parameter | null, immediate?: boolean, fromHistory?: boolean): void {
+    if (shownParameter) {
+      this.setState({shownParameter});
     }
     if (immediate) {
-      this.updateWordsDirect(parameter, displayedParameter, fromHistory);
+      this.updateWordsDirect(parameter, shownParameter, fromHistory);
     } else {
-      this.updateWordsDirectDebounced(parameter, displayedParameter, fromHistory);
+      this.updateWordsDirectDebounced(parameter, shownParameter, fromHistory);
     }
   }
 
@@ -280,17 +280,17 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  private movePage(spec: {page: number} | {difference: number} | "first" | "last"): void {
+  private movePage(spec: number | "first" | "last" | {difference: number}): void {
     let currentPage = this.state.page;
     let minPage = this.state.searchResult.minPage;
     let maxPage = this.state.searchResult.maxPage;
     let page = (() => {
-      if (spec === "first") {
+      if (typeof spec === "number") {
+        return spec;
+      } else if (spec === "first") {
         return minPage;
       } else if (spec === "last") {
         return maxPage;
-      } else if ("page" in spec) {
-        return spec.page;
       } else {
         return currentPage + spec.difference;
       }
@@ -305,16 +305,16 @@ export class MainPage extends Component<Props, State> {
   private searchUndo(): void {
     let elements = this.history.undo();
     if (elements !== undefined) {
-      let [parameter, displayedParameter] = elements;
-      this.updateWords(parameter, displayedParameter, true, true);
+      let [parameter, shownParameter] = elements;
+      this.updateWords(parameter, shownParameter, true, true);
     }
   }
 
   private searchRedo(): void {
     let elements = this.history.redo();
     if (elements !== undefined) {
-      let [parameter, displayedParameter] = elements;
-      this.updateWords(parameter, displayedParameter, true, true);
+      let [parameter, shownParameter] = elements;
+      this.updateWords(parameter, shownParameter, true, true);
     }
   }
 
@@ -408,7 +408,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private changeWordMode(mode: WordMode, focus?: boolean): void {
-    let oldParameter = ParameterUtil.getNormal(this.state.displayedParameter);
+    let oldParameter = ParameterUtil.getNormal(this.state.shownParameter);
     let parameter = new NormalParameter(oldParameter.search, mode, oldParameter.type, this.state.language);
     this.changeParameter(parameter);
     if (focus) {
@@ -417,7 +417,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private changeWordType(type: WordType, focus?: boolean): void {
-    let oldParameter = ParameterUtil.getNormal(this.state.displayedParameter);
+    let oldParameter = ParameterUtil.getNormal(this.state.shownParameter);
     let parameter = new NormalParameter(oldParameter.search, oldParameter.mode, type, this.state.language);
     this.changeParameter(parameter);
     if (focus) {
@@ -651,7 +651,7 @@ export class MainPage extends Component<Props, State> {
         <Loading loading={this.state.dictionary === null} progress={this.state.progress}>
           <div className="zpmnp-search-form-container">
             <SearchForm
-              parameter={this.state.displayedParameter}
+              parameter={this.state.shownParameter}
               language={this.state.language}
               searchResult={this.state.searchResult}
               inputRef={this.searchInputRef}
@@ -671,7 +671,7 @@ export class MainPage extends Component<Props, State> {
               onMarkerToggled={(word, marker) => this.toggleWordMarker(word, marker)}
               onLinkClick={(name) => this.updateWordsByName(name)}
               onActivate={(activeWord) => this.setState({activeWord})}
-              onPageSet={(page) => this.movePage({page})}
+              onPageSet={(page) => this.movePage(page)}
             />
           </div>
         </Loading>
@@ -690,7 +690,7 @@ type State = {
   language: string,
   activeWord: Word | null,
   parameter: Parameter,
-  displayedParameter: Parameter,
+  shownParameter: Parameter,
   searchResult: SearchResult,
   page: number,
   changed: boolean,
