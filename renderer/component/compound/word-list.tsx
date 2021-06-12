@@ -67,6 +67,7 @@ export class WordList extends Component<Props, State> {
           dictionary={this.props.dictionary}
           word={word}
           language={this.props.language}
+          useCustomFont={this.props.useCustomFont}
           onCreate={this.props.onCreate}
           onInherit={this.props.onInherit && partial(this.props.onInherit, word)}
           onEdit={this.props.onEdit && partial(this.props.onEdit, word)}
@@ -111,6 +112,7 @@ type Props = {
   searchResult: SearchResult,
   language: string,
   page: number,
+  useCustomFont: boolean,
   onCreate?: (event: MouseEvent<HTMLElement>) => void,
   onInherit?: (word: Word, event: MouseEvent<HTMLElement>) => void,
   onEdit?: (word: Word, event: MouseEvent<HTMLElement>) => void,

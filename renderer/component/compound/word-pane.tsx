@@ -41,13 +41,14 @@ export class WordPane extends Component<Props, State> {
 
   private renderHead(word: ParsedWord<ReactNode>, markers: Array<Marker>): ReactNode {
     let sort = word.parts[this.props.language]?.sort ?? null;
+    let bracketClassName = (this.props.useCustomFont) ? "swp-shaleian" : "swp-sans";
     let markerNodes = markers.map((marker) => this.renderMarker(marker));
     let categoryNode = (sort !== null) && (
       <span className="swp-head-sort swp-tag swp-right-margin">{sort}</span>
     );
     let nameNode = (
       <span className="swp-head-name swp-right-margin">
-        <span className="swp-sans">{word.name}</span>
+        <span className={bracketClassName}>{word.name}</span>
       </span>
     );
     let pronunciationNode = (word.pronunciation !== null) && (
@@ -261,7 +262,7 @@ export class WordPane extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let resolver = WordPane.createMarkupResolver(this.props.onLinkClick);
+    let resolver = WordPane.createMarkupResolver(this.props.useCustomFont, this.props.onLinkClick);
     let parser = new Parser(resolver);
     let word = parser.parse(this.props.word);
     let markers = this.props.word.markers;
@@ -269,14 +270,15 @@ export class WordPane extends Component<Props, State> {
     return node;
   }
 
-  public static createMarkupResolver(onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void): MarkupResolver<ReactNode, ReactNode> {
+  public static createMarkupResolver(useCustomFont: boolean, onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void): MarkupResolver<ReactNode, ReactNode> {
     let onLinkCtrlClick = WordPane.requireCtrl(onLinkClick);
+    let bracketClassName = (useCustomFont) ? "swp-shaleian" : "swp-sans";
     let resolveLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
       let node = <span className="swp-link" key={Math.random()} onClick={onLinkCtrlClick && partial(onLinkCtrlClick, name)}>{children}</span>;
       return node;
     };
     let resolveBracket = function (children: Array<ReactNode | string>): ReactNode {
-      let node = <span className="swp-sans" key={Math.random()}>{children}</span>;
+      let node = <span className={bracketClassName} key={Math.random()}>{children}</span>;
       return node;
     };
     let resolveSlash = function (string: string): ReactNode {
@@ -321,6 +323,7 @@ type Props = {
   dictionary: Dictionary,
   word: Word,
   language: string,
+  useCustomFont: boolean,
   onClick?: (event: MouseEvent<HTMLDivElement>) => void,
   onDoubleClick?: (event: MouseEvent<HTMLDivElement>) => void,
   onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void

@@ -74,6 +74,7 @@ export class MainPage extends Component<Props, State> {
     shownParameter: NormalParameter.createEmpty("ja"),
     searchResult: SearchResult.createEmpty(),
     page: 0,
+    useCustomFont: false,
     changed: false,
     alertOpen: false,
     progress: {offset: 0, size: 0}
@@ -664,6 +665,7 @@ export class MainPage extends Component<Props, State> {
               searchResult={this.state.searchResult}
               language={this.state.language}
               page={this.state.page}
+              useCustomFont={this.state.useCustomFont}
               onCreate={() => this.editWord(null)}
               onInherit={(word) => this.editWord(null, word)}
               onEdit={(word) => this.editWord(word)}
@@ -693,6 +695,7 @@ type State = {
   shownParameter: Parameter,
   searchResult: SearchResult,
   page: number,
+  useCustomFont: boolean,
   changed: boolean,
   alertOpen: boolean,
   progress: Progress

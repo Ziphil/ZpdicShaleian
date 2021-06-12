@@ -238,6 +238,10 @@ $swp-word-marker-shadow: inset 0px 0px 0px #{$pt-grid-size / 2} var(--marker-bac
   line-height: 96%;
 }
 
+.swp-shaleian {
+  font-family: $pt-font-family-shaleian;
+}
+
 .swp-italic {
   font-style: italic;
 }

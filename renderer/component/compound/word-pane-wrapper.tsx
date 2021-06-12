@@ -116,6 +116,7 @@ export class WordPaneWrapper extends Component<Props, State> {
             dictionary={this.props.dictionary}
             word={this.props.word}
             language={this.props.language}
+            useCustomFont={this.props.useCustomFont}
             onDoubleClick={this.props.onEdit}
             onLinkClick={this.props.onLinkClick}
           />
@@ -132,6 +133,7 @@ type Props = {
   dictionary: Dictionary,
   word: Word,
   language: string,
+  useCustomFont: boolean,
   onCreate?: (event: MouseEvent<HTMLElement>) => void,
   onInherit?: (event: MouseEvent<HTMLElement>) => void,
   onEdit?: (event: MouseEvent<HTMLElement>) => void,
