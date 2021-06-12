@@ -234,6 +234,26 @@ export class MainNavbar extends Component<Props, State> {
           />
         </MenuItem>
         <MenuDivider/>
+        <MenuItem text={this.trans("mainNavbar.searchHistory")} icon="history">
+          <MenuItem
+            text={this.trans("mainNavbar.searchUndo")}
+            label={this.handlerManager.getLabel("searchUndo")}
+            onClick={this.handlerManager.getHandler("searchUndo")}
+            icon="undo"
+          />
+          <MenuItem
+            text={this.trans("mainNavbar.searchRedo")}
+            label={this.handlerManager.getLabel("searchRedo")}
+            onClick={this.handlerManager.getHandler("searchRedo")}
+            icon="redo"
+          />
+          <MenuItem
+            text={this.trans("mainNavbar.showHistory")}
+            label={this.handlerManager.getLabel("showHistory")}
+            onClick={this.handlerManager.getHandler("showHistory")}
+            icon="blank"
+          />
+        </MenuItem>
         <MenuItem
           text={this.trans("mainNavbar.searchAdvanced")}
           label={this.handlerManager.getLabel("searchAdvanced")}
@@ -475,6 +495,8 @@ export class MainNavbar extends Component<Props, State> {
       movePreviousPage: {key: "ctrl+,", handler: () => this.props.movePreviousPage()},
       moveNextPage: {key: "ctrl+.", handler: () => this.props.moveNextPage()},
       moveLastPage: {key: "ctrl+shift+.", handler: () => this.props.moveLastPage()},
+      searchUndo: {key: "ctrl+z", handler: () => this.props.searchUndo()},
+      searchRedo: {key: "ctrl+shift+z", handler: () => this.props.searchRedo()},
       searchAdvanced: {key: "ctrl+f"},
       searchScript: {key: "ctrl+shift+f"},
       createWord: {key: "ctrl+n", handler: () => this.props.createWord()},
@@ -558,6 +580,8 @@ type Props = {
   movePreviousPage: () => void,
   moveNextPage: () => void,
   moveLastPage: () => void,
+  searchUndo: () => void,
+  searchRedo: () => void,
   createWord: () => void,
   inheritActiveWord: () => void,
   editActiveWord: () => void,

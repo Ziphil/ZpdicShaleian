@@ -580,6 +580,8 @@ export class MainPage extends Component<Props, State> {
         movePreviousPage={() => this.movePage({difference: -1})}
         moveNextPage={() => this.movePage({difference: 1})}
         moveLastPage={() => this.movePage("last")}
+        searchUndo={() => console.log("undo")}
+        searchRedo={() => console.log("redo")}
         createWord={() => this.editWord(null)}
         inheritActiveWord={() => this.editActiveWord(null, "active")}
         editActiveWord={() => this.editActiveWord("active")}
