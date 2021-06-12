@@ -1,5 +1,9 @@
 //
 
+import {
+  MouseEvent
+} from "react";
+
 
 export class HandlerManager {
 
@@ -42,4 +46,4 @@ export class HandlerManager {
 export type HandlerSpecs = {[name: string]: HandlerSpec};
 export type HandlerSpec = {key?: KeySequence, handler?: KeyHandler};
 export type KeySequence = string | Array<string>;
-export type KeyHandler = () => void;
+export type KeyHandler = (event?: KeyboardEvent | MouseEvent<HTMLElement>) => void;
