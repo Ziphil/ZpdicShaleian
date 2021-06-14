@@ -44,6 +44,7 @@ export class WordList extends Component<Props, State> {
           dictionary={this.props.dictionary}
           suggestion={suggestion}
           language={this.props.language}
+          useCustomFont={this.props.useCustomFont}
           onLinkClick={this.props.onLinkClick}
         />
       );

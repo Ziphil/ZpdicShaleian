@@ -23,13 +23,14 @@ export class SuggestionPane extends Component<Props, State> {
     let language = this.props.language;
     let descriptionNames = suggestion.getDescriptionNames(language).filter((name) => name !== undefined);
     let onLinkCtrlClick = WordPane.requireCtrl(this.props.onLinkClick);
+    let linkClassName = (this.props.useCustomFont) ? "ssp-link swp-shaleian" : "ssp-link swp-sans";
     let keywordNode = (descriptionNames.length > 0) && (
       <span className="ssp-keyword">
         ({descriptionNames.join(", ").toLowerCase()})
       </span>
     );
     let nameNodes = suggestion.names.map((name) => {
-      let nameNode = <span className="ssp-link ssp-sans" key={Math.random()} onClick={onLinkCtrlClick && partial(onLinkCtrlClick, name)}>{name}</span>;
+      let nameNode = <span className={linkClassName} key={Math.random()} onClick={onLinkCtrlClick && partial(onLinkCtrlClick, name)}>{name}</span>;
       return nameNode;
     });
     let nameNode = WordPane.intersperse(nameNodes, ", ");
@@ -51,6 +52,7 @@ type Props = {
   dictionary: Dictionary,
   suggestion: Suggestion,
   language: string,
+  useCustomFont: boolean,
   onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void
 };
 type State = {
