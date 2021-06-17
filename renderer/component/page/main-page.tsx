@@ -48,7 +48,7 @@ import {
   Loading,
   MainNavbar,
   SearchForm,
-  WordList
+  SearchResultPane
 } from "../compound";
 import {
   component,
@@ -666,7 +666,7 @@ export class MainPage extends Component<Props, State> {
             />
           </div>
           <div className="zpmnp-word-list-container" ref={this.wordListRef}>
-            <WordList
+            <SearchResultPane
               dictionary={this.state.dictionary!}
               searchResult={this.state.searchResult}
               language={this.state.language}

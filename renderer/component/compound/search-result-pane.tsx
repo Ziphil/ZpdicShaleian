@@ -27,7 +27,7 @@ import {
 
 
 @component()
-export class WordList extends Component<Props, State> {
+export class SearchResultPane extends Component<Props, State> {
 
   private handlePageSet(page: number) {
     if (this.props.onPageSet) {
