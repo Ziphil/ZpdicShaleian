@@ -1,7 +1,8 @@
 //
 
 import {
-  Button, ButtonGroup
+  Button,
+  ButtonGroup
 } from "@blueprintjs/core";
 import * as react from "react";
 import {
