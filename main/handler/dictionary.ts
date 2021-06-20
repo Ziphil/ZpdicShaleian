@@ -4,7 +4,9 @@ import axios from "axios";
 import {
   IpcMainEvent
 } from "electron";
+import FormData from "form-data";
 import {
+  createReadStream,
   promises as fs
 } from "fs";
 import {
@@ -15,9 +17,9 @@ import {
 import {
   DirectoryLoader,
   DirectorySaver,
-  OldShaleianSaver,
   SaverCreator,
-  SaverKind
+  SaverKind,
+  SingleSaver
 } from "soxsot/dist/io";
 import {
   handler,
@@ -82,15 +84,17 @@ export class DictionaryHandler extends Handler {
     if (url !== "" && password !== "") {
       let dictionary = Dictionary.fromPlain(plainDictionary);
       let tempPath = (this.main.app.isPackaged) ? "./temp.xdc" : "./dist/temp.xdc";
-      let saver = new OldShaleianSaver(dictionary, tempPath);
+      let saver = new SingleSaver(dictionary, tempPath);
       await saver.asPromise({onProgress: (offset, size) => {
         let ratio = (size > 0) ? (offset / size) / 2 : 0;
         this.send("getUploadDictionaryProgress", event.sender, {offset: ratio, size: 1});
       }});
       this.send("getUploadDictionaryProgress", event.sender, {offset: 0.5, size: 1});
-      let content = await fs.readFile(tempPath, {encoding: "utf-8"});
-      let params = new URLSearchParams({mode: "zpdic", password, content});
-      await axios.post(url, params, {onUploadProgress: (event) => {
+      let formData = new FormData();
+      let file = createReadStream(tempPath);
+      formData.append("password", password);
+      formData.append("file", file);
+      await axios.post(url, formData, {headers: formData.getHeaders(), onUploadProgress: (event) => {
         if (event.lengthComputable) {
           let ratio = (event.total > 0) ? (event.loaded / event.total) / 2 + 0.5 : 0.5;
           this.send("getUploadDictionaryProgress", event.sender, {offset: ratio, size: 1});
