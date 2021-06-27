@@ -1,6 +1,7 @@
 //
 
 import {
+  Alert,
   Button,
   IRefObject,
   InputGroup,
@@ -17,6 +18,7 @@ import {
   MouseEvent,
   ReactElement,
   ReactNode,
+  SyntheticEvent,
   createRef
 } from "react";
 import {
@@ -46,8 +48,10 @@ export class WordEditor extends Component<Props, State> {
     super(props);
     let uid = props.word?.uid ?? null;
     let word = (props.defaultWord !== undefined) ? props.defaultWord : (props.word !== null) ? props.word : Word.createEmpty();
+    let oldWord = {...word, contents: {...word.contents}};
     let originalUniqueName = props.word?.uniqueName ?? null;
-    this.state = {uid, word, originalUniqueName};
+    let alertOpen = false;
+    this.state = {uid, word, oldWord, originalUniqueName, alertOpen};
   }
 
   private contentEditorDidMount(editor: Editor): void {
@@ -63,8 +67,10 @@ export class WordEditor extends Component<Props, State> {
   private async handleConfirm(event?: MouseEvent<HTMLElement> | KeyboardEvent): Promise<void> {
     let errorType = await this.sendAsync("validateEditWord", this.state.uid, this.state.word);
     if (errorType === null) {
-      if (this.props.onConfirm) {
-        this.props.onConfirm(this.state.uid, this.state.word, event);
+      if (this.checkChange()) {
+        this.forceClose(event);
+      } else {
+        this.setState({alertOpen: true});
       }
     } else {
       if (errorType === "invalidUniqueName") {
@@ -77,7 +83,30 @@ export class WordEditor extends Component<Props, State> {
     }
   }
 
-  private setWord<T extends Array<unknown>>(setter: (...args: T) => void): (...args: T) => void {
+  private forceClose(event?: SyntheticEvent<HTMLElement> | KeyboardEvent) {
+    if (this.props.onConfirm) {
+      this.props.onConfirm(this.state.uid, this.state.word, event);
+    }
+  }
+
+  // 全ての言語に対するデータが更新されているかどうかを調べます。
+  // 1 つの言語のデータに変更が行われているのに他の言語のデータには変更が行われていない場合に、false を返します。
+  // 全ての言語のデータが全く変更されていない場合と、全ての言語のデータに何らかの変更が行われている場合は、true を返します。
+  // ただし、もともとデータが空だった言語についてはチェックしません。
+  private checkChange(): boolean {
+    let languages = ["ja", "en"];
+    let oldContents = this.state.oldWord.contents;
+    let newContents = this.state.word.contents;
+    if (languages.every((language) => (oldContents[language] ?? "") === (newContents[language] ?? ""))) {
+      return true;
+    } else if (languages.every((language) => (oldContents[language] ?? "") === "" || (oldContents[language] ?? "") !== (newContents[language] ?? ""))) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  private setWord<T extends Array<unknown>>(language: string, setter: (...args: T) => void): (...args: T) => void {
     let outerThis = this;
     let wrapper = function (...args: T): void {
       setter(...args);
@@ -92,17 +121,36 @@ export class WordEditor extends Component<Props, State> {
     let node = (
       <div className="zpwde-editor-tab zp-editor-tab" key={language}>
         <div className="zpwde-head">
-          <InputGroup className="zpwde-name" inputRef={this.nameRef} fill={true} value={word.uniqueName} onChange={this.setWord((event) => word.uniqueName = event.target.value)}/>
-          <NumericInput className="zpwde-date" value={word.date} minorStepSize={null} onValueChange={this.setWord((date) => word.date = Math.floor(date))}/>
+          <InputGroup className="zpwde-name" inputRef={this.nameRef} fill={true} value={word.uniqueName} onChange={this.setWord(language, (event) => word.uniqueName = event.target.value)}/>
+          <NumericInput className="zpwde-date" value={word.date} minorStepSize={null} onValueChange={this.setWord(language, (date) => word.date = Math.floor(date))}/>
         </div>
         <CodeMirror
           className="zpwde-content"
           value={word.contents[language] ?? ""}
           options={{theme: "zpshcontent", mode: {name: "shcontent"}, lineWrapping: true}}
-          onBeforeChange={this.setWord((editor, data, value) => word.contents[language] = value)}
+          onBeforeChange={this.setWord(language, (editor, data, value) => word.contents[language] = value)}
           editorDidMount={this.contentEditorDidMount.bind(this)}
         />
       </div>
+    );
+    return node;
+  }
+
+  private renderAlert(): ReactNode {
+    let node = (
+      <Alert
+        isOpen={this.state.alertOpen}
+        cancelButtonText={this.trans("wordEditor.alertCancel")}
+        confirmButtonText={this.trans("wordEditor.alertConfirm")}
+        icon="warning-sign"
+        intent="danger"
+        canEscapeKeyCancel={true}
+        canOutsideClickCancel={true}
+        onCancel={() => this.setState({alertOpen: false})}
+        onConfirm={(event) => this.forceClose(event)}
+      >
+        <p>{this.trans("wordEditor.alert")}</p>
+      </Alert>
     );
     return node;
   }
@@ -116,8 +164,10 @@ export class WordEditor extends Component<Props, State> {
       );
       return tabNode;
     });
+    let alertNode = this.renderAlert();
     let node = (
       <div className="zpwde-editor zp-editor">
+        {alertNode}
         <EditorHotKeys onConfirm={this.handleConfirm.bind(this)} onCancel={this.handleCancel.bind(this)}>
           <Tabs defaultSelectedTabId={this.props.language} renderActiveTabPanelOnly={true}>
             {tabNodes}
@@ -139,13 +189,15 @@ type Props = {
   word: PlainWord | null,
   defaultWord?: PlainWord,
   language: string,
-  onConfirm?: (uid: string | null, word: PlainWord, event?: MouseEvent<HTMLElement> | KeyboardEvent) => void,
-  onCancel?: (event: MouseEvent<HTMLElement> | KeyboardEvent) => void
+  onConfirm?: (uid: string | null, word: PlainWord, event?: SyntheticEvent<HTMLElement> | KeyboardEvent) => void,
+  onCancel?: (event: SyntheticEvent<HTMLElement> | KeyboardEvent) => void
 };
 type State = {
   uid: string | null,
   word: PlainWord,
-  originalUniqueName: string | null
+  oldWord: PlainWord,
+  originalUniqueName: string | null,
+  alertOpen: boolean
 };
 
 let CustomToaster = Toaster.create({position: "top", maxToasts: 2});

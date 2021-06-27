@@ -125,12 +125,17 @@ wordEditor:
   cancel: "キャンセル"
   delete: "削除"
   confirm: "決定"
+  alertCancel: "キャンセル"
+  alertConfirm: "確定"
   invalidUniqueName: >-
     綴りのフォーマットが正しくありません。
   duplicateUniqueName: >-
     その綴りの単語はすでに登録されています。
   failValidate: >-
     不明な原因によりこの内容で編集することはできません。
+  alert: >-
+    データが変更されていない言語があります。
+    このまま単語データの編集を確定しますか?
 wordPaneWrapper:
   create: "新規作成"
   inherit: "コピーして新規作成"
