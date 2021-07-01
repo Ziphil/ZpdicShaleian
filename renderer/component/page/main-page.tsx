@@ -327,6 +327,10 @@ export class MainPage extends Component<Props, State> {
   private async editWord(word: Word | null, defaultWord?: Word): Promise<void> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
+      if (word === null && defaultWord !== undefined) {
+        defaultWord = defaultWord.copy();
+        defaultWord.refreshDate();
+      }
       let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
       let plainWord = (word !== null) ? word.toPlain() : null;
       let defaultPlainWord = (defaultWord !== undefined) ? defaultWord.toPlain() : undefined;
