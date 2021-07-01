@@ -118,7 +118,7 @@ export class Main {
     let id = window.webContents.id;
     let idString = id.toString();
     window.loadFile(joinPath(__dirname, "index.html"), {query: {...options.query, mode, idString}});
-    // window.setMenu(null);
+    window.setMenu(null);
     window.show();
     window.once("closed", () => {
       this.windows.delete(id);
