@@ -246,3 +246,9 @@ $swp-word-marker-shadow: inset 0px 0px 0px #{$pt-grid-size / 2} var(--marker-bac
 .swp-italic {
   font-style: italic;
 }
+
+.swp-hairia::before {
+  font-size: 80%;
+  vertical-align: 0.4em;
+  content: "H";
+}

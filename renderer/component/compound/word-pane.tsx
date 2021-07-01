@@ -57,7 +57,7 @@ export class WordPane extends Component<Props, State> {
       </span>
     );
     let dateNode = (
-      <span className="swp-head-date">{word.date}</span>
+      <span className="swp-head-date swp-hairia">{word.date}</span>
     );
     let markerNode = (
       <div className="swp-head-markers swp-markers">
@@ -285,10 +285,15 @@ export class WordPane extends Component<Props, State> {
       let node = <span className="swp-italic" key={Math.random()}>{string}</span>;
       return node;
     };
+    let resolveHairia = function (hairia: number): ReactNode {
+      let node = <span className="swp-hairia" key={Math.random()}>{hairia}</span>;
+      return node;
+    };
     let join = function (nodes: Array<ReactNode | string>): ReactNode {
       return nodes;
     };
-    let resolver = new MarkupResolver({resolveLink, resolveBracket, resolveSlash, join});
+    let modifyPunctuations = true;
+    let resolver = new MarkupResolver({resolveLink, resolveBracket, resolveSlash, resolveHairia, join, modifyPunctuations});
     return resolver;
   }
 
