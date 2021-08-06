@@ -274,7 +274,7 @@ export class WordPane extends Component<Props, State> {
     let onLinkCtrlClick = WordPane.requireCtrl(onLinkClick);
     let bracketClassName = (useCustomFont) ? "swp-shaleian" : "swp-sans";
     let resolveLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
-      let node = <span className="swp-link" key={Math.random()} onClick={onLinkCtrlClick && partial(onLinkCtrlClick, name)}>{children}</span>;
+      let node = <span className="swp-link" key={Math.random()} onMouseDown={onLinkCtrlClick && partial(onLinkCtrlClick, name)}>{children}</span>;
       return node;
     };
     let resolveBracket = function (children: Array<ReactNode | string>): ReactNode {
