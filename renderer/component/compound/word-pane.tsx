@@ -271,10 +271,10 @@ export class WordPane extends Component<Props, State> {
   }
 
   public static createMarkupResolver(useCustomFont: boolean, onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void): MarkupResolver<ReactNode, ReactNode> {
-    let onLinkCtrlClick = WordPane.requireCtrl(onLinkClick);
+    let onLinkAltClick = WordPane.requireAlt(onLinkClick);
     let bracketClassName = (useCustomFont) ? "swp-shaleian" : "swp-sans";
     let resolveLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
-      let node = <span className="swp-link" key={Math.random()} onMouseDown={onLinkCtrlClick && partial(onLinkCtrlClick, name)}>{children}</span>;
+      let node = <span className="swp-link" key={Math.random()} onMouseDown={onLinkAltClick && partial(onLinkAltClick, name)}>{children}</span>;
       return node;
     };
     let resolveBracket = function (children: Array<ReactNode | string>): ReactNode {
@@ -297,10 +297,10 @@ export class WordPane extends Component<Props, State> {
     return resolver;
   }
 
-  public static requireCtrl<A extends Array<any>, T>(handler?: (...args: [...A, MouseEvent<T>]) => void): ((...args: [...A, MouseEvent<T>]) => void) | undefined {
+  public static requireAlt<A extends Array<any>, T>(handler?: (...args: [...A, MouseEvent<T>]) => void): ((...args: [...A, MouseEvent<T>]) => void) | undefined {
     if (handler !== undefined) {
       let resultHandler = function (...args: [...A, MouseEvent<T>]): void {
-        if (args[args.length - 1].ctrlKey) {
+        if (args[args.length - 1].altKey) {
           handler(...args);
         }
       };
