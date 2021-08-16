@@ -4,6 +4,7 @@ import axios from "axios";
 import {
   IpcMainEvent
 } from "electron";
+import execa from "execa";
 import FormData from "form-data";
 import {
   createReadStream,
@@ -14,6 +15,9 @@ import {
   PlainDictionary,
   PlainWord
 } from "soxsot";
+import {
+  DictionaryFormatBuilder
+} from "soxsot-format";
 import {
   DirectoryLoader,
   DirectorySaver,
@@ -56,15 +60,23 @@ export class DictionaryHandler extends Handler {
   }
 
   @onAsync("exportDictionary")
-  private async exportDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, path: string, kind: SaverKind): Promise<void> {
+  private async exportDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, path: string, kind: SaverKind | "pdf"): Promise<void> {
     let dictionary = Dictionary.fromPlain(plainDictionary);
-    let saver = SaverCreator.createByKind(kind, dictionary, path);
-    if (saver !== undefined) {
-      await saver.asPromise({onProgress: (offset, size) => {
-        this.send("getExportDictionaryProgress", event.sender, {offset, size});
-      }});
+    if (kind === "pdf") {
+      let builder = new DictionaryFormatBuilder("ja");
+      let xslPath = path.replace(/\.\w+$/, ".fo");
+      await fs.writeFile(xslPath, builder.convert(dictionary), {encoding: "utf-8"});
+      await execa("AHFCmd", ["-x", "3", "-d", xslPath, "-p", "@PDF", "-o", path]);
+      await fs.unlink(xslPath);
     } else {
-      throw new Error("no such saver");
+      let saver = SaverCreator.createByKind(kind, dictionary, path);
+      if (saver !== undefined) {
+        await saver.asPromise({onProgress: (offset, size) => {
+          this.send("getExportDictionaryProgress", event.sender, {offset, size});
+        }});
+      } else {
+        throw new Error("no such saver");
+      }
     }
   }
 

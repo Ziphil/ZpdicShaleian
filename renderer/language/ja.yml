@@ -75,6 +75,7 @@ mainNavbar:
   exportDictionaryAsSingle: "新シャレイア単独ファイル形式 (.xdn)"
   exportDictionaryAsOldShaleian: "旧シャレイア形式 (.xdc)"
   exportDictionaryAsSlime: "OTM-JSON 形式 (.json)"
+  exportDictionaryAsPdf: "PDF 形式 (.pdf)"
   closeWindow: "終了"
   search: "検索"
   changeWordMode: "検索範囲の変更"

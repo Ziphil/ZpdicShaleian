@@ -111,6 +111,11 @@ export class MainNavbar extends Component<Props, State> {
             label={this.handlerManager.getLabel("exportDictionaryAsSlime")}
             onClick={this.handlerManager.getHandler("exportDictionaryAsSlime")}
           />
+          <MenuItem
+            text={this.trans("mainNavbar.exportDictionaryAsPdf")}
+            label={this.handlerManager.getLabel("exportDictionaryAsPdf")}
+            onClick={this.handlerManager.getHandler("exportDictionaryAsPdf")}
+          />
         </MenuItem>
         <MenuDivider/>
         <MenuItem
@@ -483,6 +488,7 @@ export class MainNavbar extends Component<Props, State> {
       saveAndRenameDictionary: {key: "ctrl+shift+s"},
       exportDictionaryAsSingle: {handler: () => this.props.exportDictionary("single")},
       exportDictionaryAsOldShaleian: {handler: () => this.props.exportDictionary("oldShaleian")},
+      exportDictionaryAsPdf: {handler: () => this.props.exportDictionary("pdf")},
       closeWindow: {handler: () => this.props.closeWindow()},
       changeWordModeToName: {key: "ctrl+w", handler: () => this.props.changeWordMode("name")},
       changeWordModeToEquivalent: {key: "ctrl+e", handler: () => this.props.changeWordMode("equivalent")},
