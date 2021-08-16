@@ -155,6 +155,7 @@ export class MainPage extends Component<Props, State> {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
       try {
+        this.updateSaveDictionaryProgress({offset: 0, size: 0});
         await this.sendAsync("saveDictionary", dictionary.toPlain(), path);
         this.setState({changed: false});
         CustomToaster.show({message: this.trans("mainPage.succeedSaveDictionary"), icon: "tick", intent: "success"}, "saveDictionary");
@@ -180,6 +181,7 @@ export class MainPage extends Component<Props, State> {
       if (!result.canceled) {
         let path = result.filePath;
         try {
+          this.updateExportDictionaryProgress({offset: 0, size: 0});
           await this.sendAsync("exportDictionary", dictionary.toPlain(), path, kind);
           CustomToaster.show({message: this.trans("mainPage.succeedExportDictionary"), icon: "tick", intent: "success"}, "exportDictionary");
         } catch (error) {
@@ -509,6 +511,7 @@ export class MainPage extends Component<Props, State> {
       if (data !== null) {
         let {url, password} = data;
         try {
+          this.updateUploadDictionaryProgress({offset: 0, size: 0});
           await this.sendAsync("uploadDictionary", dictionary.toPlain(), url, password);
           CustomToaster.show({message: this.trans("mainPage.succeedUploadDictionary"), icon: "tick", intent: "success"}, "uploadDictionary");
         } catch (error) {
