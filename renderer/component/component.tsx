@@ -47,14 +47,14 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
     }
   }
 
-  // メインプロセスに非同期でメッセージを送信します。
-  // 仕様変更をしやすくするため、window.api のメソッドを直接呼ぶのは避け、このメソッドを利用してください。
+  /** メインプロセスに非同期でメッセージを送信します。
+   * 仕様変更をしやすくするため、`window.api` のメソッドを直接呼ぶのは避け、このメソッドを利用してください。*/
   protected send(channel: string, ...args: Array<any>): void {
     return window.api.send(channel, ...args);
   }
 
-  // メインプロセスに非同期でメッセージを送信し、結果が返されるまで待機します。
-  // 仕様変更をしやすくするため、window.api のメソッドを直接呼ぶのは避け、このメソッドを利用してください。
+  /** メインプロセスに非同期でメッセージを送信し、結果が返されるまで待機します。
+   * 仕様変更をしやすくするため、`window.api` のメソッドを直接呼ぶのは避け、このメソッドを利用してください。*/
   protected sendAsync(channel: string, ...args: Array<any>): Promise<any> {
     return window.api.sendAsync(channel, ...args);
   }
@@ -63,9 +63,9 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
     window.api.send("createWindow", mode, props, options);
   }
 
-  // 新しいウィンドウを非同期で開き、そのウィンドウが閉じられるまで待機します。
-  // 開かれたウィンドウのレンダラープロセスにおいて、closeWindow メソッドが呼ばれたときの引数が返されます。
-  // closeWindow メソッドが引数なしで呼ばれた場合か、閉じるボタンでウィンドウが閉じられた場合は、代わりに null が返されます。
+  /** 新しいウィンドウを非同期で開き、そのウィンドウが閉じられるまで待機します。
+   * 開かれたウィンドウのレンダラープロセスにおいて、`closeWindow` メソッドが呼ばれたときの引数が返されます。
+   * `closeWindow` メソッドが引数なしで呼ばれた場合か、閉じるボタンでウィンドウが閉じられた場合は、代わりに `null` が返されます。*/
   protected createWindowAsync(mode: string, props: object, options: BrowserWindowConstructorOptions): Promise<any | null> {
     let respondIdString = this.props.store!.id.toString();
     let respondChannel = "create-window-async" + uuid();
@@ -83,9 +83,9 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
     return promise;
   }
 
-  // 現在のウィンドウを閉じます。
-  // 現在のウィンドウが createWindowAsync メソッドで作られたものである場合、この関数の引数にデータを渡すことで、ウィンドウを作ったプロセスにそのデータを返信することができます。
-  // 引数を省略した場合は、ウィンドウを作ったプロセスには null が返信されます。
+  /** 現在のウィンドウを閉じます。
+   * 現在のウィンドウが `createWindowAsync` メソッドで作られたものである場合、この関数の引数にデータを渡すことで、ウィンドウを作ったプロセスにそのデータを返信することができます。
+   * 引数を省略した場合は、ウィンドウを作ったプロセスには `null` が返信されます。*/
   protected closeWindow(data?: unknown): void {
     let respondId = this.props.store!.respondId;
     let respondChannel = this.props.store!.respondChannel;

@@ -200,9 +200,9 @@ export class MainPage extends Component<Props, State> {
     CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "exportDictionary");
   }
 
-  // 検索結果ペインを再描画します。
-  // 引数の search に true を渡すと、現在の検索パラメータを用いて再検索することで表示する単語データの更新も行います。
-  // 検索結果ペインのスクロール位置は変化しません。
+  /** 検索結果ペインを再描画します。
+   * 引数の `search` に `true` を渡すと、現在の検索パラメータを用いて再検索することで表示する単語データの更新も行います。
+   * 検索結果ペインのスクロール位置は変化しません。*/
   private refreshWords(search?: boolean): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
@@ -216,8 +216,8 @@ export class MainPage extends Component<Props, State> {
     }
   }
 
-  // 検索結果の単語リストをシャッフルします。
-  // 検索結果ペインのスクロール位置はリセットされます。
+  /** 検索結果の単語リストをシャッフルします。
+   * 検索結果ペインのスクロール位置はリセットされます。*/
   private shuffleWords(): void {
     let dictionary = this.state.dictionary;
     if (dictionary !== null) {
@@ -249,8 +249,8 @@ export class MainPage extends Component<Props, State> {
     this.updateWordsDirect(parameter, shownParameter, fromHistory);
   }
 
-  // 引数に与えられた検索パラメータを用いて検索結果ペインを更新します。
-  // 検索結果ペインのスクロール位置はリセットされます。
+  /** 引数に与えられた検索パラメータを用いて検索結果ペインを更新します。
+   * 検索結果ペインのスクロール位置はリセットされます。*/
   private updateWords(parameter: Parameter, shownParameter: Parameter | null, immediate?: boolean, fromHistory?: boolean): void {
     if (shownParameter) {
       this.setState({shownParameter});
