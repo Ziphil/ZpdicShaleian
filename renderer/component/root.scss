@@ -1,5 +1,6 @@
 @charset "utf-8";
 
+@import "./font.scss";
 @import "./variable.scss";
 @import "~normalize.css";
 @import "~@blueprintjs/core/src/blueprint.scss";
@@ -27,7 +28,12 @@ body {
   user-select: none;
 }
 
+body * {
+  font-feature-settings: $zp-font-feature-settings !important;
+}
+
 .zp-root {
+  height: 100vh;
   min-height: 100vh;
   padding: $zp-page-margin;
   display: flex;

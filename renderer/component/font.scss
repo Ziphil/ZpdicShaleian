@@ -1,0 +1,118 @@
+@charset "utf-8";
+
+
+@font-face {
+  font-family: "Brill Web";
+  src: url("https://ziphil.com/material/font/14.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  size-adjust: 108%;
+  ascent-override: 90%;
+  descent-override: 20%;
+  font-display: block;
+  font-feature-settings: "lnum" 1;
+}
+
+@font-face {
+  font-family: "Brill Web";
+  src: url("https://ziphil.com/material/font/15.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+  size-adjust: 108%;
+  ascent-override: 90%;
+  descent-override: 20%;
+  font-display: block;
+  font-feature-settings: "lnum" 1;
+}
+
+@font-face {
+  font-family: "Brill Web";
+  src: url("https://ziphil.com/material/font/16.woff2") format("woff2");
+  font-weight: normal;
+  font-style: italic;
+  size-adjust: 108%;
+  ascent-override: 90%;
+  descent-override: 20%;
+  font-display: block;
+  font-feature-settings: "lnum" 1;
+}
+
+@font-face {
+  font-family: "Brill Web";
+  src: url("https://ziphil.com/material/font/17.woff2") format("woff2");
+  font-weight: bold;
+  font-style: italic;
+  size-adjust: 108%;
+  ascent-override: 90%;
+  descent-override: 20%;
+  font-display: block;
+  font-feature-settings: "lnum" 1;
+}
+
+@font-face {
+  font-family: "Brill Local";
+  src: local("brill-roman");
+  font-weight: normal;
+  font-style: normal;
+  size-adjust: 108%;
+  ascent-override: 90%;
+  descent-override: 20%;
+  font-display: block;
+  font-feature-settings: "lnum" 1;
+}
+
+@font-face {
+  font-family: "Brill Local";
+  src: local("brill-bold");
+  font-weight: bold;
+  font-style: normal;
+  size-adjust: 108%;
+  ascent-override: 90%;
+  descent-override: 20%;
+  font-display: block;
+  font-feature-settings: "lnum" 1;
+}
+
+@font-face {
+  font-family: "Brill Local";
+  src: local("brill-italic");
+  font-weight: normal;
+  font-style: italic;
+  size-adjust: 108%;
+  ascent-override: 90%;
+  descent-override: 20%;
+  font-display: block;
+  font-feature-settings: "lnum" 1;
+}
+
+@font-face {
+  font-family: "Brill Local";
+  src: local("brill-bolditalic");
+  font-weight: bold;
+  font-style: italic;
+  size-adjust: 108%;
+  ascent-override: 90%;
+  descent-override: 20%;
+  font-display: block;
+  font-feature-settings: "lnum" 1;
+}
+
+@font-face {
+  font-family: "Inter Web";
+  src: url("https://ziphil.com/material/font/19.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  size-adjust: 91%;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Inter Web";
+  src: url("https://ziphil.com/material/font/20.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+  size-adjust: 91%;
+  font-display: block;
+}

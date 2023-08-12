@@ -37,10 +37,10 @@ const COMMON_WINDOW_OPTIONS = {
   spellcheck: false,
   title: "ZpDIC for Shaleian",
   backgroundColor: "#F5F8FA",
-  webPreferences: {preload: joinPath(__dirname, "preload.js"), devTools: true}
+  webPreferences: {preload: joinPath(__dirname, "preload.js"), sandbox: false, devTools: true}
 };
 const PRODUCTION_WINDOW_OPTIONS = {
-  webPreferences: {preload: joinPath(__dirname, "preload.js"), devTools: false}
+  webPreferences: {preload: joinPath(__dirname, "preload.js"), sandbox: false, devTools: false}
 };
 
 
