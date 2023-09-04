@@ -47,12 +47,12 @@ export class Root extends Component<Props, State> {
   }
 
   private async fetchProps(): Promise<void> {
-    let query = queryParser.parse(window.location.search);
-    let mode = query.mode;
-    let idString = query.idString;
+    const query = queryParser.parse(window.location.search);
+    const mode = query.mode;
+    const idString = query.idString;
     if (typeof mode === "string" && typeof idString === "string") {
       this.store.id = parseInt(idString, 10);
-      let props = await window.api.sendAsync("getProps");
+      const props = await window.api.sendAsync("getProps");
       this.setState({mode, props}, () => {
         window.api.send("showWindow");
       });
@@ -60,23 +60,23 @@ export class Root extends Component<Props, State> {
   }
 
   private setupRespond(): void {
-    let query = queryParser.parse(window.location.search);
-    let respondIdString = query.respondIdString;
-    let respondChannel = query.respondChannel;
+    const query = queryParser.parse(window.location.search);
+    const respondIdString = query.respondIdString;
+    const respondChannel = query.respondChannel;
     if (typeof respondIdString === "string" && typeof respondChannel === "string") {
       this.store.respondId = parseInt(respondIdString, 10);
       this.store.respondChannel = respondChannel;
       window.addEventListener("unload", () => {
-        let respondId = this.store.respondId!;
-        let respondChannel = this.store.respondChannel!;
+        const respondId = this.store.respondId!;
+        const respondChannel = this.store.respondChannel!;
         window.api.sendTo(respondId, respondChannel, 0, null);
       });
     }
   }
 
   public renderPage(): ReactNode {
-    let props = this.state.props;
-    let mode = this.state.mode;
+    const props = this.state.props;
+    const mode = this.state.mode;
     if (props !== null) {
       if (mode === "main") {
         return <MainPage {...props}/>;
@@ -99,8 +99,8 @@ export class Root extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let pageNode = this.renderPage();
-    let node = (
+    const pageNode = this.renderPage();
+    const node = (
       <Provider store={this.store}>
         <IntlProvider defaultLocale="ja" locale="ja" messages={this.messages}>
           {pageNode}

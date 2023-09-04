@@ -87,10 +87,10 @@ export class Main {
   }
 
   private async loadSettings(): Promise<void> {
-    let path = (this.app.isPackaged) ? "./settings.json" : "./dist/settings.json";
+    const path = (this.app.isPackaged) ? "./settings.json" : "./dist/settings.json";
     try {
-      let string = await fs.readFile(path, {encoding: "utf-8"});
-      let settings = new Settings(JSON.parse(string));
+      const string = await fs.readFile(path, {encoding: "utf-8"});
+      const settings = new Settings(JSON.parse(string));
       this.settings = settings;
     } catch (error) {
       this.settings = Settings.createEmpty();
@@ -98,9 +98,9 @@ export class Main {
   }
 
   private async saveSettings(): Promise<void> {
-    let path = (this.app.isPackaged) ? "./settings.json" : "./dist/settings.json";
+    const path = (this.app.isPackaged) ? "./settings.json" : "./dist/settings.json";
     try {
-      let string = JSON.stringify(this.settings, null, 2);
+      const string = JSON.stringify(this.settings, null, 2);
       await fs.writeFile(path, string, {encoding: "utf-8"});
     } catch (error) {
       console.error(error);
@@ -108,15 +108,15 @@ export class Main {
   }
 
   public createWindow(mode: string, parentId: number | null, props: object, options: BrowserWindowConstructorOptions & {query?: Record<string, string>}): BrowserWindow {
-    let show = false;
-    let parent = (parentId !== null) ? this.windows.get(parentId) : undefined;
-    let additionalOptions = (!this.app.isPackaged) ? {} : PRODUCTION_WINDOW_OPTIONS;
-    let window = new BrowserWindow({...COMMON_WINDOW_OPTIONS, ...additionalOptions, show, parent, ...options});
+    const show = false;
+    const parent = (parentId !== null) ? this.windows.get(parentId) : undefined;
+    const additionalOptions = (!this.app.isPackaged) ? {} : PRODUCTION_WINDOW_OPTIONS;
+    const window = new BrowserWindow({...COMMON_WINDOW_OPTIONS, ...additionalOptions, show, parent, ...options});
     if (parent !== undefined) {
       BrowserWindowUtil.centerToParent(parent, window);
     }
-    let id = window.webContents.id;
-    let idString = id.toString();
+    const id = window.webContents.id;
+    const idString = id.toString();
     window.loadFile(joinPath(__dirname, "index.html"), {query: {...options.query, mode, idString}});
     window.setMenu(null);
     window.show();
@@ -129,8 +129,8 @@ export class Main {
   }
 
   private createMainWindow(): BrowserWindow {
-    let options = {width: 720, height: 720, minWidth: 640, minHeight: 480};
-    let window = this.createWindow("main", null, {}, options);
+    const options = {width: 720, height: 720, minWidth: 640, minHeight: 480};
+    const window = this.createWindow("main", null, {}, options);
     this.mainWindow = window;
     this.connectReloadClient(window);
     return window;
@@ -147,5 +147,5 @@ export class Main {
 }
 
 
-let main = new Main(electronApp);
+const main = new Main(electronApp);
 main.main();

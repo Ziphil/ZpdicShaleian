@@ -30,7 +30,7 @@ export class DictionarySettingsPage extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let node = (
+    const node = (
       <div className="zpdsp-root zp-root">
         <DictionarySettingsEditor
           settings={this.props.settings}

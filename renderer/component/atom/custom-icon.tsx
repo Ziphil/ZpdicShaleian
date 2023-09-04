@@ -10,8 +10,8 @@ import {
 export class CustomIcon extends Component<Props, State> {
 
   public render(): ReactNode {
-    let commands = ICON_PATH_COMMANDS[this.props.name] ?? "";
-    let node = (
+    const commands = ICON_PATH_COMMANDS[this.props.name] ?? "";
+    const node = (
       <span className="bp3-icon">
         <svg width="16" height="16" viewBox="0 0 16 16">
           <path d={commands}/>

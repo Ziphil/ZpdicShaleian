@@ -30,7 +30,7 @@ export class EditorPage extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let node = (
+    const node = (
       <div className="zpedp-root zp-root">
         <WordEditor
           word={this.props.word}

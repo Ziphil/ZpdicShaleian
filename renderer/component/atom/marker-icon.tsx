@@ -13,7 +13,7 @@ import {
 export class MarkerIcon extends Component<Props, State> {
 
   public renderPath(): ReactNode {
-    let marker = this.props.marker;
+    const marker = this.props.marker;
     if (marker === "circle") {
       return <circle cx="5.5" cy="5.5" r="5.5"/>;
     } else if (marker === "square") {
@@ -40,10 +40,10 @@ export class MarkerIcon extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let pathNode = this.renderPath();
+    const pathNode = this.renderPath();
     if (this.props.icon) {
-      let className = "bp3-icon" + ((this.props.className !== undefined) ? ` ${this.props.className}` : "");
-      let node = (
+      const className = "bp3-icon" + ((this.props.className !== undefined) ? ` ${this.props.className}` : "");
+      const node = (
         <span className={className}>
           <svg width="11" height="16" viewBox="0 -2 11 16">
             {pathNode}
@@ -52,7 +52,7 @@ export class MarkerIcon extends Component<Props, State> {
       );
       return node;
     } else {
-      let node = (
+      const node = (
         <svg className={this.props.className} width="11" height="11" viewBox="0 0 11 11">
           {pathNode}
         </svg>

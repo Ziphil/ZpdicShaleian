@@ -13,9 +13,9 @@ import {
 export class EditorHotKeys extends Component<Props, State> {
 
   public render(): ReactNode {
-    let keys = {confirm: ["alt+enter"], cancel: ["escape"]};
-    let handlers = {confirm: this.props.onConfirm, cancel: this.props.onCancel} as any;
-    let node = (
+    const keys = {confirm: ["alt+enter"], cancel: ["escape"]};
+    const handlers = {confirm: this.props.onConfirm, cancel: this.props.onCancel} as any;
+    const node = (
       <GlobalHotKeys keyMap={keys} handlers={handlers}>
         <div>
           {this.props.children}

@@ -36,9 +36,9 @@ export class UploadDictionaryChooser extends Component<Props, State> {
   private passwordRef: RefObject<HTMLInputElement> = createRef();
 
   public async componentDidMount(): Promise<void> {
-    let settings = await this.sendAsync("getSettings");
-    let url = settings.uploadDictionaryUrl ?? "";
-    let password = settings.uploadDictionaryPassword ?? "";
+    const settings = await this.sendAsync("getSettings");
+    const url = settings.uploadDictionaryUrl ?? "";
+    const password = settings.uploadDictionaryPassword ?? "";
     this.setState({url, password});
     this.urlRef.current?.focus();
   }
@@ -50,8 +50,8 @@ export class UploadDictionaryChooser extends Component<Props, State> {
   }
 
   private async handleConfirm(event?: MouseEvent<HTMLElement> | KeyboardEvent): Promise<void> {
-    let url = this.state.url.trim();
-    let password = this.state.password.trim();
+    const url = this.state.url.trim();
+    const password = this.state.password.trim();
     if (url !== "" && password !== "") {
       if (this.props.onConfirm) {
         this.props.onConfirm(url, password, event);
@@ -66,7 +66,7 @@ export class UploadDictionaryChooser extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let node = (
+    const node = (
       <div className="zpudc-editor zp-editor">
         <EditorHotKeys onConfirm={this.handleConfirm.bind(this)} onCancel={this.handleCancel.bind(this)}>
           <div className="zpudc-form-container">
@@ -99,4 +99,4 @@ type State = {
   password: string
 };
 
-let CustomToaster = Toaster.create({position: "top", maxToasts: 2});
+const CustomToaster = Toaster.create({position: "top", maxToasts: 2});

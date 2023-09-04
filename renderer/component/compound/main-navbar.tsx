@@ -55,7 +55,7 @@ export class MainNavbar extends Component<Props, State> {
   }
 
   private renderFileMenu(): ReactElement {
-    let node = (
+    const node = (
       <Menu>
         <MenuItem
           text={this.trans("mainNavbar.loadDictionary")}
@@ -131,7 +131,7 @@ export class MainNavbar extends Component<Props, State> {
   }
 
   private renderSearchMenu(): ReactElement {
-    let node = (
+    const node = (
       <Menu>
         <MenuItem text={this.trans("mainNavbar.changeWordMode")} icon="blank">
           <MenuItem
@@ -283,7 +283,7 @@ export class MainNavbar extends Component<Props, State> {
   }
 
   private renderEditMenu(): ReactElement {
-    let node = (
+    const node = (
       <Menu>
         <MenuItem
           text={this.trans("mainNavbar.createWord")}
@@ -398,7 +398,7 @@ export class MainNavbar extends Component<Props, State> {
   }
 
   private renderToolMenu(): ReactElement {
-    let node = (
+    const node = (
       <Menu>
         <MenuItem text={this.trans("mainNavbar.execGit")} icon="blank">
           <MenuItem
@@ -446,7 +446,7 @@ export class MainNavbar extends Component<Props, State> {
   }
 
   private renderHelpMenu(): ReactElement {
-    let node = (
+    const node = (
       <Menu>
         <MenuItem
           text={this.trans("mainNavbar.openDevTools")}
@@ -473,13 +473,13 @@ export class MainNavbar extends Component<Props, State> {
   }
 
   private renderHotkeys(): ReactNode {
-    let manager = this.handlerManager;
-    let node = <GlobalHotKeys keyMap={manager.getKeys()} handlers={manager.getHandlers()}/>;
+    const manager = this.handlerManager;
+    const node = <GlobalHotKeys keyMap={manager.getKeys()} handlers={manager.getHandlers()}/>;
     return node;
   }
 
   private createHandlerManager(): HandlerManager {
-    let manager = new HandlerManager({
+    const manager = new HandlerManager({
       loadDictionary: {key: "ctrl+o", handler: () => this.props.loadDictionary()},
       reloadDictionary: {key: "ctrl+shift+o", handler: () => this.props.reloadDictionary()},
       revealDictionaryDirectory: {handler: () => this.props.revealDictionaryDirectory()},
@@ -539,9 +539,9 @@ export class MainNavbar extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let hotkeyNode = this.renderHotkeys();
-    let version = "dev" + HairianUtil.getHairia(process.env["BUILD_DATE"]);
-    let node = (
+    const hotkeyNode = this.renderHotkeys();
+    const version = "dev" + HairianUtil.getHairia(process.env["BUILD_DATE"]);
+    const node = (
       <Fragment>
         <Navbar fixedToTop={true}>
           <NavbarGroup align="left">

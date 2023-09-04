@@ -31,7 +31,7 @@ export class Handler {
   }
 
   public static setup<H extends Handler>(this: new(main: Main) => H, main: Main): H {
-    let controller = new this(main);
+    const controller = new this(main);
     controller.setup();
     return controller;
   }

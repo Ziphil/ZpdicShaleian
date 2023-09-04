@@ -30,7 +30,7 @@ export class GitStatusPane extends Component<Props, State> {
 
   public async componentDidMount(): Promise<void> {
     try {
-      let entries = await this.sendAsync("execGitDiff", this.props.path);
+      const entries = await this.sendAsync("execGitDiff", this.props.path);
       this.setState({entries, loading: false});
     } catch (error) {
       this.setState({entries: null, loading: true});
@@ -38,16 +38,16 @@ export class GitStatusPane extends Component<Props, State> {
   }
 
   private renderItems(): ReactNode {
-    let entries = this.state.entries ?? [];
-    let itemNodes = entries.map((file, index) => {
-      let match = file.names.to.match(/^(.+)(\.\w+)$/);
-      let [fileBaseName, extension] = (match !== null) ? [match[1], match[2]] : [file.names.to, ""];
-      let insertions = file.insertions;
-      let deletions = file.deletions;
+    const entries = this.state.entries ?? [];
+    const itemNodes = entries.map((file, index) => {
+      const match = file.names.to.match(/^(.+)(\.\w+)$/);
+      const [fileBaseName, extension] = (match !== null) ? [match[1], match[2]] : [file.names.to, ""];
+      const insertions = file.insertions;
+      const deletions = file.deletions;
       if (insertions !== undefined && deletions !== undefined) {
-        let insertionString = (insertions > 99) ? "+∞" : "+" + insertions;
-        let deletionString = (deletions > 99) ? "−∞" : "−" + deletions;
-        let itemNode = (
+        const insertionString = (insertions > 99) ? "+∞" : "+" + insertions;
+        const deletionString = (deletions > 99) ? "−∞" : "−" + deletions;
+        const itemNode = (
           <Checkbox key={index} checked={true}>
             <span className={`zpgsp-list-item zpgsp-${file.type}`}>
               <span className="zpgsp-type">{this.trans(`gitStatusPane.${file.type}`)}</span>
@@ -62,8 +62,8 @@ export class GitStatusPane extends Component<Props, State> {
         );
         return itemNode;
       } else {
-        let itemNode = (
-          <Checkbox key={index}  checked={true}>
+        const itemNode = (
+          <Checkbox key={index} checked={true}>
             <span className="zpgsp-binary">
               <span className="zpgsp-type">{this.trans("gitStatusPane.binary")}</span>
               <span className="zpgsp-base-name">{fileBaseName}</span>
@@ -78,7 +78,7 @@ export class GitStatusPane extends Component<Props, State> {
   }
 
   private renderDummyItems(): ReactNode {
-    let node = (
+    const node = (
       <Fragment>
         <Checkbox className="bp3-skeleton"/>
         <Checkbox className="bp3-skeleton"/>
@@ -88,8 +88,8 @@ export class GitStatusPane extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let itemNode = (this.state.loading) ? this.renderDummyItems() : this.renderItems();
-    let node = (
+    const itemNode = (this.state.loading) ? this.renderDummyItems() : this.renderItems();
+    const node = (
       <div className="zpgsp-status">
         <FormGroup label={this.trans("gitStatusPane.change")}>
           {itemNode}

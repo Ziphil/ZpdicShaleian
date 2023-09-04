@@ -27,7 +27,7 @@ export class UploadDictionaryPage extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let node = (
+    const node = (
       <div className="zpgpp-root zp-root">
         <UploadDictionaryChooser
           onConfirm={this.handleConfirm.bind(this)}

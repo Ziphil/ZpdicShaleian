@@ -28,8 +28,8 @@ export class BasicHandler extends Handler {
 
   @onAsync("getProps")
   private async getProps(event: IpcMainEvent): Promise<object> {
-    let id = event.sender.id;
-    let props = this.main.props.get(id);
+    const id = event.sender.id;
+    const props = this.main.props.get(id);
     if (props !== undefined) {
       this.main.props.delete(id);
       return props;
@@ -40,11 +40,11 @@ export class BasicHandler extends Handler {
 
   @on("showWindow")
   private showWindow(event: IpcMainEvent): void {
-    let id = event.sender.id;
-    let window = this.main.windows.get(id);
+    const id = event.sender.id;
+    const window = this.main.windows.get(id);
     if (window !== undefined) {
       window.show();
-      let mainWindow = this.main.mainWindow;
+      const mainWindow = this.main.mainWindow;
       if (mainWindow !== undefined) {
         mainWindow.focus();
         window.focus();
@@ -54,8 +54,8 @@ export class BasicHandler extends Handler {
 
   @on("closeWindow")
   private closeWindow(event: IpcMainEvent): void {
-    let id = event.sender.id;
-    let window = this.main.windows.get(id);
+    const id = event.sender.id;
+    const window = this.main.windows.get(id);
     if (window !== undefined) {
       window.close();
     }
@@ -63,8 +63,8 @@ export class BasicHandler extends Handler {
 
   @on("destroyWindow")
   private destroyWindow(event: IpcMainEvent): void {
-    let id = event.sender.id;
-    let window = this.main.windows.get(id);
+    const id = event.sender.id;
+    const window = this.main.windows.get(id);
     if (window !== undefined) {
       window.destroy();
     }
@@ -72,7 +72,7 @@ export class BasicHandler extends Handler {
 
   @on("createWindow")
   private createWindow(event: IpcMainEvent, mode: string, props: object, options: BrowserWindowConstructorOptions): void {
-    let parentId = event.sender.id;
+    const parentId = event.sender.id;
     this.main.createWindow(mode, parentId, props, options);
   }
 
@@ -88,8 +88,8 @@ export class BasicHandler extends Handler {
 
   @on("openDevTools")
   private openDevTools(event: IpcMainEvent): void {
-    let id = event.sender.id;
-    let window = this.main.windows.get(id);
+    const id = event.sender.id;
+    const window = this.main.windows.get(id);
     if (window !== undefined) {
       window.webContents.openDevTools();
     }
@@ -97,8 +97,8 @@ export class BasicHandler extends Handler {
 
   @onAsync("showOpenDialog")
   private async showOpenDialog(event: IpcMainEvent, options: OpenDialogOptions): Promise<OpenDialogReturnValue> {
-    let id = event.sender.id;
-    let window = this.main.windows.get(id);
+    const id = event.sender.id;
+    const window = this.main.windows.get(id);
     if (window !== undefined) {
       return await dialog.showOpenDialog(window, options);
     } else {
@@ -108,8 +108,8 @@ export class BasicHandler extends Handler {
 
   @onAsync("showSaveDialog")
   private async showSaveDialog(event: IpcMainEvent, options: SaveDialogOptions): Promise<SaveDialogReturnValue> {
-    let id = event.sender.id;
-    let window = this.main.windows.get(id);
+    const id = event.sender.id;
+    const window = this.main.windows.get(id);
     if (window !== undefined) {
       return await dialog.showSaveDialog(window, options);
     } else {

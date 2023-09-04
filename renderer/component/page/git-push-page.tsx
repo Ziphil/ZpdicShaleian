@@ -27,7 +27,7 @@ export class GitPushPage extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let node = (
+    const node = (
       <div className="zpgpp-root zp-root">
         <div className="zp-editor">
           <div>

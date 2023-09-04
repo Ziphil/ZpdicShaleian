@@ -23,9 +23,9 @@ import {
 export class Pagination extends Component<Props, State> {
 
   private handleSet(page: number | "first" | "last"): void {
-    let minPage = this.props.minPage;
-    let maxPage = this.props.maxPage;
-    let nextPage = (() => {
+    const minPage = this.props.minPage;
+    const maxPage = this.props.maxPage;
+    const nextPage = (() => {
       if (page === "first") {
         return 0;
       } else if (page === "last") {
@@ -34,21 +34,21 @@ export class Pagination extends Component<Props, State> {
         return page;
       }
     })();
-    let clampedPage = Math.max(Math.min(nextPage, maxPage), minPage);
+    const clampedPage = Math.max(Math.min(nextPage, maxPage), minPage);
     if (this.props.onSet) {
       this.props.onSet(clampedPage);
     }
   }
 
   private renderButtons(direction: -1 | 1): ReactNode {
-    let nodes = [];
-    let currentPage = this.props.page;
-    let targetPage = (direction === -1) ? this.props.minPage : this.props.maxPage;
+    const nodes = [];
+    const currentPage = this.props.page;
+    const targetPage = (direction === -1) ? this.props.minPage : this.props.maxPage;
     let difference = 2;
     for (let i = 0 ; i < 5 ; i ++) {
-      let nextPage = currentPage + (difference - 1) * direction;
+      const nextPage = currentPage + (difference - 1) * direction;
       if ((direction === -1 && nextPage >= targetPage) || (direction === 1 && nextPage <= targetPage)) {
-        let node = <Button key={nextPage} text={this.transNumber(nextPage + 1)} onClick={() => this.handleSet(nextPage)}/>;
+        const node = <Button key={nextPage} text={this.transNumber(nextPage + 1)} onClick={() => this.handleSet(nextPage)}/>;
         nodes.push(node);
       }
       difference *= 2;
@@ -60,10 +60,10 @@ export class Pagination extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let page = this.props.page;
-    let leftButtonNode = this.renderButtons(-1);
-    let rightButtonNode = this.renderButtons(1);
-    let node = (
+    const page = this.props.page;
+    const leftButtonNode = this.renderButtons(-1);
+    const rightButtonNode = this.renderButtons(1);
+    const node = (
       <div className="zppgn-root">
         <div className="zppgn-leftmost">
           <ButtonGroup minimal={true}>
@@ -100,8 +100,8 @@ export class Pagination extends Component<Props, State> {
 
 type Props = {
   page: number,
-  minPage: number
-  maxPage: number
+  minPage: number,
+  maxPage: number,
   onSet?: (page: number) => void
 };
 type State = {

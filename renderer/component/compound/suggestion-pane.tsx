@@ -19,22 +19,22 @@ import {
 export class SuggestionPane extends Component<Props, State> {
 
   public render(): ReactNode {
-    let suggestion = this.props.suggestion;
-    let language = this.props.language;
-    let descriptionNames = suggestion.getDescriptionNames(language).filter((name) => name !== undefined);
-    let onLinkAltClick = WordPane.requireAlt(this.props.onLinkClick);
-    let linkClassName = (this.props.useCustomFont) ? "ssp-link swp-shaleian" : "ssp-link swp-sans";
-    let keywordNode = (descriptionNames.length > 0) && (
+    const suggestion = this.props.suggestion;
+    const language = this.props.language;
+    const descriptionNames = suggestion.getDescriptionNames(language).filter((name) => name !== undefined);
+    const onLinkAltClick = WordPane.requireAlt(this.props.onLinkClick);
+    const linkClassName = (this.props.useCustomFont) ? "ssp-link swp-shaleian" : "ssp-link swp-sans";
+    const keywordNode = (descriptionNames.length > 0) && (
       <span className="ssp-keyword">
         ({descriptionNames.join(", ").toLowerCase()})
       </span>
     );
-    let nameNodes = suggestion.names.map((name) => {
-      let nameNode = <span className={linkClassName} key={Math.random()} onClick={onLinkAltClick && partial(onLinkAltClick, name)}>{name}</span>;
+    const nameNodes = suggestion.names.map((name) => {
+      const nameNode = <span className={linkClassName} key={Math.random()} onClick={onLinkAltClick && partial(onLinkAltClick, name)}>{name}</span>;
       return nameNode;
     });
-    let nameNode = WordPane.intersperse(nameNodes, ", ");
-    let node = (
+    const nameNode = WordPane.intersperse(nameNodes, ", ");
+    const node = (
       <li className="ssp-suggestion">
         {suggestion.getKindName(language)?.toLowerCase()}
         {keywordNode}

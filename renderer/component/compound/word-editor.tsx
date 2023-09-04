@@ -46,11 +46,11 @@ export class WordEditor extends Component<Props, State> {
 
   public constructor(props: Props) {
     super(props);
-    let uid = props.word?.uid ?? null;
-    let word = (props.defaultWord !== undefined) ? props.defaultWord : (props.word !== null) ? props.word : Word.createEmpty();
-    let oldWord = {...word, contents: {...word.contents}};
-    let originalUniqueName = props.word?.uniqueName ?? null;
-    let alertOpen = false;
+    const uid = props.word?.uid ?? null;
+    const word = (props.defaultWord !== undefined) ? props.defaultWord : (props.word !== null) ? props.word : Word.createEmpty();
+    const oldWord = {...word, contents: {...word.contents}};
+    const originalUniqueName = props.word?.uniqueName ?? null;
+    const alertOpen = false;
     this.state = {uid, word, oldWord, originalUniqueName, alertOpen};
   }
 
@@ -65,7 +65,7 @@ export class WordEditor extends Component<Props, State> {
   }
 
   private async handleConfirm(event?: MouseEvent<HTMLElement> | KeyboardEvent): Promise<void> {
-    let errorType = await this.sendAsync("validateEditWord", this.state.uid, this.state.word);
+    const errorType = await this.sendAsync("validateEditWord", this.state.uid, this.state.word);
     if (errorType === null) {
       if (this.checkChange()) {
         this.forceClose(event);
@@ -83,7 +83,7 @@ export class WordEditor extends Component<Props, State> {
     }
   }
 
-  private forceClose(event?: SyntheticEvent<HTMLElement> | KeyboardEvent) {
+  private forceClose(event?: SyntheticEvent<HTMLElement> | KeyboardEvent): void {
     if (this.props.onConfirm) {
       this.props.onConfirm(this.state.uid, this.state.word, event);
     }
@@ -94,9 +94,9 @@ export class WordEditor extends Component<Props, State> {
    * 全ての言語のデータが全く変更されていない場合と、全ての言語のデータに何らかの変更が行われている場合は、`true` を返します。
    * ただし、もともとデータが空だった言語についてはチェックしません。*/
   private checkChange(): boolean {
-    let languages = ["ja", "en"];
-    let oldContents = this.state.oldWord.contents;
-    let newContents = this.state.word.contents;
+    const languages = ["ja", "en"];
+    const oldContents = this.state.oldWord.contents;
+    const newContents = this.state.word.contents;
     if (languages.every((language) => (oldContents[language] ?? "") === (newContents[language] ?? ""))) {
       return true;
     } else if (languages.every((language) => (oldContents[language] ?? "") === "" || (oldContents[language] ?? "") !== (newContents[language] ?? ""))) {
@@ -107,18 +107,18 @@ export class WordEditor extends Component<Props, State> {
   }
 
   private setWord<T extends Array<unknown>>(language: string, setter: (...args: T) => void): (...args: T) => void {
-    let outerThis = this;
-    let wrapper = function (...args: T): void {
+    const outerThis = this;
+    const wrapper = function (...args: T): void {
       setter(...args);
-      let word = outerThis.state.word;
+      const word = outerThis.state.word;
       outerThis.setState({word});
     };
     return wrapper;
   }
 
   public renderEditor(language: string): ReactElement {
-    let word = this.state.word;
-    let node = (
+    const word = this.state.word;
+    const node = (
       <div className="zpwde-editor-tab zp-editor-tab" key={language}>
         <div className="zpwde-head">
           <InputGroup className="zpwde-name" inputRef={this.nameRef} fill={true} value={word.uniqueName} onChange={this.setWord(language, (event) => word.uniqueName = event.target.value)}/>
@@ -137,7 +137,7 @@ export class WordEditor extends Component<Props, State> {
   }
 
   private renderAlert(): ReactNode {
-    let node = (
+    const node = (
       <Alert
         isOpen={this.state.alertOpen}
         cancelButtonText={this.trans("wordEditor.alertCancel")}
@@ -156,16 +156,16 @@ export class WordEditor extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let languages = ["ja", "en"];
-    let tabNodes = languages.map((language) => {
-      let editorNode = this.renderEditor(language);
-      let tabNode = (
+    const languages = ["ja", "en"];
+    const tabNodes = languages.map((language) => {
+      const editorNode = this.renderEditor(language);
+      const tabNode = (
         <Tab id={language} key={language} title={this.trans(`common.language.${language}`)} panel={editorNode}/>
       );
       return tabNode;
     });
-    let alertNode = this.renderAlert();
-    let node = (
+    const alertNode = this.renderAlert();
+    const node = (
       <div className="zpwde-editor zp-editor">
         {alertNode}
         <EditorHotKeys onConfirm={this.handleConfirm.bind(this)} onCancel={this.handleCancel.bind(this)}>
@@ -200,4 +200,4 @@ type State = {
   alertOpen: boolean
 };
 
-let CustomToaster = Toaster.create({position: "top", maxToasts: 2});
+const CustomToaster = Toaster.create({position: "top", maxToasts: 2});

@@ -31,7 +31,7 @@ import {
 export class WordPane extends Component<Props, State> {
 
   private renderMarker(marker: Marker): ReactNode {
-    let node = (
+    const node = (
       <div className={`swp-head-marker swp-marker swp-marker-${marker}`} key={marker}>
         <MarkerIcon marker={marker}/>
       </div>
@@ -40,31 +40,31 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderHead(word: ParsedWord<ReactNode>, markers: Array<Marker>): ReactNode {
-    let sort = word.parts[this.props.language]?.sort ?? null;
-    let bracketClassName = (this.props.useCustomFont) ? "swp-shaleian" : "swp-sans";
-    let markerNodes = markers.map((marker) => this.renderMarker(marker));
-    let categoryNode = (sort !== null) && (
+    const sort = word.parts[this.props.language]?.sort ?? null;
+    const bracketClassName = (this.props.useCustomFont) ? "swp-shaleian" : "swp-sans";
+    const markerNodes = markers.map((marker) => this.renderMarker(marker));
+    const categoryNode = (sort !== null) && (
       <span className="swp-head-sort swp-tag swp-right-margin">{sort}</span>
     );
-    let nameNode = (
+    const nameNode = (
       <span className="swp-head-name swp-right-margin">
         <span className={bracketClassName}>{word.name}</span>
       </span>
     );
-    let pronunciationNode = (word.pronunciation !== null) && (
+    const pronunciationNode = (word.pronunciation !== null) && (
       <span className="swp-head-pronunciation swp-right-margin">
         /{word.pronunciation}/
       </span>
     );
-    let dateNode = (
+    const dateNode = (
       <span className="swp-head-date swp-hairia">{word.date}</span>
     );
-    let markerNode = (
+    const markerNode = (
       <div className="swp-head-markers swp-markers">
         {markerNodes}
       </div>
     );
-    let node = (
+    const node = (
       <div className="swp-head">
         <div className="swp-head-left">
           {categoryNode}
@@ -81,27 +81,27 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderSection(section: Section<ReactNode>, index: number): ReactNode {
-    let equivalents = section.getEquivalents(true);
-    let normalInformations = section.getNormalInformations(true);
-    let phraseInformations = section.getPhraseInformations(true);
-    let exampleInformations = section.getExampleInformations(true);
-    let relations = section.relations;
-    let equivalentNodes = equivalents.map((equivalent, index) => this.renderEquivalent(equivalent, index));
-    let normalInformationNodes = normalInformations.map((information, index) => this.renderNormalInformation(information, index));
-    let phraseInformationNode = this.renderPhraseInformations(phraseInformations);
-    let exampleInformationNode = this.renderExampleInformations(exampleInformations);
-    let relationNodes = relations.map((relation, index) => this.renderRelation(relation, index));
-    let equivalentNode = (equivalents.length > 0) && (
+    const equivalents = section.getEquivalents(true);
+    const normalInformations = section.getNormalInformations(true);
+    const phraseInformations = section.getPhraseInformations(true);
+    const exampleInformations = section.getExampleInformations(true);
+    const relations = section.relations;
+    const equivalentNodes = equivalents.map((equivalent, index) => this.renderEquivalent(equivalent, index));
+    const normalInformationNodes = normalInformations.map((information, index) => this.renderNormalInformation(information, index));
+    const phraseInformationNode = this.renderPhraseInformations(phraseInformations);
+    const exampleInformationNode = this.renderExampleInformations(exampleInformations);
+    const relationNodes = relations.map((relation, index) => this.renderRelation(relation, index));
+    const equivalentNode = (equivalents.length > 0) && (
       <ul className="swp-equivalents swp-section-item swp-list">
         {equivalentNodes}
       </ul>
     );
-    let relationNode = (section.relations.length > 0) && (
+    const relationNode = (section.relations.length > 0) && (
       <ul className="swp-relations swp-section-item swp-list">
         {relationNodes}
       </ul>
     );
-    let node = (
+    const node = (
       <div className="swp-section" key={`section-${index}`}>
         {equivalentNode}
         {normalInformationNodes}
@@ -114,21 +114,21 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderEquivalent(equivalent: Equivalent<ReactNode>, index: number): ReactNode {
-    let categoryNode = (equivalent.category !== null) && (
+    const categoryNode = (equivalent.category !== null) && (
       <span className="swp-equivalent-category swp-tag swp-right-margin">{equivalent.category}</span>
     );
-    let frameNode = (equivalent.frame !== null) && (
+    const frameNode = (equivalent.frame !== null) && (
       <span className="swp-equivalent-frame swp-small swp-right-margin">({equivalent.frame})</span>
     );
-    let nameNodes = equivalent.names.map((name, index) => {
-      let nameNode = (
+    const nameNodes = equivalent.names.map((name, index) => {
+      const nameNode = (
         <Fragment key={`equivalent-inner-${index}`}>
           {name}
         </Fragment>
       );
       return nameNode;
     });
-    let node = (
+    const node = (
       <li className="swp-equivalent swp-text swp-list-item" key={`equivalent-${index}`}>
         {categoryNode}
         {frameNode}
@@ -139,7 +139,7 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderNormalInformation(information: NormalInformation<ReactNode>, index: number): ReactNode {
-    let node = (
+    const node = (
       <div className="swp-information swp-section-item" key={`information-${index}`}>
         <div className="swp-information-kind swp-small-head">
           <span className="swp-information-kind-inner swp-small-head-inner">{InformationKindUtil.getName(information.kind, this.props.language)}</span>
@@ -153,20 +153,20 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderPhraseInformations(informations: ReadonlyArray<PhraseInformation<ReactNode>>): ReactNode {
-    let innerNodes = informations.map((information, index) => {
-      let expressionNode = (
+    const innerNodes = informations.map((information, index) => {
+      const expressionNode = (
         <dt className="swp-phrase-expression">
           {information.expression}
           <span className="swp-phrease-divider">—</span>
           {information.equivalentNames.join(", ")}
         </dt>
       );
-      let textNode = (information.text !== null) && (
+      const textNode = (information.text !== null) && (
         <dd className="swp-phrase-inner-text">
           {information.text}
         </dd>
       );
-      let innerNode = (
+      const innerNode = (
         <Fragment key={`phrase-inner-${index}`}>
           {expressionNode}
           {textNode}
@@ -174,7 +174,7 @@ export class WordPane extends Component<Props, State> {
       );
       return innerNode;
     });
-    let node = (informations.length > 0) && (
+    const node = (informations.length > 0) && (
       <div className="swp-information swp-section-item" key="information-phrase">
         <div className="swp-information-kind swp-small-head">
           <span className="swp-information-kind-inner swp-small-head-inner">{InformationKindUtil.getName("phrase", this.props.language)}</span>
@@ -188,18 +188,18 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderExampleInformations(informations: ReadonlyArray<ExampleInformation<ReactNode>>): ReactNode {
-    let innerNodes = informations.map((information, index) => {
-      let sentenceNode = (
+    const innerNodes = informations.map((information, index) => {
+      const sentenceNode = (
         <dt className="swp-example-sentence">
           {information.sentence}
         </dt>
       );
-      let translationNode = (
+      const translationNode = (
         <dd className="swp-example-translation">
           {information.translation}
         </dd>
       );
-      let innerNode = (
+      const innerNode = (
         <Fragment key={`example-inner-${index}`}>
           {sentenceNode}
           {translationNode}
@@ -207,7 +207,7 @@ export class WordPane extends Component<Props, State> {
       );
       return innerNode;
     });
-    let node = (informations.length > 0) && (
+    const node = (informations.length > 0) && (
       <div className="swp-information swp-section-item" key="information-example">
         <div className="swp-information-kind swp-small-head">
           <span className="swp-information-kind-inner swp-small-head-inner">{InformationKindUtil.getName("example", this.props.language)}</span>
@@ -221,12 +221,12 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderRelation(relation: Relation<ReactNode>, index: number): ReactNode {
-    let titleNode = (relation.title !== null) && (
+    const titleNode = (relation.title !== null) && (
       <span className="swp-relation-title swp-tag swp-right-margin">{relation.title}</span>
     );
-    let entryNodes = relation.entries.map((entry, index) => {
-      let referNode = entry.refer && <span className="swp-refer">*</span>;
-      let entryNode = (
+    const entryNodes = relation.entries.map((entry, index) => {
+      const referNode = entry.refer && <span className="swp-refer">*</span>;
+      const entryNode = (
         <Fragment key={`relation-inner-${index}`}>
           {entry.name}
           {referNode}
@@ -234,7 +234,7 @@ export class WordPane extends Component<Props, State> {
       );
       return entryNode;
     });
-    let node = (
+    const node = (
       <li className="swp-relation swp-text swp-list-item" key={`relation-${index}`}>
         {titleNode}
         {WordPane.intersperse(entryNodes, ", ")}
@@ -244,15 +244,15 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderWord(word: ParsedWord<ReactNode>, markers: Array<Marker>): ReactNode {
-    let headNode = this.renderHead(word, markers);
-    let className = "swp-word" + ((markers.length > 0) ? ` swp-word-${markers[markers.length - 1]}` : "");
-    let sectionNodes = word.parts[this.props.language]?.sections.map((section, index) => this.renderSection(section, index));
-    let sectionNode = (sectionNodes !== undefined && sectionNodes.length > 0) && (
+    const headNode = this.renderHead(word, markers);
+    const className = "swp-word" + ((markers.length > 0) ? ` swp-word-${markers[markers.length - 1]}` : "");
+    const sectionNodes = word.parts[this.props.language]?.sections.map((section, index) => this.renderSection(section, index));
+    const sectionNode = (sectionNodes !== undefined && sectionNodes.length > 0) && (
       <div className="swp-sections">
         {sectionNodes}
       </div>
     );
-    let node = (
+    const node = (
       <div className={className} onClick={this.props.onClick} onDoubleClick={this.props.onDoubleClick}>
         {headNode}
         {sectionNode}
@@ -262,44 +262,44 @@ export class WordPane extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let resolver = WordPane.createMarkupResolver(this.props.useCustomFont, this.props.onLinkClick);
-    let parser = new Parser(resolver);
-    let word = parser.parse(this.props.word);
-    let markers = this.props.word.markers;
-    let node = this.renderWord(word, markers);
+    const resolver = WordPane.createMarkupResolver(this.props.useCustomFont, this.props.onLinkClick);
+    const parser = new Parser(resolver);
+    const word = parser.parse(this.props.word);
+    const markers = this.props.word.markers;
+    const node = this.renderWord(word, markers);
     return node;
   }
 
   public static createMarkupResolver(useCustomFont: boolean, onLinkClick?: (name: string, event: MouseEvent<HTMLSpanElement>) => void): MarkupResolver<ReactNode, ReactNode> {
-    let onLinkAltClick = WordPane.requireAlt(onLinkClick);
-    let bracketClassName = (useCustomFont) ? "swp-shaleian" : "swp-sans";
-    let resolveLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
-      let node = <span className="swp-link" key={Math.random()} onMouseDown={onLinkAltClick && partial(onLinkAltClick, name)}>{children}</span>;
+    const onLinkAltClick = WordPane.requireAlt(onLinkClick);
+    const bracketClassName = (useCustomFont) ? "swp-shaleian" : "swp-sans";
+    const resolveLink = function (name: string, children: Array<ReactNode | string>): ReactNode {
+      const node = <span className="swp-link" key={Math.random()} onMouseDown={onLinkAltClick && partial(onLinkAltClick, name)}>{children}</span>;
       return node;
     };
-    let resolveBracket = function (children: Array<ReactNode | string>): ReactNode {
-      let node = <span className={bracketClassName} key={Math.random()}>{children}</span>;
+    const resolveBracket = function (children: Array<ReactNode | string>): ReactNode {
+      const node = <span className={bracketClassName} key={Math.random()}>{children}</span>;
       return node;
     };
-    let resolveSlash = function (string: string): ReactNode {
-      let node = <span className="swp-italic" key={Math.random()}>{string}</span>;
+    const resolveSlash = function (string: string): ReactNode {
+      const node = <span className="swp-italic" key={Math.random()}>{string}</span>;
       return node;
     };
-    let resolveHairia = function (hairia: number): ReactNode {
-      let node = <span className="swp-hairia" key={Math.random()}>{hairia}</span>;
+    const resolveHairia = function (hairia: number): ReactNode {
+      const node = <span className="swp-hairia" key={Math.random()}>{hairia}</span>;
       return node;
     };
-    let join = function (nodes: Array<ReactNode | string>): ReactNode {
+    const join = function (nodes: Array<ReactNode | string>): ReactNode {
       return nodes;
     };
-    let modifyPunctuations = true;
-    let resolver = new MarkupResolver({resolveLink, resolveBracket, resolveSlash, resolveHairia, join, modifyPunctuations});
+    const modifyPunctuations = true;
+    const resolver = new MarkupResolver({resolveLink, resolveBracket, resolveSlash, resolveHairia, join, modifyPunctuations});
     return resolver;
   }
 
   public static requireAlt<A extends Array<any>, T>(handler?: (...args: [...A, MouseEvent<T>]) => void): ((...args: [...A, MouseEvent<T>]) => void) | undefined {
     if (handler !== undefined) {
-      let resultHandler = function (...args: [...A, MouseEvent<T>]): void {
+      const resultHandler = function (...args: [...A, MouseEvent<T>]): void {
         if (args[args.length - 1].altKey) {
           handler(...args);
         }
@@ -311,7 +311,7 @@ export class WordPane extends Component<Props, State> {
   }
 
   public static intersperse(nodes: ReadonlyArray<ReactNode>, separator: ReactNode): Array<ReactNode> {
-    let resultNodes = [];
+    const resultNodes = [];
     for (let i = 0 ; i < nodes.length ; i ++) {
       if (i !== 0) {
         resultNodes.push(separator);

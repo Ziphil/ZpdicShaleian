@@ -4,7 +4,7 @@ import CodeMirror from "codemirror";
 import "codemirror/addon/mode/simple";
 
 
-let contentBase = [
+const contentBase = [
   {regex: /\+|=\??|\-|\w\??:/, sol: true, token: "operator"},
   {regex: /(<)(.*?)(>)/, token: "tag"},
   {regex: /@\d+/, token: "date"},
@@ -13,7 +13,7 @@ let contentBase = [
   {regex: /\//, token: "markup", push: "slash"},
   {regex: /`./, token: "escape"}
 ];
-let revisionBase = [
+const revisionBase = [
   {regex: /\-/, sol: true, token: "operator"},
   {regex: /@\d+/, token: "date"},
   {regex: /→/, token: "operator"},

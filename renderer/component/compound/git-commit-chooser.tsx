@@ -37,8 +37,8 @@ export class GitCommitChooser extends Component<Props, State> {
   private messageRef: RefObject<HTMLInputElement> = createRef();
 
   public async componentDidMount(): Promise<void> {
-    let settings = await this.sendAsync("getSettings");
-    let message = settings.defaultCommitMessage ?? "";
+    const settings = await this.sendAsync("getSettings");
+    const message = settings.defaultCommitMessage ?? "";
     this.setState({message});
     this.messageRef.current?.focus();
   }
@@ -50,7 +50,7 @@ export class GitCommitChooser extends Component<Props, State> {
   }
 
   private async handleConfirm(event?: MouseEvent<HTMLElement> | KeyboardEvent): Promise<void> {
-    let message = this.state.message.trim();
+    const message = this.state.message.trim();
     if (message !== "") {
       if (this.props.onConfirm) {
         this.props.onConfirm(message, event);
@@ -61,7 +61,7 @@ export class GitCommitChooser extends Component<Props, State> {
   }
 
   private renderMessage(): ReactNode {
-    let node = (
+    const node = (
       <FormGroup label={this.trans("gitCommitChooser.message")} labelFor="message">
         <InputGroup id="message" value={this.state.message} inputRef={this.messageRef} onChange={(event) => this.setState({message: event.target.value})}/>
       </FormGroup>
@@ -70,8 +70,8 @@ export class GitCommitChooser extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let messageNode = this.renderMessage();
-    let node = (
+    const messageNode = this.renderMessage();
+    const node = (
       <div className="zpgce-editor zp-editor">
         <EditorHotKeys onConfirm={this.handleConfirm.bind(this)} onCancel={this.handleCancel.bind(this)}>
           <div className="zpgce-message-container">
@@ -102,4 +102,4 @@ type State = {
   message: string
 };
 
-let CustomToaster = Toaster.create({position: "top", maxToasts: 2});
+const CustomToaster = Toaster.create({position: "top", maxToasts: 2});

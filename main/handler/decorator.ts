@@ -22,14 +22,14 @@ type OnMethod = Parameters<PromisifiedIpcMain["on"]>[1];
 type OnAsyncMethod = Parameters<PromisifiedIpcMain["onAsync"]>[1];
 
 export function handler(): HandlerClassDecorator {
-  let decorator = function (clazz: new(...args: any) => Handler): void {
-    let metadata = Reflect.getMetadata(KEY, clazz.prototype) as Metadata;
+  const decorator = function (clazz: new(...args: any) => Handler): void {
+    const metadata = Reflect.getMetadata(KEY, clazz.prototype) as Metadata;
     clazz.prototype.setup = function (this: Handler): void {
-      let anyThis = this as any;
-      for (let {channel, name} of metadata.sync) {
+      const anyThis = this as any;
+      for (const {channel, name} of metadata.sync) {
         ipcMain.on(channel, anyThis[name].bind(this));
       }
-      for (let {channel, name} of metadata.async) {
+      for (const {channel, name} of metadata.async) {
         ipcMain.onAsync(channel, anyThis[name].bind(this));
       }
     };
@@ -38,7 +38,7 @@ export function handler(): HandlerClassDecorator {
 }
 
 export function on(channel: string): OnMethodDecorator {
-  let decorator = function (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<OnMethod>): void {
+  const decorator = function (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<OnMethod>): void {
     let metadata = Reflect.getMetadata(KEY, target) as Metadata;
     if (!metadata) {
       metadata = {sync: [], async: []};
@@ -50,7 +50,7 @@ export function on(channel: string): OnMethodDecorator {
 }
 
 export function onAsync(channel: string): OnAsyncMethodDecorator {
-  let decorator = function (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<OnAsyncMethod>): void {
+  const decorator = function (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<OnAsyncMethod>): void {
     let metadata = Reflect.getMetadata(KEY, target) as Metadata;
     if (!metadata) {
       metadata = {sync: [], async: []};

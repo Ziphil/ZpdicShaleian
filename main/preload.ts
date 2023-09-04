@@ -8,11 +8,11 @@ import {
 } from "./util/ipc/ipc-renderer";
 
 
-let send = ipcRenderer.send.bind(ipcRenderer);
-let sendAsync = ipcRenderer.sendAsync.bind(ipcRenderer);
-let sendTo = ipcRenderer.sendTo.bind(ipcRenderer);
-let on = ipcRenderer.on.bind(ipcRenderer);
-let onAsync = ipcRenderer.onAsync.bind(ipcRenderer);
-let once = ipcRenderer.once.bind(ipcRenderer);
+const send = ipcRenderer.send.bind(ipcRenderer);
+const sendAsync = ipcRenderer.sendAsync.bind(ipcRenderer);
+const sendTo = ipcRenderer.sendTo.bind(ipcRenderer);
+const on = ipcRenderer.on.bind(ipcRenderer);
+const onAsync = ipcRenderer.onAsync.bind(ipcRenderer);
+const once = ipcRenderer.once.bind(ipcRenderer);
 
 contextBridge.exposeInMainWorld("api", {send, sendAsync, sendTo, on, onAsync, once});

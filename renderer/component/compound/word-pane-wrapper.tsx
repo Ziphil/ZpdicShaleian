@@ -39,7 +39,7 @@ import {
 export class WordPaneWrapper extends Component<Props, State> {
 
   public renderMenu(): ReactElement {
-    let node = (
+    const node = (
       <Menu>
         <MenuItem text={this.trans("wordPaneWrapper.create")} onClick={this.props.onCreate}/>
         <MenuItem text={this.trans("wordPaneWrapper.inherit")} onClick={this.props.onInherit}/>
@@ -108,8 +108,8 @@ export class WordPaneWrapper extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let menuNode = this.renderMenu();
-    let node = (
+    const menuNode = this.renderMenu();
+    const node = (
       <ContextMenu2 key={this.props.word.uid} content={menuNode}>
         <div className="zpwpw-wrapper" tabIndex={0} onFocus={this.props.onActivate}>
           <WordPane

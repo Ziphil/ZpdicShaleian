@@ -26,7 +26,7 @@ export class History<T> {
   public undo(): T | undefined {
     if (this.pointer > 0) {
       this.pointer --;
-      let element = this.elements[this.pointer];
+      const element = this.elements[this.pointer];
       return element;
     } else {
       return undefined;
@@ -36,7 +36,7 @@ export class History<T> {
   public redo(): T | undefined {
     if (this.pointer < this.elements.length - 1) {
       this.pointer ++;
-      let element = this.elements[this.pointer];
+      const element = this.elements[this.pointer];
       return element;
     } else {
       return undefined;

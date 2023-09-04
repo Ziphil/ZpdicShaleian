@@ -31,15 +31,15 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
   protected setupIpc(): void {
   }
 
-  protected trans(id: string | number, values?: Record<string, Primitive | FormatFunction<string, string>>): string;
-  protected trans(id: string | number, values?: Record<string, Primitive | ReactNode | FormatFunction<ReactNode, ReactNode>>): ReactNode;
-  protected trans(id: string | number, values?: Record<string, any>): ReactNode {
-    let defaultMessage = "[?]";
+  protected trans(id: string, values?: Record<string, Primitive | FormatFunction<string, string>>): string;
+  protected trans(id: string, values?: Record<string, Primitive | ReactNode | FormatFunction<ReactNode, ReactNode>>): ReactNode;
+  protected trans(id: string, values?: Record<string, any>): ReactNode {
+    const defaultMessage = "[?]";
     return this.props.intl!.formatMessage({id, defaultMessage}, values);
   }
 
   protected transNumber(number: number | null | undefined, digit?: number): string {
-    let options = {minimumFractionDigits: digit, maximumFractionDigits: digit};
+    const options = {minimumFractionDigits: digit, maximumFractionDigits: digit};
     if (number !== null && number !== undefined) {
       return this.props.intl!.formatNumber(number, options);
     } else {
@@ -67,10 +67,10 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
    * 開かれたウィンドウのレンダラープロセスにおいて、`closeWindow` メソッドが呼ばれたときの引数が返されます。
    * `closeWindow` メソッドが引数なしで呼ばれた場合か、閉じるボタンでウィンドウが閉じられた場合は、代わりに `null` が返されます。*/
   protected createWindowAsync(mode: string, props: object, options: BrowserWindowConstructorOptions): Promise<any | null> {
-    let respondIdString = this.props.store!.id.toString();
-    let respondChannel = "create-window-async" + uuid();
-    let query = {respondIdString, respondChannel};
-    let promise = new Promise((resolve, reject) => {
+    const respondIdString = this.props.store!.id.toString();
+    const respondChannel = "create-window-async" + uuid();
+    const query = {respondIdString, respondChannel};
+    const promise = new Promise((resolve, reject) => {
       window.api.once(respondChannel, (event, exitCode, data) => {
         if (exitCode !== 0) {
           reject(data);
@@ -87,8 +87,8 @@ export class Component<P = {}, S = {}, H = any> extends ReactComponent<Props<P>,
    * 現在のウィンドウが `createWindowAsync` メソッドで作られたものである場合、この関数の引数にデータを渡すことで、ウィンドウを作ったプロセスにそのデータを返信することができます。
    * 引数を省略した場合は、ウィンドウを作ったプロセスには `null` が返信されます。*/
   protected closeWindow(data?: unknown): void {
-    let respondId = this.props.store!.respondId;
-    let respondChannel = this.props.store!.respondChannel;
+    const respondId = this.props.store!.respondId;
+    const respondChannel = this.props.store!.respondChannel;
     if (respondId !== null && respondChannel !== null) {
       window.api.sendTo(respondId, respondChannel, 0, data ?? null);
     }

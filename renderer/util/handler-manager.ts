@@ -14,7 +14,7 @@ export class HandlerManager {
   }
 
   public getLabel(name: string): string | undefined {
-    let rawKey = this.specs[name]?.key;
+    const rawKey = this.specs[name]?.key;
     let key = (Array.isArray(rawKey)) ? rawKey[0] : rawKey;
     if (key !== undefined) {
       key = key.replaceAll(/\b(\w+?)\+/g, (string) => string.charAt(0).toUpperCase() + string.slice(1));
@@ -26,17 +26,17 @@ export class HandlerManager {
   }
 
   public getHandler(name: string): KeyHandler | undefined {
-    let handler = this.specs[name]?.handler ?? this.specs.fallback?.handler;
+    const handler = this.specs[name]?.handler ?? this.specs.fallback?.handler;
     return handler;
   }
 
   public getKeys(): {[name: string]: KeySequence} {
-    let keys = Object.fromEntries(Object.entries(this.specs).map(([name, spec]) => [name, spec.key]).filter(([name, key]) => key !== undefined));
+    const keys = Object.fromEntries(Object.entries(this.specs).map(([name, spec]) => [name, spec.key]).filter(([name, key]) => key !== undefined));
     return keys;
   }
 
   public getHandlers(): {[name: string]: KeyHandler} {
-    let handlers = Object.fromEntries(Object.entries(this.specs).map(([name, spec]) => [name, spec.handler]).filter(([name, handler]) => handler !== undefined));
+    const handlers = Object.fromEntries(Object.entries(this.specs).map(([name, spec]) => [name, spec.handler]).filter(([name, handler]) => handler !== undefined));
     return handlers;
   }
 

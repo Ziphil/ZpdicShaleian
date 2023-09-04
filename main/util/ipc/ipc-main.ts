@@ -21,8 +21,8 @@ export class PromisifiedIpcMain {
   }
 
   public sendAsync(channel: string, webContents: WebContents, ...args: Array<any>): Promise<any> {
-    let replyChannel = channel + uuid();
-    let promise = new Promise((resolve, reject) => {
+    const replyChannel = channel + uuid();
+    const promise = new Promise((resolve, reject) => {
       electronIpcMain.once(replyChannel, (event, exitCode, data) => {
         if (exitCode !== 0) {
           reject(deserializeError(data));
@@ -56,4 +56,4 @@ export class PromisifiedIpcMain {
 }
 
 
-export let ipcMain = new PromisifiedIpcMain();
+export const ipcMain = new PromisifiedIpcMain();

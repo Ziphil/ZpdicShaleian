@@ -88,15 +88,15 @@ export class MainPage extends Component<Props, State> {
   }
 
   public async componentDidMount(): Promise<void> {
-    let settings = await this.sendAsync("getSettings");
-    let path = settings.defaultDictionaryPath;
+    const settings = await this.sendAsync("getSettings");
+    const path = settings.defaultDictionaryPath;
     if (path !== undefined) {
       this.updateDictionary(path);
     }
   }
 
   private async setupEventListener(): Promise<void> {
-    let packaged = await this.sendAsync("getPackaged");
+    const packaged = await this.sendAsync("getPackaged");
     if (packaged) {
       window.addEventListener("beforeunload", (event) => {
         this.requestCloseWindow();
@@ -106,22 +106,22 @@ export class MainPage extends Component<Props, State> {
   }
 
   private async loadDictionary(): Promise<void> {
-    let confirmed = await this.checkLeave();
+    const confirmed = await this.checkLeave();
     if (confirmed) {
-      let result = await this.sendAsync("showOpenDialog", {properties: ["openDirectory"]});
+      const result = await this.sendAsync("showOpenDialog", {properties: ["openDirectory"]});
       if (!result.canceled) {
-        let path = result.filePaths[0];
+        const path = result.filePaths[0];
         this.updateDictionary(path);
       }
     }
   }
 
   private async reloadDictionary(): Promise<void> {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null && dictionary.path !== null) {
-      let confirmed = await this.checkLeave();
+      const confirmed = await this.checkLeave();
       if (confirmed) {
-        let path = dictionary.path;
+        const path = dictionary.path;
         await this.updateDictionary(path);
       }
     } else {
@@ -135,13 +135,13 @@ export class MainPage extends Component<Props, State> {
   }
 
   private async updateDictionary(path: string): Promise<void> {
-    let dictionary = null;
-    let progress = {offset: 0, size: 0};
+    const dictionary = null;
+    const progress = {offset: 0, size: 0};
     this.setState({dictionary, progress, activeWord: null, changed: false});
     try {
-      let plainDictionary = await this.sendAsync("loadDictionary", path);
-      let dictionary = Dictionary.fromPlain(plainDictionary);
-      let parameter = NormalParameter.createEmpty(this.state.language);
+      const plainDictionary = await this.sendAsync("loadDictionary", path);
+      const dictionary = Dictionary.fromPlain(plainDictionary);
+      const parameter = NormalParameter.createEmpty(this.state.language);
       this.setState({dictionary}, () => {
         this.updateWords(parameter, null, true);
       });
@@ -152,7 +152,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private async saveDictionary(path: string | null): Promise<void> {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
       try {
         this.updateSaveDictionaryProgress({offset: 0, size: 0});
@@ -170,16 +170,16 @@ export class MainPage extends Component<Props, State> {
 
   @on("getSaveDictionaryProgress")
   private updateSaveDictionaryProgress(progress: Progress): void {
-    let message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
+    const message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
     CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "saveDictionary");
   }
 
   private async exportDictionary(kind: string): Promise<void> {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      let result = await this.sendAsync("showSaveDialog", {});
+      const result = await this.sendAsync("showSaveDialog", {});
       if (!result.canceled) {
-        let path = result.filePath;
+        const path = result.filePath;
         try {
           this.updateExportDictionaryProgress({offset: 0, size: 0});
           await this.sendAsync("exportDictionary", dictionary.toPlain(), path, kind);
@@ -196,7 +196,7 @@ export class MainPage extends Component<Props, State> {
 
   @on("getExportDictionaryProgress")
   private updateExportDictionaryProgress(progress: Progress): void {
-    let message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
+    const message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
     CustomToaster.show({message, icon: "floppy-disk", timeout: 0}, "exportDictionary");
   }
 
@@ -204,13 +204,13 @@ export class MainPage extends Component<Props, State> {
    * 引数の `search` に `true` を渡すと、現在の検索パラメータを用いて再検索することで表示する単語データの更新も行います。
    * 検索結果ペインのスクロール位置は変化しません。*/
   private refreshWords(search?: boolean): void {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
       if (!search) {
-        let searchResult = this.state.searchResult.copy();
+        const searchResult = this.state.searchResult.copy();
         this.setState({searchResult});
       } else {
-        let searchResult = dictionary.search(this.state.parameter);
+        const searchResult = dictionary.search(this.state.parameter);
         this.setState({searchResult});
       }
     }
@@ -219,12 +219,12 @@ export class MainPage extends Component<Props, State> {
   /** 検索結果の単語リストをシャッフルします。
    * 検索結果ペインのスクロール位置はリセットされます。*/
   private shuffleWords(): void {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      let oldSearchResult = this.state.searchResult;
-      let oldWords = this.state.searchResult.words;
-      let words = ArrayUtil.shuffle([...oldWords]);
-      let searchResult = new SearchResult(words, oldSearchResult.suggestions, oldSearchResult.elapsedTime);
+      const oldSearchResult = this.state.searchResult;
+      const oldWords = this.state.searchResult.words;
+      const words = ArrayUtil.shuffle([...oldWords]);
+      const searchResult = new SearchResult(words, oldSearchResult.suggestions, oldSearchResult.elapsedTime);
       this.setState({searchResult, page: 0, activeWord: null});
       this.scrollWordList();
     } else {
@@ -233,9 +233,9 @@ export class MainPage extends Component<Props, State> {
   }
 
   private updateWordsDirect(parameter: Parameter, shownParameter: Parameter | null, fromHistory?: boolean): void {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      let searchResult = dictionary.search(parameter);
+      const searchResult = dictionary.search(parameter);
       if (!fromHistory) {
         this.history.add([parameter, shownParameter ?? this.state.shownParameter]);
       }
@@ -263,13 +263,13 @@ export class MainPage extends Component<Props, State> {
   }
 
   private updateWordsByName(name: string): void {
-    let language = this.state.language;
-    let parameter = new NormalParameter(name, "name", "exact", language, {case: false, diacritic: false});
+    const language = this.state.language;
+    const parameter = new NormalParameter(name, "name", "exact", language, {case: false, diacritic: false});
     this.updateWords(parameter, null, true);
   }
 
   private focusSearchForm(): void {
-    let element = this.searchInputRef.current;
+    const element = this.searchInputRef.current;
     if (element !== null) {
       element.focus();
       this.setState({activeWord: null});
@@ -277,17 +277,17 @@ export class MainPage extends Component<Props, State> {
   }
 
   private scrollWordList(): void {
-    let wordListElement = this.wordListRef.current;
+    const wordListElement = this.wordListRef.current;
     if (wordListElement !== null) {
       wordListElement.scrollTop = 0;
     }
   }
 
   private movePage(spec: number | "first" | "last" | {difference: number}): void {
-    let currentPage = this.state.page;
-    let minPage = this.state.searchResult.minPage;
-    let maxPage = this.state.searchResult.maxPage;
-    let page = (() => {
+    const currentPage = this.state.page;
+    const minPage = this.state.searchResult.minPage;
+    const maxPage = this.state.searchResult.maxPage;
+    const page = (() => {
       if (typeof spec === "number") {
         return spec;
       } else if (spec === "first") {
@@ -298,7 +298,7 @@ export class MainPage extends Component<Props, State> {
         return currentPage + spec.difference;
       }
     })();
-    let clampedPage = Math.max(Math.min(page, maxPage), 0);
+    const clampedPage = Math.max(Math.min(page, maxPage), 0);
     if (clampedPage !== currentPage) {
       this.setState({page: clampedPage});
       this.scrollWordList();
@@ -306,40 +306,40 @@ export class MainPage extends Component<Props, State> {
   }
 
   private searchUndo(): void {
-    let elements = this.history.undo();
+    const elements = this.history.undo();
     if (elements !== undefined) {
-      let [parameter, shownParameter] = elements;
+      const [parameter, shownParameter] = elements;
       this.updateWords(parameter, shownParameter, true, true);
     }
   }
 
   private searchRedo(): void {
-    let elements = this.history.redo();
+    const elements = this.history.redo();
     if (elements !== undefined) {
-      let [parameter, shownParameter] = elements;
+      const [parameter, shownParameter] = elements;
       this.updateWords(parameter, shownParameter, true, true);
     }
   }
 
   private toggleFont(): void {
-    let useCustomFont = !this.state.useCustomFont;
+    const useCustomFont = !this.state.useCustomFont;
     this.setState({useCustomFont});
   }
 
   private async editWord(word: Word | null, defaultWord?: Word): Promise<void> {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
       if (word === null && defaultWord !== undefined) {
         defaultWord = defaultWord.copy();
         defaultWord.refreshDate();
       }
-      let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
-      let plainWord = (word !== null) ? word.toPlain() : null;
-      let defaultPlainWord = (defaultWord !== undefined) ? defaultWord.toPlain() : undefined;
-      let language = this.state.language;
-      let data = await this.createWindowAsync("editor", {word: plainWord, defaultWord: defaultPlainWord, language}, options);
+      const options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
+      const plainWord = (word !== null) ? word.toPlain() : null;
+      const defaultPlainWord = (defaultWord !== undefined) ? defaultWord.toPlain() : undefined;
+      const language = this.state.language;
+      const data = await this.createWindowAsync("editor", {word: plainWord, defaultWord: defaultPlainWord, language}, options);
       if (data !== null) {
-        let {uid, newWord} = data;
+        const {uid, newWord} = data;
         dictionary.editWord(uid, newWord);
         this.setState({changed: true});
         this.refreshWords(true);
@@ -350,10 +350,10 @@ export class MainPage extends Component<Props, State> {
   }
 
   private async editActiveWord(word: Word | "active" | null, defaultWord?: Word | "active"): Promise<void> {
-    let activeWord = this.state.activeWord;
+    const activeWord = this.state.activeWord;
     if (activeWord !== null) {
-      let nextWord = (word === "active") ? activeWord : word;
-      let nextDefaultWord = (defaultWord === "active") ? activeWord : defaultWord;
+      const nextWord = (word === "active") ? activeWord : word;
+      const nextDefaultWord = (defaultWord === "active") ? activeWord : defaultWord;
       await this.editWord(nextWord, nextDefaultWord);
     } else {
       this.showNoActiveWordToaster();
@@ -361,7 +361,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private deleteWord(uid: string): void {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
       dictionary.deleteWord(uid);
       this.setState({changed: true});
@@ -372,7 +372,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private deleteActiveWord(): void {
-    let activeWord = this.state.activeWord;
+    const activeWord = this.state.activeWord;
     if (activeWord !== null) {
       this.deleteWord(activeWord.uid);
     } else {
@@ -382,7 +382,7 @@ export class MainPage extends Component<Props, State> {
 
   @onAsync("doValidateEditWord")
   private async validateEditWord(uid: string | null, word: PlainWord): Promise<string | null> {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
       return dictionary.validateEditWord(uid, word);
     } else {
@@ -391,7 +391,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private toggleWordMarker(word: Word, marker: Marker): void {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
       word.toggleMarker(marker);
       this.setState({changed: true});
@@ -402,7 +402,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private toggleActiveWordMarker(marker: Marker): void {
-    let activeWord = this.state.activeWord;
+    const activeWord = this.state.activeWord;
     if (activeWord !== null) {
       this.toggleWordMarker(activeWord, marker);
     } else {
@@ -411,7 +411,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private changeParameter(parameter: Parameter, immediate?: boolean): void {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
       this.updateWords(parameter, parameter, immediate);
     } else {
@@ -420,8 +420,8 @@ export class MainPage extends Component<Props, State> {
   }
 
   private changeWordMode(mode: WordMode, focus?: boolean): void {
-    let oldParameter = ParameterUtil.getNormal(this.state.shownParameter);
-    let parameter = new NormalParameter(oldParameter.search, mode, oldParameter.type, this.state.language);
+    const oldParameter = ParameterUtil.getNormal(this.state.shownParameter);
+    const parameter = new NormalParameter(oldParameter.search, mode, oldParameter.type, this.state.language);
     this.changeParameter(parameter);
     if (focus) {
       this.focusSearchForm();
@@ -429,8 +429,8 @@ export class MainPage extends Component<Props, State> {
   }
 
   private changeWordType(type: WordType, focus?: boolean): void {
-    let oldParameter = ParameterUtil.getNormal(this.state.shownParameter);
-    let parameter = new NormalParameter(oldParameter.search, oldParameter.mode, type, this.state.language);
+    const oldParameter = ParameterUtil.getNormal(this.state.shownParameter);
+    const parameter = new NormalParameter(oldParameter.search, oldParameter.mode, type, this.state.language);
     this.changeParameter(parameter);
     if (focus) {
       this.focusSearchForm();
@@ -445,13 +445,13 @@ export class MainPage extends Component<Props, State> {
   }
 
   private async changeDictionarySettings(): Promise<void> {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      let options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
-      let settings = dictionary.settings;
-      let data = await this.createWindowAsync("dictionarySettings", {settings}, options);
+      const options = {width: 640, height: 480, minWidth: 480, minHeight: 320, type: "toolbar"};
+      const settings = dictionary.settings;
+      const data = await this.createWindowAsync("dictionarySettings", {settings}, options);
       if (data !== null) {
-        let newSettings = data;
+        const newSettings = data;
         dictionary.changeSettings(newSettings);
         this.setState({changed: true});
       }
@@ -461,13 +461,13 @@ export class MainPage extends Component<Props, State> {
   }
 
   private async execGitCommit(): Promise<void> {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null && dictionary.path !== null) {
-      let options = {width: 480, height: 400, minWidth: 320, minHeight: 240, type: "toolbar"};
-      let path = dictionary.path;
-      let data = await this.createWindowAsync("gitCommit", {path}, options);
+      const options = {width: 480, height: 400, minWidth: 320, minHeight: 240, type: "toolbar"};
+      const path = dictionary.path;
+      const data = await this.createWindowAsync("gitCommit", {path}, options);
       if (data !== null) {
-        let message = data;
+        const message = data;
         try {
           this.showLoadingToaster("git-commit", "execGitCommit");
           await this.sendAsync("execGitCommit", path, message);
@@ -483,11 +483,11 @@ export class MainPage extends Component<Props, State> {
   }
 
   private async execGitPush(): Promise<void> {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      let options = {width: 480, height: 320, minWidth: 320, minHeight: 240, type: "toolbar"};
-      let path = dictionary.path;
-      let data = await this.createWindowAsync("gitPush", {path}, options);
+      const options = {width: 480, height: 320, minWidth: 320, minHeight: 240, type: "toolbar"};
+      const path = dictionary.path;
+      const data = await this.createWindowAsync("gitPush", {path}, options);
       if (data !== null) {
         try {
           this.showLoadingToaster("git-push", "execGitPush");
@@ -504,12 +504,12 @@ export class MainPage extends Component<Props, State> {
   }
 
   private async uploadDictionary(): Promise<void> {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      let options = {width: 480, height: 320, minWidth: 320, minHeight: 240, type: "toolbar"};
-      let data = await this.createWindowAsync("uploadDictionary", {}, options);
+      const options = {width: 480, height: 320, minWidth: 320, minHeight: 240, type: "toolbar"};
+      const data = await this.createWindowAsync("uploadDictionary", {}, options);
       if (data !== null) {
-        let {url, password} = data;
+        const {url, password} = data;
         try {
           this.updateUploadDictionaryProgress({offset: 0, size: 0});
           await this.sendAsync("uploadDictionary", dictionary.toPlain(), url, password);
@@ -526,12 +526,12 @@ export class MainPage extends Component<Props, State> {
 
   @on("getUploadDictionaryProgress")
   private updateUploadDictionaryProgress(progress: Progress): void {
-    let message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
+    const message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
     CustomToaster.show({message, icon: "export", timeout: 0}, "uploadDictionary");
   }
 
   private revealDictionaryDirectory(): void {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
       this.send("showItem", dictionary.path);
     } else {
@@ -540,10 +540,10 @@ export class MainPage extends Component<Props, State> {
   }
 
   private revealWord(word: Word): void {
-    let dictionary = this.state.dictionary;
+    const dictionary = this.state.dictionary;
     if (dictionary !== null) {
-      let resolver = FileNameResolver.createDefault();
-      let baseName = resolver.resolveWordBaseName(word.uniqueName);
+      const resolver = FileNameResolver.createDefault();
+      const baseName = resolver.resolveWordBaseName(word.uniqueName);
       this.send("showItem", `${dictionary.path}/${baseName}.xdnw`);
     } else {
       this.showNoDictionaryToaster();
@@ -551,7 +551,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private revealActiveWord(): void {
-    let activeWord = this.state.activeWord;
+    const activeWord = this.state.activeWord;
     if (activeWord !== null) {
       this.revealWord(activeWord);
     } else {
@@ -560,8 +560,8 @@ export class MainPage extends Component<Props, State> {
   }
 
   private showLoadingToaster(icon: IconName | MaybeElement, key?: string): void {
-    let progress = {offset: 0, size: 1};
-    let message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
+    const progress = {offset: 0, size: 1};
+    const message = <EnhancedProgressBar className="zpmnp-save-progress-bar" progress={progress} showDetail={false}/>;
     CustomToaster.show({message, icon, timeout: 0}, key);
   }
 
@@ -578,7 +578,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private async requestCloseWindow(): Promise<void> {
-    let confirmed = await this.checkLeave();
+    const confirmed = await this.checkLeave();
     if (confirmed) {
       this.send("destroyWindow");
     }
@@ -586,7 +586,7 @@ export class MainPage extends Component<Props, State> {
 
   private checkLeave(): Promise<boolean> {
     if (this.state.changed) {
-      let promise = new Promise<boolean>((resolve, reject) => {
+      const promise = new Promise<boolean>((resolve, reject) => {
         this.handleAlertClose = function (confirmed: boolean): void {
           this.setState({alertOpen: false});
           resolve(confirmed);
@@ -595,13 +595,13 @@ export class MainPage extends Component<Props, State> {
       });
       return promise;
     } else {
-      let promise = Promise.resolve(true);
+      const promise = Promise.resolve(true);
       return promise;
     }
   }
 
   private renderNavbar(): ReactNode {
-    let node = (
+    const node = (
       <MainNavbar
         loadDictionary={() => this.loadDictionary()}
         reloadDictionary={() => this.reloadDictionary()}
@@ -637,7 +637,7 @@ export class MainPage extends Component<Props, State> {
   }
 
   private renderAlert(): ReactNode {
-    let node = (
+    const node = (
       <Alert
         isOpen={this.state.alertOpen}
         cancelButtonText={this.trans("mainPage.alertCancel")}
@@ -656,9 +656,9 @@ export class MainPage extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let navbarNode = this.renderNavbar();
-    let alertNode = this.renderAlert();
-    let node = (
+    const navbarNode = this.renderNavbar();
+    const alertNode = this.renderAlert();
+    const node = (
       <div className="zpmnp-root zp-root zp-navbar-root">
         {navbarNode}
         {alertNode}
@@ -714,4 +714,4 @@ type State = {
   progress: Progress
 };
 
-let CustomToaster = Toaster.create({position: "top", maxToasts: 2});
+const CustomToaster = Toaster.create({position: "top", maxToasts: 2});

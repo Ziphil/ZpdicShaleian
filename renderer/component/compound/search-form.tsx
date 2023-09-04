@@ -38,24 +38,24 @@ export class SearchForm extends Component<Props, State> {
 
   private handleParameterSet(nextParameter: {search?: string, mode?: WordMode, type?: WordType}): void {
     if (this.props.onParameterSet) {
-      let oldParameter = ParameterUtil.getNormal(this.props.parameter);
-      let search = nextParameter.search ?? oldParameter.search;
-      let mode = nextParameter.mode ?? oldParameter.mode;
-      let type = nextParameter.type ?? oldParameter.type;
-      let language = this.props.language;
-      let parameter = new NormalParameter(search, mode, type, language);
+      const oldParameter = ParameterUtil.getNormal(this.props.parameter);
+      const search = nextParameter.search ?? oldParameter.search;
+      const mode = nextParameter.mode ?? oldParameter.mode;
+      const type = nextParameter.type ?? oldParameter.type;
+      const language = this.props.language;
+      const parameter = new NormalParameter(search, mode, type, language);
       this.props.onParameterSet(parameter);
     }
   }
 
   public render(): ReactNode {
-    let parameter = ParameterUtil.getNormal(this.props.parameter);
-    let supplementNode = (
+    const parameter = ParameterUtil.getNormal(this.props.parameter);
+    const supplementNode = (
       <Tag minimal={true}>
         {this.transNumber(this.props.searchResult.words.length)}
       </Tag>
     );
-    let node = (
+    const node = (
       <div className="zpscf-root">
         <ControlGroup fill={true}>
           <InputGroup

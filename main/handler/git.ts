@@ -6,7 +6,6 @@ import {
 import simpleGit from "simple-git";
 import {
   handler,
-  on,
   onAsync
 } from "./decorator";
 import {
@@ -20,13 +19,13 @@ export class GitHandler extends Handler {
   @onAsync("execGitDiff")
   private async execGitDiff(event: IpcMainEvent, path: string): Promise<Array<GitDiffEntry>> {
     try {
-      let git = simpleGit(path);
+      const git = simpleGit(path);
       await git.raw("add", "--all");
-      let statusResult = await git.status();
-      let diffResult = await git.diffSummary(["--staged"]);
+      const statusResult = await git.status();
+      const diffResult = await git.diffSummary(["--staged"]);
       await git.reset();
-      let files = diffResult.files;
-      let findType = function (names: {from: string | null, to: string}) {
+      const files = diffResult.files;
+      const findType = function (names: {from: string | null, to: string}): string {
         if (statusResult.created.includes(names.to)) {
           return "created";
         } else if (statusResult.modified.includes(names.to)) {
@@ -39,30 +38,30 @@ export class GitHandler extends Handler {
           return "unknown";
         }
       };
-      let parseNameDescription = function (nameDescription: string): {from: string | null, to: string} {
+      const parseNameDescription = function (nameDescription: string): {from: string | null, to: string} {
         let match;
         if (match = nameDescription.match(/^(.*)\{(.+?)\s*=>\s*(.+?)\}$/)) {
-          let from = match[1] + "/" + match[2];
-          let to = match[1] + "/" + match[3];
+          const from = match[1] + "/" + match[2];
+          const to = match[1] + "/" + match[3];
           return {from, to};
         } else if (match = nameDescription.match(/^(.+?)\s*=>\s*(.+?)$/)) {
-          let from = match[1];
-          let to = match[2];
+          const from = match[1];
+          const to = match[2];
           return {from, to};
         } else {
-          let from = null;
-          let to = nameDescription;
+          const from = null;
+          const to = nameDescription;
           return {from, to};
         }
       };
-      let entries = files.map((file) => {
-        let names = parseNameDescription(file.file);
+      const entries = files.map((file) => {
+        const names = parseNameDescription(file.file);
         if ("insertions" in file) {
-          let {changes, insertions, deletions} = file;
-          let type = findType(names);
+          const {changes, insertions, deletions} = file;
+          const type = findType(names);
           return {type, names, changes, insertions, deletions};
         } else {
-          let type = "binary";
+          const type = "binary";
           return {type, names};
         }
       });
@@ -76,7 +75,7 @@ export class GitHandler extends Handler {
   @onAsync("execGitReset")
   private async execGitReset(event: IpcMainEvent, path: string): Promise<void> {
     try {
-      let git = simpleGit(path);
+      const git = simpleGit(path);
       await git.reset();
     } catch (error) {
       console.error(error);
@@ -87,8 +86,8 @@ export class GitHandler extends Handler {
   @onAsync("execGitAddIntent")
   private async execGitAddIntent(event: IpcMainEvent, path: string): Promise<void> {
     try {
-      let git = simpleGit(path);
-      let statusResult = await git.status();
+      const git = simpleGit(path);
+      const statusResult = await git.status();
       await git.raw("add", "--intent-to-add", ...statusResult["not_added"]);
     } catch (error) {
       console.error(error);
@@ -99,8 +98,8 @@ export class GitHandler extends Handler {
   @onAsync("execGitCommit")
   private async execGitCommit(event: IpcMainEvent, path: string, message: string | null): Promise<void> {
     try {
-      let git = simpleGit(path);
-      let nextMessage = message || this.main.settings.defaultCommitMessage;
+      const git = simpleGit(path);
+      const nextMessage = message || this.main.settings.defaultCommitMessage;
       if (nextMessage !== undefined && nextMessage !== "") {
         await git.raw("add", "--all");
         await git.commit(nextMessage, ["--allow-empty"]);
@@ -116,7 +115,7 @@ export class GitHandler extends Handler {
   @onAsync("execGitPush")
   private async execGitPush(event: IpcMainEvent, path: string): Promise<void> {
     try {
-      let git = simpleGit(path);
+      const git = simpleGit(path);
       await git.push();
     } catch (error) {
       console.error(error);

@@ -13,7 +13,7 @@ export class Settings {
   }
 
   public static createEmpty(): Settings {
-    let settings = new Settings({});
+    const settings = new Settings({});
     return settings;
   }
 

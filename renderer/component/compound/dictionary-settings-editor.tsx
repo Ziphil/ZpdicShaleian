@@ -46,10 +46,10 @@ export class DictionarySettingsEditor extends Component<Props, State> {
 
   public constructor(props: Props) {
     super(props);
-    let serializer = new Serializer();
-    let oldSettings = props.settings;
-    let revisionString = serializer.serializeRevisions(Revisions.fromPlain(oldSettings.revisions), {part: true});
-    let settings = {...oldSettings, revisionString};
+    const serializer = new Serializer();
+    const oldSettings = props.settings;
+    const revisionString = serializer.serializeRevisions(Revisions.fromPlain(oldSettings.revisions), {part: true});
+    const settings = {...oldSettings, revisionString};
     this.state = {settings};
   }
 
@@ -66,8 +66,8 @@ export class DictionarySettingsEditor extends Component<Props, State> {
 
   private handleConfirm(event?: MouseEvent<HTMLElement> | KeyboardEvent): void {
     try {
-      let deserializer = new Deserializer();
-      let settings = this.state.settings;
+      const deserializer = new Deserializer();
+      const settings = this.state.settings;
       settings.revisions = deserializer.deserializeRevisions(settings.revisionString, {part: true});
       if (this.props.onConfirm) {
         this.props.onConfirm(settings, event);
@@ -78,18 +78,18 @@ export class DictionarySettingsEditor extends Component<Props, State> {
   }
 
   private setSettings<T extends Array<unknown>>(setter: (...args: T) => void): (...args: T) => void {
-    let outerThis = this;
-    let wrapper = function (...args: T): void {
+    const outerThis = this;
+    const wrapper = function (...args: T): void {
       setter(...args);
-      let settings = outerThis.state.settings;
+      const settings = outerThis.state.settings;
       outerThis.setState({settings});
     };
     return wrapper;
   }
 
   public renderBasic(): ReactElement {
-    let settings = this.state.settings;
-    let node = (
+    const settings = this.state.settings;
+    const node = (
       <div className="zpdse-editor-tab zp-editor-tab">
         <FormGroup label={this.trans("dictionarySettingsEditor.version")} labelFor="version">
           <InputGroup id="version" value={settings.version} onChange={this.setSettings((event) => settings.version = event.target.value)}/>
@@ -103,8 +103,8 @@ export class DictionarySettingsEditor extends Component<Props, State> {
   }
 
   public renderRevision(): ReactElement {
-    let settings = this.state.settings;
-    let node = (
+    const settings = this.state.settings;
+    const node = (
       <div className="zpdse-editor-tab zp-editor-tab">
         <CodeMirror
           className="zpdse-revision"
@@ -119,9 +119,9 @@ export class DictionarySettingsEditor extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let basicNode = this.renderBasic();
-    let revisionNode = this.renderRevision();
-    let node = (
+    const basicNode = this.renderBasic();
+    const revisionNode = this.renderRevision();
+    const node = (
       <div className="zpdse-editor zp-editor">
         <EditorHotKeys onConfirm={this.handleConfirm.bind(this)} onCancel={this.handleCancel.bind(this)}>
           <Tabs defaultSelectedTabId="revision">
@@ -150,4 +150,4 @@ type State = {
   settings: PlainDictionarySettings & {revisionString: string}
 };
 
-let CustomToaster = Toaster.create({position: "top", maxToasts: 2});
+const CustomToaster = Toaster.create({position: "top", maxToasts: 2});

@@ -20,8 +20,8 @@ export class PromisifiedIpcRenderer {
   }
 
   public sendAsync(channel: string, ...args: Array<any>): Promise<any> {
-    let replyChannel = channel + uuid();
-    let promise = new Promise((resolve, reject) => {
+    const replyChannel = channel + uuid();
+    const promise = new Promise((resolve, reject) => {
       electronIpcRenderer.once(replyChannel, (event, exitCode, data) => {
         if (exitCode !== 0) {
           reject(deserializeError(data));
@@ -42,7 +42,7 @@ export class PromisifiedIpcRenderer {
     electronIpcRenderer.on(channel, listener);
   }
 
-  public onAsync(channel: string, listener: (event: IpcRendererEvent, ...args: Array<any>) => Promise<any>) {
+  public onAsync(channel: string, listener: (event: IpcRendererEvent, ...args: Array<any>) => Promise<any>): void {
     electronIpcRenderer.on(channel, (event, replyChannel, ...args) => {
       listener(event, ...args).then((data) => {
         event.sender.send(replyChannel, 0, data);
@@ -59,4 +59,4 @@ export class PromisifiedIpcRenderer {
 }
 
 
-export let ipcRenderer = new PromisifiedIpcRenderer();
+export const ipcRenderer = new PromisifiedIpcRenderer();

@@ -33,8 +33,8 @@ const DEFAULT_DECORATOR_OPTIONS = {
 };
 
 export function component(style?: any, options: DecoratorOptions = {}): ClassDecorator {
-  let nextOptions = Object.assign({}, DEFAULT_DECORATOR_OPTIONS, options);
-  let decorator = function <P, C extends ComponentClass<P>>(component: ComponentClass<P> & C): ComponentClass<P> & C {
+  const nextOptions = Object.assign({}, DEFAULT_DECORATOR_OPTIONS, options);
+  const decorator = function (component: any): any {
     if (style !== null && style !== undefined) {
       component = css(style, {allowMultiple: true, handleNotFoundStyleName: "ignore"})(component);
     }
@@ -57,8 +57,8 @@ function wrappedInject<P extends {store?: GlobalStore}, C extends ComponentClass
 }
 
 function wrappedInjectIntl<P extends {intl?: IntlShape}, C extends ComponentClass<P>>(component: ComponentClass<P> & C): ComponentClass<P> & C {
-  let anyComponent = component as any;
-  let resultComponent = injectIntl(anyComponent) as any;
+  const anyComponent = component as any;
+  const resultComponent = injectIntl(anyComponent) as any;
   return resultComponent;
 }
 
@@ -78,14 +78,14 @@ type OnMethod = (...args: Array<any>) => any;
 type OnAsyncMethod = (...args: Array<any>) => Promise<any>;
 
 export function handler(): HandlerClassDecorator {
-  let decorator = function (clazz: new(...args: any) => Component): void {
-    let metadata = Reflect.getMetadata(KEY, clazz.prototype) as Metadata;
+  const decorator = function (clazz: new(...args: any) => Component): void {
+    const metadata = Reflect.getMetadata(KEY, clazz.prototype) as Metadata;
     clazz.prototype.setupIpc = function (this: Component): void {
-      let anyThis = this as any;
-      for (let {channel, name} of metadata.sync) {
+      const anyThis = this as any;
+      for (const {channel, name} of metadata.sync) {
         window.api.on(channel, (event, ...args) => anyThis[name].bind(this)(...args));
       }
-      for (let {channel, name} of metadata.async) {
+      for (const {channel, name} of metadata.async) {
         window.api.onAsync(channel, (event, ...args) => anyThis[name].bind(this)(...args));
       }
     };
@@ -94,7 +94,7 @@ export function handler(): HandlerClassDecorator {
 }
 
 export function on(channel: string): OnMethodDecorator {
-  let decorator = function (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<OnMethod>): void {
+  const decorator = function (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<OnMethod>): void {
     let metadata = Reflect.getMetadata(KEY, target) as Metadata;
     if (!metadata) {
       metadata = {sync: [], async: []};
@@ -106,7 +106,7 @@ export function on(channel: string): OnMethodDecorator {
 }
 
 export function onAsync(channel: string): OnAsyncMethodDecorator {
-  let decorator = function (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<OnAsyncMethod>): void {
+  const decorator = function (target: object, name: string | symbol, descriptor: TypedPropertyDescriptor<OnAsyncMethod>): void {
     let metadata = Reflect.getMetadata(KEY, target) as Metadata;
     if (!metadata) {
       metadata = {sync: [], async: []};

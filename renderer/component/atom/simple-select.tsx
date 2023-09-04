@@ -20,22 +20,22 @@ import {
 export class SimpleSelect<T> extends Component<Props<T>, State> {
 
   private renderItem(item: T, itemProps: IItemRendererProps): ReactElement | null {
-    let modifiers = itemProps.modifiers;
-    let text = (this.props.getMenuText ?? this.props.getText)(item);
-    let node = (modifiers.matchesPredicate) && (
+    const modifiers = itemProps.modifiers;
+    const text = (this.props.getMenuText ?? this.props.getText)(item);
+    const node = (modifiers.matchesPredicate) && (
       <MenuItem key={text} text={text} active={modifiers.active} onClick={itemProps.handleClick}/>
     );
     return node || null;
   }
 
   public render(): ReactNode {
-    let popoverProps = {
+    const popoverProps = {
       position: "bottom-left",
       hoverOpenDelay: 0,
       minimal: true,
       modifiers: {preventOverflow: {enabled: true, boundariesElement: "window"}, flip: {enabled: true, boundariesElement: "window"}}
     } as const;
-    let node = (
+    const node = (
       <AnySelect
         items={this.props.items}
         activeItem={this.props.activeItem}
@@ -66,4 +66,4 @@ type Props<T> = {
 type State = {
 };
 
-let AnySelect = BlueprintSelect.ofType<any>();
+const AnySelect = BlueprintSelect.ofType<any>();

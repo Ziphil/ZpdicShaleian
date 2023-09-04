@@ -22,10 +22,10 @@ export class Loading extends Component<Props, State> {
 
   public render(): ReactNode {
     if (this.props.loading) {
-      let node = <EnhancedProgressBar progress={this.props.progress} showDetail={true}/>;
+      const node = <EnhancedProgressBar progress={this.props.progress} showDetail={true}/>;
       return node;
     } else {
-      let node = <Fragment>{this.props.children}</Fragment>;
+      const node = <Fragment>{this.props.children}</Fragment>;
       return node;
     }
   }

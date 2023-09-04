@@ -27,7 +27,7 @@ export class GitCommitPage extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let node = (
+    const node = (
       <div className="zpgcp-root zp-root">
         <GitCommitChooser
           path={this.props.path}

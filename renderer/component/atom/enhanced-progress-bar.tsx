@@ -20,11 +20,11 @@ export class EnhancedProgressBar extends Component<Props, State> {
   private static intl: IntlShape<string> = createIntl({locale: "ja"}, createIntlCache());
 
   public render(): ReactNode {
-    let offset = this.props.progress.offset;
-    let size = this.props.progress.size;
-    let ratio = (size > 0) ? offset / size : 0;
-    let percent = ratio * 100;
-    let detailNode = (this.props.showDetail) && (
+    const offset = this.props.progress.offset;
+    const size = this.props.progress.size;
+    const ratio = (size > 0) ? offset / size : 0;
+    const percent = ratio * 100;
+    const detailNode = (this.props.showDetail) && (
       <div className="zpepb-detail">
         <div className="zpepb-percent">
           {EnhancedProgressBar.intl.formatNumber(percent, {minimumFractionDigits: 2, maximumFractionDigits: 2})} %
@@ -34,7 +34,7 @@ export class EnhancedProgressBar extends Component<Props, State> {
         </div>
       </div>
     );
-    let node = (
+    const node = (
       <div className={this.props.className}>
         <ProgressBar value={ratio} intent={(ratio >= 1) ? "success" : "primary"} stripes={ratio < 1}/>
         {detailNode}

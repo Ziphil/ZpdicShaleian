@@ -9,7 +9,7 @@ import {
 export class ParameterUtil {
 
   public static getNormal(parameter: Parameter): NormalParameter {
-    let language = parameter.language;
+    const language = parameter.language;
     if (parameter instanceof NormalParameter) {
       return parameter;
     } else {

@@ -29,16 +29,16 @@ import {
 @component()
 export class SearchResultPane extends Component<Props, State> {
 
-  private handlePageSet(page: number) {
+  private handlePageSet(page: number): void {
     if (this.props.onPageSet) {
       this.props.onPageSet(page);
     }
   }
 
   public renderSuggestions(): ReactNode {
-    let suggestions = this.props.searchResult.suggestions;
-    let suggestionPanes = suggestions.map((suggestion, index) => {
-      let suggestionPane = (
+    const suggestions = this.props.searchResult.suggestions;
+    const suggestionPanes = suggestions.map((suggestion, index) => {
+      const suggestionPane = (
         <SuggestionPane
           key={index}
           dictionary={this.props.dictionary}
@@ -50,7 +50,7 @@ export class SearchResultPane extends Component<Props, State> {
       );
       return suggestionPane;
     });
-    let node = (suggestions.length > 0) && (
+    const node = (suggestions.length > 0) && (
       <ul className="zpwdl-suggestion">
         {suggestionPanes}
       </ul>
@@ -59,10 +59,10 @@ export class SearchResultPane extends Component<Props, State> {
   }
 
   public renderWords(): ReactNode {
-    let page = this.props.page;
-    let words = this.props.searchResult.sliceWords(page);
-    let wordPanes = words.map((word) => {
-      let wordPane = (
+    const page = this.props.page;
+    const words = this.props.searchResult.sliceWords(page);
+    const wordPanes = words.map((word) => {
+      const wordPane = (
         <WordPaneWrapper
           key={word.uid}
           dictionary={this.props.dictionary}
@@ -80,7 +80,7 @@ export class SearchResultPane extends Component<Props, State> {
       );
       return wordPane;
     });
-    let node = (
+    const node = (
       <div className="zpwdl-word">
         {wordPanes}
       </div>
@@ -89,11 +89,11 @@ export class SearchResultPane extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    let page = this.props.page;
-    let searchResult = this.props.searchResult;
-    let suggestionNode = this.renderSuggestions();
-    let wordNode = this.renderWords();
-    let node = (
+    const page = this.props.page;
+    const searchResult = this.props.searchResult;
+    const suggestionNode = this.renderSuggestions();
+    const wordNode = this.renderWords();
+    const node = (
       <div className="zpwdl-list-wrapper">
         {suggestionNode}
         {wordNode}
