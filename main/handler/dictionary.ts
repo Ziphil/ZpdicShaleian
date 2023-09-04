@@ -16,8 +16,8 @@ import {
   PlainWord
 } from "soxsot";
 import {
+  DirectoryDiffSaver,
   DirectoryLoader,
-  DirectorySaver,
   SaverCreator,
   SaverKind,
   SingleSaver
@@ -52,7 +52,7 @@ export class DictionaryHandler extends Handler {
   @onAsync("saveDictionary")
   private async saveDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, path: string | null): Promise<void> {
     const dictionary = Dictionary.fromPlain(plainDictionary);
-    const saver = new DirectorySaver(dictionary, path);
+    const saver = new DirectoryDiffSaver(dictionary, path);
     await saver.asPromise({onProgress: (offset, size) => {
       this.send("getSaveDictionaryProgress", event.sender, {offset, size});
     }});
@@ -60,7 +60,7 @@ export class DictionaryHandler extends Handler {
 
   @onAsync("exportDictionary")
   private async exportDictionary(event: IpcMainEvent, plainDictionary: PlainDictionary, path: string, kind: SaverKind | "pdf"): Promise<void> {
-    const dictionary = Dictionary.fromPlain(plainDictionary);
+    const dictionary = Dictionary.fromPlain(plainDictionary) as any;
     if (kind === "pdf") {
       const builder = new DictionaryFormatBuilder("ja");
       const xslPath = path.replace(/\.\w+$/, ".fo");

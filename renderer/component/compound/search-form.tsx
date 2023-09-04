@@ -39,11 +39,11 @@ export class SearchForm extends Component<Props, State> {
   private handleParameterSet(nextParameter: {search?: string, mode?: WordMode, type?: WordType}): void {
     if (this.props.onParameterSet) {
       const oldParameter = ParameterUtil.getNormal(this.props.parameter);
-      const search = nextParameter.search ?? oldParameter.search;
+      const text = nextParameter.search ?? oldParameter.text;
       const mode = nextParameter.mode ?? oldParameter.mode;
       const type = nextParameter.type ?? oldParameter.type;
       const language = this.props.language;
-      const parameter = new NormalParameter(search, mode, type, language);
+      const parameter = new NormalParameter(text, mode, type, language);
       this.props.onParameterSet(parameter);
     }
   }
@@ -59,7 +59,7 @@ export class SearchForm extends Component<Props, State> {
       <div className="zpscf-root">
         <ControlGroup fill={true}>
           <InputGroup
-            value={parameter.search}
+            value={parameter.text}
             rightElement={supplementNode}
             fill={true}
             inputRef={this.props.inputRef}
