@@ -264,7 +264,7 @@ export class MainPage extends Component<Props, State> {
 
   private updateWordsByName(name: string): void {
     const language = this.state.language;
-    const parameter = new NormalParameter(name, "name", "exact", language, {case: false, diacritic: false});
+    const parameter = new NormalParameter(name, "name", "exact", language, {case: false, diacritic: false, space: false, wave: false});
     this.updateWords(parameter, null, true);
   }
 
@@ -421,7 +421,7 @@ export class MainPage extends Component<Props, State> {
 
   private changeWordMode(mode: WordMode, focus?: boolean): void {
     const oldParameter = ParameterUtil.getNormal(this.state.shownParameter);
-    const parameter = new NormalParameter(oldParameter.text, mode, oldParameter.type, this.state.language);
+    const parameter = new NormalParameter(oldParameter.text, mode, oldParameter.type, this.state.language, "default");
     this.changeParameter(parameter);
     if (focus) {
       this.focusSearchForm();
@@ -430,7 +430,7 @@ export class MainPage extends Component<Props, State> {
 
   private changeWordType(type: WordType, focus?: boolean): void {
     const oldParameter = ParameterUtil.getNormal(this.state.shownParameter);
-    const parameter = new NormalParameter(oldParameter.text, oldParameter.mode, type, this.state.language);
+    const parameter = new NormalParameter(oldParameter.text, oldParameter.mode, type, this.state.language, "default");
     this.changeParameter(parameter);
     if (focus) {
       this.focusSearchForm();

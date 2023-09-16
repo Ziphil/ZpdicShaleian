@@ -263,7 +263,7 @@ export class WordPane extends Component<Props, State> {
 
   public render(): ReactNode {
     const resolver = WordPane.createMarkupResolver(this.props.useCustomFont, this.props.onLinkClick);
-    const parser = new Parser(resolver);
+    const parser = new Parser(resolver, {pronouncerConfigs: {showSyllables: true}});
     const word = parser.parse(this.props.word);
     const markers = this.props.word.markers;
     const node = this.renderWord(word, markers);

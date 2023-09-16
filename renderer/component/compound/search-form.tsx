@@ -43,7 +43,7 @@ export class SearchForm extends Component<Props, State> {
       const mode = nextParameter.mode ?? oldParameter.mode;
       const type = nextParameter.type ?? oldParameter.type;
       const language = this.props.language;
-      const parameter = new NormalParameter(text, mode, type, language);
+      const parameter = new NormalParameter(text, mode, type, language, "default");
       this.props.onParameterSet(parameter);
     }
   }
