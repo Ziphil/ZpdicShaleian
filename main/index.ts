@@ -87,7 +87,7 @@ export class Main {
   }
 
   private async loadSettings(): Promise<void> {
-    const path = (this.app.isPackaged) ? "./settings.json" : "./dist/settings.json";
+    const path = (this.app.isPackaged) ? "./settings.json" : joinPath(electronApp.getPath("userData"), "settings.json");
     try {
       const string = await fs.readFile(path, {encoding: "utf-8"});
       const settings = new Settings(JSON.parse(string));

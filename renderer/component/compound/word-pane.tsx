@@ -82,12 +82,14 @@ export class WordPane extends Component<Props, State> {
 
   private renderSection(section: Section<ReactNode>, index: number): ReactNode {
     const equivalents = section.getEquivalents(true);
-    const normalInformations = section.getNormalInformations(true);
+    const normalInformations = section.getNormalInformations(true).filter((information) => information.kind !== "task" && information.kind !== "history");
+    const appendixInformations = section.getNormalInformations(true).filter((information) => information.kind === "task" || information.kind === "history");
     const phraseInformations = section.getPhraseInformations(true);
     const exampleInformations = section.getExampleInformations(true);
     const relations = section.relations;
     const equivalentNodes = equivalents.map((equivalent, index) => this.renderEquivalent(equivalent, index));
     const normalInformationNodes = normalInformations.map((information, index) => this.renderNormalInformation(information, index));
+    const appendixInformationNodes = appendixInformations.map((information, index) => this.renderNormalInformation(information, index));
     const phraseInformationNode = this.renderPhraseInformations(phraseInformations);
     const exampleInformationNode = this.renderExampleInformations(exampleInformations);
     const relationNodes = relations.map((relation, index) => this.renderRelation(relation, index));
@@ -101,6 +103,11 @@ export class WordPane extends Component<Props, State> {
         {relationNodes}
       </ul>
     );
+    const appendixNode = (appendixInformations.length > 0) && (
+      <div className="swp-appendix swp-section-item">
+        {appendixInformationNodes}
+      </div>
+    );
     const node = (
       <div className="swp-section" key={`section-${index}`}>
         {equivalentNode}
@@ -108,6 +115,7 @@ export class WordPane extends Component<Props, State> {
         {phraseInformationNode}
         {exampleInformationNode}
         {relationNode}
+        {appendixNode}
       </div>
     );
     return node;
@@ -139,10 +147,19 @@ export class WordPane extends Component<Props, State> {
   }
 
   private renderNormalInformation(information: NormalInformation<ReactNode>, index: number): ReactNode {
+    const date = information.date;
+    const dateNode = (date !== null) && (
+      <span className="swp-left-margin">
+        <span className="swp-hairia">{date}</span>
+      </span>
+    );
     const node = (
       <div className="swp-information swp-section-item" key={`information-${index}`}>
         <div className="swp-information-kind swp-small-head">
-          <span className="swp-information-kind-inner swp-small-head-inner">{InformationKindUtil.getName(information.kind, this.props.language)}</span>
+          <span className="swp-information-kind-inner swp-small-head-inner">
+            {InformationKindUtil.getName(information.kind, this.props.language)}
+            {dateNode}
+          </span>
         </div>
         <div className="swp-information-text swp-text">
           {information.text}

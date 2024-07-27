@@ -75,6 +75,13 @@ $swp-word-marker-shadow: inset 0px 0px 0px #{$pt-grid-size / 2} var(--marker-bac
   }
 }
 
+.swp-appendix {
+  padding: $pt-grid-size / 2;
+  border-radius: $pt-border-radius;
+  background-color: $light-gray5;
+  opacity: 0.8;
+}
+
 .swp-head {
   @extend %h4;
   margin-bottom: $pt-grid-size / 2;
@@ -226,6 +233,10 @@ $swp-word-marker-shadow: inset 0px 0px 0px #{$pt-grid-size / 2} var(--marker-bac
 
 .swp-small {
   font-size: $pt-font-size-small;
+}
+
+.swp-left-margin {
+  margin-left: $pt-grid-size * 0.5;
 }
 
 .swp-right-margin {
