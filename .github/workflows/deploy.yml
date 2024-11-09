@@ -20,7 +20,7 @@ jobs:
       - name: Pack for Windows
         run: npm run pack:windows
       - name: Upload for Windows
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: zpdic-shaleian-windows
           path: product/*.exe
@@ -40,7 +40,7 @@ jobs:
       - name: Pack for Mac
         run: npm run pack:mac
       - name: Upload for Mac
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: zpdic-shaleian-mac
           path: product/*.dmg
@@ -62,7 +62,7 @@ jobs:
       - name: Tar files
         run: tar -cvf zpdic-shaleian-linux.tar product/*.AppImage
       - name: Upload for Linux
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: zpdic-shaleian-linux
           path: zpdic-shaleian-linux.tar
